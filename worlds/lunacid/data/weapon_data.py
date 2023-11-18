@@ -11,7 +11,7 @@ class WeaponItem(GameItem):
     region: str
 
     def __repr__(self):
-        return f"{self.name} [{self.item_id}] (Located At: {self.region} |"
+        return f"{self.name} (Located At: {self.region} |"
 
 
 all_weapons = []
