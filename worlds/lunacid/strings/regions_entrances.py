@@ -25,6 +25,7 @@ class Region:
     forlorn_arena = "Forlorn Arena"
     chamber_of_fate = "Chamber of Fate"
     grave_of_the_sleeper = "Grave of the Sleeper"
+    daedalus = "Daedalus"
 class Entrance:
     menu_to_basin = "Menu to Hollow Basin"
     to_wings_rest = "To Wing's Rest"
@@ -39,6 +40,7 @@ class Entrance:
     yosei_to_canopy = "Yosei Forest to Forest Canopy"
     yosei_to_tomb = "Yosei Forest to Accursed Tomb"
     archives_to_chasm = "Forbidden Archives to Laetus Chasm"
+    archives_to_daedalus = "Forbidden Archives to Daedalus"
     chasm_to_surface = "Laetus Chasm to Great Well Surface"
     white_to_blue = "Castle Le Fanu White Area to Castle Le Fanu Blue Area"
     castle_to_white = "Castle Le Fanu to Castle Le Fanu White Area"
