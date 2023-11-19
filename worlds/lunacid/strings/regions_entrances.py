@@ -2,6 +2,7 @@
 class Region:
     menu = "Menu"
     hollow_basin = "Hollow Basin"
+    temple_of_silence = "Temple of Silence"
     wings_rest = "Wing's Rest"
     fetid_mire = "The Fetid Mire"
     yosei_forest = "Yosei Forest"
@@ -26,11 +27,14 @@ class Region:
     chamber_of_fate = "Chamber of Fate"
     grave_of_the_sleeper = "Grave of the Sleeper"
     daedalus = "Daedalus"
+
+
 class Entrance:
     menu_to_basin = "Menu to Hollow Basin"
     to_wings_rest = "To Wing's Rest"
     wings_to_surface = "Wing's Rest to Great Well Surface"
-    basin_to_mire = "Hollow Basin to The Fetid Mire"
+    basin_to_temple = "Hollow Basin to Temple of Silence"
+    temple_to_mire = "Temple of Silence to The Fetid Mire"
     basin_to_forest = "Hollow Basin to Yosei Forest"
     basin_to_archives = "Hollow Basin to Forbidden Archives"
     basin_to_surface = "Hollow Basin to Great Well Surface"
@@ -55,4 +59,3 @@ class Entrance:
     prison_to_arena = "Terminus Prison to Forlorn Arena"
     arena_to_fate = "Forlorn Arena to Chamber of Fate"
     fate_to_sleeper = "Chamber of Fate to Grave of the Sleeper"
-
