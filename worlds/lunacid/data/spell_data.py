@@ -3,8 +3,9 @@ from typing import List
 from BaseClasses import ItemClassification
 
 from .game_item import GameItem
-from ..strings.spells import Spell
+from ..strings.spells import Spell, MobSpell
 from ..strings.regions_entrances import Region
+from ..strings.locations import Location
 
 
 @dataclass(frozen=True)
@@ -58,3 +59,12 @@ summon_fairy = create_spell(Spell.summon_fairy, Region.sanguine_sea, ItemClassif
 summon_ice_sword = create_spell(Spell.summon_ice_sword, Region.castle_le_fanu_red, ItemClassification.useful)
 wind_dash = create_spell(Spell.wind_dash, Region.fetid_mire, ItemClassification.useful)
 wind_slicer = create_spell(Spell.wind_slicer, Region.forest_canopy, ItemClassification.useful)
+
+spell_drop_locations = {
+    MobSpell.summon_snail: [Location.hollow_basin_left_water],
+    MobSpell.dark_skull: [Location.mausoleum_hidden_chest, Location.mire_skeleton_chest, Location.sea_blood_island],
+    MobSpell.summon_kodama: [Location.yosei_chest_near_tree],
+}
+
+light_spells = [Spell.lightning, Spell.moon_beam]
+blood_spells = [Spell.blood_drain, Spell.blood_strike]
