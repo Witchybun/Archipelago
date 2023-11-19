@@ -31,3 +31,4 @@ class UniqueItem:
     vampiric_symbol_e = "Vampiric Symbol (E)"
     crystal_lantern = "Crystal Lantern"
     terminus_prison_key = "Terminus Prison Key"
+    survey_banner = "Survey Banner"

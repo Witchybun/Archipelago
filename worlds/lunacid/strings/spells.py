@@ -30,3 +30,11 @@ class Spell:
     summon_ice_sword = "Summon Ice Sword"
     wind_dash = "Wind Dash"
     wind_slicer = "Wind Slicer"
+
+
+class MobSpell:
+    summon_snail = "Summon Snail"
+    summon_kodama = "Summon Kodama"
+    tornado = "Tornado"
+    dark_skull = "Dark Skull"
+    quick_stride = "Quick Stride"
