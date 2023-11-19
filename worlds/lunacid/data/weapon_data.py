@@ -58,4 +58,6 @@ wand_of_power = create_weapon(Weapon.wand_of_power, Region.castle_le_fanu_red, I
 wolfram_greatsword = create_weapon(Weapon.wolfram_greatsword, Region.forbidden_archives, ItemClassification.useful)
 wooden_shield = create_weapon(Weapon.wooden_shield, Region.hollow_basin, ItemClassification.useful)
 
+light_weapons = [Weapon.moonlight, Weapon.vampire_hunter_sword, Weapon.shadow_blade]
+ranged_weapons = [Weapon.elfen_bow, Weapon.twisted_staff, Weapon.wand_of_power]
 
