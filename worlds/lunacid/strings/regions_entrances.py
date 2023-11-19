@@ -27,6 +27,8 @@ class Region:
     chamber_of_fate = "Chamber of Fate"
     grave_of_the_sleeper = "Grave of the Sleeper"
     daedalus = "Daedalus"
+    Mausoleum = "Mausoleum"
+    yosei_lower = "Yosei Forest Lower"
 
 
 class Entrance:
@@ -40,9 +42,11 @@ class Entrance:
     basin_to_surface = "Hollow Basin to Great Well Surface"
     mire_to_sea = "The Fetid Mire to The Sanguine Sea"
     sea_to_tomb = "The Sanguine Sea to Accursed Tomb"
+    tomb_to_mausoleum = "Accursed Tomb to Mausoleum"
     sea_to_castle = "The Sanguine Sea to Castle Le Fanu"
+    yosei_to_yosei_lower = "Yosei Forest to Yosei Forest Lower"
     yosei_to_canopy = "Yosei Forest to Forest Canopy"
-    yosei_to_tomb = "Yosei Forest to Accursed Tomb"
+    yosei_lower_to_tomb = "Yosei Forest Lower to Accursed Tomb"
     archives_to_chasm = "Forbidden Archives to Laetus Chasm"
     archives_to_daedalus = "Forbidden Archives to Daedalus"
     chasm_to_surface = "Laetus Chasm to Great Well Surface"

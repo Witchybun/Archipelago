@@ -56,29 +56,4 @@ vampiric_symbol_e = create_item(UniqueItem.vampiric_symbol_e, True, ItemClassifi
 crystal_lantern = create_item(UniqueItem.crystal_lantern, True, ItemClassification.useful)
 terminus_prison_key = create_item(UniqueItem.terminus_prison_key, True, ItemClassification.progression)
 enchanted_key = create_item(GenericItem.enchanted_key, False, ItemClassification.progression)
-
-options_item_count = {
-    "Base": {
-        health_vial: 6 + 1 + 4 + 2 + 2 + 1 + 3 + 2 + 1 + 2 + 3 + 1,
-        mana_vial: 1,
-        antidote: 1,
-        blood_wine: 1,
-        crystal_shard: 1,
-        ocean_elixir: 1,
-        earth_elixir: 1,
-        poison_throwing_knife: 1,
-        black_book: 3,
-        holy_water: 1,
-        fairy_moss: 1,
-        light_urn: 1,
-        ashes: 1,
-        cloth_bandage: 1,
-        moonlight_vial: 3,
-        spectral_candle: 2,
-        dark_urn: 1,
-        wisp_heart: 1,
-        staff_of_osiris: 1,
-        enchanted_key: 1
-
-    }
-}
+survey_banner = create_item(UniqueItem.survey_banner, True, ItemClassification.useful)
