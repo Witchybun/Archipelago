@@ -86,14 +86,14 @@ class RandoExec(object):
         if hide == True:
             for itemLoc in itemLocs:
                 item = itemLoc.Item
-                loc = itemLoc.Location
+                loc = itemLoc.BaseLocation
                 if (item.Category != "Nothing"
                     and loc.CanHidden == True
                     and loc.Visibility == 'Visible'):
                     if bool(self.random.getrandbits(1)) == True:
                         loc.Visibility = 'Hidden'
         # put nothing in unfilled locations
-        filledLocNames = [il.Location.Name for il in itemLocs]
+        filledLocNames = [il.BaseLocation.Name for il in itemLocs]
         unfilledLocs = [loc for loc in Logic.locations if loc.Name not in filledLocNames]
         nothing = ItemManager.getItem('Nothing')
         for loc in unfilledLocs:
