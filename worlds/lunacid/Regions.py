@@ -1,73 +1,94 @@
-from worlds.lunacid.strings.regions_entrances import Region, Entrance
+from random import Random
+from BaseClasses import Region
+from typing import Protocol, Iterable, Tuple, Dict
+
+from worlds.lunacid.strings.regions_entrances import LunacidRegion, LunacidEntrance
 from .RegionClasses import RegionData, ConnectionData
+from .Options import LunacidOptions
+
+
+class RegionFactory(Protocol):
+    def __call__(self, name: str, regions: Iterable[str]) -> Region:
+        raise NotImplementedError
+
 
 lunacid_regions = [
-    RegionData(Region.menu, [Entrance.menu_to_basin]),
-    RegionData(Region.hollow_basin, [Entrance.to_wings_rest, Entrance.basin_to_archives, Entrance.basin_to_surface, Entrance.basin_to_temple]),
-    RegionData(Region.temple_of_silence, [Entrance.temple_to_mire, Entrance.temple_to_forest]),
-    RegionData(Region.wings_rest, [Entrance.wings_to_surface, Entrance.sheryl]),
-    RegionData(Region.fetid_mire, [Entrance.mire_to_sea]),
-    RegionData(Region.forbidden_archives, [Entrance.archives_to_chasm]),
-    RegionData(Region.laetus_chasm, [Entrance.chasm_to_surface]),
-    RegionData(Region.great_well_surface),
-    RegionData(Region.yosei_forest, [Entrance.yosei_to_yosei_lower, Entrance.yosei_to_canopy]),
-    RegionData(Region.forest_canopy),
-    RegionData(Region.yosei_lower, [Entrance.yosei_lower_to_tomb]),
-    RegionData(Region.sanguine_sea, [Entrance.sea_to_castle, Entrance.sea_to_tomb]),
-    RegionData(Region.accursed_tomb, [Entrance.tomb_to_mausoleum]),
-    RegionData(Region.mausoleum),
-    RegionData(Region.castle_le_fanu, [Entrance.castle_to_red, Entrance.castle_to_white, Entrance.castle_to_battleground]),
-    RegionData(Region.castle_le_fanu_red),
-    RegionData(Region.holy_battleground),
-    RegionData(Region.castle_le_fanu_white, [Entrance.white_to_blue, Entrance.white_to_throne]),
-    RegionData(Region.castle_le_fanu_blue, [Entrance.castle_to_grotto, Entrance.castle_to_ballroom]),
-    RegionData(Region.sealed_ballroom),
-    RegionData(Region.boiling_grotto, [Entrance.grotto_to_tower, Entrance.grotto_to_sand]),
-    RegionData(Region.tower_abyss),
-    RegionData(Region.sand_temple),
-    RegionData(Region.throne_chamber, [Entrance.throne_to_prison]),
-    RegionData(Region.terminus_prison, [Entrance.prison_to_prison_dark]),
-    RegionData(Region.terminus_prison_dark, [Entrance.prison_to_ash, Entrance.prison_to_arena]),
-    RegionData(Region.labyrinth_of_ash),
-    RegionData(Region.forlorn_arena, [Entrance.arena_to_fate]),
-    RegionData(Region.chamber_of_fate, [Entrance.fate_to_sleeper]),
-    RegionData(Region.grave_of_the_sleeper),
+    RegionData(LunacidRegion.menu, [LunacidEntrance.menu_to_basin]),
+    RegionData(LunacidRegion.hollow_basin, [LunacidEntrance.to_wings_rest, LunacidEntrance.basin_to_archives, LunacidEntrance.basin_to_surface, LunacidEntrance.basin_to_temple]),
+    RegionData(LunacidRegion.temple_of_silence, [LunacidEntrance.temple_to_mire, LunacidEntrance.temple_to_forest]),
+    RegionData(LunacidRegion.wings_rest, [LunacidEntrance.wings_to_surface, LunacidEntrance.sheryl]),
+    RegionData(LunacidRegion.fetid_mire, [LunacidEntrance.mire_to_sea]),
+    RegionData(LunacidRegion.forbidden_archives, [LunacidEntrance.archives_to_chasm]),
+    RegionData(LunacidRegion.laetus_chasm, [LunacidEntrance.chasm_to_surface]),
+    RegionData(LunacidRegion.great_well_surface),
+    RegionData(LunacidRegion.yosei_forest, [LunacidEntrance.yosei_to_yosei_lower, LunacidEntrance.yosei_to_canopy]),
+    RegionData(LunacidRegion.forest_canopy),
+    RegionData(LunacidRegion.yosei_lower, [LunacidEntrance.yosei_lower_to_tomb]),
+    RegionData(LunacidRegion.sanguine_sea, [LunacidEntrance.sea_to_castle, LunacidEntrance.sea_to_tomb]),
+    RegionData(LunacidRegion.accursed_tomb, [LunacidEntrance.tomb_to_mausoleum]),
+    RegionData(LunacidRegion.mausoleum),
+    RegionData(LunacidRegion.castle_le_fanu, [LunacidEntrance.castle_to_red, LunacidEntrance.castle_to_white, LunacidEntrance.castle_to_battleground]),
+    RegionData(LunacidRegion.castle_le_fanu_red),
+    RegionData(LunacidRegion.holy_battleground),
+    RegionData(LunacidRegion.castle_le_fanu_white, [LunacidEntrance.white_to_blue, LunacidEntrance.white_to_throne]),
+    RegionData(LunacidRegion.castle_le_fanu_blue, [LunacidEntrance.castle_to_grotto, LunacidEntrance.castle_to_ballroom]),
+    RegionData(LunacidRegion.sealed_ballroom),
+    RegionData(LunacidRegion.boiling_grotto, [LunacidEntrance.grotto_to_tower, LunacidEntrance.grotto_to_sand]),
+    RegionData(LunacidRegion.tower_abyss),
+    RegionData(LunacidRegion.sand_temple),
+    RegionData(LunacidRegion.throne_chamber, [LunacidEntrance.throne_to_prison]),
+    RegionData(LunacidRegion.terminus_prison, [LunacidEntrance.prison_to_prison_dark]),
+    RegionData(LunacidRegion.terminus_prison_dark, [LunacidEntrance.prison_to_ash, LunacidEntrance.prison_to_arena]),
+    RegionData(LunacidRegion.labyrinth_of_ash),
+    RegionData(LunacidRegion.forlorn_arena, [LunacidEntrance.arena_to_fate]),
+    RegionData(LunacidRegion.chamber_of_fate, [LunacidEntrance.fate_to_sleeper]),
+    RegionData(LunacidRegion.grave_of_the_sleeper),
 ]
 
 lunacid_entrances = [
-    ConnectionData(Entrance.menu_to_basin, Region.hollow_basin),
-    ConnectionData(Entrance.to_wings_rest, Region.wings_rest),
-    ConnectionData(Entrance.sheryl, Region.sheryl_the_crow),
-    ConnectionData(Entrance.basin_to_archives, Region.forbidden_archives),
-    ConnectionData(Entrance.basin_to_surface, Region.great_well_surface),
-    ConnectionData(Entrance.basin_to_temple, Region.temple_of_silence),
-    ConnectionData(Entrance.temple_to_mire, Region.fetid_mire),
-    ConnectionData(Entrance.temple_to_forest, Region.yosei_forest),
-    ConnectionData(Entrance.wings_to_surface, Region.great_well_surface),
-    ConnectionData(Entrance.mire_to_sea, Region.sanguine_sea),
-    ConnectionData(Entrance.archives_to_chasm, Region.laetus_chasm),
-    ConnectionData(Entrance.chasm_to_surface, Region.great_well_surface),
-    ConnectionData(Entrance.yosei_to_canopy, Region.forest_canopy),
-    ConnectionData(Entrance.yosei_to_yosei_lower, Region.yosei_lower),
-    ConnectionData(Entrance.yosei_lower_to_tomb, Region.accursed_tomb),
-    ConnectionData(Entrance.sea_to_castle, Region.castle_le_fanu),
-    ConnectionData(Entrance.sea_to_tomb, Region.accursed_tomb),
-    ConnectionData(Entrance.tomb_to_mausoleum, Region.mausoleum),
-    ConnectionData(Entrance.castle_to_red, Region.castle_le_fanu_red),
-    ConnectionData(Entrance.castle_to_white, Region.castle_le_fanu_white),
-    ConnectionData(Entrance.castle_to_battleground, Region.holy_battleground),
-    ConnectionData(Entrance.white_to_throne, Region.throne_chamber),
-    ConnectionData(Entrance.white_to_blue, Region.castle_le_fanu_blue),
-    ConnectionData(Entrance.castle_to_ballroom, Region.sealed_ballroom),
-    ConnectionData(Entrance.castle_to_grotto, Region.boiling_grotto),
-    ConnectionData(Entrance.grotto_to_tower, Region.tower_abyss),
-    ConnectionData(Entrance.throne_to_prison, Region.terminus_prison),
-    ConnectionData(Entrance.prison_to_arena, Region.forlorn_arena),
-    ConnectionData(Entrance.prison_to_ash, Region.labyrinth_of_ash),
-    ConnectionData(Entrance.arena_to_fate, Region.chamber_of_fate),
-    ConnectionData(Entrance.fate_to_sleeper, Region.grave_of_the_sleeper),
-    ConnectionData(Entrance.grotto_to_sand, Region.sand_temple),
-    ConnectionData(Entrance.prison_to_prison_dark, Region.terminus_prison_dark)
-
-
+    ConnectionData(LunacidEntrance.menu_to_basin, LunacidRegion.hollow_basin),
+    ConnectionData(LunacidEntrance.to_wings_rest, LunacidRegion.wings_rest),
+    ConnectionData(LunacidEntrance.sheryl, LunacidRegion.sheryl_the_crow),
+    ConnectionData(LunacidEntrance.basin_to_archives, LunacidRegion.forbidden_archives),
+    ConnectionData(LunacidEntrance.basin_to_surface, LunacidRegion.great_well_surface),
+    ConnectionData(LunacidEntrance.basin_to_temple, LunacidRegion.temple_of_silence),
+    ConnectionData(LunacidEntrance.temple_to_mire, LunacidRegion.fetid_mire),
+    ConnectionData(LunacidEntrance.temple_to_forest, LunacidRegion.yosei_forest),
+    ConnectionData(LunacidEntrance.wings_to_surface, LunacidRegion.great_well_surface),
+    ConnectionData(LunacidEntrance.mire_to_sea, LunacidRegion.sanguine_sea),
+    ConnectionData(LunacidEntrance.archives_to_chasm, LunacidRegion.laetus_chasm),
+    ConnectionData(LunacidEntrance.chasm_to_surface, LunacidRegion.great_well_surface),
+    ConnectionData(LunacidEntrance.yosei_to_canopy, LunacidRegion.forest_canopy),
+    ConnectionData(LunacidEntrance.yosei_to_yosei_lower, LunacidRegion.yosei_lower),
+    ConnectionData(LunacidEntrance.yosei_lower_to_tomb, LunacidRegion.accursed_tomb),
+    ConnectionData(LunacidEntrance.sea_to_castle, LunacidRegion.castle_le_fanu),
+    ConnectionData(LunacidEntrance.sea_to_tomb, LunacidRegion.accursed_tomb),
+    ConnectionData(LunacidEntrance.tomb_to_mausoleum, LunacidRegion.mausoleum),
+    ConnectionData(LunacidEntrance.castle_to_red, LunacidRegion.castle_le_fanu_red),
+    ConnectionData(LunacidEntrance.castle_to_white, LunacidRegion.castle_le_fanu_white),
+    ConnectionData(LunacidEntrance.castle_to_battleground, LunacidRegion.holy_battleground),
+    ConnectionData(LunacidEntrance.white_to_throne, LunacidRegion.throne_chamber),
+    ConnectionData(LunacidEntrance.white_to_blue, LunacidRegion.castle_le_fanu_blue),
+    ConnectionData(LunacidEntrance.castle_to_ballroom, LunacidRegion.sealed_ballroom),
+    ConnectionData(LunacidEntrance.castle_to_grotto, LunacidRegion.boiling_grotto),
+    ConnectionData(LunacidEntrance.grotto_to_tower, LunacidRegion.tower_abyss),
+    ConnectionData(LunacidEntrance.throne_to_prison, LunacidRegion.terminus_prison),
+    ConnectionData(LunacidEntrance.prison_to_arena, LunacidRegion.forlorn_arena),
+    ConnectionData(LunacidEntrance.prison_to_ash, LunacidRegion.labyrinth_of_ash),
+    ConnectionData(LunacidEntrance.arena_to_fate, LunacidRegion.chamber_of_fate),
+    ConnectionData(LunacidEntrance.fate_to_sleeper, LunacidRegion.grave_of_the_sleeper),
+    ConnectionData(LunacidEntrance.grotto_to_sand, LunacidRegion.sand_temple),
+    ConnectionData(LunacidEntrance.prison_to_prison_dark, LunacidRegion.terminus_prison_dark)
 ]
+
+
+def create_regions(region_factory: RegionFactory) -> Dict[str, Region]:
+    final_regions = lunacid_regions
+    regions: Dict[str: LunacidRegion] = {region.name: region_factory(region.name, region.exits) for region in final_regions}
+    entrances: Dict[str: LunacidEntrance] = {entrance.name: entrance for region in regions.values() for entrance in region.exits}
+
+    connections = lunacid_entrances
+    for connection in connections:
+        if connection.name in entrances:
+            entrances[connection.name].connect(regions[connection.destination])
+    return regions
