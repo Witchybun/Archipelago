@@ -4,8 +4,8 @@ from BaseClasses import ItemClassification
 
 from .game_item import GameItem
 from ..strings.spells import Spell, MobSpell
-from ..strings.regions_entrances import Region
-from ..strings.locations import Location
+from ..strings.regions_entrances import LunacidRegion
+from ..strings.locations import BaseLocation
 
 
 @dataclass(frozen=True)
@@ -59,9 +59,9 @@ wind_dash = create_spell(Spell.wind_dash, ItemClassification.useful)
 wind_slicer = create_spell(Spell.wind_slicer, ItemClassification.useful)
 
 spell_drop_locations = {
-    MobSpell.summon_snail: [Location.hollow_basin_left_water],
-    MobSpell.dark_skull: [Location.mausoleum_hidden_chest, Location.mire_skeleton_chest, Location.sea_blood_island],
-    MobSpell.summon_kodama: [Location.yosei_chest_near_tree],
+    MobSpell.summon_snail: [BaseLocation.hollow_basin_left_water],
+    MobSpell.dark_skull: [BaseLocation.mausoleum_hidden_chest, BaseLocation.mire_skeleton_chest, BaseLocation.sea_blood_island],
+    MobSpell.summon_kodama: [BaseLocation.yosei_chest_near_tree],
 }
 
 light_spells = [Spell.lightning, Spell.moon_beam]

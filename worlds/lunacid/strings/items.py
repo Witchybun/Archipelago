@@ -1,29 +1,46 @@
 class GenericItem:
-    health_vial = "Health Vial"
-    mana_vial = "Mana Vial"
-    antidote = "Antidote"
     blood_wine = "Blood Wine"
-    crystal_shard = "Crystal Shard"
-    poison_throwing_knife = "Poison Throwing Knife"
-    holy_water = "Holy Water"
-    fairy_moss = "Fairy Moss"
     light_urn = "Light Urn"
-    ashes = "Ashes"
     cloth_bandage = "Cloth Bandage"
-    moonlight_vial = "Moonlight Vial"
-    spectral_candle = "Spectral Candle"
     dark_urn = "Dark Urn"
-    wisp_heart = "Wisp Heart"
-    staff_of_osiris = "Staff of Osiris"
 
 
 class Alchemy:
     ectoplasm = "Ectoplasm"
     snowflake_obsidian = "Snowflake Obsidian"
-    moonpetal = "Moonpetal"
+    moon_petal = "Moon Petal"
     fractured_life = "Fractured Life"
     fractured_death = "Fractured Death"
     broken_sword = "Broken Sword"
+    fire_opal = "Fire Opal"
+    ashes = "Ashes"
+    opal = "Opal"
+    yellow_morel = "Yellow Morel"
+    lotus_seed_pod = "Lotus Seed Pod"
+    obsidian = "Obsidian"
+    onyx = "Onyx"
+    ocean_bone_shard = "Ocean Bone Shard"
+    bloodweed = "Bloodweed"
+    ikurrilb_root = "Ikurr'ilb Root"
+    destroying_angel_mushroom = "Destroying Angel Mushroom"
+    bomb = "Bomb"
+    poison_urn = "Poison Urn"
+    limbo = "Limbo"
+
+
+class Creation:
+    wisp_heart = "Wisp Heart"
+    staff_of_osiris = "Staff of Osiris"
+    moonlight_vial = "Moonlight Vial"
+    spectral_candle = "Spectral Candle"
+    health_vial = "Health Vial"
+    mana_vial = "Mana Vial"
+    fairy_moss = "Fairy Moss"
+    crystal_shard = "Crystal Shard"
+    poison_throwing_knife = "Poison Throwing Knife"
+    throwing_knife = "Throwing Knife"
+    holy_water = "Holy Water"
+    antidote = "Antidote"
 
 
 class UniqueItem:
@@ -43,9 +60,12 @@ class UniqueItem:
     survey_banner = "Survey Banner"
     water_talisman = "Water Talisman"
     earth_talisman = "Earth Talisman"
+    oil_lantern = "Oil Lantern"
 
 
 class Coins:
     silver_5 = "Silver (5)"
     silver_2 = "Silver (2)"
+    silver_50 = "Silver (50)"
     silver_100 = "Silver (100)"
+    strange_coin = "Strange Coins"
