@@ -1,4 +1,4 @@
-class Location:
+class BaseLocation:
     wings_rest_crystal_shard = "WR: Bench"
     wings_rest_ocean_elixir = "WR: Rafters"
 
@@ -45,6 +45,7 @@ class Location:
     sea_demon = "SS: Demon's Drop"
     sea_underblood = "SS: Underblood Near Castle Le Fanu"
     sea_blood_island = "SS: Blood Island"
+    sea_kill_jotunn = "SS: Killing the Jotunn"
 
     catacombs_coffin_stairs = "AT: Catacombs Coffins Near Stairs"
     catacombs_coffin_blue_light = "AT: Catacombs Coffins With Blue Light"
@@ -206,4 +207,24 @@ class Location:
     arena_water_hidden_alcove_before_switch = "FlA: Temple of Water Hidden Alcove Before Switch"
     arena_water_underwater_temple = "FlA: Temple of Water Underwater Temple"
     arena_water_chest_near_switch = "FlA: Temple of Water Chest Near Switch"
+
+    ash_entry_coffin = "LA: Entry Coffin"
+    ash_jotunn_remains = "LA: Jotunn Remains"
+    ash_cetea_statue = "LA: Cetea Statue"
+    ash_rocks_near_switch = "LA: Rocks Near Switch"
+    ash_forbidden_light_chest = "LA: Forbidden Light Chest"
+    ash_hidden_chest = "LA: Hidden Light Chest"
+
+    fate_lucid_blade = "LA: The Weapon to Kill an Immortal"
+
+
+class ShopLocation:
+    buy_enchanted_key = "Buy Enchanted Key"
+    buy_rapier = "Buy Rapier"
+    buy_steel_needle = "Buy Steel Needle"
+    buy_crossbow = "Buy Crossbow"
+    buy_oil_lantern = "Buy Oil Lantern"
+    buy_ocean_elixir = "Buy Ocean Elixir"
+    buy_privateer_musket = "Buy Privateer Musket"
+    buy_jotunn_slayer = "Buy Jotunn Slayer"
 
