@@ -29,3 +29,7 @@ class Weapon:
     wand_of_power = "Wand of Power"
     wolfram_greatsword = "Wolfram Greatsword"
     wooden_shield = "Wooden Shield"
+    crossbow = "Crossbow"
+    steel_needle = "Steel Needle"
+    hammer_of_cruelty = "Hammer of Cruelty"
+    lucid_blade = "Lucid Blade"
