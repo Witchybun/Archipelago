@@ -1,5 +1,6 @@
 
-class Region:
+class LunacidRegion:
+
     menu = "Menu"
     hollow_basin = "Hollow Basin"
     temple_of_silence = "Temple of Silence"
@@ -34,7 +35,7 @@ class Region:
     sand_temple = "Sand Temple"
 
 
-class Entrance:
+class LunacidEntrance:
     menu_to_basin = "Menu to Hollow Basin"
     to_wings_rest = "To Wing's Rest"
     wings_to_surface = "Wing's Rest to Great Well Surface"
