@@ -103,7 +103,7 @@ class RomPatcher:
         return ret
 
     def writeItem(self, itemLoc):
-        loc = itemLoc.BaseLocation
+        loc = itemLoc.Location
         if loc.isBoss():
             raise ValueError('Cannot write Boss location')
         #print('write ' + itemLoc.Item.Type + ' at ' + loc.Name)
@@ -113,7 +113,7 @@ class RomPatcher:
     def writeItemsLocs(self, itemLocs):
         self.nItems = 0
         for itemLoc in itemLocs:
-            loc = itemLoc.BaseLocation
+            loc = itemLoc.Location
             item = itemLoc.Item
             if loc.isBoss():
                 continue
@@ -125,8 +125,8 @@ class RomPatcher:
                     self.patchMorphBallEye(item)
 
     def writeSplitLocs(self, split, itemLocs, progItemLocs):
-        majChozoCheck = lambda itemLoc: itemLoc.Item.Class == split and itemLoc.BaseLocation.isClass(split)
-        fullCheck = lambda itemLoc: itemLoc.BaseLocation.Id is not None and itemLoc.BaseLocation.BossItemType is None
+        majChozoCheck = lambda itemLoc: itemLoc.Item.Class == split and itemLoc.Location.isClass(split)
+        fullCheck = lambda itemLoc: itemLoc.Location.Id is not None and itemLoc.Location.BossItemType is None
         splitChecks = {
             'Full': fullCheck,
             'Scavenger': fullCheck,
@@ -136,7 +136,7 @@ class RomPatcher:
         }
         itemLocCheck = lambda itemLoc: itemLoc.Item.Category != "Nothing" and splitChecks[split](itemLoc)
         for area,addr in locIdsByAreaAddresses.items():
-            locs = [il.BaseLocation for il in itemLocs if itemLocCheck(il) and il.BaseLocation.GraphArea == area and not il.BaseLocation.restricted]
+            locs = [il.Location for il in itemLocs if itemLocCheck(il) and il.Location.GraphArea == area and not il.Location.restricted]
             self.log.debug("writeSplitLocs. area="+area)
             self.log.debug(str([loc.Name for loc in locs]))
             self.romFile.seek(addr)
@@ -147,7 +147,7 @@ class RomPatcher:
             # write required major item order
             self.romFile.seek(Addresses.getOne('scavengerOrder'))
             for itemLoc in progItemLocs:
-                self.romFile.writeWord((itemLoc.BaseLocation.Id << 8) | itemLoc.BaseLocation.HUD)
+                self.romFile.writeWord((itemLoc.Location.Id << 8) | itemLoc.Location.HUD)
             # bogus loc ID | "HUNT OVER" index
             self.romFile.writeWord(0xff11)
             # fill remaining list with 0xFFFF to avoid issue with plandomizer having less items than in the base seed
@@ -267,7 +267,7 @@ class RomPatcher:
                 for patchName in RomPatcher.IPSPatches['VariaTweaks']:
                     self.applyIPSPatch(patchName)
             if (self.settings["majorsSplit"] == 'Scavenger'
-                and any(il for il in self.settings["progItemLocs"] if il.BaseLocation.Name == "Ridley")):
+                and any(il for il in self.settings["progItemLocs"] if il.Location.Name == "Ridley")):
                 # ridley as scav loc
                 self.applyIPSPatch("Blinking[RidleyRoomIn]")
 
@@ -545,7 +545,7 @@ class RomPatcher:
     def writeRandoSettings(self, settings, itemLocs):
         dist = self.getMinorsDistribution(itemLocs)
         totalAmmo = sum(d['Quantity'] for ammo,d in dist.items())
-        totalItemLocs = sum(1 for il in itemLocs if il.Accessible and not il.BaseLocation.isBoss())
+        totalItemLocs = sum(1 for il in itemLocs if il.Accessible and not il.Location.isBoss())
         totalNothing = sum(1 for il in itemLocs if il.Accessible and il.Item.Category == 'Nothing')
         totalEnergy = self.getItemQty(itemLocs, 'ETank')+self.getItemQty(itemLocs, 'Reserve')
         totalMajors = max(totalItemLocs - totalEnergy - totalAmmo - totalNothing, 0)
@@ -651,7 +651,7 @@ class RomPatcher:
 
         itemLocs = {}
         for iL in fItemLocs:
-            itemLocs[iL.Item.Name] = iL.BaseLocation.Name
+            itemLocs[iL.Item.Name] = iL.Location.Name
 
         def prepareString(s, isItem=True):
             s = s.upper()
@@ -1072,7 +1072,7 @@ class RomPatcher:
         self.writeItemsMasks(itemLocs)
         # hack bomb_torizo.ips to wake BT in all cases if necessary, ie chozo bots objective is on, and nothing at bombs
         if objectives.isGoalActive("activate chozo robots") and RomPatches.has(self.player, RomPatches.BombTorizoWake):
-            bomb = next((il for il in itemLocs if il.BaseLocation.Name == "Bomb"), None)
+            bomb = next((il for il in itemLocs if il.Location.Name == "Bomb"), None)
             if bomb is not None and bomb.Item.Category == "Nothing":
                 for addrName in ["BTtweaksHack1", "BTtweaksHack2"]:
                     self.romFile.seek(Addresses.getOne(addrName))
@@ -1084,7 +1084,7 @@ class RomPatcher:
         itemsMask = 0
         beamsMask = 0
         for il in itemLocs:
-            if not il.BaseLocation.restricted:
+            if not il.Location.restricted:
                 item = il.Item
                 itemsMask |= item.ItemBits
                 beamsMask |= item.BeamBits
