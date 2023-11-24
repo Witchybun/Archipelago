@@ -4,7 +4,7 @@ from typing import List
 
 from .game_item import GameItem
 from ..strings.weapons import Weapon
-from ..strings.regions_entrances import Region
+from ..strings.regions_entrances import LunacidRegion
 
 
 @dataclass(frozen=True)
@@ -57,6 +57,8 @@ wolfram_greatsword = create_weapon(Weapon.wolfram_greatsword, ItemClassification
 wooden_shield = create_weapon(Weapon.wooden_shield, ItemClassification.useful)
 crossbow = create_weapon(Weapon.crossbow, ItemClassification.progression)
 steel_needle = create_weapon(Weapon.steel_needle, ItemClassification.useful)
+lucid_blade = create_weapon(Weapon.lucid_blade, ItemClassification.progression)
+jotunn_slayer = create_weapon(Weapon.jotunn_slayer, ItemClassification.progression)
 
 
 light_weapons = [Weapon.moonlight, Weapon.vampire_hunter_sword, Weapon.shadow_blade]

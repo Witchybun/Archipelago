@@ -33,3 +33,8 @@ class Weapon:
     steel_needle = "Steel Needle"
     hammer_of_cruelty = "Hammer of Cruelty"
     lucid_blade = "Lucid Blade"
+
+    jotunn_slayer = "Jotunn Slayer"
+    rapier = "Rapier"
+    privateer_musket = "Privateer Musket"
+

@@ -42,9 +42,9 @@ class RandoServices(object):
                 self.cache.reset()
             self.currentLocations(ap, container)
         container.collect(itemLoc, pickup=pickup)
-        self.log.debug("COLLECT "+itemLoc.Item.Type+" at "+itemLoc.Location.Name)
+        self.log.debug("COLLECT " + itemLoc.Item.Type +" at " + itemLoc.BaseLocation.Name)
         RandoServices.printProgress('.')
-        return itemLoc.Location.accessPoint if pickup == True else ap
+        return itemLoc.BaseLocation.accessPoint if pickup == True else ap
 
     # gives all the possible theoretical locations for a given item
     def possibleLocations(self, item, ap, emptyContainer, bossesKilled=True):

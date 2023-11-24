@@ -96,11 +96,11 @@ def exclusion_rules(multiworld: MultiWorld, player: int, exclude_locations: typi
                 logging.warning(f"Unable to exclude location {loc_name} in player {player}'s world.")
 
 
-def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule):
+def set_rule(spot: typing.Union["BaseClasses.BaseLocation", "BaseClasses.LunacidEntrance"], rule: CollectionRule):
     spot.access_rule = rule
 
 
-def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine="and"):
+def add_rule(spot: typing.Union["BaseClasses.BaseLocation", "BaseClasses.LunacidEntrance"], rule: CollectionRule, combine="and"):
     old_rule = spot.access_rule
     # empty rule, replace instead of add
     if old_rule is Location.access_rule or old_rule is Entrance.access_rule:
@@ -112,7 +112,7 @@ def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
             spot.access_rule = lambda state: rule(state) or old_rule(state)
 
 
-def forbid_item(location: "BaseClasses.Location", item: str, player: int):
+def forbid_item(location: "BaseClasses.BaseLocation", item: str, player: int):
     old_rule = location.item_rule
     # empty rule
     if old_rule is Location.item_rule:
@@ -121,18 +121,18 @@ def forbid_item(location: "BaseClasses.Location", item: str, player: int):
         location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
 
 
-def forbid_items_for_player(location: "BaseClasses.Location", items: typing.Set[str], player: int):
+def forbid_items_for_player(location: "BaseClasses.BaseLocation", items: typing.Set[str], player: int):
     old_rule = location.item_rule
     location.item_rule = lambda i: (i.player != player or i.name not in items) and old_rule(i)
 
 
-def forbid_items(location: "BaseClasses.Location", items: typing.Set[str]):
+def forbid_items(location: "BaseClasses.BaseLocation", items: typing.Set[str]):
     """unused, but kept as a debugging tool."""
     old_rule = location.item_rule
     location.item_rule = lambda i: i.name not in items and old_rule(i)
 
 
-def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str = "and"):
+def add_item_rule(location: "BaseClasses.BaseLocation", rule: ItemRule, combine: str = "and"):
     old_rule = location.item_rule
     # empty rule, replace instead of add
     if old_rule is Location.item_rule:
@@ -153,7 +153,7 @@ def item_name_in_location_names(state: "BaseClasses.CollectionState", item: str,
 
 
 def item_name_in_locations(item: str, player: int,
-                           locations: typing.Sequence["BaseClasses.Location"]) -> bool:
+                           locations: typing.Sequence["BaseClasses.BaseLocation"]) -> bool:
     for location in locations:
         if location.item and location.item.name == item and location.item.player == player:
             return True
