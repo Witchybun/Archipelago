@@ -8,56 +8,26 @@ LOCATION_CODE_START = 771111110
 
 @dataclass(frozen=True)
 class LocationDict:
-    code: Optional[int]
     name: str
     region: str
 
 
-def create_event_locations():
-    location_data = []
-    for location in events:
-        location_data.append(LocationDict(None, location.name, location.region))
-    return location_data
-
-
 def initialize_locations():
-    locations = []
+    loc_1 = []
+    loc_2 = []
     for location in base_locations:
-        locations.append(LocationDict(location.id + LOCATION_CODE_START, location.name, location.region))
+        loc_1.append(LocationDict(location.name, location.region))
+    base_locations_cleaned = loc_1
     for location in shop_locations:
-        locations.append(LocationDict(location.id + LOCATION_CODE_START, location.name, location.region))
-    locations.extend(create_event_locations())
-    return locations
+        loc_2.append(LocationDict(location.name, location.region))
+    shop_locations_cleaned = loc_2
+    locations = loc_1 + loc_2
+    return locations, base_locations_cleaned, shop_locations_cleaned
 
 
-location_table = initialize_locations()
+total_table = initialize_locations()
+location_table = total_table[0]
+base_location_table = total_table[1]
+shop_locations_table = total_table[2]
 locations_by_name = {location.name: location for location in location_table}
-
-
-def extend_base_locations(location_data):
-    for location in base_locations:
-        location_data.append({
-            'code': location.code,
-            'name': location.name,
-            'region': location.region
-        })
-
-
-def extend_shop_locations(options: LunacidOptions, location_data):
-    shop = options.shopsanity
-    if shop:
-        return
-    for location in shop_locations:
-        location_data.append({
-            'code': location.code,
-            'name': location.name,
-            'region': location.region
-        })
-
-
-def create_locations(options: LunacidOptions):
-    world_locations: List[LocationDict] = []
-    extend_base_locations(world_locations)
-    extend_shop_locations(options, world_locations)
-    return world_locations
 
