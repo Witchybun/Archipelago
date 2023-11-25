@@ -1,22 +1,5 @@
-from Options import Choice, Toggle, Range, DeathLink, PerGameCommonOptions
-import random
-
-
-class ChoiceIsRandom(Choice):
-    randomized: bool = False
-
-    @classmethod
-    def from_text(cls, text: str) -> Choice:
-        text = text.lower()
-        if text == "random":
-            cls.randomized = True
-            return cls(random.choice(list(cls.name_lookup)))
-        for option_name, value in cls.options.items():
-            if option_name == text:
-                return cls(value)
-        raise KeyError(
-            f'Could not find option "{text}" for "{cls.__name__}", '
-            f'known options are {", ".join(f"{option}" for option in cls.name_lookup.values())}')
+from dataclasses import dataclass
+from Options import Choice, Toggle, DeathLink, PerGameCommonOptions
 
 
 class Ending(Choice):
@@ -51,27 +34,25 @@ class Switchsanity(Toggle):
     display_name = "Switchsanity"
 
 
-class Fillershuffle(Choice):
+class Arbitraryfiller(Toggle):
     """Choose how non-progression items are handled.
-    Shuffled: Only use the items and counts obtainable from their respective locations in the original game.
-    Random: Choose items from the entire game (includes some monster drops and alchemy creations).
-    Note that items from un-toggled options will not be chosen."""
-    internal_name = "fillershuffle"
-    display_name = "Filler Shuffle"
-    option_shuffled = 0
-    option_random = 1
-    default = 0
+    Off: Original location items are used for the randomizer.
+    On: Any item denoted as filler from Lunacid is used for the randomizer."""
+    internal_name = "arbitraryfiller"
+    display_name = "Arbitrary Filler"
 
 
 class LunacidDeathLink(DeathLink):
     """When you die, everyone dies. The reverse is also true.
     Note that this causes a Game Over; save often!"""
+    internal_name = "death_link"
 
 
+@dataclass
 class LunacidOptions(PerGameCommonOptions):
-    ending: Ending
+    ending = Ending
     shopsanity = Shopsanity
     dropsanity = Dropsanity
     switchsanity = Switchsanity
-    fillershuffle = Fillershuffle
-    death_link: LunacidDeathLink
+    arbitraryfiller = Arbitraryfiller
+    death_link = LunacidDeathLink
