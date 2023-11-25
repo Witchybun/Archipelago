@@ -1,28 +1,27 @@
+from dataclasses import dataclass
 from typing import Dict, List, Set, Any, Iterable, Optional, Union
+from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .data.location_data import events
-from .Items import all_items, create_items
-from .Locations import all_locations, create_locations, all_event_locations, LocationDict
-from .Regions import create_regions
-from .Rules import rules, LunacidLogic
+from .data.item_data import money, max_item_count_by_item, all_item_data_by_name
+from .strings.options import Endings, Victory
+from .strings.regions_entrances import LunacidRegion
+from .Items import item_table, complete_items_by_name, create_items, group_table, ITEM_CODE_START
+from .Locations import location_table, create_locations, LocationDict, LOCATION_CODE_START
+from .Regions import link_lunacid_areas, lunacid_entrances, lunacid_regions
+from .Rules import set_rules, has_every_spell
 from worlds.generic.Rules import set_rule
 from .Options import LunacidOptions
 
-client_version = 0
 
-
-class LunacidLocation(Location):
-    game: str = "Lunacid"
-
-    def __init__(self, player: int, name: str, address: Optional[int], parent=None):
-        super().__init__(player, name, address, parent)
-        self.event = not address
-
-
-class LunacidItem(Item):
-    game: str = "Lunacid"
+@dataclass(frozen=True)
+class LunacidItem:
+    actual_id: Optional[int]
+    name: str
+    classification: ItemClassification
+    player: int
 
 
 class LunacidWeb(WebWorld):
@@ -47,90 +46,88 @@ class LunacidWorld(World):
     sleeping old one below. On the way there will be many creatures and secrets to discover.
     """
 
-    game: str = "Lunacid"
+    game = "Lunacid"
     topology_present = False
-
-    item_name_to_id = {name: data.code for name, data in all_items.items()}
-    location_name_to_id = {name: data.code for name, data in all_locations.items()}
+    item_name_to_id = {item.name: item.code for item in item_table}
+    location_name_to_id = {location.name: location.code for location in location_table}
 
     data_version = 0
     required_client_version = (0, 4, 3)
 
     options_dataclass = LunacidOptions
-    options: LunacidOptions
-    logic: LunacidLogic
+    Options: LunacidOptions
+    item_name_groups = group_table
 
     web = LunacidWeb()
-    all_progression_items: Set[str]
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
-        self.all_progression_items = set()
+    def create_item(self, name: str) -> LunacidItem:
+        item_id: int = self.item_name_to_id[name]
+        actual_id = ITEM_CODE_START + item_id
+
+        return LunacidItem(actual_id, name, item_table[actual_id]["classification"], player=self.player)
+
+    def create_event(self, event: str):
+        return Item(event, ItemClassification.progression_skip_balancing, None, self.player)
+
+    def get_filler_item_name(self) -> str:
+        return self.multiworld.random.choice(money)
 
     def create_regions(self):
-        def create_region(name: str, exits: Iterable[str]) -> Region:
-            region = Region(name, self.player, self.multiworld)
-            region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
+        world = self.multiworld
+        player = self.player
+
+        def lunacidregion(region_name: str, entrances):
+            region = Region(region_name, player, world)
+            for entrance in entrances:
+                region.exits.append(Entrance(player, entrance, region))
             return region
 
-        world_regions = create_regions(create_region)
+        world.regions += [lunacidregion(*r) for r in lunacid_regions]
+        link_lunacid_areas(world, player)
 
-        def add_location(name: str, code: Optional[int], region_name: str):
-            region = world_regions[region_name]
-            location = LunacidLocation(self.player, name, code, region)
-            location.access_rule = lambda _: True
-            region.locations.append(location)
+        ending_region = world.get_region(LunacidRegion.grave_of_the_sleeper, player)
 
-        create_locations(add_location, self.options)
-        self.multiworld.regions.extend(world_regions.values())
+        if self.options.ending == self.options.ending.option_ending_cd:
+            victory = Location(player, Endings.look_into_abyss, None, ending_region)
+        else:
+            victory = Location(player, Endings.wake_dreamer, None, ending_region)
+        victory.place_locked_item(self.create_event(Victory.victory))
+        ending_region.locations.append(victory)
+
+        if self.options.ending == self.options.ending.option_ending_e:
+            set_rule(victory, lambda state: has_every_spell(self, state, player))
+
+        world.completion_condition[self.player] = lambda state: state.has("Victory", player)
 
     def create_items(self):
-        created_items = create_items(self.create_item, self.options,
-                                     self.multiworld.random)
+        world = self.multiworld
+        player = self.player
 
-        self.multiworld.itempool += created_items
+        skipped_items = []
 
-        self.setup_victory()
+        for item, count in world.start_inventory[player].value.items():
+            item_name = complete_items_by_name[item]
+            max_count = 1
+            if item_name in all_item_data_by_name:
+                max_count = max_item_count_by_item[item_name]
+            if count > max_count:
+                count = max_item_count_by_item[item_name]
+            for _ in range(count):
+                skipped_items.append(item)
 
-    def setup_victory(self):
-        if self.options.ending == self.options.ending.option_ending_cd:
-            self.create_event_location(all_event_locations["Look Into The Abyss"],
-                                       self.can_reach("Look Into The Abyss"),
-                                       "Victory")
-        else:
-            self.create_event_location(all_event_locations["Wake the Dreamer"],
-                                       self.can_reach("Wake the Dreamer"),
-                                       "Victory")
+        pool = create_items(self.options, self.multiworld.random)
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        for items in skipped_items:
+            item = complete_items_by_name[items]
+            pool.remove(item)
+            pool.append(self.create_item(self.get_filler_item_name()))
 
-    def create_item(self, item: Union[str, Item]) -> LunacidItem:
-        if isinstance(item, str):
-            item = all_items[item]
-
-        if item.classification == ItemClassification.progression:
-            self.all_progression_items.add(item.name)
-        return LunacidItem(item.name, item.classification, item.code, self.player)
-
-    def create_event_location(self, location_data: LocationDict, rule: bool = True, item: Optional[str] = None):
-        if item is None:
-            item = location_data.name
-
-        region = self.multiworld.get_region(location_data.region, self.player)
-        location = LunacidLocation(self.player, location_data.name, None, region)
-        location.access_rule = rule
-        region.locations.append(location)
-        location.place_locked_item(self.create_item(item))
+        world.itempool += pool
 
     def set_rules(self):
-        rules(self)
+        set_rules(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-
-        modified_bundles = {}
-        for bundle_key in self.modified_bundles:
-            key, value = self.modified_bundles[bundle_key].to_pair()
-            modified_bundles[key] = value
 
         excluded_options = []
         excluded_option_names = [option.internal_name for option in excluded_options]
@@ -140,9 +137,7 @@ class LunacidWorld(World):
         slot_data = self.options.as_dict(*included_option_names)
         slot_data.update({
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
-            "randomized_entrances": self.randomized_entrances,
-            "modified_bundles": modified_bundles,
-            "client_version": "4.0.0",
+            "client_version": "0.1.0",
         })
 
         return slot_data
