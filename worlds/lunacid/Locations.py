@@ -23,9 +23,9 @@ def create_event_locations():
 def initialize_locations():
     locations = []
     for location in base_locations:
-        locations.append(LocationDict(location.id, location.name, location.region))
+        locations.append(LocationDict(location.id + LOCATION_CODE_START, location.name, location.region))
     for location in shop_locations:
-        locations.append(LocationDict(location.id, location.name, location.region))
+        locations.append(LocationDict(location.id + LOCATION_CODE_START, location.name, location.region))
     locations.extend(create_event_locations())
     return locations
 

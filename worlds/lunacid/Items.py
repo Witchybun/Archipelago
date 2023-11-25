@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from BaseClasses import ItemClassification, Item
 from random import Random
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Tuple
 from .data.location_data import base_locations, shop_locations, LocationData
 from .data.item_data import all_items
 from .data.weapon_data import all_weapons
@@ -25,11 +25,11 @@ all_locations = base_locations + shop_locations
 def initialize_items_by_name() -> List[ItemDict]:
     items = []
     for item in all_items:
-        items.append(ItemDict(item.code, item.name, item.classification))
+        items.append(ItemDict(item.code + ITEM_CODE_START, item.name, item.classification))
     for weapon in all_weapons:
-        items.append(ItemDict(weapon.code, weapon.name, weapon.classification))
+        items.append(ItemDict(weapon.code + ITEM_CODE_START, weapon.name, weapon.classification))
     for spell in all_spells:
-        items.append(ItemDict(spell.code, spell.name, spell.classification))
+        items.append(ItemDict(spell.code + ITEM_CODE_START, spell.name, spell.classification))
     return items
 
 
@@ -37,41 +37,64 @@ complete_items = initialize_items_by_name()
 complete_items_by_name = {item.name: item for item in complete_items}
 
 
-def create_item_dict(locations: List[LocationData]) -> List[ItemDict]:
+def create_item_dict(locations: List[LocationData]) -> Tuple[List[ItemDict], Dict[str, int]]:
     item_data_list: List[Item] = []
+    item_count = {}
     for location in locations:
         item_name = location.original_item
         item_data = complete_items_by_name[item_name]
+        if item_data in item_data_list:
+            item_count[item_name] += 1
+            continue
         item_data_list.append(item_data)
-    return [ItemDict(item_data.code, item_data.name, item_data.classification) for item_data in item_data_list]
+        item_count[item_name] = 1
+    return [ItemDict(item_data.code, item_data.name, item_data.classification) for item_data in item_data_list], item_count
 
 
-item_table = create_item_dict(all_locations)
+dictionary_complete = create_item_dict(all_locations)
+item_table = dictionary_complete[0]
+item_table_counts = dictionary_complete[1]
 all_filler = [item for item in item_table if item.classification is ItemClassification.filler]
 
 
 def extend_items_by_locations(options: LunacidOptions, locations: List[LocationData], incoming_items, random: Random):
-    items = create_item_dict(locations)
+    dictionary = create_item_dict(locations)
+    items = dictionary[0]
+    item_counts = dictionary[1]
+    possible_filler_list = all_filler
+    total_filler = 0
     for item_data in items:
         if item_data.classification is not ItemClassification.filler:
             incoming_items.append({
                 'code': item_data.code,
                 'name': item_data.name,
+                'count': item_counts[item_data.name],
                 'classification': item_data.classification
             })
-        if options.arbitraryfiller == options.arbitraryfiller.option_shuffled:
-            incoming_items.extend({
+        if options.arbitraryfiller == options.arbitraryfiller.option_false:
+            incoming_items.append({
                 'code': item_data.code,
                 'name': item_data.name,
+                'count': item_counts[item_data.name],
                 'classification': item_data.classification
             })
-        elif options.arbitraryfiller == options.arbitraryfiller.option_random:
-            random_filler = random.choice(all_filler)
+        else:
+            total_filler += 1
+    if options.arbitraryfiller == options.arbitraryfiller.option_true:
+
+        while total_filler > 0:
+            num = random.randint(1,5)
+            item = random.choice(possible_filler_list)
+            possible_filler_list.remove(item)
+            if not possible_filler_list:
+                num = total_filler  # if we run out of items just go ham with the last one
             incoming_items.append({
-                'code': random_filler.code,
-                'name': random_filler.name,
-                'classification': random_filler.classification
+                'code': item.code,
+                'name': item.name,
+                'count': num,
+                'classification': item.classification
             })
+            total_filler -= num
 
 
 def create_items(options: LunacidOptions, random: Random):
