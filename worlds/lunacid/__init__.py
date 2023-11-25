@@ -86,7 +86,11 @@ class LunacidWorld(World):
         link_lunacid_areas(world, player)
 
         ending_region = world.get_region(LunacidRegion.grave_of_the_sleeper, player)
+        throne_region = world.get_region(LunacidRegion.throne_chamber, player)
 
+        crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
+        crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
+        throne_region.locations.append(crilall)
         if self.options.ending == self.options.ending.option_ending_cd:
             victory = Location(player, Endings.look_into_abyss, None, ending_region)
         else:
