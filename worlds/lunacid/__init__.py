@@ -4,24 +4,22 @@ from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from .data.location_data import events
+from .data.location_data import shop_items, base_items
 from .data.item_data import money, max_item_count_by_item, all_item_data_by_name
+from .strings.weapons import Weapon
 from .strings.options import Endings, Victory
 from .strings.regions_entrances import LunacidRegion
-from .Items import item_table, complete_items_by_name, create_items, group_table, ITEM_CODE_START
-from .Locations import location_table, create_locations, LocationDict, LOCATION_CODE_START
+from .strings.locations import BaseLocation
+from .Items import item_table, item_table_by_name, complete_items_by_name, create_items, group_table, ITEM_CODE_START
+from .Locations import location_table, base_location_table, shop_locations_table, LocationDict, LOCATION_CODE_START
 from .Regions import link_lunacid_areas, lunacid_entrances, lunacid_regions
 from .Rules import set_rules, has_every_spell
 from worlds.generic.Rules import set_rule
 from .Options import LunacidOptions
 
 
-@dataclass(frozen=True)
-class LunacidItem:
-    actual_id: Optional[int]
-    name: str
-    classification: ItemClassification
-    player: int
+class LunacidItem(Item):
+    game: str = "Lunacid"
 
 
 class LunacidWeb(WebWorld):
@@ -48,8 +46,8 @@ class LunacidWorld(World):
 
     game = "Lunacid"
     topology_present = False
-    item_name_to_id = {item.name: item.code for item in item_table}
-    location_name_to_id = {location.name: location.code for location in location_table}
+    item_name_to_id = {item.name: (ITEM_CODE_START + index) for index, item in enumerate(item_table)}
+    location_name_to_id = {loc.name: (LOCATION_CODE_START + index) for index, loc in enumerate(location_table)}
 
     data_version = 0
     required_client_version = (0, 4, 3)
@@ -60,11 +58,17 @@ class LunacidWorld(World):
 
     web = LunacidWeb()
 
-    def create_item(self, name: str) -> LunacidItem:
-        item_id: int = self.item_name_to_id[name]
-        actual_id = ITEM_CODE_START + item_id
+    def __init__(self, multiworld, player):
+        super(LunacidWorld, self).__init__(multiworld, player)
 
-        return LunacidItem(actual_id, name, item_table[actual_id]["classification"], player=self.player)
+    def set_rules(self):
+        set_rules(self)
+
+    def create_item(self, name: str) -> "LunacidItem":
+        item_id: int = self.item_name_to_id[name]
+        original_id = item_id - ITEM_CODE_START
+
+        return LunacidItem(name, item_table[original_id].classification, item_id, player=self.player)
 
     def create_event(self, event: str):
         return Item(event, ItemClassification.progression_skip_balancing, None, self.player)
@@ -85,12 +89,20 @@ class LunacidWorld(World):
         world.regions += [lunacidregion(*r) for r in lunacid_regions]
         link_lunacid_areas(world, player)
 
+        for index, location in enumerate(location_table):
+            if location in shop_locations_table and self.options.shopsanity == self.options.shopsanity.option_false:
+                continue
+            region: Region = world.get_region(location.region, player)
+            region.add_locations({location.name: index})
+
         ending_region = world.get_region(LunacidRegion.grave_of_the_sleeper, player)
         throne_region = world.get_region(LunacidRegion.throne_chamber, player)
-
+        lucid = world.get_location(BaseLocation.fate_lucid_blade, player)
+        lucid.place_locked_item(self.create_item(Weapon.lucid_blade))
         crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
         crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
         throne_region.locations.append(crilall)
+
         if self.options.ending == self.options.ending.option_ending_cd:
             victory = Location(player, Endings.look_into_abyss, None, ending_region)
         else:
@@ -118,18 +130,42 @@ class LunacidWorld(World):
                 count = max_item_count_by_item[item_name]
             for _ in range(count):
                 skipped_items.append(item)
+            skipped_items.append(Weapon.lucid_blade)
 
-        pool = create_items(self.options, self.multiworld.random)
+        counter = Counter(skipped_items)
+        pool = []
+
+        for original_item in base_items:
+            item = item_table_by_name[original_item]
+            count = item.count - counter[item.name]
+
+            if count <= 0:
+                continue
+            else:
+                for i in range(count):
+                    pool.append(self.create_item(item.name))
+
+        if self.options.shopsanity == self.options.shopsanity.option_true:
+            for original_item in shop_items:
+                item = complete_items_by_name[original_item]
+                count = item.count - counter[item.name]
+
+                if count <= 0:
+                    continue
+                else:
+                    for i in range(count):
+                        pool.append(self.create_item(item.name))
 
         for items in skipped_items:
             item = complete_items_by_name[items]
             pool.remove(item)
             pool.append(self.create_item(self.get_filler_item_name()))
 
+        filler_pool = [item for item in pool if item.classification == ItemClassification.filler]
+        for _ in range(8):
+            chosen_item = world.random.choice(filler_pool)
+            pool.remove(chosen_item)
         world.itempool += pool
-
-    def set_rules(self):
-        set_rules(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
 
