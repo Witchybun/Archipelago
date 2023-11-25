@@ -36,23 +36,17 @@ class Switchsanity(Toggle):
 
 class Arbitraryfiller(Toggle):
     """Choose how non-progression items are handled.
-    Off: Original location items are used for the randomizer.
-    On: Any item denoted as filler from Lunacid is used for the randomizer."""
+    False: Original location items are used for the randomizer.
+    True: Any item denoted as filler from Lunacid is used for the randomizer."""
     internal_name = "arbitraryfiller"
     display_name = "Arbitrary Filler"
 
 
-class LunacidDeathLink(DeathLink):
-    """When you die, everyone dies. The reverse is also true.
-    Note that this causes a Game Over; save often!"""
-    internal_name = "death_link"
-
-
 @dataclass
 class LunacidOptions(PerGameCommonOptions):
-    ending = Ending
-    shopsanity = Shopsanity
-    dropsanity = Dropsanity
-    switchsanity = Switchsanity
-    arbitraryfiller = Arbitraryfiller
-    death_link = LunacidDeathLink
+    ending: Ending
+    shopsanity: Shopsanity
+    dropsanity: Dropsanity
+    switchsanity: Switchsanity
+    arbitraryfiller: Arbitraryfiller
+    death_link: DeathLink

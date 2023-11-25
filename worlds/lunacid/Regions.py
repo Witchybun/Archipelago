@@ -13,6 +13,7 @@ lunacid_regions = [
     (LunacidRegion.hollow_basin, [LunacidEntrance.to_wings_rest, LunacidEntrance.basin_to_archives, LunacidEntrance.basin_to_surface, LunacidEntrance.basin_to_temple]),
     (LunacidRegion.temple_of_silence, [LunacidEntrance.temple_to_mire, LunacidEntrance.temple_to_forest]),
     (LunacidRegion.wings_rest, [LunacidEntrance.wings_to_surface, LunacidEntrance.sheryl]),
+    (LunacidRegion.sheryl_the_crow, []),
     (LunacidRegion.fetid_mire, [LunacidEntrance.mire_to_sea]),
     (LunacidRegion.forbidden_archives, [LunacidEntrance.archives_to_chasm]),
     (LunacidRegion.laetus_chasm, [LunacidEntrance.chasm_to_surface]),
