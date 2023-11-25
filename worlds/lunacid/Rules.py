@@ -129,6 +129,12 @@ def set_rules(game_world):
     set_rule(world.get_entrance(LunacidEntrance.arena_to_fate, player),
              lambda state: state.has_all({UniqueItem.water_talisman, UniqueItem.earth_talisman}, player))
 
+    set_rule(world.get_location(BaseLocation.archives_daedalus_one, player),
+             lambda state: state.has(UniqueItem.black_book, player, 1))
+    set_rule(world.get_location(BaseLocation.archives_daedalus_two, player),
+             lambda state: state.has(UniqueItem.black_book, player, 2))
+    set_rule(world.get_location(BaseLocation.archives_daedalus_third, player),
+             lambda state: state.has(UniqueItem.black_book, player, 3))
     set_rule(world.get_location(BaseLocation.sea_pillar, player),
              lambda state: can_jump_high(state, player))
     set_rule(world.get_location(BaseLocation.tomb_demi_chest, player),

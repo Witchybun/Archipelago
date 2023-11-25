@@ -272,6 +272,8 @@ chamber_of_fate = [
 base_locations = wings_rest + hollow_basin + great_well_surface + the_fetid_mire + the_sacrosant_sea + accursed_tomb + yosei_forest + \
                  forest_canopy + forbidden_archives + castle_le_fanu + holy_battlefield + sealed_ballroom + laetus_chasm + throne_room + boiling_grotto + \
                  terminus_prison + forlorn_arena + labyrinth_of_ash + chamber_of_fate
+base_items = []
+[base_items.append(location.original_item) for location in base_locations if location.original_item not in base_items]
 
 switch_locations = []
 
@@ -285,5 +287,7 @@ shop_locations = [
     LocationData(194, ShopLocation.buy_steel_needle, LunacidRegion.sheryl_the_crow, Weapon.steel_needle),
     LocationData(195, ShopLocation.buy_ocean_elixir, LunacidRegion.sheryl_the_crow, UniqueItem.ocean_elixir)
 ]
+shop_items = []
+[shop_items.append(location.original_item) for location in shop_locations if location.original_item not in shop_items]
 
 mob_drop_locations = []
