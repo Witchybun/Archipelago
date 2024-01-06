@@ -4,7 +4,6 @@ from BaseClasses import ItemClassification
 
 from .game_item import GameItem
 from ..strings.spells import Spell, MobSpell
-from ..strings.regions_entrances import LunacidRegion
 from ..strings.locations import BaseLocation
 
 
@@ -59,10 +58,18 @@ summon_ice_sword = create_spell(148, Spell.summon_ice_sword, ItemClassification.
 wind_dash = create_spell(149, Spell.wind_dash, ItemClassification.useful)
 wind_slicer = create_spell(150, Spell.wind_slicer, ItemClassification.useful)
 
+summon_snail = create_spell(151, MobSpell.summon_snail, ItemClassification.useful)
+dark_skull = create_spell(152, MobSpell.dark_skull, ItemClassification.useful)
+summon_kodama = create_spell(153, MobSpell.summon_kodama, ItemClassification.useful)
+tornado = create_spell(154, MobSpell.tornado, ItemClassification.useful)
+quick_stride = create_spell(155, MobSpell.quick_stride, ItemClassification.useful)
+
 spell_drop_locations = {
     MobSpell.summon_snail: [BaseLocation.hollow_basin_left_water],
     MobSpell.dark_skull: [BaseLocation.mausoleum_hidden_chest, BaseLocation.mire_skeleton_chest, BaseLocation.sea_blood_island],
     MobSpell.summon_kodama: [BaseLocation.yosei_chest_near_tree],
+    MobSpell.quick_stride: [BaseLocation.archives_daedalus_one],
+    MobSpell.tornado: [BaseLocation.ash_rocks_near_switch]
 }
 
 light_spells = [Spell.lightning, Spell.moon_beam]
