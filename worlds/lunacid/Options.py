@@ -19,19 +19,19 @@ class Ending(Choice):
 class Shopsanity(Toggle):
     """Choose whether the unique items Sheryl the Crow sells are locations."""
     internal_name = "shopsanity"
-    display_name = "Shopsanity"
+    display_name = "Shuffle Shop Items"
 
 
 class Dropsanity(Toggle):
     """Choose whether the unique items monsters drop are locations."""
     internal_name = "dropsanity"
-    display_name = "Dropsanity"
+    display_name = "Mob Drops"
 
 
 class Switchsanity(Toggle):
     """Choose whether the switches in the game are locations, and their action of opening doors is an item."""
     internal_name = "switchsanity"
-    display_name = "Switchsanity"
+    display_name = "Shuffle Switches"
 
 
 class Arbitraryfiller(Toggle):
