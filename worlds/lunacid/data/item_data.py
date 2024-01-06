@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from typing import List
-from BaseClasses import ItemClassification, Item
+from BaseClasses import ItemClassification
 
 from .game_item import GameItem
-from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation
+from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Switch
 
 
 @dataclass(frozen=True)
-class ItemItem(GameItem):
+class GeneralItem(GameItem):
     code: int
     name: str
     classification: ItemClassification
@@ -16,12 +16,13 @@ class ItemItem(GameItem):
         return f"{self.code} {self.name} (Classification: {self.classification})"
 
 
-all_items: List[ItemItem] = []
+all_items: List[GeneralItem] = []
 
 
 def create_item(code: int, name: str, classification: ItemClassification):
-    item = ItemItem(name, code, classification)
+    item = GeneralItem(name, code, classification)
     all_items.append(item)
+
     return item
 
 
@@ -70,6 +71,21 @@ silver_100 = create_item(42, Coins.silver_100, ItemClassification.filler)
 strange_coin = create_item(43, Coins.strange_coin, ItemClassification.progression)
 oil_lantern = create_item(44, UniqueItem.oil_lantern, ItemClassification.progression)
 
+hb_switch_1 = create_item(45, Switch.hollow_basin_switch_near_demi, ItemClassification.useful)
+hb_switch_2 = create_item(46, Switch.temple_switch, ItemClassification.useful)
+fm_switch = create_item(47, Switch.fetid_mire_switch, ItemClassification.useful)
+fa_switch = create_item(48, Switch.archives_switch, ItemClassification.useful)
+at_switch_1 = create_item(49, Switch.tomb_shortcut_switch, ItemClassification.useful)
+at_switch_2 = create_item(50, Switch.tomb_crypt_switch, ItemClassification.useful)
+bg_switch_1 = create_item(51, Switch.grotto_temple_switch, ItemClassification.useful)
+bg_switch_2 = create_item(52, Switch.grotto_calor_switch, ItemClassification.useful)
+sb_switch = create_item(53, Switch.ballroom_switch, ItemClassification.useful)
+tp_switch_1 = create_item(54, Switch.prison_arena_switch, ItemClassification.progression)
+tp_switch_2 = create_item(55, Switch.prison_shortcut_switch, ItemClassification.useful)
+fla_switch_1 = create_item(56, Switch.arena_earth_switch, ItemClassification.useful)
+fla_switch_2 = create_item(57, Switch.arena_water_switch, ItemClassification.useful)
+la_switch = create_item(58, Switch.ash_switch, ItemClassification.useful)
+
 item_light_sources = [UniqueItem.crystal_lantern, UniqueItem.oil_lantern]
 money = [silver_5, silver_50, silver_100, silver_10]
 
@@ -91,4 +107,3 @@ max_item_count_by_item = {
     enchanted_key: 2,
     corrupted_key: 1,
 }
-

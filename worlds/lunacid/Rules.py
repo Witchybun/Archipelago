@@ -9,7 +9,6 @@ from .strings.regions_entrances import LunacidEntrance
 from .strings.spells import Spell
 from .strings.items import UniqueItem
 from .strings.locations import BaseLocation
-from .Options import LunacidOptions
 
 all_light_sources = spell_light_sources + weapon_light_sources + item_light_sources
 
