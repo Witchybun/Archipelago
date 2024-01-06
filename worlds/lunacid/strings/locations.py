@@ -193,6 +193,7 @@ class BaseLocation:
     prison_f4_monk_room_three = "TP: Fourth Floor Monk Room 3"
     prison_f4_collapsed_tunnel = "TP: Fourth Floor Collapsed Tunnel"
 
+    arena_broken_sword = "FlA: Central Area"
     arena_rock_parkour = "FlA: Entry Rock Parkour"
     arena_earth_hidden_plant_haven = "FlA: Temple of Earth Hidden Plant Haven"
     arena_earth_hidden_room = "FlA: Temple of Earth Hidden Room"
@@ -228,3 +229,40 @@ class ShopLocation:
     buy_privateer_musket = "Buy Privateer Musket"
     buy_jotunn_slayer = "Buy Jotunn Slayer"
 
+
+class SwitchLocation:
+    hollow_basin_switch_near_demi = "HB: Switch Near Demi"
+    temple_switch = "HB: Temple Gates Switch"
+    fetid_mire_switch = "FM: Shortcut Switch"
+    tomb_shortcut_switch = "AT: Shortcut Switch"
+    tomb_crypt_switch = "AT: Crypt Switch"
+    archives_switch = "FA: Shortcut Switch"
+    ballroom_switch = "SB: Shortcut Switch"
+    grotto_calor_switch = "BG: Switch Near Chest"
+    grotto_temple_switch = "BG: Inner Temple Switch"
+    prison_shortcut_switch = "TP: Shortcut Switch"
+    prison_arena_switch = "TP: Arena Door Switch"
+    arena_water_switch = "TP: Water Shortcut Switch"
+    arena_earth_switch = "TP: Earth Shortcut Switch"
+    ash_switch = "LA: Shortcut Switch"
+
+
+class DropLocation:
+    snail_drop = "Snail: Summon Snail Drop"
+    mummy_drop = "Mummy: Rusted Sword Drop"
+    milk_snail_drop = "Milk Snail: Ice Sickle Drop"
+    skeleon_weapon_drop = "Skeleton: Skeleton Axe Drop"
+    skeleton_spell_drop = "Skeleton: Dark Skull Drop"
+    phantom_drop = "Phantom: Cursed Blade Drop"
+    kodama_drop = "Kodama: Summon Kodama Drop"
+    chimera_drop = "Chimera: Quick Stride Drop"
+    vampire_drop = "Vampire Page: Lyrian Longsword Drop"
+    horse_drop = "Malformed Horse: Brittle Arming Sword Drop"
+    obsidian_skeleton_drop_1 = "Obsidian Skeleton: Obsidian Cursebrand Drop"
+    obsidian_skeleton_drop_2 = "Obsidian Skeleton: Obsidian Poisonguard Drop"
+    anpu_drop_1 = "Anpu: Golden Kopesh Drop"
+    anpu_drop_2 = "Anpu: Golden Sickle Drop"
+    jailor_drop = "Jailor: Jailor's Candle Drop"
+    sucsarian_drop_1 = "Sucsarian: Sucsarian Dagger Drop"
+    sucsarian_drop_2 = "Sucsarian: Sucsarian Spear Drop"
+    cetea_drop = "Cetea: Tornado Drop"
