@@ -69,3 +69,21 @@ class Coins:
     silver_50 = "Silver (50)"
     silver_100 = "Silver (100)"
     strange_coin = "Strange Coins"
+
+
+class Switch:
+    hollow_basin_switch_near_demi = "Hollow Basin Switch"
+    temple_switch = "Temple of Silence Switch"
+    fetid_mire_switch = "Fetid Mire Switch"
+    tomb_shortcut_switch = "Accursed Tomb Main Switch"
+    tomb_crypt_switch = "Accursed Tomb Crypt Switch"
+    archives_switch = "Forbidden Archives Switch"
+    ballroom_switch = "Sealed Ballroom Switch"
+    grotto_calor_switch = "Sand Temple Main Switch"
+    grotto_temple_switch = "Sand Temple Back Switch"
+    prison_shortcut_switch = "Accursed Prison Main Switch"
+    prison_arena_switch = "Forlorn Arena Gate Switch"
+    arena_water_switch = "Temple of Water Switch"
+    arena_earth_switch = "Temple of Earth Switch"
+    ash_switch = "Labyrinth of Ash Switch"
+
