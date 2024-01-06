@@ -4,7 +4,6 @@ from typing import List
 
 from .game_item import GameItem
 from ..strings.weapons import Weapon
-from ..strings.regions_entrances import LunacidRegion
 
 
 @dataclass(frozen=True)
@@ -12,7 +11,6 @@ class WeaponItem(GameItem):
     code: int
     name: str
     classification: ItemClassification
-
 
     def __repr__(self):
         return f"{self.name} (Classification: {self.classification})"
@@ -59,15 +57,28 @@ wooden_shield = create_weapon(88, Weapon.wooden_shield, ItemClassification.usefu
 crossbow = create_weapon(89, Weapon.crossbow, ItemClassification.progression)
 steel_needle = create_weapon(90, Weapon.steel_needle, ItemClassification.useful)
 lucid_blade = create_weapon(91, Weapon.lucid_blade, ItemClassification.progression)
-jotunn_slayer = create_weapon(92, Weapon.jotunn_slayer, ItemClassification.progression)
 hammer_of_cruelty = create_weapon(93, Weapon.hammer_of_cruelty, ItemClassification.useful)
+
+jotunn_slayer = create_weapon(92, Weapon.jotunn_slayer, ItemClassification.progression)
 rapier = create_weapon(94, Weapon.rapier, ItemClassification.useful)
 privateer_musket = create_weapon(95, Weapon.privateer_musket, ItemClassification.useful)
 
+rusted_sword = create_weapon(96, Weapon.rusted_sword, ItemClassification.useful)
+ice_sickle = create_weapon(97, Weapon.ice_sickle, ItemClassification.useful)
+skeleton_axe = create_weapon(98, Weapon.skeleton_axe, ItemClassification.useful)
+cursed_blade = create_weapon(99, Weapon.cursed_blade, ItemClassification.useful)
+brittle_arming_sword = create_weapon(100, Weapon.brittle_arming_sword, ItemClassification.useful)
+obsidian_cursebrand = create_weapon(101, Weapon.obsidian_cursebrand, ItemClassification.useful)
+obsidian_poisonguard = create_weapon(102, Weapon.obsidian_poisonguard, ItemClassification.useful)
+golden_kopesh = create_weapon(103, Weapon.golden_kopesh, ItemClassification.useful)
+golden_sickle = create_weapon(104, Weapon.golden_sickle, ItemClassification.useful)
+jailor_candle = create_weapon(105, Weapon.jailor_candle, ItemClassification.useful)
+sucsarian_dagger = create_weapon(106, Weapon.sucsarian_dagger, ItemClassification.useful)
+sucsarian_spear = create_weapon(107, Weapon.sucsarian_spear, ItemClassification.useful)
+lyrian_longsword = create_weapon(108, Weapon.lyrian_longsword, ItemClassification.useful)
 
 light_weapons = [Weapon.moonlight, Weapon.vampire_hunter_sword, Weapon.shadow_blade]
 ranged_weapons = [Weapon.elfen_bow, Weapon.twisted_staff, Weapon.wand_of_power, Weapon.crossbow]
 weapon_light_sources = [Weapon.torch, Weapon.twisted_staff, Weapon.moonlight]
 
 all_weapons_by_name = {weapon.name: weapon for weapon in all_weapons}
-
