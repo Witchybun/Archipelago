@@ -81,4 +81,6 @@ light_weapons = [Weapon.moonlight, Weapon.vampire_hunter_sword, Weapon.shadow_bl
 ranged_weapons = [Weapon.elfen_bow, Weapon.twisted_staff, Weapon.wand_of_power, Weapon.crossbow]
 weapon_light_sources = [Weapon.torch, Weapon.twisted_staff, Weapon.moonlight]
 
+starting_weapons = [Weapon.replica_sword, Weapon.battle_axe, Weapon.ice_sickle, Weapon.stone_club, Weapon.twisted_staff, Weapon.ritual_dagger]
+
 all_weapons_by_name = {weapon.name: weapon for weapon in all_weapons}
