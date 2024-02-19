@@ -1,6 +1,7 @@
 class Endings:
     wake_dreamer = "Wake the Dreamer"
     look_into_abyss = "Look into the Abyss"
+    open_door = "Open the Door"
 
 
 class Victory:
