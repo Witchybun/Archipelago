@@ -13,7 +13,7 @@ from .data.item_count_data import (base_weapons, base_spells, base_special_item_
 from .data.switch_data import all_switches
 from .data.weapon_data import all_weapons
 from .data.spell_data import all_spells
-from .strings.items import UniqueItem, Progressives
+from .strings.items import UniqueItem, Progressives, Coins
 from .strings.options import Settings
 
 logger = logging.getLogger(__name__)
@@ -56,7 +56,7 @@ complete_items_by_name = {item.name: item for item in item_table}
 
 def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], options: LunacidOptions, random: Random) -> List[Item]:
     items = []
-    lunacid_items = create_lunacid_items(item_factory, options, items)
+    lunacid_items = create_lunacid_items(item_factory, options)
     for item in items_to_exclude:
         if item in lunacid_items:
             lunacid_items.remove(item)
@@ -64,12 +64,13 @@ def create_items(item_factory: LunacidItemFactory, locations_count: int, items_t
     items += lunacid_items
     logger.debug(f"Created {len(lunacid_items)} unique items")
     filler_slots = locations_count - len(lunacid_items)
-    items += create_filler(item_factory, options, random, filler_slots, items)
+    create_filler(item_factory, options, random, filler_slots, items)
 
     return items
 
 
-def create_lunacid_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
+def create_lunacid_items(item_factory: LunacidItemFactory, options: LunacidOptions):
+    items = []
     create_weapons(item_factory, options, items)
     create_spells(item_factory, options, items)
     create_special_items(item_factory, options, items)
@@ -103,6 +104,7 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
         items.append(item_factory(item))
     for item in base_special_item_counts:
         items.extend(item_factory(special_item) for special_item in [item] * base_special_item_counts[item])
+    items.extend(item_factory(coin) for coin in [Coins.strange_coin] * get_coin_count(options))
     if options.shopsanity == options.shopsanity.option_true:
         for item in shop_unique_items:
             items.append(item_factory(item))
@@ -123,8 +125,28 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
         filler_list.extend([filler for filler in shop_filler_items if filler not in filler_list])
     if options.dropsanity == options.dropsanity.option_true:
         filler_list.extend([filler for filler in drop_filler_count if filler not in filler_list])
-    items.extend([item_factory(filler) for filler in random.sample(filler_list, filler_slots)])
+    items.extend([item_factory(filler) for filler in random.choices(filler_list, k=filler_slots)])
     return items
+
+
+def get_coin_count(options: LunacidOptions):
+    coin_setting = options.strangecoinbundle
+    if coin_setting == coin_setting.option_one:
+        return 30
+    if coin_setting == coin_setting.option_two:
+        return 15
+    if coin_setting == coin_setting.option_three:
+        return 10
+    if coin_setting == coin_setting.option_five:
+        return 6
+    if coin_setting == coin_setting.option_six:
+        return 5
+    if coin_setting == coin_setting.option_ten:
+        return 3
+    if coin_setting == coin_setting.option_fifteen:
+        return 2
+    if coin_setting == coin_setting.option_thirty:
+        return 1
 
 
 all_filler = [item for item in item_table if item.classification is ItemClassification.filler]
