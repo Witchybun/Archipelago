@@ -133,8 +133,7 @@ class LunacidWorld(World):
 
     def create_items(self):
         locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player)
-                               if not location.event or location.name != BaseLocation.hollow_basin_starting_sword])
+                               for location in self.multiworld.get_locations(self.player)]) - 3
 
         excluded_items = self.multiworld.precollected_items[self.player] + [self.determine_starting_weapon()]
 
