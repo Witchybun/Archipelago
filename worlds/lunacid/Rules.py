@@ -68,12 +68,6 @@ def has_poison_dark_blood_access(state: CollectionState, player: int, options: L
     return state.has_any(poison_or_dark_attacks, player)
 
 
-def has_enchanted_keys(state: CollectionState, player: int, options: LunacidOptions) -> bool:
-    if options.shopsanity == options.shopsanity.option_true:
-        return state.has(UniqueItem.enchanted_key, player, 2)
-    return state.has(UniqueItem.enchanted_key, player)
-
-
 def set_rules(game_world: "LunacidWorld") -> None:
     world = game_world.multiworld
     player = game_world.player
@@ -82,6 +76,7 @@ def set_rules(game_world: "LunacidWorld") -> None:
     set_base_entrance_rules(world, player, options)
     set_base_location_rules(world, player, options)
     set_switch_rules(world, player, options)
+    set_enchanted_key_rules(world, player, options)
 
 
 def set_base_entrance_rules(world: MultiWorld, player: int, options: LunacidOptions):
@@ -91,20 +86,14 @@ def set_base_entrance_rules(world: MultiWorld, player: int, options: LunacidOpti
              lambda state: state.has(Spell.icarian_flight, player))
     set_rule(world.get_entrance(LunacidEntrance.basin_to_surface, player),
              lambda state: state.has(Spell.icarian_flight, player))
-    set_rule(world.get_entrance(LunacidEntrance.basin_to_temple, player),
-             lambda state: has_light_source(state, player) and has_enchanted_keys(state, player, options))
     set_rule(world.get_entrance(LunacidEntrance.temple_to_forest, player),
              lambda state: has_light_source(state, player))
     set_rule(world.get_entrance(LunacidEntrance.temple_to_mire, player),
              lambda state: has_light_source(state, player))
-    set_rule(world.get_entrance(LunacidEntrance.tomb_to_mausoleum, player),
-             lambda state: state.has_any(light_spells + light_weapons, player) and has_light_source(state, player))
     set_rule(world.get_entrance(LunacidEntrance.yosei_to_yosei_lower, player),
              lambda state: state.has_any(blood_spells, player) or can_jump_high(state, player))
-    set_rule(world.get_entrance(LunacidEntrance.yosei_to_canopy, player),
-             lambda state:  has_enchanted_keys(state, player, options))
     set_rule(world.get_entrance(LunacidEntrance.archives_to_chasm, player),
-             lambda state: state.has(Progressives.vampiric_symbol, player, 2))
+             lambda state: state.has(Progressives.vampiric_symbol, player, 2) and state.has(Spell.icarian_flight, player))
     set_rule(world.get_entrance(LunacidEntrance.white_to_throne, player),
              lambda state: state.has(Progressives.vampiric_symbol, player, 3))
     set_rule(world.get_entrance(LunacidEntrance.throne_to_prison, player),
@@ -131,7 +120,7 @@ def set_base_location_rules(world: MultiWorld, player: int, options: LunacidOpti
     set_rule(world.get_location(BaseLocation.archives_daedalus_third, player),
              lambda state: state.has(UniqueItem.black_book, player, 3))
     set_rule(world.get_location(BaseLocation.sea_pillar, player),
-             lambda state: can_jump_high(state, player))
+             lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, player))
     set_rule(world.get_location(BaseLocation.tomb_demi_chest, player),
              lambda state: can_jump_high(state, player))
     set_rule(world.get_location(BaseLocation.mausoleum_upper_table, player),
@@ -151,7 +140,7 @@ def set_base_location_rules(world: MultiWorld, player: int, options: LunacidOpti
     set_rule(world.get_location(BaseLocation.sand_chest_overlooking_crypt, player),
              lambda state: can_jump_high(state, player))
     set_rule(world.get_location(BaseLocation.arena_water_underwater_temple, player),
-             lambda state: can_jump_high(state, player))
+             lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, player))
     set_rule(world.get_location(BaseLocation.arena_earth_earthen_temple, player),
              lambda state: can_jump_high(state, player))
 
@@ -160,7 +149,8 @@ def set_switch_rules(world: MultiWorld, player: int, options: LunacidOptions):  
     set_rule(world.get_entrance(LunacidEntrance.tomb_to_vampire, player),
              lambda state: has_light_element_access(state, player) and has_key_to_switch(state, Switch.tomb_lightning_gate_2, player, options))
     set_rule(world.get_entrance(LunacidEntrance.tomb_to_mausoleum, player),
-             lambda state: has_light_element_access(state, player) and has_key_to_switch(state, Switch.tomb_lightning_gate_1, player, options))
+             lambda state: has_light_element_access(state, player) and has_key_to_switch(state, Switch.tomb_lightning_gate_1, player, options) and
+                           has_light_source(state, player))
     set_rule(world.get_entrance(LunacidEntrance.temple_entrance_to_temple_interior, player),
              lambda state: has_key_to_switch(state, Switch.temple_switch, player, options))
     set_rule(world.get_entrance(LunacidEntrance.grotto_to_sand, player),
@@ -170,3 +160,14 @@ def set_switch_rules(world: MultiWorld, player: int, options: LunacidOptions):  
     set_rule(world.get_entrance(LunacidEntrance.prison_to_prison_dark, player),
              lambda state: has_key_to_switch(state, Switch.prison_shortcut_switch, player, options) or state.has(Spell.icarian_flight, player))
 
+
+def set_enchanted_key_rules(world: MultiWorld, player: int, options: LunacidOptions):
+    setting_count = 1 if options.shopsanity == options.shopsanity.option_true else 0
+    if setting_count == 0:
+        set_rule(world.get_entrance(LunacidEntrance.basin_to_temple, player),
+                 lambda state: has_light_source(state, player))
+    else:
+        set_rule(world.get_entrance(LunacidEntrance.basin_to_temple, player),
+                 lambda state: has_light_source(state, player) and state.has(UniqueItem.enchanted_key, player))
+    set_rule(world.get_entrance(LunacidEntrance.yosei_to_canopy, player),
+             lambda state: state.has(UniqueItem.enchanted_key, player, 1 + setting_count))
