@@ -7,12 +7,12 @@ from .data.location_data import shop_items, base_items, drop_items
 from .data.item_data import money, max_item_count_by_item, all_item_data_by_name
 from .data.spell_data import starting_spells
 from .data.weapon_data import starting_weapons
-from .strings.items import Creation
+from .strings.items import Creation, Coins
 from .strings.weapons import Weapon
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
 from .strings.locations import BaseLocation
-from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_START, ItemDict, create_items
+from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_START, ItemDict, create_items, get_coin_count
 from .Locations import (location_table, base_location_table, shop_locations_table, mob_drop_locations_table, LocationDict,
                         LOCATION_CODE_START)
 from .Regions import link_lunacid_areas, lunacid_entrances, lunacid_regions
@@ -97,8 +97,6 @@ class LunacidWorld(World):
             code = location.code
             if location in shop_locations_table and self.options.shopsanity == self.options.shopsanity.option_false:
                 continue
-            if location in switch_locations_table and self.options.switchlocks == self.options.switchlocks.option_false:
-                continue
             if location in mob_drop_locations_table and self.options.dropsanity == self.options.dropsanity.option_false:
                 continue
             region: Region = world.get_region(location.region, player)
@@ -107,7 +105,10 @@ class LunacidWorld(World):
         starting_location = world.get_location(BaseLocation.hollow_basin_starting_sword, player)
         starting_location.place_locked_item(self.determine_starting_weapon())
 
-        ending_region = world.get_region(LunacidRegion.grave_of_the_sleeper, player)
+        if self.options.ending == self.options.ending.option_ending_b:
+            ending_region = world.get_region(LunacidRegion.labyrinth_of_ash, player)
+        else:
+            ending_region = world.get_region(LunacidRegion.grave_of_the_sleeper, player)
         throne_region = world.get_region(LunacidRegion.throne_chamber, player)
         crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
         crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
@@ -115,12 +116,17 @@ class LunacidWorld(World):
 
         if self.options.ending == self.options.ending.option_ending_cd:
             victory = Location(player, Endings.look_into_abyss, None, ending_region)
+        elif self.options.ending == self.options.ending.option_ending_b:
+            victory = Location(player, Endings.open_door, None, ending_region)
         else:
             victory = Location(player, Endings.wake_dreamer, None, ending_region)
         victory.place_locked_item(self.create_event(Victory.victory))
         ending_region.locations.append(victory)
 
-        if self.options.ending == self.options.ending.option_ending_e:
+        if self.options.ending == self.options.ending.option_ending_b:
+            coin_count = get_coin_count(self.options)
+            set_rule(victory, lambda state: state.has(Coins.strange_coin, player, coin_count))
+        elif self.options.ending == self.options.ending.option_ending_e:
             set_rule(victory, lambda state: has_every_spell(state, player))
 
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
@@ -128,7 +134,7 @@ class LunacidWorld(World):
     def create_items(self):
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
-                               if not location.event])
+                               if not location.event or location.name != BaseLocation.hollow_basin_starting_sword])
 
         excluded_items = self.multiworld.precollected_items[self.player] + [self.determine_starting_weapon()]
 
