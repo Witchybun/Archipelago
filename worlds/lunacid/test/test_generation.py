@@ -1,7 +1,7 @@
 from BaseClasses import ItemClassification, MultiWorld
 from . import LunacidTestBase
 from .. import Items
-from ..Options import Shopsanity, Switchsanity
+from ..Options import Shopsanity, SwitchLocks
 
 
 def get_real_locations(tester: LunacidTestBase, multiworld: MultiWorld):
@@ -38,7 +38,7 @@ class TestShopItems(LunacidTestBase):
 
 class TestSwitchItems(LunacidTestBase):
     options = {
-        Switchsanity.internal_name: Switchsanity.option_true
+        SwitchLocks.internal_name: SwitchLocks.option_true
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):

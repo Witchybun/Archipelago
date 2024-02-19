@@ -45,7 +45,6 @@ class Weapon:
     jailor_candle = "Jailor's Candle"
     obsidian_cursebrand = "Obsidian Cursebrand"
     obsidian_poisonguard = "Obsidian Poisonguard"
-    rusted_sword = "Rusted Sword"
     skeleton_axe = "Skeleton Axe"
     sucsarian_dagger = "Sucsarian Dagger"
     sucsarian_spear = "Sucsarian Spear"
