@@ -22,7 +22,8 @@ lunacid_regions = [
     (LunacidRegion.great_well_surface, []),
     (LunacidRegion.yosei_forest, [LunacidEntrance.yosei_to_yosei_lower, LunacidEntrance.yosei_to_canopy]),
     (LunacidRegion.forest_canopy, []),
-    (LunacidRegion.yosei_lower, [LunacidEntrance.yosei_lower_to_tomb]),
+    (LunacidRegion.yosei_lower, [LunacidEntrance.yosei_lower_to_tomb, LunacidEntrance.yosei_lower_to_patchouli]),
+    (LunacidRegion.patchouli, []),
     (LunacidRegion.sanguine_sea, [LunacidEntrance.sea_to_castle, LunacidEntrance.sea_to_tomb]),
     (LunacidRegion.accursed_tomb, [LunacidEntrance.tomb_to_mausoleum]),
     (LunacidRegion.mausoleum, []),
@@ -78,5 +79,6 @@ lunacid_entrances = [
     (LunacidEntrance.arena_to_fate, LunacidRegion.chamber_of_fate),
     (LunacidEntrance.fate_to_sleeper, LunacidRegion.grave_of_the_sleeper),
     (LunacidEntrance.grotto_to_sand, LunacidRegion.sand_temple),
-    (LunacidEntrance.prison_to_prison_dark, LunacidRegion.terminus_prison_dark)
+    (LunacidEntrance.prison_to_prison_dark, LunacidRegion.terminus_prison_dark),
+    (LunacidEntrance.yosei_lower_to_patchouli, LunacidRegion.patchouli)
 ]

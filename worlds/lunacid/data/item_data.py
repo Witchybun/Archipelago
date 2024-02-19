@@ -3,7 +3,7 @@ from typing import List
 from BaseClasses import ItemClassification
 
 from .game_item import GameItem
-from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Switch
+from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Switch, Progressives
 
 
 @dataclass(frozen=True)
@@ -49,9 +49,7 @@ white_tape = create_item(20, UniqueItem.white_tape, ItemClassification.useful)
 vhs_tape = create_item(21, UniqueItem.vhs_tape, ItemClassification.progression)
 corrupted_key = create_item(22, UniqueItem.corrupted_key, ItemClassification.progression)
 skull_of_josiah = create_item(23, UniqueItem.skull_of_josiah, ItemClassification.progression)
-vampiric_symbol_w = create_item(24, UniqueItem.vampiric_symbol_w, ItemClassification.progression)
-vampiric_symbol_a = create_item(25, UniqueItem.vampiric_symbol_a, ItemClassification.progression)
-vampiric_symbol_e = create_item(26, UniqueItem.vampiric_symbol_e, ItemClassification.progression)
+vampiric_symbol = create_item(24, Progressives.vampiric_symbol, ItemClassification.progression)
 crystal_lantern = create_item(27, UniqueItem.crystal_lantern, ItemClassification.useful)
 terminus_prison_key = create_item(28, UniqueItem.terminus_prison_key, ItemClassification.progression)
 enchanted_key = create_item(29, UniqueItem.enchanted_key, ItemClassification.progression)
@@ -86,6 +84,7 @@ fla_switch_1 = create_item(56, Switch.arena_earth_switch, ItemClassification.use
 fla_switch_2 = create_item(57, Switch.arena_water_switch, ItemClassification.useful)
 la_switch = create_item(58, Switch.ash_switch, ItemClassification.useful)
 
+
 item_light_sources = [UniqueItem.crystal_lantern, UniqueItem.oil_lantern]
 money = [silver_5, silver_50, silver_100, silver_10]
 
@@ -106,4 +105,5 @@ max_item_count_by_item = {
     terminus_prison_key: 1,
     enchanted_key: 2,
     corrupted_key: 1,
+    vampiric_symbol: 3,
 }
