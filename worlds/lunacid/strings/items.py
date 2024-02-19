@@ -63,12 +63,16 @@ class UniqueItem:
     oil_lantern = "Oil Lantern"
 
 
+class Progressives:
+    vampiric_symbol = "Progressive Vampiric Symbol"
+
+
 class Coins:
     silver_5 = "Silver (5)"
     silver_2 = "Silver (2)"
     silver_50 = "Silver (50)"
     silver_100 = "Silver (100)"
-    strange_coin = "Strange Coins"
+    strange_coin = "Strange Coin"
 
 
 class Switch:
@@ -77,11 +81,18 @@ class Switch:
     fetid_mire_switch = "Fetid Mire Switch"
     tomb_shortcut_switch = "Accursed Tomb Main Switch"
     tomb_crypt_switch = "Accursed Tomb Crypt Switch"
+    tomb_light_switch_1 = "Accursed Tomb Light Switch (Near Save Crystal)"
+    tomb_light_switch_2 = "Accursed Tomb Light Switch (Near Demi)"
+    tomb_light_switch_3 = "Accursed Tomb Light Switch (In Noble Crypt)"
+    tomb_lightning_gate_1 = "Accursed Tomb Lightning Gate (To Mausoleum)"
+    tomb_lightning_gate_2 = "Accursed Tomb Lightning Gate (To Jusztina)"
     archives_switch = "Forbidden Archives Switch"
     ballroom_switch = "Sealed Ballroom Switch"
+    grotto_valve_switch_1 = "Boiling Grotto Fire Switch (North)"
+    grotto_valve_switch_2 = "Boiling Grotto Fire Switch (South)"
     grotto_calor_switch = "Sand Temple Main Switch"
     grotto_temple_switch = "Sand Temple Back Switch"
-    prison_shortcut_switch = "Accursed Prison Main Switch"
+    prison_shortcut_switch = "Terminus Prison Back Alley Switch"
     prison_arena_switch = "Forlorn Arena Gate Switch"
     arena_water_switch = "Temple of Water Switch"
     arena_earth_switch = "Temple of Earth Switch"

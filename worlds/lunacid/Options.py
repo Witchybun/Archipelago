@@ -1,19 +1,55 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DeathLink, PerGameCommonOptions
+from Options import Choice, Toggle, DeathLink, PerGameCommonOptions, Range
 
 
 class Ending(Choice):
     """Choose which ending is required to complete the game.
     Ending A: Reach Chamber of the Sleeper without all spells and awaken the Dreamer.
+    Ending B: Obtain 30 Strange Coins and enter the door located in the Labyrinth of Ash.
     Ending CD: Reach Chamber of the Sleeper and stare into the water pool.
     Ending E: Reach Chamber of the Sleeper with all spells and awaken the Dreamer."""
     internal_name = "ending"
     display_name = "Ending"
     option_any_ending = 0
     option_ending_a = 1
-    option_ending_cd = 2
-    option_ending_e = 3
+    option_ending_b = 2
+    option_ending_cd = 3
+    option_ending_e = 4
     default = 0
+
+
+class ExperienceMod(Range):
+    """Multiplier for gained experience as a percent.  Ranges from 25% to 400%."""
+    internal_name = "experience"
+    display_name = "Experience Modifier"
+    range_start = 25
+    range_end = 400
+    default = 100
+
+
+class StrangeCoinBundle(Choice):
+    """Changes the drop total of the strange coins from 10 to any divisor of 30, helping it become more of a maguffin hunt.
+    Note: Filler will be replaced to compensate."""
+    internal_name = "coinbundle"
+    display_name = "Strange Coin Bundle"
+    option_one = 0
+    option_two = 1
+    option_three = 2
+    option_five = 3
+    option_six = 4
+    option_ten = 5
+    option_fifteen = 6
+    option_thirty = 7
+    default = 5
+
+
+class FillerBundle(Range):
+    """Changes how many of the non-unique filler items are given to the player when such an item is received."""
+    internal_name = "fillerbundle"
+    display_name = "Filler Bundle"
+    range_start = 1
+    range_end = 5
+    default = 1
 
 
 class Shopsanity(Toggle):
@@ -28,25 +64,20 @@ class Dropsanity(Toggle):
     display_name = "Mob Drops"
 
 
-class Switchsanity(Toggle):
-    """Choose whether the switches in the game are locations, and their action of opening doors is an item."""
-    internal_name = "switchsanity"
-    display_name = "Shuffle Switches"
-
-
-class Arbitraryfiller(Toggle):
-    """Choose how non-progression items are handled.
-    False: Original location items are used for the randomizer.
-    True: Any item denoted as filler from Lunacid is used for the randomizer."""
-    internal_name = "arbitraryfiller"
-    display_name = "Arbitrary Filler"
+class SwitchLocks(Toggle):
+    """All physical switches (not mirages) are locked, and cannot be flipped without their relevant item.
+    Note: Removes filler at random to compensate."""
+    internal_name = "switchlock"
+    display_name = "Lock Switches"
 
 
 @dataclass
 class LunacidOptions(PerGameCommonOptions):
     ending: Ending
+    experience: ExperienceMod
+    strangecoinbundle: StrangeCoinBundle
+    fillerbundle: FillerBundle
     shopsanity: Shopsanity
     dropsanity: Dropsanity
-    switchsanity: Switchsanity
-    arbitraryfiller: Arbitraryfiller
+    switchlocks: SwitchLocks
     death_link: DeathLink

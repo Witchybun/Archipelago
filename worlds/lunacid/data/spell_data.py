@@ -75,6 +75,8 @@ spell_drop_locations = {
 light_spells = [Spell.lightning, Spell.moon_beam]
 blood_spells = [Spell.blood_drain, Spell.blood_strike]
 spell_light_sources = [Spell.flame_flare, Spell.ghost_light]
-jump_spells = [Spell.icarian_flight, Spell.rock_bridge, Spell.coffin]
+jump_spells = [Spell.icarian_flight, Spell.rock_bridge]
+
+starting_spells = [Spell.flame_spear, Spell.ice_spear, Spell.blood_strike, Spell.wind_slicer, Spell.earth_strike]
 
 all_spells_by_name = {spell.name: spell for spell in all_spells}
