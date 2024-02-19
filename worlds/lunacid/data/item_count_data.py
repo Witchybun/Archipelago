@@ -84,7 +84,6 @@ base_unique_items = [
 ]
 
 base_special_item_counts = {
-    Coins.strange_coin: 3,
     UniqueItem.black_book: 3,
     Progressives.vampiric_symbol: 3,
 }
