@@ -37,22 +37,22 @@ hollow_basin = [
     LocationData(14, BaseLocation.hollow_basin_enchanted_door, LunacidRegion.hollow_basin, Creation.health_vial),
     LocationData(15, BaseLocation.hollow_basin_dark_item, LunacidRegion.hollow_basin, Weapon.torch),
 
-    LocationData(16, BaseLocation.temple_fountain, LunacidRegion.temple_of_silence, Creation.health_vial),
-    LocationData(17, BaseLocation.temple_ritual_table, LunacidRegion.temple_of_silence, Weapon.ritual_dagger),
-    LocationData(18, BaseLocation.temple_altar_chest, LunacidRegion.temple_of_silence, Spell.lithomancy),
-    LocationData(19, BaseLocation.temple_pillar_left, LunacidRegion.temple_of_silence, Creation.health_vial),
-    LocationData(20, BaseLocation.temple_pillar_right, LunacidRegion.temple_of_silence, Creation.health_vial),
-    LocationData(21, BaseLocation.temple_ritual_ring, LunacidRegion.temple_of_silence, Spell.flame_flare),
-    LocationData(22, BaseLocation.temple_small_pillar, LunacidRegion.temple_of_silence, Creation.health_vial),
-    LocationData(23, BaseLocation.temple_pillar_room_left, LunacidRegion.temple_of_silence, Creation.crystal_shard),
-    LocationData(24, BaseLocation.temple_pillar_room_back_left, LunacidRegion.temple_of_silence, Weapon.wooden_shield),
-    LocationData(25, BaseLocation.temple_pillar_room_back_right, LunacidRegion.temple_of_silence, GenericItem.blood_wine),
-    LocationData(26, BaseLocation.temple_pillar_room_hidden_room, LunacidRegion.temple_of_silence, Spell.blood_strike),
-    LocationData(27, BaseLocation.temple_hidden_room_in_sewer, LunacidRegion.temple_of_silence, UniqueItem.vhs_tape),
-    LocationData(28, BaseLocation.temple_table_in_sewer, LunacidRegion.temple_of_silence, Weapon.stone_club),
-    LocationData(29, BaseLocation.temple_sewer_puzzle, LunacidRegion.temple_of_silence, UniqueItem.corrupted_key),
-    LocationData(30, BaseLocation.temple_blood_altar, LunacidRegion.temple_of_silence, Coins.strange_coin),
-    LocationData(31, BaseLocation.temple_path_to_forest, LunacidRegion.temple_of_silence, Weapon.steel_spear),
+    LocationData(16, BaseLocation.temple_fountain, LunacidRegion.temple_of_silence_entrance, Creation.health_vial),
+    LocationData(17, BaseLocation.temple_ritual_table, LunacidRegion.temple_of_silence_entrance, Weapon.ritual_dagger),
+    LocationData(18, BaseLocation.temple_altar_chest, LunacidRegion.temple_of_silence_entrance, Spell.lithomancy),
+    LocationData(19, BaseLocation.temple_pillar_left, LunacidRegion.temple_of_silence_interior, Creation.health_vial),
+    LocationData(20, BaseLocation.temple_pillar_right, LunacidRegion.temple_of_silence_interior, Creation.health_vial),
+    LocationData(21, BaseLocation.temple_ritual_ring, LunacidRegion.temple_of_silence_interior, Spell.flame_flare),
+    LocationData(22, BaseLocation.temple_small_pillar, LunacidRegion.temple_of_silence_interior, Creation.health_vial),
+    LocationData(23, BaseLocation.temple_pillar_room_left, LunacidRegion.temple_of_silence_interior, Creation.crystal_shard),
+    LocationData(24, BaseLocation.temple_pillar_room_back_left, LunacidRegion.temple_of_silence_interior, Weapon.wooden_shield),
+    LocationData(25, BaseLocation.temple_pillar_room_back_right, LunacidRegion.temple_of_silence_interior, GenericItem.blood_wine),
+    LocationData(26, BaseLocation.temple_pillar_room_hidden_room, LunacidRegion.temple_of_silence_interior, Spell.blood_strike),
+    LocationData(27, BaseLocation.temple_hidden_room_in_sewer, LunacidRegion.temple_of_silence_interior, UniqueItem.vhs_tape),
+    LocationData(28, BaseLocation.temple_table_in_sewer, LunacidRegion.temple_of_silence_interior, Weapon.stone_club),
+    LocationData(29, BaseLocation.temple_sewer_puzzle, LunacidRegion.temple_of_silence_interior, UniqueItem.corrupted_key),
+    LocationData(30, BaseLocation.temple_blood_altar, LunacidRegion.temple_of_silence_interior, Coins.strange_coin),
+    LocationData(31, BaseLocation.temple_path_to_forest, LunacidRegion.temple_of_silence_interior, Weapon.steel_spear),
 ]
 
 the_fetid_mire = [
@@ -85,27 +85,27 @@ accursed_tomb = [
     LocationData(68, BaseLocation.catacombs_coffin_blue_light, LunacidRegion.accursed_tomb, Spell.coffin),
     LocationData(69, BaseLocation.corrupted_room, LunacidRegion.accursed_tomb, UniqueItem.white_tape),
     LocationData(70, BaseLocation.catacombs_coffin_gate, LunacidRegion.accursed_tomb, UniqueItem.ocean_elixir),
-    LocationData(71, BaseLocation.catacombs_hidden_room, LunacidRegion.accursed_tomb, UniqueItem.ocean_elixir),
-    LocationData(72, BaseLocation.catacombs_deep_coffin_storage, LunacidRegion.accursed_tomb, Weapon.halberd),
-    LocationData(73, BaseLocation.catacombs_restore_vampire, LunacidRegion.accursed_tomb, Weapon.blade_of_jusztina),
+    LocationData(71, BaseLocation.catacombs_hidden_room, LunacidRegion.vampire_tomb, UniqueItem.ocean_elixir),
+    LocationData(72, BaseLocation.catacombs_deep_coffin_storage, LunacidRegion.vampire_tomb, Weapon.halberd),
+    LocationData(73, BaseLocation.catacombs_restore_vampire, LunacidRegion.vampire_tomb, Weapon.blade_of_jusztina),
 
-    LocationData(74, BaseLocation.mausoleum_hidden_chest, LunacidRegion.accursed_tomb, Weapon.twisted_staff),
-    LocationData(75, BaseLocation.mausoleum_upper_table, LunacidRegion.accursed_tomb, UniqueItem.black_book),
-    LocationData(76, BaseLocation.mausoleum_maze_intro, LunacidRegion.accursed_tomb, Creation.holy_water),
-    LocationData(77, BaseLocation.mausoleum_maze_mid, LunacidRegion.accursed_tomb, Creation.health_vial),
-    LocationData(78, BaseLocation.mausoleum_center_right, LunacidRegion.accursed_tomb, Creation.health_vial),
-    LocationData(79, BaseLocation.mausoleum_center_left, LunacidRegion.accursed_tomb, Creation.holy_water),
-    LocationData(80, BaseLocation.mausoleum_center_back, LunacidRegion.accursed_tomb, UniqueItem.earth_elixir),
-    LocationData(81, BaseLocation.mausoleum_center_left_path, LunacidRegion.accursed_tomb, Creation.health_vial),
-    LocationData(82, BaseLocation.mausoleum_center_right_path, LunacidRegion.accursed_tomb, UniqueItem.ocean_elixir),
-    LocationData(83, BaseLocation.mausoleum_kill_death, LunacidRegion.accursed_tomb, Coins.strange_coin),
+    LocationData(74, BaseLocation.mausoleum_hidden_chest, LunacidRegion.mausoleum, Weapon.twisted_staff),
+    LocationData(75, BaseLocation.mausoleum_upper_table, LunacidRegion.mausoleum, UniqueItem.black_book),
+    LocationData(76, BaseLocation.mausoleum_maze_intro, LunacidRegion.mausoleum, Creation.holy_water),
+    LocationData(77, BaseLocation.mausoleum_maze_mid, LunacidRegion.mausoleum, Creation.health_vial),
+    LocationData(78, BaseLocation.mausoleum_center_right, LunacidRegion.mausoleum, Creation.health_vial),
+    LocationData(79, BaseLocation.mausoleum_center_left, LunacidRegion.mausoleum, Creation.holy_water),
+    LocationData(80, BaseLocation.mausoleum_center_back, LunacidRegion.mausoleum, UniqueItem.earth_elixir),
+    LocationData(81, BaseLocation.mausoleum_center_left_path, LunacidRegion.mausoleum, Creation.health_vial),
+    LocationData(82, BaseLocation.mausoleum_center_right_path, LunacidRegion.mausoleum, UniqueItem.ocean_elixir),
+    LocationData(83, BaseLocation.mausoleum_kill_death, LunacidRegion.mausoleum, Coins.strange_coin),
 
-    LocationData(83, BaseLocation.tomb_tomb_with_switch, LunacidRegion.accursed_tomb, Weapon.vampire_hunter_sword),
-    LocationData(84, BaseLocation.tomb_tomb_with_corpse, LunacidRegion.accursed_tomb, UniqueItem.survey_banner),
-    LocationData(85, BaseLocation.tomb_demi_chest, LunacidRegion.accursed_tomb, Spell.lightning),
-    LocationData(86, BaseLocation.tomb_near_light_switch, LunacidRegion.accursed_tomb, Creation.crystal_shard),
-    LocationData(87, BaseLocation.tomb_hidden_room, LunacidRegion.accursed_tomb, UniqueItem.earth_elixir),
-    LocationData(88, BaseLocation.tomb_hidden_chest, LunacidRegion.accursed_tomb, Coins.silver_100)
+    LocationData(84, BaseLocation.tomb_tomb_with_switch, LunacidRegion.accursed_tomb, Weapon.vampire_hunter_sword),
+    LocationData(85, BaseLocation.tomb_tomb_with_corpse, LunacidRegion.accursed_tomb, UniqueItem.survey_banner),
+    LocationData(86, BaseLocation.tomb_demi_chest, LunacidRegion.accursed_tomb, Spell.lightning),
+    LocationData(87, BaseLocation.tomb_near_light_switch, LunacidRegion.accursed_tomb, Creation.crystal_shard),
+    LocationData(88, BaseLocation.tomb_hidden_room, LunacidRegion.accursed_tomb, UniqueItem.earth_elixir),
+    LocationData(89, BaseLocation.tomb_hidden_chest, LunacidRegion.accursed_tomb, Coins.silver_100)
 ]
 
 yosei_forest = [
@@ -313,7 +313,7 @@ chamber_of_fate = [
 
 base_locations = wings_rest + hollow_basin + great_well_surface + the_fetid_mire + the_sacrosant_sea + accursed_tomb + yosei_forest + \
                  forest_canopy + forbidden_archives + castle_le_fanu + holy_battlefield + sealed_ballroom + laetus_chasm + throne_room + boiling_grotto + \
-                 terminus_prison + forlorn_arena + labyrinth_of_ash + chamber_of_fate
+                 tower_of_abyss + terminus_prison + forlorn_arena + labyrinth_of_ash + chamber_of_fate
 base_items: List[str] = []
 [base_items.append(location.original_item) for location in base_locations if location.original_item not in base_items]
 
@@ -333,7 +333,7 @@ shop_items: List[str] = []
 
 mob_drop_locations = [
     LocationData(409, DropLocation.snail_drop, LunacidRegion.hollow_basin, MobSpell.summon_snail),
-    LocationData(410, DropLocation.mummy_drop, LunacidRegion.temple_of_silence, Weapon.rusted_sword),
+    LocationData(410, DropLocation.mummy_drop, LunacidRegion.temple_of_silence_interior, Weapon.rusted_sword),
     LocationData(411, DropLocation.kodama_drop, LunacidRegion.yosei_forest, MobSpell.summon_kodama),
     LocationData(412, DropLocation.chimera_drop, LunacidRegion.forbidden_archives, MobSpell.quick_stride),
     LocationData(413, DropLocation.milk_snail_drop, LunacidRegion.hollow_basin, Weapon.ice_sickle),
