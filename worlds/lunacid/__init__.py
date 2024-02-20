@@ -33,7 +33,7 @@ class LunacidWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Albrekka"]
+        ["Albrekka", "Tesseract (Advice/Direction)"]
     )]
 
 
@@ -113,6 +113,9 @@ class LunacidWorld(World):
         crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
         crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
         throne_region.locations.append(crilall)
+        grotto_region = world.get_region(LunacidRegion.boiling_grotto, player)
+        hicket = Location(player, "Free Sir Hicket", None, grotto_region)
+        hicket.place_locked_item(self.create_event("Sir Hicket's Freedom from Armor"))
 
         if self.options.ending == self.options.ending.option_ending_cd:
             victory = Location(player, Endings.look_into_abyss, None, ending_region)
@@ -133,7 +136,7 @@ class LunacidWorld(World):
 
     def create_items(self):
         locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player)]) - 3
+                               for location in self.multiworld.get_locations(self.player)]) - 4
 
         excluded_items = self.multiworld.precollected_items[self.player] + [self.determine_starting_weapon()]
 
@@ -148,16 +151,10 @@ class LunacidWorld(World):
         return chosen_item
 
     def fill_slot_data(self) -> Dict[str, Any]:
-
-        excluded_options = []
-        excluded_option_names = [option.internal_name for option in excluded_options]
-        generic_option_names = [option_name for option_name in LunacidOptions.type_hints]
-        excluded_option_names.extend(generic_option_names)
-        included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
-        slot_data = self.options.as_dict(*included_option_names)
-        slot_data.update({
+        slot_data = {
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
             "client_version": "0.1.0",
-        })
+            **self.options.as_dict("ending", "experience", "strangecoinbundle", "fillerbundle", "shopsanity", "dropsanity", "switchlocks")
+        }
 
         return slot_data
