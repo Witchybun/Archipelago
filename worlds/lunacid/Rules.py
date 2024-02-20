@@ -1,12 +1,12 @@
 from BaseClasses import CollectionState, MultiWorld
 from typing import Dict, List, Tuple, TYPE_CHECKING
-from ..generic.Rules import set_rule
+from ..generic.Rules import set_rule, CollectionRule
 
 from .data.spell_data import all_spells, spell_drop_locations, light_spells, blood_spells, spell_light_sources, jump_spells
 from .data.weapon_data import light_weapons, ranged_weapons, weapon_light_sources
 from .data.item_data import item_light_sources
 from .Options import LunacidOptions
-from .strings.regions_entrances import LunacidEntrance
+from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
 from .strings.items import UniqueItem, Progressives, Switch, Alchemy
 from .strings.locations import BaseLocation
@@ -15,159 +15,151 @@ from .strings.weapons import Weapon
 if TYPE_CHECKING:
     from . import LunacidWorld
 
-all_light_sources = spell_light_sources + weapon_light_sources + item_light_sources
 
+class LunacidRules:
+    player: int
+    world: "LunacidWorld"
+    region_rules: Dict[str, CollectionRule]
+    entrance_rules: Dict[str, CollectionRule]
+    location_rules: Dict[str, CollectionRule]
 
-def can_jump_high(state: CollectionState, player: int) -> bool:
-    return state.has_any(jump_spells, player)
+    def __init__(self, world: "LunacidWorld") -> None:
+        self.player = world.player
+        self.world = world
+        self.world.options = world.options
 
+        self.region_rules = {
+            LunacidRegion.temple_of_silence_entrance: lambda state: self.has_light_source(state) and self.has_keys_for_basin_door(state, self.world.options),
+            LunacidRegion.temple_of_silence_interior: lambda state: self.has_light_source(state) and
+                                                                    self.has_key_to_switch(state, Switch.temple_switch, self.world.options),
+            LunacidRegion.forest_canopy: lambda state: self.has_keys_for_canopy(state, self.world.options),
+            LunacidRegion.throne_chamber: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3),
+            LunacidRegion.terminus_prison: lambda state: state.has("Defeat Prince Crilall Fanu", self.player),
+            LunacidRegion.castle_le_fanu_white: lambda state: state.has(Progressives.vampiric_symbol, self.player, 1),
+            LunacidRegion.castle_le_fanu_blue: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2),
+            LunacidRegion.chamber_of_fate: lambda state: state.has_all({UniqueItem.earth_talisman, UniqueItem.water_talisman}, self.player),
+            LunacidRegion.sealed_ballroom: lambda state: self.has_poison_dark_blood_access(state, self.world.options),
+            LunacidRegion.vampire_tomb: lambda state: self.has_key_to_switch(state, Switch.tomb_lightning_gate_2, self.world.options),
+            LunacidRegion.mausoleum: lambda state: self.has_key_to_switch(state, Switch.tomb_lightning_gate_1, self.world.options) and
+                                                   self.has_light_source(state),
+            LunacidRegion.sand_temple: lambda state: self.has_all_keys_to_switch(state,
+                                                                            [Switch.grotto_valve_switch_1, Switch.grotto_valve_switch_2],
+                                                                            self.world.options),
+            LunacidRegion.forlorn_arena: lambda state: self.has_key_to_switch(state, Switch.prison_arena_switch, self.world.options),
+            LunacidRegion.terminus_prison_dark: lambda state: self.has_key_to_switch(state, Switch.prison_shortcut_switch, self.world.options) or
+                                                              state.has(Spell.icarian_flight, self.player)
 
-def has_light_source(state: CollectionState, player: int) -> bool:
-    return state.has_any(spell_light_sources + weapon_light_sources + item_light_sources, player)
+        }
 
+        self.entrance_rules = {
+            LunacidEntrance.basin_to_archives: lambda state: state.has_any({Spell.rock_bridge, Spell.coffin}, self.player),
+            LunacidEntrance.archives_to_chasm: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2) and
+                                                             state.has(Spell.icarian_flight, self.player),
+            LunacidEntrance.wings_to_surface: lambda state: state.has_all({Spell.icarian_flight, Spell.spirit_warp}, self.player) or
+                                                            (state.has(Spell.icarian_flight, self.player) and self.can_reach_region(
+                                                                state, LunacidRegion.temple_of_silence_interior)),
+            LunacidEntrance.basin_to_surface: lambda state: state.has_all({Spell.icarian_flight, Spell.spirit_warp}, self.player) or
+                                                            (state.has(Spell.icarian_flight, self.player) and state.can_reach(
+                                                                LunacidRegion.temple_of_silence_interior, None, self.player)),
+            LunacidEntrance.yosei_to_yosei_lower: lambda state: self.can_jump_high(state) or self.has_blood_spell_access(state),
+            LunacidEntrance.castle_to_red: self.has_blood_spell_access,
+        }
 
-def can_reach_spell_drop(state: CollectionState, drop: str) -> bool:
-    drop_locations = spell_drop_locations[drop]
-    drop_rule = True
-    for locations in drop_locations:
-        drop_rule += state.can_reach(locations)
-    return drop_rule
+        self.location_rules = {
+            BaseLocation.temple_blood_altar: self.has_blood_spell_access,
+            BaseLocation.archives_daedalus_one: lambda state: state.has(UniqueItem.black_book, self.player),
+            BaseLocation.archives_daedalus_two: lambda state: state.has(UniqueItem.black_book, self.player, 2),
+            BaseLocation.archives_daedalus_third: lambda state: state.has(UniqueItem.black_book, self.player, 3),
+            BaseLocation.sea_pillar: lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, self.player),
+            BaseLocation.tomb_demi_chest: self.can_jump_high,
+            BaseLocation.mausoleum_upper_table: self.can_jump_high,
+            BaseLocation.mausoleum_kill_death: lambda state: state.has_all({Alchemy.fractured_life, Alchemy.fractured_death, Alchemy.broken_sword},
+                                                                           self.player),
+            BaseLocation.corrupted_room: lambda state: state.has(UniqueItem.corrupted_key, self.player),
+            BaseLocation.yosei_hanging_in_trees: lambda state: state.has_any(ranged_weapons, self.player),
+            BaseLocation.castle_upper_floor_coffin_double: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3),
+            BaseLocation.prison_f3_bottomless_pit: lambda state: state.has_any({Spell.icarian_flight, Spell.spirit_warp}, self.player),
+            BaseLocation.throne_book: lambda state: state.has("Defeat Prince Crilall Fanu", self.player),
+            BaseLocation.sand_chest_overlooking_crypt: self.can_jump_high,
+            BaseLocation.arena_water_underwater_temple: lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, self.player),
+            BaseLocation.arena_earth_earthen_temple: self.can_jump_high,
+        }
 
+    def can_reach_region(self, state: CollectionState, spot: str):
+        return state.can_reach(spot, "Region", self.player)
 
-def can_reach_every_spell_drop_region(state: CollectionState) -> bool:
-    drop_rule = True
-    for drop in spell_drop_locations:
-        drop_rule += can_reach_spell_drop(state, drop)
-    return drop_rule
+    def can_jump_high(self, state: CollectionState) -> bool:
+        return state.has_any(jump_spells, self.player)
 
+    def has_light_source(self, state: CollectionState) -> bool:
+        sources = []
+        sources.extend(source for source in spell_light_sources)
+        sources.extend(source for source in weapon_light_sources)
+        sources.extend(source for source in item_light_sources)
+        return state.has_any(sources, self.player)
 
-def has_every_spell(state: CollectionState, player: int) -> bool:
-    return state.has_all({spell.name for spell in all_spells}, player) & can_reach_every_spell_drop_region(state)
+    def can_reach_spell_drop(self, state: CollectionState, drop: str) -> bool:
+        drop_locations = spell_drop_locations[drop]
+        drop_rule = True
+        for locations in drop_locations:
+            drop_rule += state.can_reach(locations, "Location", self.player)
+        return drop_rule
 
+    def can_reach_every_spell_drop_region(self, state: CollectionState) -> bool:
+        drop_rule = True
+        for drop in spell_drop_locations:
+            drop_rule += self.can_reach_spell_drop(state, drop)
+        return drop_rule
 
-def has_light_element_access(state: CollectionState, player: int) -> bool:
-    return state.has_any(light_spells + light_weapons, player)
+    def has_every_spell(self, state: CollectionState) -> bool:
+        return state.has_all({spell.name for spell in all_spells}, self.player) & self.can_reach_every_spell_drop_region(state)
 
+    def has_light_element_access(self, state: CollectionState) -> bool:
+        return state.has_any(light_spells + light_weapons, self.player)
 
-def has_blood_spell_access(state: CollectionState, player: int) -> bool:
-    return state.has_any(blood_spells, player)
+    def has_blood_spell_access(self, state: CollectionState) -> bool:
+        return state.has_any(blood_spells, self.player)
 
+    def has_keys_for_basin_door(self, state: CollectionState, options: LunacidOptions) -> bool:
+        if options.shopsanity == options.shopsanity.option_false:
+            return True
+        return state.has(UniqueItem.enchanted_key, self.player)
 
-def has_key_to_switch(state: CollectionState, key: str | List[str], player: int, options: LunacidOptions) -> bool:
-    if options.switchlocks == options.switchlocks.option_false:
-        return True
-    return state.has_all(key, player)
+    def has_keys_for_canopy(self, state: CollectionState, options: LunacidOptions) -> bool:
+        if options.shopsanity == options.shopsanity.option_false:
+            return state.has(UniqueItem.enchanted_key, self.player)
+        return state.has(UniqueItem.enchanted_key, self.player, 2)
 
+    def has_key_to_switch(self, state: CollectionState, key: str, options: LunacidOptions) -> bool:
+        if options.switchlocks == options.switchlocks.option_false:
+            return True
+        return state.has(key, self.player)
 
-def has_poison_dark_blood_access(state: CollectionState, player: int, options: LunacidOptions) -> bool:
-    poison_or_dark_attacks = [Spell.slime_orb, Spell.blood_strike]
-    if options.dropsanity == options.dropsanity.option_true:
-        poison_or_dark_attacks.append(MobSpell.dark_skull)
-    if options.shopsanity == options.shopsanity.option_true:
-        poison_or_dark_attacks.append(Weapon.privateer_musket)
-    return state.has_any(poison_or_dark_attacks, player)
+    def has_all_keys_to_switch(self, state: CollectionState, keys: List[str], options: LunacidOptions) -> bool:
+        rule = True
+        for key in keys:
+            rule = rule and self.has_key_to_switch(state, key, options)
+        return rule
 
+    def has_poison_dark_blood_access(self, state: CollectionState, options: LunacidOptions) -> bool:
+        poison_or_dark_attacks = [Spell.slime_orb, Spell.blood_strike]
+        if options.dropsanity == options.dropsanity.option_true:
+            poison_or_dark_attacks.append(MobSpell.dark_skull)
+        if options.shopsanity == options.shopsanity.option_true:
+            poison_or_dark_attacks.append(Weapon.privateer_musket)
+        return state.has_any(poison_or_dark_attacks, self.player)
 
-def set_rules(game_world: "LunacidWorld") -> None:
-    world = game_world.multiworld
-    player = game_world.player
-    options = game_world.options
+    def set_lunacid_rules(self) -> None:
+        multiworld = self.world.multiworld
 
-    set_base_entrance_rules(world, player, options)
-    set_base_location_rules(world, player, options)
-    set_switch_rules(world, player, options)
-    set_enchanted_key_rules(world, player, options)
+        for region in multiworld.get_regions(self.player):
+            if region.name in self.region_rules:
+                for entrance in region.entrances:
+                    entrance.access_rule = self.region_rules[region.name]
+            for entrance in region.entrances:
+                if entrance.name in self.entrance_rules:
+                    entrance.access_rule = entrance.access_rule and self.entrance_rules[entrance.name]
+            for loc in region.locations:
+                if loc.name in self.location_rules:
+                    loc.access_rule = self.location_rules[loc.name]
 
-
-def set_base_entrance_rules(world: MultiWorld, player: int, options: LunacidOptions):
-    set_rule(world.get_entrance(LunacidEntrance.basin_to_archives, player),
-             lambda state: state.has_any({Spell.coffin, Spell.rock_bridge}, player))
-    set_rule(world.get_entrance(LunacidEntrance.wings_to_surface, player),
-             lambda state: state.has(Spell.icarian_flight, player))
-    set_rule(world.get_entrance(LunacidEntrance.basin_to_surface, player),
-             lambda state: state.has(Spell.icarian_flight, player))
-    set_rule(world.get_entrance(LunacidEntrance.temple_to_forest, player),
-             lambda state: has_light_source(state, player))
-    set_rule(world.get_entrance(LunacidEntrance.temple_to_mire, player),
-             lambda state: has_light_source(state, player))
-    set_rule(world.get_entrance(LunacidEntrance.yosei_to_yosei_lower, player),
-             lambda state: state.has_any(blood_spells, player) or can_jump_high(state, player))
-    set_rule(world.get_entrance(LunacidEntrance.archives_to_chasm, player),
-             lambda state: state.has(Progressives.vampiric_symbol, player, 2) and state.has(Spell.icarian_flight, player))
-    set_rule(world.get_entrance(LunacidEntrance.white_to_throne, player),
-             lambda state: state.has(Progressives.vampiric_symbol, player, 3))
-    set_rule(world.get_entrance(LunacidEntrance.throne_to_prison, player),
-             lambda state: state.has("Defeat Prince Crilall Fanu", player))
-    set_rule(world.get_entrance(LunacidEntrance.castle_to_red, player),
-             lambda state: has_blood_spell_access(state, player))
-    set_rule(world.get_entrance(LunacidEntrance.castle_to_white, player),
-             lambda state: state.has(Progressives.vampiric_symbol, player, 1))
-    set_rule(world.get_entrance(LunacidEntrance.white_to_blue, player),
-             lambda state: state.has(Progressives.vampiric_symbol, player, 2))
-    set_rule(world.get_entrance(LunacidEntrance.arena_to_fate, player),
-             lambda state: state.has_all({UniqueItem.water_talisman, UniqueItem.earth_talisman}, player))
-    set_rule(world.get_entrance(LunacidEntrance.castle_to_ballroom, player),
-             lambda state: has_poison_dark_blood_access(state, player, options))
-
-
-def set_base_location_rules(world: MultiWorld, player: int, options: LunacidOptions):
-    set_rule(world.get_location(BaseLocation.temple_blood_altar, player),
-             lambda state: has_blood_spell_access(state, player))
-    set_rule(world.get_location(BaseLocation.archives_daedalus_one, player),
-             lambda state: state.has(UniqueItem.black_book, player, 1))
-    set_rule(world.get_location(BaseLocation.archives_daedalus_two, player),
-             lambda state: state.has(UniqueItem.black_book, player, 2))
-    set_rule(world.get_location(BaseLocation.archives_daedalus_third, player),
-             lambda state: state.has(UniqueItem.black_book, player, 3))
-    set_rule(world.get_location(BaseLocation.sea_pillar, player),
-             lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, player))
-    set_rule(world.get_location(BaseLocation.tomb_demi_chest, player),
-             lambda state: can_jump_high(state, player))
-    set_rule(world.get_location(BaseLocation.mausoleum_upper_table, player),
-             lambda state: can_jump_high(state, player))
-    set_rule(world.get_location(BaseLocation.mausoleum_kill_death, player),
-             lambda state: state.has_all({Alchemy.fractured_life, Alchemy.fractured_death, Alchemy.broken_sword}, player))
-    set_rule(world.get_location(BaseLocation.corrupted_room, player),
-             lambda state: state.has(UniqueItem.corrupted_key, player))
-    set_rule(world.get_location(BaseLocation.yosei_hanging_in_trees, player),
-             lambda state: state.has_any(ranged_weapons, player))
-    set_rule(world.get_location(BaseLocation.castle_upper_floor_coffin_double, player),
-             lambda state: state.has(Progressives.vampiric_symbol, player, 3))
-    set_rule(world.get_location(BaseLocation.prison_f3_bottomless_pit, player),
-             lambda state: state.has_any({Spell.icarian_flight, Spell.spirit_warp}, player))
-    set_rule(world.get_location(BaseLocation.throne_book, player),
-             lambda state: state.has("Defeat Prince Crilall Fanu", player))
-    set_rule(world.get_location(BaseLocation.sand_chest_overlooking_crypt, player),
-             lambda state: can_jump_high(state, player))
-    set_rule(world.get_location(BaseLocation.arena_water_underwater_temple, player),
-             lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, player))
-    set_rule(world.get_location(BaseLocation.arena_earth_earthen_temple, player),
-             lambda state: can_jump_high(state, player))
-
-
-def set_switch_rules(world: MultiWorld, player: int, options: LunacidOptions):  # Place rules which are relevant to this setting
-    set_rule(world.get_entrance(LunacidEntrance.tomb_to_vampire, player),
-             lambda state: has_light_element_access(state, player) and has_key_to_switch(state, Switch.tomb_lightning_gate_2, player, options))
-    set_rule(world.get_entrance(LunacidEntrance.tomb_to_mausoleum, player),
-             lambda state: has_light_element_access(state, player) and has_key_to_switch(state, Switch.tomb_lightning_gate_1, player, options) and
-                           has_light_source(state, player))
-    set_rule(world.get_entrance(LunacidEntrance.temple_entrance_to_temple_interior, player),
-             lambda state: has_key_to_switch(state, Switch.temple_switch, player, options))
-    set_rule(world.get_entrance(LunacidEntrance.grotto_to_sand, player),
-             lambda state: has_key_to_switch(state, [Switch.grotto_valve_switch_1, Switch.grotto_valve_switch_2], player, options))
-    set_rule(world.get_entrance(LunacidEntrance.prison_to_arena, player),
-             lambda state: has_key_to_switch(state, Switch.prison_arena_switch, player, options))
-    set_rule(world.get_entrance(LunacidEntrance.prison_to_prison_dark, player),
-             lambda state: has_key_to_switch(state, Switch.prison_shortcut_switch, player, options) or state.has(Spell.icarian_flight, player))
-
-
-def set_enchanted_key_rules(world: MultiWorld, player: int, options: LunacidOptions):
-    setting_count = 1 if options.shopsanity == options.shopsanity.option_true else 0
-    if setting_count == 0:
-        set_rule(world.get_entrance(LunacidEntrance.basin_to_temple, player),
-                 lambda state: has_light_source(state, player))
-    else:
-        set_rule(world.get_entrance(LunacidEntrance.basin_to_temple, player),
-                 lambda state: has_light_source(state, player) and state.has(UniqueItem.enchanted_key, player))
-    set_rule(world.get_entrance(LunacidEntrance.yosei_to_canopy, player),
-             lambda state: state.has(UniqueItem.enchanted_key, player, 1 + setting_count))

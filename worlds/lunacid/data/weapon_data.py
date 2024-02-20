@@ -78,7 +78,7 @@ sucsarian_spear = create_weapon(107, Weapon.sucsarian_spear, ItemClassification.
 lyrian_longsword = create_weapon(108, Weapon.lyrian_longsword, ItemClassification.useful)
 
 light_weapons = [Weapon.moonlight, Weapon.vampire_hunter_sword, Weapon.shadow_blade]
-ranged_weapons = [Weapon.elfen_bow, Weapon.twisted_staff, Weapon.wand_of_power, Weapon.crossbow]
+ranged_weapons = [Weapon.elfen_bow, Weapon.twisted_staff, Weapon.wand_of_power, Weapon.crossbow, Weapon.privateer_musket]
 weapon_light_sources = [Weapon.torch, Weapon.twisted_staff, Weapon.moonlight]
 
 starting_weapons = [Weapon.replica_sword, Weapon.battle_axe, Weapon.ice_sickle, Weapon.stone_club, Weapon.twisted_staff, Weapon.ritual_dagger]
