@@ -16,7 +16,7 @@ from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_ST
 from .Locations import (location_table, base_location_table, shop_locations_table, mob_drop_locations_table, LocationDict,
                         LOCATION_CODE_START)
 from .Regions import link_lunacid_areas, lunacid_entrances, lunacid_regions
-from .Rules import set_rules, has_every_spell
+from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
 from .Options import LunacidOptions
 
@@ -64,9 +64,6 @@ class LunacidWorld(World):
     def __init__(self, multiworld, player):
         super(LunacidWorld, self).__init__(multiworld, player)
 
-    def set_rules(self):
-        set_rules(self)
-
     def create_item(self, name: str) -> "LunacidItem":
         item_id: int = self.item_name_to_id[name]
         item_classification = complete_items_by_name[name].classification
@@ -78,6 +75,9 @@ class LunacidWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(money)
+
+    def set_rules(self):
+        LunacidRules(self).set_lunacid_rules()
 
     def create_regions(self):
         world = self.multiworld
@@ -127,7 +127,7 @@ class LunacidWorld(World):
             coin_count = get_coin_count(self.options)
             set_rule(victory, lambda state: state.has(Coins.strange_coin, player, coin_count))
         elif self.options.ending == self.options.ending.option_ending_e:
-            set_rule(victory, lambda state: has_every_spell(state, player))
+            set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state))
 
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
 
