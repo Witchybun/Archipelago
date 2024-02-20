@@ -30,7 +30,7 @@ class ExperienceMod(Range):
 class StrangeCoinBundle(Choice):
     """Changes the drop total of the strange coins from 10 to any divisor of 30, helping it become more of a maguffin hunt.
     Note: Filler will be replaced to compensate."""
-    internal_name = "coinbundle"
+    internal_name = "strangecoinbundle"
     display_name = "Strange Coin Bundle"
     option_one = 0
     option_two = 1
