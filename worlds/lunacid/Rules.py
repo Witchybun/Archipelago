@@ -9,7 +9,7 @@ from .Options import LunacidOptions
 from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
 from .strings.items import UniqueItem, Progressives, Switch, Alchemy
-from .strings.locations import BaseLocation
+from .strings.locations import BaseLocation, ShopLocation
 from .strings.weapons import Weapon
 
 if TYPE_CHECKING:
@@ -63,6 +63,10 @@ class LunacidRules:
                                                                 LunacidRegion.temple_of_silence_interior, None, self.player)),
             LunacidEntrance.yosei_to_yosei_lower: lambda state: self.can_jump_high(state) or self.has_blood_spell_access(state),
             LunacidEntrance.castle_to_red: self.has_blood_spell_access,
+            LunacidEntrance.archives_3_to_archives_1b: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_1_to_3, self.world.options),
+            LunacidEntrance.archives_2_to_archives_1: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_1_to_2, self.world.options),
+            LunacidEntrance.archives_2_to_archives_3: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_2_to_3, self.world.options)
+                                                                    and self.has_key_to_switch(state, Switch.archives_elevator_switch_1_to_2, self.world.options),
         }
 
         self.location_rules = {
@@ -83,10 +87,18 @@ class LunacidRules:
             BaseLocation.sand_chest_overlooking_crypt: self.can_jump_high,
             BaseLocation.arena_water_underwater_temple: lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, self.player),
             BaseLocation.arena_earth_earthen_temple: self.can_jump_high,
+            "Free Sir Hicket": lambda state: state.has(Spell.ignis_calor, self.player),
+            ShopLocation.buy_ocean_elixir_sheryl: lambda state: self.can_purchase_item(state, self.world.options),
+            ShopLocation.buy_privateer_musket: lambda state: self.can_purchase_item(state, self.world.options),
+            ShopLocation.buy_oil_lantern: lambda state: self.can_purchase_item(state, self.world.options),
+            ShopLocation.buy_jotunn_slayer: lambda state: self.can_reach_location(state, "LA: The Weapon to Kill an Immortal")
         }
 
     def can_reach_region(self, state: CollectionState, spot: str):
         return state.can_reach(spot, "Region", self.player)
+
+    def can_reach_location(self, state: CollectionState, spot: str):
+        return state.can_reach(spot, "Location", self.player)
 
     def can_jump_high(self, state: CollectionState) -> bool:
         return state.has_any(jump_spells, self.player)
@@ -113,6 +125,11 @@ class LunacidRules:
 
     def has_every_spell(self, state: CollectionState) -> bool:
         return state.has_all({spell.name for spell in all_spells}, self.player) & self.can_reach_every_spell_drop_region(state)
+
+    def can_purchase_item(self, state: CollectionState, options: LunacidOptions) -> bool:
+        if options.shopsanity == options.shopsanity.option_false:
+            return True
+        return state.has("Sir Hicket's Freedom from Armor", self.player)
 
     def has_light_element_access(self, state: CollectionState) -> bool:
         return state.has_any(light_spells + light_weapons, self.player)
