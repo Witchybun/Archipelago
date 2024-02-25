@@ -18,10 +18,19 @@ class Ending(Choice):
     default = 0
 
 
-class ExperienceMod(Range):
+class Experience(Range):
     """Multiplier for gained experience as a percent.  Ranges from 25% to 400%."""
     internal_name = "experience"
     display_name = "Experience Modifier"
+    range_start = 25
+    range_end = 400
+    default = 100
+
+
+class WeaponExperience(Range):
+    """Multiplier for gained weapon experience as a percent.  Ranges from 25% to 400%"""
+    internal_name = "weaponexperience"
+    display_name = "Weapon Experience Modifier"
     range_start = 25
     range_end = 400
     default = 100
@@ -74,7 +83,8 @@ class SwitchLocks(Toggle):
 @dataclass
 class LunacidOptions(PerGameCommonOptions):
     ending: Ending
-    experience: ExperienceMod
+    experience: Experience
+    weaponexperience: WeaponExperience
     strangecoinbundle: StrangeCoinBundle
     fillerbundle: FillerBundle
     shopsanity: Shopsanity
