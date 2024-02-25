@@ -3,7 +3,7 @@ from typing import List
 from BaseClasses import ItemClassification
 
 from .game_item import GameItem
-from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Switch, Progressives
+from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives
 
 
 @dataclass(frozen=True)

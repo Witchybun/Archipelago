@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional
-from .data.location_data import base_locations, shop_locations, mob_drop_locations, events
+from .data.location_data import base_locations, shop_locations, mob_drop_locations
 
 LOCATION_CODE_START = 771111110
 
