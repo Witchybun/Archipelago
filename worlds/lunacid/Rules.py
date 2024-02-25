@@ -1,12 +1,10 @@
-import logging
-
-from BaseClasses import CollectionState, MultiWorld
-from typing import Dict, List, Tuple, TYPE_CHECKING
+from BaseClasses import CollectionState
+from typing import Dict, List, TYPE_CHECKING
 
 from .data.item_count_data import base_spells
-from ..generic.Rules import set_rule, CollectionRule
+from ..generic.Rules import CollectionRule
 
-from .data.spell_data import all_spells, light_spells, blood_spells, spell_light_sources, jump_spells, drop_spells, fire_spells
+from .data.spell_data import light_spells, blood_spells, spell_light_sources, jump_spells, drop_spells, fire_spells
 from .data.weapon_data import light_weapons, ranged_weapons, weapon_light_sources, fire_weapons
 from .data.item_data import item_light_sources
 from .Options import LunacidOptions

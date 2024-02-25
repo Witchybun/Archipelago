@@ -6,7 +6,7 @@ from BaseClasses import ItemClassification, Item
 from typing import Dict, List, Union, Protocol
 
 from .Options import LunacidOptions
-from .data.location_data import base_locations, shop_locations, LocationData, mob_drop_locations
+from .data.location_data import base_locations, shop_locations, mob_drop_locations
 from .data.item_data import all_items
 from .data.item_count_data import (base_weapons, base_spells, base_special_item_counts, base_unique_items, shop_weapons, shop_unique_items, shop_item_count,
                                    drop_weapons, drop_spells, drop_filler_count, switches, filler_items)
@@ -14,7 +14,6 @@ from .data.switch_data import all_switches
 from .data.weapon_data import all_weapons, starting_weapon, shop_starting_weapons, drop_starting_weapons
 from .data.spell_data import all_spells, all_spells_by_name, starting_spells, drop_starting_spells
 from .strings.items import UniqueItem, Progressives, Coins
-from .strings.options import Settings
 
 logger = logging.getLogger(__name__)
 
