@@ -4,7 +4,6 @@ from BaseClasses import ItemClassification
 
 from .game_item import GameItem
 from ..strings.spells import Spell, MobSpell
-from ..strings.locations import BaseLocation
 
 
 @dataclass(frozen=True)

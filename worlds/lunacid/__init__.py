@@ -1,7 +1,6 @@
-from typing import Dict, List, Any
+from typing import Dict, Any
 import logging
-from collections import Counter
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, CollectionState
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import Options
 from .data.item_count_data import base_spells, drop_spells
