@@ -31,8 +31,8 @@ mana_vial = create_item(2, Creation.mana_vial, ItemClassification.filler)
 antidote = create_item(3, Creation.antidote, ItemClassification.filler)
 blood_wine = create_item(4, GenericItem.blood_wine, ItemClassification.filler)
 crystal_shard = create_item(5, Creation.crystal_shard, ItemClassification.filler)
-ocean_elixir = create_item(6, UniqueItem.ocean_elixir, ItemClassification.filler)
-earth_elixir = create_item(7, UniqueItem.earth_elixir, ItemClassification.filler)
+ocean_elixir = create_item(6, UniqueItem.ocean_elixir, ItemClassification.useful)
+earth_elixir = create_item(7, UniqueItem.earth_elixir, ItemClassification.useful)
 poison_throwing_knife = create_item(8, Creation.poison_throwing_knife, ItemClassification.filler)
 black_book = create_item(9, UniqueItem.black_book, ItemClassification.progression)
 holy_water = create_item(10, Creation.holy_water, ItemClassification.filler)
@@ -63,15 +63,18 @@ broken_sword = create_item(36, Alchemy.broken_sword, ItemClassification.progress
 water_talisman = create_item(37, UniqueItem.water_talisman, ItemClassification.progression)
 earth_talisman = create_item(38, UniqueItem.earth_talisman, ItemClassification.progression)
 silver_5 = create_item(39, Coins.silver_5, ItemClassification.filler)
-silver_10 = create_item(40, Coins.silver_2, ItemClassification.filler)
+silver_2 = create_item(40, Coins.silver_2, ItemClassification.filler)
 silver_50 = create_item(41, Coins.silver_50, ItemClassification.filler)
 silver_100 = create_item(42, Coins.silver_100, ItemClassification.filler)
 strange_coin = create_item(43, Coins.strange_coin, ItemClassification.progression)
 oil_lantern = create_item(44, UniqueItem.oil_lantern, ItemClassification.progression)
+bomb = create_item(45, Creation.bomb, ItemClassification.filler)
+poison_urn = create_item(46, Creation.poison_urn, ItemClassification.filler)
+silver_10 = create_item(47, Coins.silver_10, ItemClassification.filler)
 
 
 item_light_sources = [UniqueItem.crystal_lantern, UniqueItem.oil_lantern]
-money = [silver_5, silver_50, silver_100, silver_10]
+money = [silver_5, silver_50, silver_100, silver_2, silver_10]
 
 all_item_data_by_name = {item.name: item for item in all_items}
 all_filler_items = {item for item in all_items if item.classification == ItemClassification.filler}

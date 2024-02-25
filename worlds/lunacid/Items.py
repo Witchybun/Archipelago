@@ -8,11 +8,11 @@ from typing import Dict, List, Union, Protocol
 from .Options import LunacidOptions
 from .data.location_data import base_locations, shop_locations, LocationData, mob_drop_locations
 from .data.item_data import all_items
-from .data.item_count_data import (base_weapons, base_spells, base_special_item_counts, base_unique_items, shop_weapons, shop_unique_items, shop_filler_items,
+from .data.item_count_data import (base_weapons, base_spells, base_special_item_counts, base_unique_items, shop_weapons, shop_unique_items, shop_item_count,
                                    drop_weapons, drop_spells, drop_filler_count, switches, filler_items)
 from .data.switch_data import all_switches
-from .data.weapon_data import all_weapons
-from .data.spell_data import all_spells
+from .data.weapon_data import all_weapons, starting_weapon, shop_starting_weapons, drop_starting_weapons
+from .data.spell_data import all_spells, all_spells_by_name, starting_spells, drop_starting_spells
 from .strings.items import UniqueItem, Progressives, Coins
 from .strings.options import Settings
 
@@ -30,7 +30,7 @@ class ItemDict:
 
 
 class LunacidItemFactory(Protocol):
-    def __call__(self, name: Union[str, ItemDict]) -> Item:
+    def __call__(self, name: Union[str, ItemDict], override_classification: ItemClassification = None) -> Item:
         raise NotImplementedError
 
 
@@ -54,19 +54,21 @@ item_table = initialize_items_by_name()
 complete_items_by_name = {item.name: item for item in item_table}
 
 
-def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], options: LunacidOptions, random: Random) -> List[Item]:
+def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], options: LunacidOptions, random: Random) -> (List[Item], Item):
     items = []
     lunacid_items = create_lunacid_items(item_factory, options)
     for item in items_to_exclude:
         if item in lunacid_items:
             lunacid_items.remove(item)
-    assert len(lunacid_items) <= locations_count, f"There should be at least as many locations [{locations_count}] as there are mandatory items [{len(lunacid_items)}]"
+    assert len(
+        lunacid_items) <= locations_count, f"There should be at least as many locations [{locations_count}] as there are mandatory items [{len(lunacid_items)}]"
     items += lunacid_items
     logger.debug(f"Created {len(lunacid_items)} unique items")
     filler_slots = locations_count - len(lunacid_items)
     create_filler(item_factory, options, random, filler_slots, items)
+    starting_weapon_choice = item_factory(determine_starting_weapon(random, options))
 
-    return items
+    return items, starting_weapon_choice
 
 
 def create_lunacid_items(item_factory: LunacidItemFactory, options: LunacidOptions):
@@ -91,12 +93,33 @@ def create_weapons(item_factory: LunacidItemFactory, options: LunacidOptions, it
 
 
 def create_spells(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
+    force_progressive = False
+    if options.ending == options.ending.option_ending_e:
+        force_progressive = True
     for item in base_spells:
-        items.append(item_factory(item))
+        items.append(item_factory(item, determine_item_classification(item, force_progressive)))
     if options.dropsanity == options.dropsanity.option_true:
         for item in drop_spells:
-            items.append(item_factory(item))
+            items.append(item_factory(item, determine_item_classification(item, force_progressive)))
     return items
+
+
+def determine_starting_weapon(random: Random, options: LunacidOptions):
+    starting_selection = starting_weapon + starting_spells
+    if options.shopsanity == options.shopsanity.option_true:
+        starting_selection += shop_starting_weapons
+    if options.dropsanity == options.dropsanity.option_true:
+        starting_selection += drop_starting_weapons + drop_starting_spells
+    chosen_weapon_name = random.choice(starting_selection)
+    return chosen_weapon_name
+
+
+def determine_item_classification(item: str, progression: bool):
+    spell_data = all_spells_by_name[item]
+    if progression:
+        return ItemClassification.progression
+    else:
+        return spell_data.classification
 
 
 def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
@@ -108,6 +131,8 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
     if options.shopsanity == options.shopsanity.option_true:
         for item in shop_unique_items:
             items.append(item_factory(item))
+        for item in shop_item_count:
+            items.extend([item_factory(filler) for filler in [item] * shop_item_count[item]])
     return items
 
 
@@ -121,8 +146,6 @@ def create_switch_items(item_factory: LunacidItemFactory, options: LunacidOption
 
 def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random, filler_slots: int, items: List[Item]):
     filler_list = filler_items.copy()
-    if options.shopsanity == options.shopsanity.option_true:
-        filler_list.extend([filler for filler in shop_filler_items if filler not in filler_list])
     if options.dropsanity == options.dropsanity.option_true:
         filler_list.extend([filler for filler in drop_filler_count if filler not in filler_list])
     items.extend([item_factory(filler) for filler in random.choices(filler_list, k=filler_slots)])

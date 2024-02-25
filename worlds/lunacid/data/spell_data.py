@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict
 from BaseClasses import ItemClassification
 
 from .game_item import GameItem
@@ -64,19 +64,15 @@ summon_kodama = create_spell(153, MobSpell.summon_kodama, ItemClassification.use
 tornado = create_spell(154, MobSpell.tornado, ItemClassification.useful)
 quick_stride = create_spell(155, MobSpell.quick_stride, ItemClassification.useful)
 
-spell_drop_locations = {
-    MobSpell.summon_snail: [BaseLocation.hollow_basin_left_water],
-    MobSpell.dark_skull: [BaseLocation.mausoleum_hidden_chest, BaseLocation.mire_skeleton_chest, BaseLocation.sea_blood_island],
-    MobSpell.summon_kodama: [BaseLocation.yosei_chest_near_tree],
-    MobSpell.quick_stride: [BaseLocation.archives_daedalus_one],
-    MobSpell.tornado: [BaseLocation.ash_rocks_near_switch]
-}
-
 light_spells = [Spell.lightning, Spell.moon_beam]
 blood_spells = [Spell.blood_drain, Spell.blood_strike]
 spell_light_sources = [Spell.flame_flare, Spell.ghost_light]
 jump_spells = [Spell.icarian_flight, Spell.rock_bridge]
+fire_spells = [Spell.lava_chasm, Spell.flame_spear, Spell.fire_worm]
 
-starting_spells = [Spell.flame_spear, Spell.ice_spear, Spell.blood_strike, Spell.wind_slicer, Spell.earth_strike]
+drop_spells = [MobSpell.summon_snail, MobSpell.dark_skull, MobSpell.summon_kodama, MobSpell.tornado, MobSpell.quick_stride]
 
-all_spells_by_name = {spell.name: spell for spell in all_spells}
+starting_spells = [Spell.flame_spear, Spell.ice_spear, Spell.wind_slicer, Spell.slime_orb, Spell.earth_strike]
+drop_starting_spells = [MobSpell.dark_skull]
+
+all_spells_by_name: Dict[str, SpellItem] = {spell.name: spell for spell in all_spells}
