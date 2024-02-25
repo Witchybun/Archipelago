@@ -41,6 +41,8 @@ class Creation:
     throwing_knife = "Throwing Knife"
     holy_water = "Holy Water"
     antidote = "Antidote"
+    bomb = "Bomb"
+    poison_urn = "Poison Urn"
 
 
 class UniqueItem:
@@ -50,7 +52,7 @@ class UniqueItem:
     black_book = "Black Book"
     enchanted_key = "Enchanted Key"
     vhs_tape = "VHS Tape"
-    corrupted_key = "Corrupted Key"
+    corrupted_key = "Corrupt Key"
     skull_of_josiah = "Skull of Josiah"
     crystal_lantern = "Crystal Lantern"
     terminus_prison_key = "Terminus Prison Key"
@@ -69,6 +71,7 @@ class Coins:
     silver_2 = "Silver (2)"
     silver_50 = "Silver (50)"
     silver_100 = "Silver (100)"
+    silver_10 = "Silver (10)"
     strange_coin = "Strange Coin"
 
 
@@ -81,8 +84,6 @@ class Switch:
     tomb_light_switch_1 = "Accursed Tomb Light Switch (Near Save Crystal)"
     tomb_light_switch_2 = "Accursed Tomb Light Switch (Near Demi)"
     tomb_light_switch_3 = "Accursed Tomb Light Switch (In Noble Crypt)"
-    tomb_lightning_gate_1 = "Accursed Tomb Lightning Gate (To Mausoleum)"
-    tomb_lightning_gate_2 = "Accursed Tomb Lightning Gate (To Jusztina)"
     archives_switch = "Forbidden Archives Shortcut Switch"
     archives_elevator_switch_1_to_2 = "Forbidden Archives Elevator Switch (1F - 2F)"
     archives_elevator_switch_2_to_3 = "Forbidden Archives Elevator Switch (2F - 3F)"
