@@ -86,34 +86,35 @@ base_unique_items = [
 base_special_item_counts = {
     UniqueItem.black_book: 3,
     Progressives.vampiric_symbol: 3,
+    UniqueItem.ocean_elixir: 7,
+    UniqueItem.earth_elixir: 10,
 }
 
-filler_items = [UniqueItem.ocean_elixir,
-                Creation.crystal_shard,
-                Creation.health_vial,
-                Creation.mana_vial,
-                GenericItem.blood_wine,
-                Creation.antidote,
-                UniqueItem.earth_elixir,
-                Creation.poison_throwing_knife,
-                Creation.holy_water,
-                UniqueItem.survey_banner,
-                Coins.silver_100,
-                GenericItem.dark_urn,
-                GenericItem.light_urn,
-                Creation.spectral_candle,
-                Coins.silver_5,
-                Coins.silver_50,
-                Alchemy.ashes,
-                GenericItem.cloth_bandage,
-                Creation.staff_of_osiris,
-                Creation.moonlight_vial,
-                Alchemy.ectoplasm,
-                Alchemy.snowflake_obsidian,
-                Alchemy.moon_petal,
-                Creation.wisp_heart,
-                Creation.fairy_moss,
-                ]
+filler_items = [
+    Creation.crystal_shard,
+    Creation.health_vial,
+    Creation.mana_vial,
+    GenericItem.blood_wine,
+    Creation.antidote,
+    Creation.poison_throwing_knife,
+    Creation.holy_water,
+    UniqueItem.survey_banner,
+    Coins.silver_10,
+    GenericItem.dark_urn,
+    GenericItem.light_urn,
+    Creation.spectral_candle,
+    Alchemy.ashes,
+    GenericItem.cloth_bandage,
+    Creation.staff_of_osiris,
+    Creation.moonlight_vial,
+    Alchemy.ectoplasm,
+    Alchemy.snowflake_obsidian,
+    Alchemy.moon_petal,
+    Creation.wisp_heart,
+    Creation.fairy_moss,
+    Creation.bomb,
+    Creation.poison_urn,
+]
 
 shop_weapons = [Weapon.rapier,
                 Weapon.crossbow,
@@ -123,11 +124,10 @@ shop_weapons = [Weapon.rapier,
                 ]
 
 shop_unique_items = [UniqueItem.oil_lantern,
-                      UniqueItem.enchanted_key
-                      ]
-
-shop_filler_items = [UniqueItem.ocean_elixir
+                     UniqueItem.enchanted_key
                      ]
+
+shop_item_count = {UniqueItem.ocean_elixir: 2}
 
 drop_weapons = [Weapon.rusted_sword,
                 Weapon.ice_sickle,
@@ -158,13 +158,14 @@ switches = [Switch.hollow_basin_switch_near_demi,
             Switch.temple_switch,
             Switch.fetid_mire_switch,
             Switch.archives_switch,
+            Switch.archives_elevator_switch_2_to_3,
+            Switch.archives_elevator_switch_1_to_3,
+            Switch.archives_elevator_switch_1_to_2,
             Switch.tomb_shortcut_switch,
             Switch.tomb_crypt_switch,
             Switch.tomb_light_switch_1,
             Switch.tomb_light_switch_2,
             Switch.tomb_light_switch_3,
-            Switch.tomb_lightning_gate_1,
-            Switch.tomb_lightning_gate_2,
             Switch.ballroom_switch,
             Switch.grotto_valve_switch_1,
             Switch.grotto_valve_switch_2,
