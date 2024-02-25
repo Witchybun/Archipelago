@@ -77,10 +77,14 @@ sucsarian_dagger = create_weapon(106, Weapon.sucsarian_dagger, ItemClassificatio
 sucsarian_spear = create_weapon(107, Weapon.sucsarian_spear, ItemClassification.useful)
 lyrian_longsword = create_weapon(108, Weapon.lyrian_longsword, ItemClassification.useful)
 
-light_weapons = [Weapon.moonlight, Weapon.vampire_hunter_sword, Weapon.shadow_blade]
+light_weapons = [Weapon.moonlight, Weapon.vampire_hunter_sword, Weapon.shadow_blade, Weapon.wand_of_power]
 ranged_weapons = [Weapon.elfen_bow, Weapon.twisted_staff, Weapon.wand_of_power, Weapon.crossbow, Weapon.privateer_musket]
 weapon_light_sources = [Weapon.torch, Weapon.twisted_staff, Weapon.moonlight]
+fire_weapons = [Weapon.jailor_candle, Weapon.jotunn_slayer, Weapon.torch, Weapon.twisted_staff, Weapon.wand_of_power]
 
-starting_weapons = [Weapon.replica_sword, Weapon.battle_axe, Weapon.ice_sickle, Weapon.stone_club, Weapon.twisted_staff, Weapon.ritual_dagger]
+starting_weapon = [Weapon.replica_sword, Weapon.battle_axe, Weapon.stone_club, Weapon.ritual_dagger, Weapon.torch, Weapon.steel_spear,
+                   Weapon.wooden_shield, Weapon.broken_hilt, Weapon.elfen_bow, Weapon.elfen_sword, ]
+shop_starting_weapons = [Weapon.crossbow, Weapon.rapier, Weapon.steel_needle]
+drop_starting_weapons = [Weapon.skeleton_axe, Weapon.rusted_sword, Weapon.ice_sickle]
 
 all_weapons_by_name = {weapon.name: weapon for weapon in all_weapons}
