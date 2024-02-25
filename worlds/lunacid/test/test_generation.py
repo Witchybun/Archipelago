@@ -1,17 +1,9 @@
-import unittest
-
-from BaseClasses import ItemClassification, MultiWorld, CollectionState
-from test.general import setup_solo_multiworld
+from BaseClasses import CollectionState
 from . import LunacidTestBase
-from .. import Items, LunacidWorld, Endings
-from ..Items import create_lunacid_items
-from ..Options import Shopsanity, SwitchLocks, LunacidOptions
+from .. import Endings
 from ..data import item_count_data
-from ..data.item_data import item_light_sources
 from ..data.location_data import *
-from ..data.spell_data import spell_light_sources, blood_spells, all_spells, drop_spells, all_spells_by_name
-from ..data.weapon_data import weapon_light_sources, ranged_weapons
-from ..Rules import LunacidRules
+from ..data.spell_data import all_spells, drop_spells
 
 
 class TestAllLocationsAppended(LunacidTestBase):

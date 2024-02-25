@@ -5,7 +5,7 @@ from ..strings.locations import BaseLocation, ShopLocation, DropLocation
 from ..strings.regions_entrances import LunacidRegion
 from ..strings.weapons import Weapon
 from ..strings.spells import Spell, MobSpell
-from ..strings.items import UniqueItem, GenericItem, Coins, Alchemy, Creation, Switch, Progressives
+from ..strings.items import UniqueItem, GenericItem, Coins, Alchemy, Creation, Progressives
 
 
 @dataclass(frozen=True)
