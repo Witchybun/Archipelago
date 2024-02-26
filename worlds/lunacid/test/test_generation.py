@@ -4,6 +4,7 @@ from .. import Endings
 from ..data import item_count_data
 from ..data.location_data import *
 from ..data.spell_data import all_spells, drop_spells
+from ..strings.items import Switch
 
 
 class TestAllLocationsAppended(LunacidTestBase):

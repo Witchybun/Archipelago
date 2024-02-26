@@ -42,7 +42,8 @@ lunacid_regions = [
     (LunacidRegion.tower_abyss, []),
     (LunacidRegion.sand_temple, []),
     (LunacidRegion.throne_chamber, [LunacidEntrance.throne_to_prison]),
-    (LunacidRegion.terminus_prison, [LunacidEntrance.prison_to_prison_dark]),
+    (LunacidRegion.terminus_prison, [LunacidEntrance.prison_to_prison_upstairs, LunacidEntrance.prison_to_prison_dark]),
+    (LunacidRegion.terminus_prison_upstairs, []),
     (LunacidRegion.terminus_prison_dark, [LunacidEntrance.prison_to_ash, LunacidEntrance.prison_to_arena]),
     (LunacidRegion.labyrinth_of_ash, []),
     (LunacidRegion.forlorn_arena, [LunacidEntrance.arena_to_fate]),
@@ -90,5 +91,6 @@ lunacid_entrances = [
     (LunacidEntrance.fate_to_sleeper, LunacidRegion.grave_of_the_sleeper),
     (LunacidEntrance.grotto_to_sand, LunacidRegion.sand_temple),
     (LunacidEntrance.prison_to_prison_dark, LunacidRegion.terminus_prison_dark),
-    (LunacidEntrance.yosei_lower_to_patchouli, LunacidRegion.patchouli)
+    (LunacidEntrance.yosei_lower_to_patchouli, LunacidRegion.patchouli),
+    (LunacidEntrance.prison_to_prison_upstairs, LunacidRegion.terminus_prison_upstairs)
 ]

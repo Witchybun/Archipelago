@@ -39,6 +39,7 @@ class LunacidRegion:
     sheryl_the_crow = "Sheryl the Crow"
     patchouli = "Patchouli"
     sand_temple = "Sand Temple"
+    terminus_prison_upstairs = "Terminus Prison Upstairs"
 
 
 class LunacidEntrance:
@@ -82,4 +83,5 @@ class LunacidEntrance:
     grotto_to_sand = "Boiling Grotto to Sand Temple"
     prison_to_prison_dark = "Terminus Prison to Terminus Prison Dark Areas"
     yosei_lower_to_patchouli = "Yosei Lower to Patchouli"
+    prison_to_prison_upstairs = "Terminus Prison to Terminus Prison Upstairs"
 
