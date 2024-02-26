@@ -49,7 +49,8 @@ class LunacidRules:
             LunacidRegion.forlorn_arena: lambda state: self.has_key_to_switch(state, Switch.prison_arena_switch, self.world.options)
                                                        and state.has(UniqueItem.terminus_prison_key, self.player),
             LunacidRegion.terminus_prison_dark: lambda state: self.has_key_to_switch(state, Switch.prison_shortcut_switch, self.world.options) or
-                                                              state.has(Spell.icarian_flight, self.player)
+                                                              state.has(Spell.icarian_flight, self.player),
+            LunacidRegion.terminus_prison_upstairs: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
 
         }
 
@@ -86,6 +87,9 @@ class LunacidRules:
             BaseLocation.sand_chest_overlooking_crypt: self.can_jump_high,
             BaseLocation.arena_water_underwater_temple: lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, self.player),
             BaseLocation.arena_earth_earthen_temple: self.can_jump_high,
+            BaseLocation.prison_f3_locked_left: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
+            BaseLocation.prison_f3_locked_right: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
+            BaseLocation.prison_f3_locked_south: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             "Free Sir Hicket": lambda state: state.has(Spell.ignis_calor, self.player),
             BaseLocation.castle_cell_center: self.has_fire_source,
             ShopLocation.buy_steel_needle: lambda state: self.can_reach_region(state, LunacidRegion.sanguine_sea),  # Push out of sphere 0
