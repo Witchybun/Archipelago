@@ -1,4 +1,4 @@
-from ..strings.items import UniqueItem, GenericItem, Creation, Alchemy, Coins, Switch, Progressives
+from ..strings.items import UniqueItem, GenericItem, Creation, Alchemy, Coins, Switch, Progressives, Traps
 from ..strings.weapons import Weapon
 from ..strings.spells import Spell, MobSpell
 
@@ -22,7 +22,7 @@ base_weapons = [Weapon.replica_sword,
                 Weapon.axe_of_harming,
                 Weapon.wand_of_power,
                 Weapon.blade_of_ophelia,
-                Weapon.flail,
+                Weapon.marauder_black_flail,
                 Weapon.blessed_wind,
                 Weapon.iron_claw,
                 Weapon.moonlight,
@@ -66,6 +66,7 @@ base_spells = [Spell.ghost_light,
                Spell.blue_flame_arc,
                Spell.lava_chasm,
                Spell.spirit_warp,
+               Spell.jingle_bells
                ]
 
 base_unique_items = [
@@ -81,6 +82,10 @@ base_unique_items = [
     Alchemy.broken_sword,
     Alchemy.fractured_death,
     UniqueItem.water_talisman,
+    UniqueItem.skeleton_egg,
+    UniqueItem.dried_rat,
+    UniqueItem.dusty_crystal_orb,
+    UniqueItem.skeleton_rattle
 ]
 
 base_special_item_counts = {
@@ -177,3 +182,14 @@ switches = [Switch.hollow_basin_switch_near_demi,
             Switch.arena_earth_switch,
             Switch.ash_switch,
             ]
+
+traps = [Traps.health_viai,
+         Traps.slowness_trap,
+         Traps.bleed_trap,
+         Traps.curse_trap,
+         Traps.blindness_trap,
+         Traps.mana_drain_trap,
+         Traps.xp_drain_trap,
+         Traps.poison_trap,
+         Traps.eggnog]
+

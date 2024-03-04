@@ -60,6 +60,10 @@ class UniqueItem:
     water_talisman = "Water Talisman"
     earth_talisman = "Earth Talisman"
     oil_lantern = "Oil Lantern"
+    skeleton_egg = "Skeleton Egg"
+    dried_rat = "Dried Rat"
+    dusty_crystal_orb = "Dusty Crystal Orb"
+    skeleton_rattle = "Skeleton Rattle"
 
 
 class Progressives:
@@ -73,6 +77,18 @@ class Coins:
     silver_100 = "Silver (100)"
     silver_10 = "Silver (10)"
     strange_coin = "Strange Coin"
+
+
+class Traps:
+    health_viai = "Health ViaI"
+    blindness_trap = "Blindness Trap"
+    slowness_trap = "Slowness Trap"
+    mana_drain_trap = "Mana Drain Trap"
+    xp_drain_trap = "XP Drain Trap"
+    curse_trap = "Curse Trap"
+    poison_trap = "Poison Trap"
+    bleed_trap = "Bleed Trap"
+    eggnog = "Eggnog"
 
 
 class Switch:
