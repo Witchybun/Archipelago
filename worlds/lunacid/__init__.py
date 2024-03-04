@@ -7,13 +7,14 @@ from .data.item_count_data import base_spells, drop_spells
 from .data.location_data import shop_items, base_items, drop_items
 from .data.item_data import money, max_item_count_by_item, all_item_data_by_name
 from .data.spell_data import starting_spells, drop_starting_spells
-from .data.weapon_data import starting_weapon, drop_starting_weapons, shop_starting_weapons
+from .data.weapon_data import starting_weapon, drop_starting_weapons, shop_starting_weapons, weapons_by_element
 from .strings.items import Creation, Coins, UniqueItem
 from .strings.weapons import Weapon
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
 from .strings.locations import BaseLocation
-from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_START, ItemDict, create_items, get_coin_count, determine_starting_weapon
+from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_START, ItemDict, create_items, get_coin_count, determine_starting_weapon, \
+    determine_weapon_elements
 from .Locations import (location_table, base_location_table, shop_locations_table, mob_drop_locations_table, LocationDict,
                         LOCATION_CODE_START)
 from .Regions import link_lunacid_areas, lunacid_entrances, lunacid_regions
@@ -59,6 +60,7 @@ class LunacidWorld(World):
     options_dataclass = LunacidOptions
     options: LunacidOptions
     starting_weapon: LunacidItem
+    weapon_elements: Dict[str, str]
     web = LunacidWeb()
     logger = logging.getLogger()
 
@@ -80,14 +82,17 @@ class LunacidWorld(World):
         return self.multiworld.random.choice(money)
 
     def set_rules(self):
-        LunacidRules(self).set_lunacid_rules()
+        LunacidRules(self).set_lunacid_rules(self.weapon_elements)
 
     def create_items(self):
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)]) - 3
         excluded_items = self.multiworld.precollected_items[self.player]
-
-        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.options, self.multiworld.random)
+        if self.options.random_elements == self.options.random_elements.option_true:
+            self.weapon_elements = determine_weapon_elements(self.multiworld.random)
+        else:
+            self.weapon_elements = weapons_by_element
+        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.options, self.multiworld.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
@@ -149,9 +154,10 @@ class LunacidWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.1.0",
-            **self.options.as_dict("ending", "experience", "weaponexperience", "strangecoinbundle",
-                                   "fillerbundle", "shopsanity", "dropsanity", "switchlocks")
+            "client_version": "0.1.2",
+            "elements": self.weapon_elements,
+            **self.options.as_dict("ending", "experience", "weapon_experience", "strange_coin_bundle",
+                                   "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "random_elements", "death_link")
         }
 
         return slot_data
