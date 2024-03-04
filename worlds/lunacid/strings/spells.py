@@ -30,6 +30,7 @@ class Spell:
     summon_ice_sword = "Summon Ice Sword"
     wind_dash = "Wind Dash"
     wind_slicer = "Wind Slicer"
+    jingle_bells = "Jingle Bells"
 
 
 class MobSpell:
