@@ -26,6 +26,8 @@ wings_rest = [
     LocationData(1, BaseLocation.wings_rest_ocean_elixir, LunacidRegion.wings_rest, UniqueItem.ocean_elixir),
     LocationData(2, BaseLocation.wings_rest_crystal_shard, LunacidRegion.wings_rest, Creation.crystal_shard),
     LocationData(3, BaseLocation.wings_rest_clives_gift, LunacidRegion.wings_rest, Creation.health_vial),
+    LocationData(4, BaseLocation.wings_rest_demi_orb, LunacidRegion.wings_rest, UniqueItem.dusty_crystal_orb),
+    LocationData(5, BaseLocation.wings_rest_demi_gift, LunacidRegion.wings_rest, UniqueItem.dried_rat),  # Its lots of things, really, or nothing.
 ]
 
 hollow_basin = [
@@ -44,11 +46,11 @@ hollow_basin = [
     LocationData(20, BaseLocation.temple_pillar_right, LunacidRegion.temple_of_silence_interior, Creation.health_vial),
     LocationData(21, BaseLocation.temple_ritual_ring, LunacidRegion.temple_of_silence_interior, Spell.flame_flare),
     LocationData(22, BaseLocation.temple_small_pillar, LunacidRegion.temple_of_silence_interior, Creation.health_vial),
-    LocationData(23, BaseLocation.temple_pillar_room_left, LunacidRegion.temple_of_silence_interior, Creation.crystal_shard),
-    LocationData(24, BaseLocation.temple_pillar_room_back_left, LunacidRegion.temple_of_silence_interior, Weapon.wooden_shield),
-    LocationData(25, BaseLocation.temple_pillar_room_back_right, LunacidRegion.temple_of_silence_interior, GenericItem.blood_wine),
-    LocationData(26, BaseLocation.temple_pillar_room_hidden_room, LunacidRegion.temple_of_silence_interior, Spell.blood_strike),
-    LocationData(27, BaseLocation.temple_hidden_room_in_sewer, LunacidRegion.temple_of_silence_interior, UniqueItem.vhs_tape),
+    LocationData(23, BaseLocation.temple_pillar_room_left, LunacidRegion.temple_of_silence_secret, Creation.crystal_shard),
+    LocationData(24, BaseLocation.temple_pillar_room_back_left, LunacidRegion.temple_of_silence_secret, Weapon.wooden_shield),
+    LocationData(25, BaseLocation.temple_pillar_room_back_right, LunacidRegion.temple_of_silence_secret, GenericItem.blood_wine),
+    LocationData(26, BaseLocation.temple_pillar_room_hidden_room, LunacidRegion.temple_of_silence_secret, Spell.blood_strike),
+    LocationData(27, BaseLocation.temple_hidden_room_in_sewer, LunacidRegion.temple_of_silence_secret, UniqueItem.vhs_tape),
     LocationData(28, BaseLocation.temple_table_in_sewer, LunacidRegion.temple_of_silence_interior, Weapon.stone_club),
     LocationData(29, BaseLocation.temple_sewer_puzzle, LunacidRegion.temple_of_silence_interior, UniqueItem.corrupted_key),
     LocationData(30, BaseLocation.temple_blood_altar, LunacidRegion.temple_of_silence_interior, Coins.strange_coin),
@@ -57,17 +59,17 @@ hollow_basin = [
 
 the_fetid_mire = [
     LocationData(37, BaseLocation.mire_room_left_foyer, LunacidRegion.fetid_mire, Creation.antidote),
-    LocationData(38, BaseLocation.mire_hidden_slime_chest, LunacidRegion.fetid_mire, Spell.ice_spear),
-    LocationData(39, BaseLocation.mire_upper_overlook_left, LunacidRegion.fetid_mire, Creation.crystal_shard),
-    LocationData(40, BaseLocation.mire_upper_overlook_right, LunacidRegion.fetid_mire, UniqueItem.ocean_elixir),
+    LocationData(38, BaseLocation.mire_hidden_slime_chest, LunacidRegion.fetid_mire_secret, Spell.ice_spear),
+    LocationData(39, BaseLocation.mire_upper_overlook_left, LunacidRegion.fetid_mire_secret, Creation.crystal_shard),
+    LocationData(40, BaseLocation.mire_upper_overlook_right, LunacidRegion.fetid_mire_secret, UniqueItem.ocean_elixir),
     LocationData(41, BaseLocation.mire_bonerard_trash, LunacidRegion.fetid_mire, Creation.antidote),
     LocationData(42, BaseLocation.mire_rubble_bridge, LunacidRegion.fetid_mire, Creation.antidote),
     LocationData(43, BaseLocation.mire_skeleton_chest, LunacidRegion.fetid_mire, Spell.barrier),
-    LocationData(44, BaseLocation.mire_jellisha_trash, LunacidRegion.fetid_mire, Creation.mana_vial),
-    LocationData(45, BaseLocation.mire_jellisha_reward, LunacidRegion.fetid_mire, Spell.slime_orb),
+    LocationData(44, BaseLocation.mire_jellisha_trash, LunacidRegion.fetid_mire_secret, Creation.mana_vial),
+    LocationData(45, BaseLocation.mire_jellisha_reward, LunacidRegion.fetid_mire_secret, Spell.slime_orb),
     LocationData(46, BaseLocation.mire_path_to_sea_left, LunacidRegion.fetid_mire, Weapon.battle_axe),
     LocationData(47, BaseLocation.mire_path_to_sea_right, LunacidRegion.fetid_mire, Creation.health_vial),
-    LocationData(48, BaseLocation.mire_hidden_chest_near_underworks, LunacidRegion.fetid_mire, UniqueItem.earth_elixir),
+    LocationData(48, BaseLocation.mire_hidden_chest_near_underworks, LunacidRegion.fetid_mire_secret, UniqueItem.earth_elixir),
     LocationData(49, BaseLocation.mire_rubble_near_illusory_wall, LunacidRegion.fetid_mire, Spell.wind_dash),
     LocationData(50, BaseLocation.mire_underwater_pipe, LunacidRegion.fetid_mire, Creation.poison_throwing_knife),
     LocationData(51, BaseLocation.mire_underworks_waterfall, LunacidRegion.fetid_mire, Creation.antidote),
@@ -173,15 +175,15 @@ holy_battlefield = [
 
 sealed_ballroom = [
     LocationData(166, BaseLocation.ballroom_small_room_lounge, LunacidRegion.sealed_ballroom, GenericItem.blood_wine),
-    LocationData(167, BaseLocation.ballroom_entry_hidden_couch_top, LunacidRegion.sealed_ballroom, Weapon.steel_needle),
-    LocationData(168, BaseLocation.ballroom_entry_hidden_couch_bottom, LunacidRegion.sealed_ballroom, Creation.health_vial),
-    LocationData(169, BaseLocation.ballroom_entry_hidden_cave_in_lounge, LunacidRegion.sealed_ballroom, Creation.spectral_candle),
+    LocationData(167, BaseLocation.ballroom_entry_hidden_couch_top, LunacidRegion.sealed_ballroom_secret, Weapon.steel_needle),
+    LocationData(168, BaseLocation.ballroom_entry_hidden_couch_bottom, LunacidRegion.sealed_ballroom_secret, Creation.health_vial),
+    LocationData(169, BaseLocation.ballroom_entry_hidden_cave_in_lounge, LunacidRegion.sealed_ballroom_secret, Creation.spectral_candle),
     LocationData(170, BaseLocation.ballroom_entry_long_table, LunacidRegion.sealed_ballroom, Creation.health_vial),
-    LocationData(171, BaseLocation.ballroom_side_hidden_cave, LunacidRegion.sealed_ballroom, Creation.crystal_shard),
+    LocationData(171, BaseLocation.ballroom_side_hidden_cave, LunacidRegion.sealed_ballroom_secret, Creation.crystal_shard),
     LocationData(172, BaseLocation.ballroom_side_chest_near_switch, LunacidRegion.sealed_ballroom, Spell.earth_thorn),
     LocationData(173, BaseLocation.ballroom_side_painting, LunacidRegion.sealed_ballroom, UniqueItem.ocean_elixir),
-    LocationData(174, BaseLocation.ballroom_side_hidden_casket_room, LunacidRegion.sealed_ballroom, Creation.health_vial),
-    LocationData(175, BaseLocation.ballroom_side_xp_drain, LunacidRegion.sealed_ballroom, Weapon.flail),
+    LocationData(174, BaseLocation.ballroom_side_hidden_casket_room, LunacidRegion.sealed_ballroom_secret, Creation.health_vial),
+    LocationData(175, BaseLocation.ballroom_side_xp_drain, LunacidRegion.sealed_ballroom, Weapon.marauder_black_flail),
 ]
 
 laetus_chasm = [
@@ -255,6 +257,7 @@ terminus_prison = [
     LocationData(276, BaseLocation.prison_f4_monk_room_two, LunacidRegion.terminus_prison_upstairs, Alchemy.snowflake_obsidian),
     LocationData(277, BaseLocation.prison_f4_monk_room_three, LunacidRegion.terminus_prison_upstairs, Alchemy.moon_petal),
     LocationData(278, BaseLocation.prison_f4_collapsed_tunnel, LunacidRegion.terminus_prison_upstairs, Weapon.hammer_of_cruelty),
+    LocationData(279, BaseLocation.prison_b2_egg_resting_place, LunacidRegion.terminus_prison_dark, UniqueItem.skeleton_rattle),
 ]
 
 forlorn_arena = [

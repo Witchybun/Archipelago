@@ -115,12 +115,13 @@ class TestEndingEButDropsanity(LunacidTestBase):
 
 
 class SwitchLockRegionTests(LunacidTestBase):
-    options = {"switchlocks": "true"}
+    options = {"switch_locks": "true"}
 
     def test_switch_reachability(self):
         state = self.multiworld.state
         player = self.player
-        self.collect_by_name([Weapon.torch, Progressives.vampiric_symbol, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman])
+        for item in [Weapon.torch, Progressives.vampiric_symbol, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman]:
+            self.collect_by_name(item)
         self.assertFalse(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
         self.collect_by_name(Switch.temple_switch)
         self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
@@ -142,7 +143,7 @@ class SwitchLockRegionTests(LunacidTestBase):
 
 
 class SwitchLockRegionTestsEndingE(LunacidTestBase):
-    options = {"switchlocks": "true",
+    options = {"switch_locks": "true",
                "ending": "ending_e"}
 
     def test_switch_reachability(self):
@@ -177,3 +178,18 @@ class SwitchLockRegionTestsEndingE(LunacidTestBase):
         for region in mob_spell_regions:
             self.assertTrue(state.can_reach(region, "Region", player), f"Couldn't reach {region}")
         self.assertTrue(self.multiworld.state.can_reach(Endings.wake_dreamer, "Location", self.player))
+
+
+class DustyTest(LunacidTestBase):
+    options = {"secret_door_lock": "true"}
+
+    def test_reachability_criteria(self):
+        state = self.multiworld.state
+        player = self.player
+        self.collect_by_name([Weapon.torch, Progressives.vampiric_symbol, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman])
+        self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
+        self.assertFalse(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
+        self.collect_by_name(UniqueItem.dusty_crystal_orb)
+        self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
+
+
