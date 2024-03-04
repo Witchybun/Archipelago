@@ -2,6 +2,8 @@ class BaseLocation:
     wings_rest_crystal_shard = "WR: Bench"
     wings_rest_ocean_elixir = "WR: Rafters"
     wings_rest_clives_gift = "WR: Clive's Gift"
+    wings_rest_demi_gift = "WR: Demi's Introduction Gift"
+    wings_rest_demi_orb = "WR: Demi's Victory Gift"
 
     hollow_basin_starting_sword = "HB: Starting Weapon"
     hollow_basin_right_water_right = "HB: Rightmost Water Room (Right)"
@@ -193,6 +195,7 @@ class BaseLocation:
     prison_b2_guarded_corner_two = "TP: Second Basement Guarded Alcove (Right)"
     prison_b2_deep_alcove = "TP: Second Basement Long Alcove"
     prison_b2_bone_pit = "TP: Second Basement Bone Pit"
+    prison_b2_egg_resting_place = "TP: Egg's Resting Place"
     prison_f4_hanging = "TP: Fourth Floor Cell Hanging Remains"
     prison_f4_maledictus_secret = "TP: Fourth Floor Maledictus Secret"
     prison_f4_hidden_beds = "TP: Fourth Floor Hidden Jailer Sleeping Spot"

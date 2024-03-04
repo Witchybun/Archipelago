@@ -71,6 +71,10 @@ oil_lantern = create_item(44, UniqueItem.oil_lantern, ItemClassification.progres
 bomb = create_item(45, Creation.bomb, ItemClassification.filler)
 poison_urn = create_item(46, Creation.poison_urn, ItemClassification.filler)
 silver_10 = create_item(47, Coins.silver_10, ItemClassification.filler)
+skeleton_egg = create_item(48, UniqueItem.skeleton_egg, ItemClassification.progression)
+dried_rat = create_item(49, UniqueItem.dried_rat, ItemClassification.useful)
+dusty_crystal_orb = create_item(50, UniqueItem.dusty_crystal_orb, ItemClassification.progression)
+skeleton_rattle = create_item(51, UniqueItem.skeleton_rattle, ItemClassification.useful),
 
 
 item_light_sources = [UniqueItem.crystal_lantern, UniqueItem.oil_lantern]
