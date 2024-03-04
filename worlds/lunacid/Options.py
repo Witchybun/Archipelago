@@ -29,7 +29,7 @@ class Experience(Range):
 
 class WeaponExperience(Range):
     """Multiplier for gained weapon experience as a percent.  Ranges from 25% to 400%"""
-    internal_name = "weaponexperience"
+    internal_name = "weapon_experience"
     display_name = "Weapon Experience Modifier"
     range_start = 25
     range_end = 400
@@ -39,7 +39,7 @@ class WeaponExperience(Range):
 class StrangeCoinBundle(Choice):
     """Changes the drop total of the strange coins from 10 to any divisor of 30, helping it become more of a maguffin hunt.
     Note: Filler will be replaced to compensate."""
-    internal_name = "strangecoinbundle"
+    internal_name = "strange_coin_bundle"
     display_name = "Strange Coin Bundle"
     option_one = 0
     option_two = 1
@@ -52,13 +52,11 @@ class StrangeCoinBundle(Choice):
     default = 5
 
 
-class FillerBundle(Range):
-    """Changes how many of the non-unique filler items are given to the player when such an item is received."""
-    internal_name = "fillerbundle"
-    display_name = "Filler Bundle"
-    range_start = 1
-    range_end = 5
-    default = 1
+class RandomElements(Toggle):
+    """Randomizes the elements of almost all weapons and spells.  Guaranteed Poison ranged option.
+    Lucid Blade and Wand of Power are not randomized (either due to limitation, or to guarantee victory)"""
+    internal_name = "random_elements"
+    display_name = "Random Elements"
 
 
 class Shopsanity(Toggle):
@@ -76,18 +74,45 @@ class Dropsanity(Toggle):
 class SwitchLocks(Toggle):
     """All physical switches (not mirages) are locked, and cannot be flipped without their relevant item.
     Note: Removes filler at random to compensate."""
-    internal_name = "switchlock"
+    internal_name = "switch_lock"
     display_name = "Lock Switches"
+
+
+class SecretDoorLock(Toggle):
+    """All secret doors are locked until receiving the Dusty Crystal Orb."""
+    internal_name = "secret_door_lock"
+    display_name = "Secret Door Lock"
+
+
+class FillerBundle(Range):
+    """Changes how many of the non-unique filler items are given to the player when such an item is received."""
+    internal_name = "filler_bundle"
+    display_name = "Filler Bundle"
+    range_start = 1
+    range_end = 5
+    default = 1
+
+
+class TrapPercent(Range):
+    """Percent of filler items to be converted to traps."""
+    internal_name = "trap_percent"
+    display_name = "Trap Percent"
+    range_start = 0
+    range_end = 100
+    default = 20
 
 
 @dataclass
 class LunacidOptions(PerGameCommonOptions):
     ending: Ending
     experience: Experience
-    weaponexperience: WeaponExperience
-    strangecoinbundle: StrangeCoinBundle
-    fillerbundle: FillerBundle
+    random_elements: RandomElements
+    weapon_experience: WeaponExperience
+    strange_coin_bundle: StrangeCoinBundle
+    filler_bundle: FillerBundle
     shopsanity: Shopsanity
     dropsanity: Dropsanity
-    switchlocks: SwitchLocks
+    secret_door_lock: SecretDoorLock
+    switch_locks: SwitchLocks
+    trap_percent: TrapPercent
     death_link: DeathLink
