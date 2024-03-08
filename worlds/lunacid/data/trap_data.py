@@ -34,5 +34,6 @@ xp_drain = create_trap(66, Traps.xp_drain_trap, ItemClassification.trap)
 curse = create_trap(67, Traps.curse_trap, ItemClassification.trap)
 bleed = create_trap(68, Traps.bleed_trap, ItemClassification.trap)
 eggnog = create_trap(69, Traps.eggnog, ItemClassification.trap)
+coal = create_trap(70, Traps.coal, ItemClassification.trap)
 
 
