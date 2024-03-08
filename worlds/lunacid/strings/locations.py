@@ -200,9 +200,9 @@ class BaseLocation:
     prison_f4_maledictus_secret = "TP: Fourth Floor Maledictus Secret"
     prison_f4_hidden_beds = "TP: Fourth Floor Hidden Jailer Sleeping Spot"
     prison_f4_jailer_break_room = "TP: Fourth Floor Jailer Break Room"
-    prison_f4_monk_room_one = "TP: Fourth Floor Monk Room 1"
-    prison_f4_monk_room_two = "TP: Fourth Floor Monk Room 2"
-    prison_f4_monk_room_three = "TP: Fourth Floor Monk Room 3"
+    prison_f4_monk_room_one = "TP: Etna's Resting Place Item 1"
+    prison_f4_monk_room_two = "TP: Etna's Resting Place Item 2"
+    prison_f4_monk_room_three = "TP: Etna's Resting Place Item 3"
     prison_f4_collapsed_tunnel = "TP: Fourth Floor Collapsed Tunnel"
 
     arena_broken_sword = "FlA: Corpse Waiting For A Full Moon"
@@ -232,7 +232,7 @@ class BaseLocation:
     ash_hidden_chest = "LA: Hidden Light Chest"
     ash_path_maze = "LA: NNSNSSNSNN Lost Maze"
 
-    fate_lucid_blade = "CF: The Weapon to Kill an Immortal"
+    fate_lucid_blade = "CF: Calamis' Weapon of Choice"
 
 
 class ShopLocation:
