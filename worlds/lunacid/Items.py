@@ -74,28 +74,6 @@ def determine_weapon_elements(random: Random) -> Dict[str, str]:
             elements[item.name] = random.choice(Elements.spell_elements)
     for item in spells:
         elements[item] = random.choice(Elements.spell_elements)
-    ranged_elements = {element: elements[element] for element in elements if element in ranged_weapons or element in ranged_spells}
-    unused_elements = [element for element in Elements.all_elements if element not in ranged_elements.values()]
-    if set(Elements.poison_or_dark).intersection(set(unused_elements)) == set(Elements.poison_or_dark):
-        chosen_ranged = random.choice(ranged_elements)
-        chosen_element = random.choice(Elements.poison_or_dark)
-        elements[chosen_ranged] = chosen_element
-    melee_elements = {element: elements[element] for element in elements if element not in ranged_elements and element
-                      not in ranged_spells}
-    unused_elements = [element for element in Elements.all_elements if element not in melee_elements.values()]
-    if set(Elements.light_options).intersection(set(unused_elements)) == set(Elements.light_options):
-        chosen_melee = random.choice(melee_elements)
-        next_element = random.choice(Elements.light_options)
-        elements[chosen_melee] = next_element
-    unused_elements = [element for element in Elements.all_elements if element not in elements.values()]
-    if set(Elements.fire_options).intersection(set(unused_elements)) == set(Elements.fire_options):
-        chosen_item = Weapon.replica_sword
-        while elements[chosen_item] not in Elements.fire_options:
-            chosen_item = random.choice(elements)
-            if elements[chosen_item] in Elements.light_options or elements[chosen_item] in Elements.poison_or_dark:
-                continue
-            next_element = random.choice(Elements.fire_options)
-            elements[chosen_item] = next_element
     for item in excluded_list:
         elements[item] = all_items_by_element[item]
     return elements
@@ -104,16 +82,27 @@ def determine_weapon_elements(random: Random) -> Dict[str, str]:
 def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], weapon_elements: Dict[str, str], options: LunacidOptions, random: Random) -> (List[Item], Item):
     items = []
     lunacid_items = create_lunacid_items(item_factory, weapon_elements, options)
+    starting_weapon_choice = item_factory(determine_starting_weapon(random, options))
     for item in items_to_exclude:
         if item in lunacid_items:
             lunacid_items.remove(item)
     assert len(
         lunacid_items) <= locations_count, f"There should be at least as many locations [{locations_count}] as there are mandatory items [{len(lunacid_items)}]"
     items += lunacid_items
+    chosen_weapon = determine_starting_weapon(random, options)
+    if weapon_elements[chosen_weapon] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
+        starting_weapon_choice = item_factory(chosen_weapon, ItemClassification.progression)
+    elif weapon_elements[chosen_weapon] in [Elements.poison, Elements.ice_and_poison] and chosen_weapon in ranged_weapons or chosen_weapon in ranged_spells:
+        starting_weapon_choice = item_factory(chosen_weapon, ItemClassification.progression)
+    else:
+        starting_weapon_choice = item_factory(chosen_weapon)
+    for item in items:
+        if item.name == starting_weapon_choice:
+            items.remove(item)
+            break
     logger.debug(f"Created {len(lunacid_items)} unique items")
     filler_slots = locations_count - len(lunacid_items)
     create_filler(item_factory, options, random, filler_slots, items)
-    starting_weapon_choice = item_factory(determine_starting_weapon(random, options))
 
     return items, starting_weapon_choice
 
