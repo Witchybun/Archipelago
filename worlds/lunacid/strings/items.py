@@ -63,7 +63,7 @@ class UniqueItem:
     skeleton_egg = "Skeleton Egg"
     dried_rat = "Dried Rat"
     dusty_crystal_orb = "Dusty Crystal Orb"
-    skeleton_rattle = "Skeleton Rattle"
+    skeleton_rattle = "Skeletal Rattle"
 
 
 class Progressives:
@@ -89,6 +89,7 @@ class Traps:
     poison_trap = "Poison Trap"
     bleed_trap = "Bleed Trap"
     eggnog = "Eggnog"
+    coal = "Coal"
 
 
 class Switch:
