@@ -191,5 +191,6 @@ traps = [Traps.health_viai,
          Traps.mana_drain_trap,
          Traps.xp_drain_trap,
          Traps.poison_trap,
-         Traps.eggnog]
+         Traps.eggnog,
+         Traps.coal]
 
