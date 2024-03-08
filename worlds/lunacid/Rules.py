@@ -40,12 +40,13 @@ class LunacidRules:
             LunacidRegion.fetid_mire_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidRegion.forest_canopy: lambda state: self.has_keys_for_canopy(state, self.world.options),
             LunacidRegion.throne_chamber: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3),
-            LunacidRegion.terminus_prison: lambda state: state.has("Defeat Prince Crilall Fanu", self.player),
             LunacidRegion.castle_le_fanu_white: lambda state: state.has(Progressives.vampiric_symbol, self.player, 1),
             LunacidRegion.castle_le_fanu_blue: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2),
             LunacidRegion.chamber_of_fate: lambda state: state.has_all({UniqueItem.earth_talisman, UniqueItem.water_talisman}, self.player),
-            LunacidRegion.sealed_ballroom: lambda state: self.has_ranged_element_access(
-                [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison], state),
+            LunacidRegion.sealed_ballroom: lambda state: self.can_reach_region(LunacidRegion.castle_le_fanu, state) and (self.has_ranged_element_access(
+                [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison], state) or
+                        (self.has_element_access([Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison], state) and
+                         state.has(Spell.rock_bridge, self.player))),
             LunacidRegion.sealed_ballroom_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidRegion.vampire_tomb: lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state),
             LunacidRegion.mausoleum: lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state),
@@ -70,11 +71,16 @@ class LunacidRules:
                                                                 LunacidRegion.temple_of_silence_interior, None, self.player)),
             LunacidEntrance.yosei_to_yosei_lower: lambda state: self.can_jump_high(state) or self.has_blood_spell_access(state),
             LunacidEntrance.castle_to_red: self.has_blood_spell_access,
-            LunacidEntrance.archives_3_to_archives_1b: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_1_to_3, self.world.options),
-            LunacidEntrance.archives_2_to_archives_3: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_2_to_3, self.world.options),
+            LunacidEntrance.archives_3_to_archives_1b: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_1_to_3, self.world.options)
+                                                                     or self.can_jump_high(state),
+            LunacidEntrance.archives_2_to_archives_3: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_2_to_3, self.world.options)
+                                                                    or self.can_jump_high(state),
+            LunacidEntrance.throne_to_prison: lambda state: state.has("Defeat Prince Crilall Fanu", self.player),
         }
 
         self.location_rules = {
+            "Throne of Prince Crilall Fanu": lambda state: state.can_reach(LunacidEntrance.white_to_throne, "Entrance", self.player),
+            BaseLocation.wings_rest_demi_orb: lambda state: self.can_reach_region(state, LunacidRegion.grave_of_the_sleeper),
             BaseLocation.temple_blood_altar: self.has_blood_spell_access,
             BaseLocation.hollow_basin_dark_item: lambda state: state.has(UniqueItem.enchanted_key, self.player),
             BaseLocation.temple_sewer_puzzle: lambda state: state.has(UniqueItem.vhs_tape, self.player) and self.can_reach_region(state,
@@ -89,12 +95,10 @@ class LunacidRules:
             BaseLocation.sea_pillar: lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, self.player),
             BaseLocation.tomb_demi_chest: self.can_jump_high,
             BaseLocation.chasm_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
-            # AT locations requiring orb as they are singletons
             BaseLocation.tomb_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.tomb_hidden_room: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.catacombs_hidden_room: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.mausoleum_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
-            # End of AT Hidden list
             BaseLocation.mausoleum_upper_table: self.can_jump_high,
             BaseLocation.mausoleum_kill_death: lambda state: state.has_all({Alchemy.fractured_life, Alchemy.fractured_death, Alchemy.broken_sword},
                                                                            self.player),
