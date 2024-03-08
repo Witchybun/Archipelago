@@ -79,7 +79,7 @@ class LunacidWorld(World):
         return Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(money)
+        return self.random.choice(money)
 
     def set_rules(self):
         LunacidRules(self).set_lunacid_rules(self.weapon_elements)
@@ -157,7 +157,8 @@ class LunacidWorld(World):
             "client_version": "0.1.2",
             "elements": self.weapon_elements,
             **self.options.as_dict("ending", "experience", "weapon_experience", "strange_coin_bundle",
-                                   "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "random_elements", "death_link")
+                                   "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "random_elements", "secret_door_lock",
+                                   "death_link")
         }
 
         return slot_data
