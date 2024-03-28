@@ -2,6 +2,7 @@ from BaseClasses import CollectionState
 from . import LunacidTestBase
 from .. import Endings
 from ..data import item_count_data
+from ..data.item_count_data import base_weapons, base_spells
 from ..data.location_data import *
 from ..data.spell_data import all_spells, drop_spells
 from ..strings.items import Switch
@@ -50,7 +51,7 @@ class TestAllLocationsAppended(LunacidTestBase):
             self.assertIn(location, base_locations)
         for location in chamber_of_fate:
             self.assertIn(location, base_locations)
-        self.assertTrue(206 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
+        self.assertTrue(208 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
 
 
 class TestEndingE(LunacidTestBase):
@@ -189,7 +190,35 @@ class DustyTest(LunacidTestBase):
         self.collect_by_name([Weapon.torch, Progressives.vampiric_symbol, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman])
         self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
         self.assertFalse(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
+        self.assertFalse(state.can_reach(BaseLocation.archives_hidden_room_upper, "Location", player))
         self.collect_by_name(UniqueItem.dusty_crystal_orb)
         self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
+        self.assertTrue(state.can_reach(BaseLocation.archives_hidden_room_upper, "Location", player))
 
 
+class DuplicateTest(LunacidTestBase):
+    def test_base_duplicate_weapons(self):
+        world = self.multiworld
+        for weapon in base_weapons:
+            count = 0
+            for item in world.itempool:
+                if item.name == weapon:
+                    count += 1
+            self.assertTrue(count < 2, "There are duplicate weapons.")
+        for spell in base_spells:
+            count = 0
+            for item in world.itempool:
+                if item.name == spell:
+                    count += 1
+            self.assertTrue(count < 2, "There are duplicate spells.")
+
+
+class LightTest(LunacidTestBase):
+
+    def test_base_light_reachability(self):
+        world = self.multiworld
+        self.collect_by_name(UniqueItem.enchanted_key)
+        self.assertTrue(self.can_reach_location(BaseLocation.hollow_basin_dark_item))
+        self.assertFalse(self.can_reach_region(LunacidRegion.temple_of_silence_entrance))
+        self.assertFalse(self.can_reach_region(LunacidRegion.fetid_mire_secret))
+        self.assertFalse(self.can_reach_region(LunacidRegion.yosei_forest))
