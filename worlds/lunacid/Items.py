@@ -148,7 +148,9 @@ def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[
     if options.ending == options.ending.option_ending_e:
         force_progressive = True
     for item in base_spells:
-        if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
+        if all_spells_by_name[item].style == Types.support:
+            items.append(item_factory(item, determine_item_classification(item, force_progressive)))
+        elif equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
             items.append(item_factory(item, ItemClassification.progression))
         elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
             items.append(item_factory(item, ItemClassification.progression))
@@ -156,7 +158,9 @@ def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
     if options.dropsanity == options.dropsanity.option_true:
         for item in drop_spells:
-            if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
+            if all_spells_by_name[item].style == Types.support:
+                items.append(item_factory(item, determine_item_classification(item, force_progressive)))
+            elif equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
                 items.append(item_factory(item, ItemClassification.progression))
             elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
                 items.append(item_factory(item, ItemClassification.progression))
