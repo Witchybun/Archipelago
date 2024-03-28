@@ -8,6 +8,11 @@ def link_lunacid_areas(world: MultiWorld, player: int):
         world.get_entrance(entrance, player).connect(world.get_region(region, player))
 
 
+def invert_connection(connection: str):
+    connection_array = connection.split(" to ")
+    return connection_array[1] + " to " + connection_array[0]
+
+
 lunacid_regions = [
     (LunacidRegion.menu, [LunacidEntrance.menu_to_basin]),
     (LunacidRegion.hollow_basin, [LunacidEntrance.to_wings_rest, LunacidEntrance.basin_to_archives, LunacidEntrance.basin_to_surface,
