@@ -61,7 +61,7 @@ the_fetid_mire = [
     LocationData(38, BaseLocation.mire_hidden_slime_chest, LunacidRegion.fetid_mire_secret, Spell.ice_spear),
     LocationData(39, BaseLocation.mire_upper_overlook_left, LunacidRegion.fetid_mire_secret, Creation.crystal_shard),
     LocationData(40, BaseLocation.mire_upper_overlook_right, LunacidRegion.fetid_mire_secret, UniqueItem.ocean_elixir),
-    LocationData(41, BaseLocation.mire_bonerard_trash, LunacidRegion.fetid_mire, Creation.antidote),
+    LocationData(41, BaseLocation.mire_bonenard_trash, LunacidRegion.fetid_mire, Creation.antidote),
     LocationData(42, BaseLocation.mire_rubble_bridge, LunacidRegion.fetid_mire, Creation.antidote),
     LocationData(43, BaseLocation.mire_skeleton_chest, LunacidRegion.fetid_mire, Spell.barrier),
     LocationData(44, BaseLocation.mire_jellisha_trash, LunacidRegion.fetid_mire_secret, Creation.mana_vial),
@@ -78,7 +78,7 @@ the_fetid_mire = [
 the_sacrosant_sea = [
     LocationData(58, BaseLocation.sea_pillar, LunacidRegion.sanguine_sea, Weapon.corrupted_dagger),
     LocationData(59, BaseLocation.sea_underblood, LunacidRegion.sanguine_sea, Weapon.dark_rapier),
-    LocationData(60, BaseLocation.sea_blood_island, LunacidRegion.sanguine_sea, Spell.summon_fairy),
+    LocationData(60, BaseLocation.sea_fairy_circle, LunacidRegion.sanguine_sea, Spell.summon_fairy),
     LocationData(61, BaseLocation.sea_kill_jotunn, LunacidRegion.sanguine_sea, Coins.strange_coin)]
 
 accursed_tomb = [
@@ -282,7 +282,7 @@ forlorn_arena = [
 
 labyrinth_of_ash = [
     LocationData(307, BaseLocation.ash_entry_coffin, LunacidRegion.labyrinth_of_ash, Creation.mana_vial),
-    LocationData(308, BaseLocation.ash_jotunn_remains, LunacidRegion.labyrinth_of_ash, Creation.health_vial),
+    LocationData(308, BaseLocation.ash_giant_remains, LunacidRegion.labyrinth_of_ash, Creation.health_vial),
     LocationData(309, BaseLocation.ash_cetea_statue, LunacidRegion.labyrinth_of_ash, Creation.wisp_heart),
     LocationData(310, BaseLocation.ash_rocks_near_switch, LunacidRegion.labyrinth_of_ash, Spell.lava_chasm),
     LocationData(311, BaseLocation.ash_forbidden_light_chest, LunacidRegion.labyrinth_of_ash, Spell.spirit_warp),
