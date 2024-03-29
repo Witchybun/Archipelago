@@ -5,11 +5,10 @@ from .data.item_count_data import base_spells
 from .strings.properties import Elements
 from ..generic.Rules import CollectionRule
 
-from .data.spell_data import spell_light_sources, jump_spells, drop_spells, ranged_spells, blood_spells
+from .data.spell_data import spell_light_sources, drop_spells, ranged_spells, blood_spells
 from .data.weapon_data import ranged_weapons, weapon_light_sources
 from .data.item_data import item_light_sources
 from .Options import LunacidOptions
-from .Regions import invert_connection
 from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
 from .strings.items import UniqueItem, Progressives, Switch, Alchemy
@@ -72,8 +71,6 @@ class LunacidRules:
             LunacidEntrance.white_to_throne: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3),
             LunacidEntrance.archives_to_chasm: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2) and
                                                                                 self.can_jump_given_height(state, "Medium", self.world.options),
-            invert_connection(LunacidEntrance.archives_to_chasm): lambda state: state.has(Progressives.vampiric_symbol, self.player, 2) and
-                                                                                self.can_jump_given_height(state, "High", self.world.options),
             LunacidEntrance.wings_to_surface: lambda state: state.has(Spell.icarian_flight, self.player),
             LunacidEntrance.basin_to_surface: lambda state: state.has_all({Spell.icarian_flight, Spell.spirit_warp}, self.player) or
                                                             (state.has(Spell.icarian_flight, self.player) and state.can_reach(
