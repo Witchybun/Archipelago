@@ -8,7 +8,7 @@ def link_lunacid_areas(world: MultiWorld, player: int):
         world.get_entrance(entrance, player).connect(world.get_region(region, player))
 
 
-def invert_connection(connection: str):
+def inverse(connection: str):
     connection_array = connection.split(" to ")
     return connection_array[1] + " to " + connection_array[0]
 
