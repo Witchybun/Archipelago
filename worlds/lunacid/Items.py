@@ -7,10 +7,11 @@ from typing import Dict, List, Union, Protocol
 
 from . import Weapon
 from .Options import LunacidOptions
+from .data.door_data import all_doors
 from .data.location_data import base_locations, shop_locations, mob_drop_locations
 from .data.item_data import all_items
 from .data.item_count_data import (base_weapons, base_spells, base_special_item_counts, base_unique_items, shop_weapons, shop_unique_items, shop_item_count,
-                                   drop_weapons, drop_spells, switches, filler_items, traps)
+                                   drop_weapons, drop_spells, switches, filler_items, traps, doors)
 from .data.switch_data import all_switches
 from .data.trap_data import all_traps
 from .data.weapon_data import all_weapons, starting_weapon, shop_starting_weapons, drop_starting_weapons, ranged_weapons, weapons_by_element
@@ -51,6 +52,8 @@ def initialize_items_by_name() -> List[ItemDict]:
         items.append(ItemDict(ITEM_CODE_START + switch.code, switch.name, switch.classification, 0))
     for trap in all_traps:
         items.append(ItemDict(ITEM_CODE_START + trap.code, trap.name, trap.classification, 0))
+    for door in all_doors:
+        items.append(ItemDict(ITEM_CODE_START + door.code, door.name, door.classification, 0))
     return items
 
 
@@ -82,7 +85,6 @@ def determine_weapon_elements(random: Random) -> Dict[str, str]:
 def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], weapon_elements: Dict[str, str], options: LunacidOptions, random: Random) -> (List[Item], Item):
     items = []
     lunacid_items = create_lunacid_items(item_factory, weapon_elements, options)
-    starting_weapon_choice = item_factory(determine_starting_weapon(random, options))
     for item in items_to_exclude:
         if item in lunacid_items:
             lunacid_items.remove(item)
@@ -97,11 +99,11 @@ def create_items(item_factory: LunacidItemFactory, locations_count: int, items_t
     else:
         starting_weapon_choice = item_factory(chosen_weapon)
     for item in items:
-        if item.name == starting_weapon_choice:
+        if item.name == starting_weapon_choice.name:
             items.remove(item)
             break
     logger.debug(f"Created {len(lunacid_items)} unique items")
-    filler_slots = locations_count - len(lunacid_items)
+    filler_slots = locations_count - len(items)
     create_filler(item_factory, options, random, filler_slots, items)
 
     return items, starting_weapon_choice
@@ -113,6 +115,7 @@ def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict
     create_spells(item_factory, weapon_elements, options, items)
     create_special_items(item_factory, options, items)
     create_switch_items(item_factory, options, items)
+    create_door_items(item_factory, options, items)
     return items
 
 
@@ -206,6 +209,14 @@ def create_switch_items(item_factory: LunacidItemFactory, options: LunacidOption
         return items
     for item in switches:
         items.append(item_factory(item))
+    return items
+
+
+def create_door_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
+    if options.door_locks == options.door_locks.option_false:
+        return items
+    for key in doors:
+        items.append(item_factory(key))
     return items
 
 
