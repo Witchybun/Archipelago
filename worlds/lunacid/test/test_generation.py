@@ -190,8 +190,28 @@ class DustyTest(LunacidTestBase):
         self.collect_by_name([Weapon.torch, Progressives.vampiric_symbol, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman])
         self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
         self.assertFalse(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
+        self.assertFalse(state.can_reach(BaseLocation.temple_pillar_room_back_right, "Location", player))
         self.assertFalse(state.can_reach(BaseLocation.archives_hidden_room_upper, "Location", player))
         self.collect_by_name(UniqueItem.dusty_crystal_orb)
+        self.assertTrue(state.can_reach(BaseLocation.temple_pillar_room_back_right, "Location", player))
+        self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
+        self.assertTrue(state.can_reach(BaseLocation.archives_hidden_room_upper, "Location", player))
+
+
+class DustyTestER(LunacidTestBase):
+    options = {"secret_door_lock": "true",
+               "entrance_randomization": "true"}
+
+    def test_reachability_criteria(self):
+        state = self.multiworld.state
+        player = self.player
+        self.collect_by_name([Weapon.torch, Progressives.vampiric_symbol, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman])
+        self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
+        self.assertFalse(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
+        self.assertFalse(state.can_reach(BaseLocation.temple_pillar_room_back_right, "Location", player))
+        self.assertFalse(state.can_reach(BaseLocation.archives_hidden_room_upper, "Location", player))
+        self.collect_by_name(UniqueItem.dusty_crystal_orb)
+        self.assertTrue(state.can_reach(BaseLocation.temple_pillar_room_back_right, "Location", player))
         self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
         self.assertTrue(state.can_reach(BaseLocation.archives_hidden_room_upper, "Location", player))
 
