@@ -46,8 +46,8 @@ class LunacidRegion:
 
 
 class LunacidEntrance:
-    menu_to_basin = "Menu to Hollow Basin"
-    to_wings_rest = "To Wing's Rest"
+    menu_to_basin = "Menu to Basin"
+    basin_to_wings_rest = "Hollow Basin to Wing's Rest"
     wings_to_surface = "Wing's Rest to Great Well Surface"
     basin_to_temple = "Hollow Basin to Temple of Silence Entrance"
     temple_entrance_to_temple_interior = "Temple of Silence Entrance to Temple of Silence Interior"
@@ -90,4 +90,11 @@ class LunacidEntrance:
     prison_to_prison_dark = "Terminus Prison to Terminus Prison Dark Areas"
     yosei_lower_to_patchouli = "Yosei Lower to Patchouli"
     prison_to_prison_upstairs = "Terminus Prison to Terminus Prison Upstairs"
+
+    # Used for yosei starting
+    yosei_to_wings_rest = "Yosei Forest to Wing's Rest"
+    forest_to_temple = "Yosei Forest to Temple of Silence Interior"
+    temple_interior_to_temple_entrance = "Temple of Silence Interior to Temple of Silence Entrance"
+    temple_interior_to_basin = "Temple of Silence Interior to Hollow Basin"
+    temple_to_basin = "Temple of Silence Entrance to Hollow Basin"
 

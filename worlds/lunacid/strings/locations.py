@@ -228,7 +228,7 @@ class BaseLocation:
     ash_cetea_statue = "LA: Behind Statue"
     ash_rocks_near_switch = "LA: Rocks Near Switch"
     ash_forbidden_light_chest = "LA: Forbidden Light Chest"
-    ash_hidden_chest = "LA: Hidden Light Chest"
+    ash_hidden_chest = "LA: Hidden Light Stash"
     ash_path_maze = "LA: NNSNSSNSNN Lost Maze"
 
     fate_lucid_blade = "CF: Calamis' Weapon of Choice"
