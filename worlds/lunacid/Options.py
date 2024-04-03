@@ -18,6 +18,13 @@ class Ending(Choice):
     default = 0
 
 
+class EntranceRandomization(Toggle):
+    """Shuffles the entrances around.  The only untouched entrances are crystal warps (including spell/item), entrance to Chamber of Fate, entrance to
+    Grave of the Sleeper, and the doors of Tower of Abyss."""
+    internal_name = "entrance_randomization"
+    display_name = "Entrance Randomization"
+
+
 class Experience(Range):
     """Multiplier for gained experience as a percent.  Ranges from 25% to 400%."""
     internal_name = "experience"
@@ -78,6 +85,13 @@ class SwitchLocks(Toggle):
     display_name = "Lock Switches"
 
 
+class DoorLocks(Toggle):
+    """All physical doors leading to new zones are locked, and cannot be opened without their relevant item.
+    Note: Removes filler at random to compensate."""
+    internal_name = "door_lock"
+    display_name = "Lock Doors"
+
+
 class SecretDoorLock(Toggle):
     """All secret doors are locked until receiving the Dusty Crystal Orb."""
     internal_name = "secret_door_lock"
@@ -105,6 +119,7 @@ class TrapPercent(Range):
 @dataclass
 class LunacidOptions(PerGameCommonOptions):
     ending: Ending
+    entrance_randomization: EntranceRandomization
     experience: Experience
     random_elements: RandomElements
     weapon_experience: WeaponExperience
@@ -114,5 +129,6 @@ class LunacidOptions(PerGameCommonOptions):
     dropsanity: Dropsanity
     secret_door_lock: SecretDoorLock
     switch_locks: SwitchLocks
+    door_locks: DoorLocks
     trap_percent: TrapPercent
     death_link: DeathLink

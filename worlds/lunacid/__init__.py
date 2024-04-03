@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Iterable, Optional, TextIO
 import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
@@ -17,7 +17,7 @@ from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_ST
     determine_weapon_elements
 from .Locations import (location_table, base_location_table, shop_locations_table, mob_drop_locations_table, LocationDict,
                         LOCATION_CODE_START)
-from .Regions import link_lunacid_areas, lunacid_entrances, lunacid_regions
+from .Regions import link_lunacid_areas, lunacid_entrances_basin, lunacid_regions_basin, create_regions
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
 from .Options import LunacidOptions
@@ -61,6 +61,7 @@ class LunacidWorld(World):
     options: LunacidOptions
     starting_weapon: LunacidItem
     weapon_elements: Dict[str, str]
+    randomized_entrances: Dict[str, str]
     web = LunacidWeb()
     logger = logging.getLogger()
 
@@ -102,6 +103,57 @@ class LunacidWorld(World):
         starting_location.place_locked_item(self.starting_weapon)
 
     def create_regions(self):
+        world = self.multiworld
+        player = self.player
+
+        def create_region(name: str, exits: Iterable[str]) -> Region:
+            lunacid_region = Region(name, player, world)
+            lunacid_region.exits = [Entrance(player, exit_name, lunacid_region) for exit_name in exits]
+            return lunacid_region
+
+        world_regions, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
+
+        for location in location_table:
+            name = location.name
+            code = location.code
+            if location in shop_locations_table and self.options.shopsanity == self.options.shopsanity.option_false:
+                continue
+            if location in mob_drop_locations_table and self.options.dropsanity == self.options.dropsanity.option_false:
+                continue
+            region: Region = world_regions[location.region]
+            region.add_locations({name: code})
+
+        self.multiworld.regions.extend(world_regions.values())
+
+        if self.options.ending == self.options.ending.option_ending_b:
+            ending_region = world.get_region(LunacidRegion.labyrinth_of_ash, player)
+        else:
+            ending_region = world.get_region(LunacidRegion.grave_of_the_sleeper, player)
+        throne_region = world.get_region(LunacidRegion.throne_chamber, player)
+        crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
+        crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
+        throne_region.locations.append(crilall)
+        grotto_region = world.get_region(LunacidRegion.boiling_grotto, player)
+        hicket = Location(player, "Free Sir Hicket", None, grotto_region)
+        hicket.place_locked_item(self.create_event("Sir Hicket's Freedom from Armor"))
+        victory = Location(player, Endings.wake_dreamer, None, ending_region)
+        if self.options.ending == self.options.ending.option_ending_cd:
+            victory = Location(player, Endings.look_into_abyss, None, ending_region)
+        elif self.options.ending == self.options.ending.option_ending_b:
+            victory = Location(player, Endings.open_door, None, ending_region)
+        victory.place_locked_item(self.create_event(Victory.victory))
+        ending_region.locations.append(victory)
+
+        if self.options.ending == self.options.ending.option_ending_b:
+            coin_count = get_coin_count(self.options)
+            set_rule(victory, lambda state: state.has(Coins.strange_coin, player, coin_count))
+        elif self.options.ending == self.options.ending.option_ending_e:
+            set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state, self.options) and state.has(UniqueItem.white_tape, self.player))
+
+        world.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
+
+
+    """def create_regions(self):
         world = self.multiworld
         player = self.player
 
@@ -149,16 +201,28 @@ class LunacidWorld(World):
         elif self.options.ending == self.options.ending.option_ending_e:
             set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state, self.options) and state.has(UniqueItem.white_tape, self.player))
 
-        world.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
+        world.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)"""
+
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        """Write to the spoiler header. If individual it's right at the end of that player's options,
+        if as stage it's right under the common header before per-player options."""
+        self.add_entrances_to_spoiler_log()
+
+    def add_entrances_to_spoiler_log(self):
+        if self.options.entrance_randomization == self.options.entrance_randomization.option_false:
+            return
+        for original_entrance, replaced_entrance in self.randomized_entrances.items():
+            self.multiworld.spoiler.set_entrance(original_entrance, replaced_entrance, "entrance", self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
-            "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.1.2",
+            "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
+            "client_version": "0.3.1",
             "elements": self.weapon_elements,
-            **self.options.as_dict("ending", "experience", "weapon_experience", "strange_coin_bundle",
-                                   "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "random_elements", "secret_door_lock",
-                                   "death_link")
+            **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "strange_coin_bundle",
+                                   "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "door_locks", "random_elements", "secret_door_lock",
+                                   "death_link"),
+            "entrances": self.randomized_entrances
         }
 
         return slot_data
