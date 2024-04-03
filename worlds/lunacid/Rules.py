@@ -1,6 +1,7 @@
 from BaseClasses import CollectionState
 from typing import Dict, List, TYPE_CHECKING
 
+from .Regions import REVERSE
 from .data.item_count_data import base_spells
 from .strings.properties import Elements
 from ..generic.Rules import CollectionRule
@@ -11,11 +12,11 @@ from .data.item_data import item_light_sources
 from .Options import LunacidOptions
 from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
-from .strings.items import UniqueItem, Progressives, Switch, Alchemy
+from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door
 from .strings.locations import BaseLocation, ShopLocation, DropLocation
 
 if TYPE_CHECKING:
-    from . import LunacidWorld
+    from . import LunacidWorld, Weapon
 
 
 class LunacidRules:
@@ -43,34 +44,60 @@ class LunacidRules:
             LunacidRegion.sealed_ballroom_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidRegion.vampire_tomb: lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state),
             LunacidRegion.mausoleum: lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state),
-            LunacidRegion.sand_temple: lambda state: self.has_all_keys_to_switch(state,
-                                                                                 [Switch.grotto_valve_switch_1, Switch.grotto_valve_switch_2],
-                                                                                 self.world.options),
+            LunacidRegion.sand_temple: lambda state: self.has_key_to_switch(state, Switch.grotto_valves_switches, self.world.options),
             LunacidRegion.terminus_prison_dark: lambda state: self.has_light_source(state) and
                                                               (self.has_key_to_switch(state, Switch.prison_shortcut_switch, self.world.options) or
                                                                state.has(Spell.icarian_flight, self.player)),
             LunacidRegion.terminus_prison_upstairs: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             LunacidRegion.throne_chamber: lambda state: self.can_defeat_the_prince(state),
+            LunacidRegion.tower_abyss: lambda state: self.has_door_key(Door.tower_key, state, self.world.options),
         }
 
         self.entrance_rules = {
             LunacidEntrance.basin_to_temple: lambda state: self.has_keys_for_basin_door(state, self.world.options) and self.has_light_source(state),
+            REVERSE(LunacidEntrance.basin_to_temple): lambda state: self.has_keys_for_basin_door(state, self.world.options),
             LunacidEntrance.temple_entrance_to_temple_interior: lambda state: self.has_key_to_switch(state, Switch.temple_switch, self.world.options),
+            REVERSE(LunacidEntrance.temple_entrance_to_temple_interior): lambda state: self.has_key_to_switch(state, Switch.temple_switch, self.world.options),
             LunacidEntrance.temple_interior_to_temple_secret: lambda state: self.has_crystal_orb(state, self.world.options),
-            LunacidEntrance.castle_to_ballroom: lambda state: self.can_reach_region(state, LunacidRegion.castle_le_fanu) and (self.has_ranged_element_access(
-                [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison], state) or
-                                                                                                                              (self.has_element_access(
-                                                                                                                                  [Elements.dark,
-                                                                                                                                   Elements.dark_and_fire,
-                                                                                                                                   Elements.dark_and_light,
-                                                                                                                                   Elements.poison,
-                                                                                                                                   Elements.ice_and_poison],
-                                                                                                                                  state) and state.has(
-                                                                                                                                  Spell.rock_bridge,
-                                                                                                                                  self.player))),
-            LunacidEntrance.white_to_throne: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3),
+            LunacidEntrance.temple_to_mire: lambda state: self.has_door_key(Door.basin_temple_sewers, state, self.world.options),
+            LunacidEntrance.temple_to_forest: lambda state: self.has_door_key(Door.basin_rickety_bridge, state, self.world.options),
+            LunacidEntrance.basin_to_archives: lambda state: self.has_door_key(Door.basin_broken_steps, state, self.world.options),
+            REVERSE(LunacidEntrance.temple_to_forest): lambda state: self.has_door_key(Door.basin_rickety_bridge, state, self.world.options),
+            REVERSE(LunacidEntrance.basin_to_archives): lambda state: self.has_door_key(Door.basin_broken_steps, state, self.world.options),
+            REVERSE(LunacidEntrance.temple_to_mire): lambda state: self.has_light_source(state) and self.has_door_key(Door.basin_temple_sewers, state,
+                                                                                                                      self.world.options),
+            LunacidEntrance.mire_to_sea: lambda state: self.has_door_key(Door.sea_westward, state, self.world.options),
+            REVERSE(LunacidEntrance.mire_to_sea): lambda state: self.has_door_key(Door.sea_westward, state, self.world.options),
+            LunacidEntrance.sea_to_tomb: lambda state: self.has_light_source(state) and self.has_door_key(Door.sea_eastward, state, self.world.options),
+            LunacidEntrance.sea_to_castle: lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
+            REVERSE(LunacidEntrance.sea_to_castle): lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
+            LunacidEntrance.yosei_lower_to_tomb: lambda state: self.has_light_source(state) and self.has_door_key(Door.forest_patchouli, state,
+                                                                                                                  self.world.options),
+            LunacidEntrance.castle_to_ballroom: lambda state: self.has_door_key(Door.ballroom_key, state, self.world.options) and
+            self.can_reach_region(state, LunacidRegion.castle_le_fanu) and (
+                    self.has_ranged_element_access(
+                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison], state) or
+                    (self.has_element_access(
+                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
+                         Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
+            REVERSE(LunacidEntrance.castle_to_ballroom): lambda state: self.has_door_key(Door.ballroom_key, state, self.world.options) and
+                                                                       self.can_reach_region(state, LunacidRegion.castle_le_fanu) and (
+                    self.has_ranged_element_access(
+                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison], state) or
+                    (self.has_element_access([Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
+                                              Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
+            LunacidEntrance.white_to_throne: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3) and
+                                                           self.has_door_key(Door.throne_key, state, self.world.options),
+            REVERSE(LunacidEntrance.white_to_throne): lambda state: state.has(Progressives.vampiric_symbol, self.player, 3) and
+                                                                    self.has_door_key(Door.throne_key, state, self.world.options),
+            LunacidEntrance.throne_to_prison: lambda state: self.has_door_key(Door.prison_key, state, self.world.options),
             LunacidEntrance.archives_to_chasm: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2) and
-                                                                                self.can_jump_given_height(state, "Medium", self.world.options),
+                                                             self.can_jump_given_height(state, "Medium", self.world.options) and
+                                                             self.has_door_key(Door.archives_sealed_door, state, self.world.options),
+            REVERSE(LunacidEntrance.archives_to_chasm): lambda state: state.has(Progressives.vampiric_symbol, self.player, 2) and
+                                                                      self.can_jump_given_height(state, "Medium", self.world.options) and
+                                                                      self.has_door_key(Door.archives_sealed_door, state, self.world.options),
+            LunacidEntrance.chasm_to_surface: lambda state: self.has_door_key(Door.chasm_surface_door, state, self.world.options),
             LunacidEntrance.wings_to_surface: lambda state: state.has(Spell.icarian_flight, self.player),
             LunacidEntrance.basin_to_surface: lambda state: state.has_all({Spell.icarian_flight, Spell.spirit_warp}, self.player) or
                                                             (state.has(Spell.icarian_flight, self.player) and state.can_reach(
@@ -78,14 +105,22 @@ class LunacidRules:
             LunacidEntrance.yosei_to_yosei_lower: lambda state: self.can_jump_given_height(state, "Medium", self.world.options) or self.has_blood_spell_access(
                 state),
             LunacidEntrance.castle_to_red: self.has_blood_spell_access,
-            LunacidEntrance.yosei_to_canopy: lambda state: self.has_keys_for_canopy(state, self.world.options),
-            LunacidEntrance.archives_3_to_archives_1b: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_1_to_3, self.world.options)
+            LunacidEntrance.castle_to_grotto: lambda state: self.has_door_key(Door.burning_key, state, self.world.options),
+            REVERSE(LunacidEntrance.castle_to_grotto): lambda state: self.has_door_key(Door.burning_key, state, self.world.options),
+            LunacidEntrance.yosei_to_canopy: lambda state: self.has_keys_for_canopy(state, self.world.options) and
+                                                           self.has_door_key(Door.forest_door_in_trees, state, self.world.options),
+            LunacidEntrance.archives_3_to_archives_1b: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switches, self.world.options)
                                                                      or self.can_jump_given_height(state, "High", self.world.options),
-            LunacidEntrance.archives_2_to_archives_3: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switch_2_to_3, self.world.options)
+            LunacidEntrance.archives_2_to_archives_3: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switches, self.world.options)
                                                                     or self.can_jump_given_height(state, "High", self.world.options),
             LunacidEntrance.grotto_to_tower: lambda state: self.has_crystal_orb(state, self.world.options),
+            REVERSE(LunacidEntrance.grotto_to_tower): lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.prison_to_arena: lambda state: self.has_key_to_switch(state, Switch.prison_arena_switch, self.world.options)
-                                                           and state.has(UniqueItem.terminus_prison_key, self.player),
+                                                           and state.has(UniqueItem.terminus_prison_key, self.player) and
+                                                           self.has_door_key(Door.forlorn_key, state, self.world.options),
+            LunacidEntrance.prison_to_ash: lambda state: self.has_door_key(Door.ash_key, state, self.world.options),
+            LunacidEntrance.arena_to_fate: lambda state: self.has_door_key(Door.sucs_key, state, self.world.options),
+            LunacidEntrance.fate_to_sleeper: lambda state: self.has_door_key(Door.sleeper_key, state, self.world.options),
         }
 
         self.location_rules = {
@@ -104,6 +139,7 @@ class LunacidRules:
             BaseLocation.sea_pillar: lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, self.player),
             BaseLocation.tomb_demi_chest: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             BaseLocation.chasm_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
+            BaseLocation.chasm_invisible_cliffside: lambda state: state.has_any([Spell.coffin, Spell.icarian_flight], self.player),
             BaseLocation.tomb_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.tomb_hidden_room: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.catacombs_hidden_room: lambda state: self.has_crystal_orb(state, self.world.options),
@@ -114,16 +150,29 @@ class LunacidRules:
             BaseLocation.corrupted_room: lambda state: state.has(UniqueItem.corrupted_key, self.player),
             BaseLocation.yosei_hanging_in_trees: lambda state: state.has_any(ranged_weapons, self.player),
             BaseLocation.yosei_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
+            BaseLocation.yosei_room_defended_by_blood_plant: lambda state: self.has_blood_spell_access(state),
+            BaseLocation.yosei_blood_plant_insides: lambda state: self.has_blood_spell_access(state),
+            BaseLocation.castle_cell_center: lambda state: self.has_element_access(Elements.fire, state),
             BaseLocation.castle_hidden_cell: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.castle_upper_floor_coffin_double: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3) and
                                                                          self.has_crystal_orb(state, self.world.options),
+            BaseLocation.ballroom_side_chest_near_switch: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
+            BaseLocation.ballroom_side_xp_drain: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
+            BaseLocation.ballroom_entry_long_table: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
+            BaseLocation.ballroom_side_painting: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
+            BaseLocation.ballroom_entry_hidden_cave_in_lounge: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
+            BaseLocation.ballroom_entry_hidden_couch_bottom: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
+            BaseLocation.ballroom_entry_hidden_couch_top: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
+            BaseLocation.ballroom_small_room_lounge: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
             BaseLocation.prison_f3_bottomless_pit: lambda state: state.has_any({Spell.icarian_flight, Spell.spirit_warp}, self.player),
             BaseLocation.grotto_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.grotto_triple_secret_chest: lambda state: self.has_crystal_orb(state, self.world.options),
+            BaseLocation.sand_basement_snake_pit: lambda state: self.can_jump_given_height(state, "High", self.world.options),
             BaseLocation.sand_hidden_sarcophagus: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.sand_second_floor_snake: lambda state: self.has_crystal_orb(state, self.world.options) or self.can_jump_given_height(state, "Medium",
-                                                                                                                                              self.world.options),
+            BaseLocation.sand_second_floor_snake: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
+            BaseLocation.sand_second_floor_dead_end: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             BaseLocation.sand_chest_overlooking_crypt: lambda state: self.can_jump_given_height(state, "High", self.world.options),
+            BaseLocation.sand_lunacid_sandwich: lambda state: state.has(Spell.spirit_warp, self.player),
             BaseLocation.arena_earth_hidden_room: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.arena_earth_hidden_plant_haven: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.arena_water_hidden_alcove_before: lambda state: self.has_crystal_orb(state, self.world.options),
@@ -145,7 +194,6 @@ class LunacidRules:
             BaseLocation.prison_f3_locked_right: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             BaseLocation.prison_f3_locked_south: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             "Free Sir Hicket": lambda state: state.has(Spell.ignis_calor, self.player),
-            BaseLocation.castle_cell_center: lambda state: self.has_element_access(Elements.fire, state),
             BaseLocation.ash_path_maze: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.ash_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             ShopLocation.buy_steel_needle: lambda state: self.can_reach_region(state, LunacidRegion.sanguine_sea),  # Push out of sphere 0
@@ -212,6 +260,11 @@ class LunacidRules:
         else:
             high_spells = {Spell.barrier, Spell.rock_bridge, Spell.icarian_flight}
             return state.has_any(high_spells, self.player)
+
+    def has_door_key(self, key: str, state: CollectionState, options: LunacidOptions) -> bool:
+        if options.door_locks == options.door_locks.option_false:
+            return True
+        return state.has(key, self.player)
 
     def has_light_source(self, state: CollectionState) -> bool:
         sources = []
@@ -290,7 +343,7 @@ class LunacidRules:
 
     def can_defeat_the_prince(self, state: CollectionState):
         return (self.has_element_access([Elements.light, Elements.dark_and_light], state) and
-                self.can_reach_any_region(state, [LunacidRegion.castle_le_fanu_white, LunacidRegion.forbidden_archives_2]))
+                self.can_reach_any_region(state, [LunacidRegion.castle_le_fanu_white, LunacidRegion.forbidden_archives_2, LunacidRegion.sealed_ballroom, LunacidRegion.boiling_grotto, LunacidRegion.forlorn_arena]))
 
     def set_lunacid_rules(self, world_elements: Dict[str, str]) -> None:
         multiworld = self.world.multiworld
@@ -299,9 +352,11 @@ class LunacidRules:
             if region.name in self.region_rules:
                 for entrance in region.entrances:
                     entrance.access_rule = self.region_rules[region.name]
+                for location in region.locations:
+                    location.access_rule = self.region_rules[region.name]
             for entrance in region.entrances:
                 if entrance.name in self.entrance_rules:
                     entrance.access_rule = entrance.access_rule and self.entrance_rules[entrance.name]
             for loc in region.locations:
                 if loc.name in self.location_rules:
-                    loc.access_rule = self.location_rules[loc.name]
+                    loc.access_rule = loc.access_rule and self.location_rules[loc.name]
