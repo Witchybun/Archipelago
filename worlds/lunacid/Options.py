@@ -1,5 +1,11 @@
 from dataclasses import dataclass
+from typing import ClassVar, Protocol
+
 from Options import Choice, Toggle, DeathLink, PerGameCommonOptions, Range
+
+
+class LunacidOption(Protocol):
+    internal_name: ClassVar[str]
 
 
 class Ending(Choice):
