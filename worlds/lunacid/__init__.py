@@ -68,6 +68,21 @@ class LunacidWorld(World):
     def __init__(self, multiworld, player):
         super(LunacidWorld, self).__init__(multiworld, player)
 
+    def generate_early(self) -> None:
+        # Universal tracker stuff, shouldn't do anything in standard gen
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "Lunacid" in self.multiworld.re_gen_passthrough:
+                passthrough = self.multiworld.re_gen_passthrough["Lunacid"]
+                self.options.ending.value = passthrough["ending"]
+                self.options.dropsanity.value = passthrough["dropsanity"]
+                self.options.shopsanity.value = passthrough["shopsanity"]
+                self.options.random_elements.value = passthrough["random_elements"]
+                self.options.entrance_randomization.value = passthrough["entrance_randomization"]
+                self.options.strange_coin_bundle.value = passthrough["strange_coin_bundle"]
+                self.options.door_locks.value = passthrough["door_locks"]
+                self.options.switch_locks.value = passthrough["switch_locks"]
+                self.options.secret_door_lock.value = passthrough["secret_door_lock"]
+
     def create_item(self, name: str, override_classification: ItemClassification = None) -> "LunacidItem":
         item_id: int = self.item_name_to_id[name]
 
@@ -152,57 +167,6 @@ class LunacidWorld(World):
 
         world.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
 
-
-    """def create_regions(self):
-        world = self.multiworld
-        player = self.player
-
-        def lunacid_region(region_name: str, entrances):
-            single_region = Region(region_name, player, world)
-            for entrance in entrances:
-                single_region.exits.append(Entrance(player, entrance, single_region))
-            return single_region
-
-        world.regions += [lunacid_region(*r) for r in lunacid_regions]
-        link_lunacid_areas(world, player)
-
-        for location in location_table:
-            name = location.name
-            code = location.code
-            if location in shop_locations_table and self.options.shopsanity == self.options.shopsanity.option_false:
-                continue
-            if location in mob_drop_locations_table and self.options.dropsanity == self.options.dropsanity.option_false:
-                continue
-            region: Region = world.get_region(location.region, player)
-            region.add_locations({name: code})
-
-        if self.options.ending == self.options.ending.option_ending_b:
-            ending_region = world.get_region(LunacidRegion.labyrinth_of_ash, player)
-        else:
-            ending_region = world.get_region(LunacidRegion.grave_of_the_sleeper, player)
-        throne_region = world.get_region(LunacidRegion.throne_chamber, player)
-        crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
-        crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
-        throne_region.locations.append(crilall)
-        grotto_region = world.get_region(LunacidRegion.boiling_grotto, player)
-        hicket = Location(player, "Free Sir Hicket", None, grotto_region)
-        hicket.place_locked_item(self.create_event("Sir Hicket's Freedom from Armor"))
-        victory = Location(player, Endings.wake_dreamer, None, ending_region)
-        if self.options.ending == self.options.ending.option_ending_cd:
-            victory = Location(player, Endings.look_into_abyss, None, ending_region)
-        elif self.options.ending == self.options.ending.option_ending_b:
-            victory = Location(player, Endings.open_door, None, ending_region)
-        victory.place_locked_item(self.create_event(Victory.victory))
-        ending_region.locations.append(victory)
-
-        if self.options.ending == self.options.ending.option_ending_b:
-            coin_count = get_coin_count(self.options)
-            set_rule(victory, lambda state: state.has(Coins.strange_coin, player, coin_count))
-        elif self.options.ending == self.options.ending.option_ending_e:
-            set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state, self.options) and state.has(UniqueItem.white_tape, self.player))
-
-        world.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)"""
-
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,
         if as stage it's right under the common header before per-player options."""
@@ -225,4 +189,10 @@ class LunacidWorld(World):
             "entrances": self.randomized_entrances
         }
 
+        return slot_data
+
+    # for the universal tracker, doesn't get called in standard gen
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
         return slot_data
