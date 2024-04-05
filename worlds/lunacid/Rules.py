@@ -14,9 +14,10 @@ from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
 from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door
 from .strings.locations import BaseLocation, ShopLocation, DropLocation
+from .strings.weapons import Weapon
 
 if TYPE_CHECKING:
-    from . import LunacidWorld, Weapon
+    from . import LunacidWorld
 
 
 class LunacidRules:
@@ -68,11 +69,12 @@ class LunacidRules:
                                                                                                                       self.world.options),
             LunacidEntrance.mire_to_sea: lambda state: self.has_door_key(Door.sea_westward, state, self.world.options),
             REVERSE(LunacidEntrance.mire_to_sea): lambda state: self.has_door_key(Door.sea_westward, state, self.world.options),
-            LunacidEntrance.sea_to_tomb: lambda state: self.has_light_source(state) and self.has_door_key(Door.sea_eastward, state, self.world.options),
+            LunacidEntrance.sea_to_tomb_lobby: lambda state: self.has_door_key(Door.sea_eastward, state, self.world.options),
+            LunacidEntrance.tomb_upper_to_tomb: lambda state: self.has_light_source(state) and self.can_jump_given_height(state, "High", self.world.options),
+            LunacidEntrance.tomb_lobby_to_tomb: lambda state: self.has_light_source(state),
             LunacidEntrance.sea_to_castle: lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
             REVERSE(LunacidEntrance.sea_to_castle): lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
-            LunacidEntrance.yosei_lower_to_tomb: lambda state: self.has_light_source(state) and self.has_door_key(Door.forest_patchouli, state,
-                                                                                                                  self.world.options),
+            LunacidEntrance.yosei_lower_to_tomb_upper_lobby: lambda state: self.has_door_key(Door.forest_patchouli, state, self.world.options),
             LunacidEntrance.castle_to_ballroom: lambda state: self.has_door_key(Door.ballroom_key, state, self.world.options) and
             self.can_reach_region(state, LunacidRegion.castle_le_fanu) and (
                     self.has_ranged_element_access(
@@ -124,6 +126,7 @@ class LunacidRules:
         }
 
         self.location_rules = {
+            "Throne of Prince Crilall Fanu": lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state) & self.can_level_reasonably(state),
             BaseLocation.wings_rest_demi_orb: lambda state: self.can_reach_region(state, LunacidRegion.grave_of_the_sleeper),
             BaseLocation.temple_blood_altar: self.has_blood_spell_access,
             BaseLocation.hollow_basin_dark_item: lambda state: state.has(UniqueItem.enchanted_key, self.player),
@@ -143,6 +146,7 @@ class LunacidRules:
             BaseLocation.tomb_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.tomb_hidden_room: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.catacombs_hidden_room: lambda state: self.has_crystal_orb(state, self.world.options),
+            BaseLocation.catacombs_restore_vampire: lambda state: self.has_blood_spell_access(state),
             BaseLocation.mausoleum_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.mausoleum_upper_table: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             BaseLocation.mausoleum_kill_death: lambda state: state.has_all({Alchemy.fractured_life, Alchemy.fractured_death, Alchemy.broken_sword},
@@ -273,6 +277,10 @@ class LunacidRules:
         sources.extend(source for source in item_light_sources)
         return state.has_any(sources, self.player)
 
+    def can_level_reasonably(self, state: CollectionState):
+        return self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_2, LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
+                                                 LunacidRegion.sealed_ballroom, LunacidRegion.fetid_mire, LunacidRegion.forest_canopy, LunacidRegion.forlorn_arena])
+
     def has_spell(self, spell: str, state: CollectionState):
         return state.has(spell, self.player)
 
@@ -331,7 +339,7 @@ class LunacidRules:
         if isinstance(element, str):
             element = [element]
         element_options = [item for item in self.elements if self.elements[item] in element]
-        return state.has_any(element_options, self.player)
+        return state.has_any(element_options, self.player) or state.has(Weapon.wand_of_power, self.player)
 
     def has_ranged_element_access(self, element: str | List[str], state: CollectionState):
         if isinstance(element, str):

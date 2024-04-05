@@ -17,7 +17,7 @@ from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_ST
     determine_weapon_elements
 from .Locations import (location_table, base_location_table, shop_locations_table, mob_drop_locations_table, LocationDict,
                         LOCATION_CODE_START)
-from .Regions import link_lunacid_areas, lunacid_entrances_basin, lunacid_regions_basin, create_regions
+from .Regions import link_lunacid_areas, create_regions
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
 from .Options import LunacidOptions
