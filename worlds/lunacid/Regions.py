@@ -17,7 +17,7 @@ connector_keyword = " to "
 
 
 def link_lunacid_areas(world: MultiWorld, player: int):
-    for (entrance, region) in lunacid_entrances_basin:
+    for (entrance, region) in consistent_entrances:
         world.get_entrance(entrance, player).connect(world.get_region(region, player))
 
 
@@ -71,9 +71,12 @@ consistent_regions = [
     RegionData(LunacidRegion.forbidden_archives_1b, [LunacidEntrance.archives_to_daedalus]),
     RegionData(LunacidRegion.daedalus),
     RegionData(LunacidRegion.forest_canopy),
-    RegionData(LunacidRegion.yosei_lower, [LunacidEntrance.yosei_lower_to_tomb, LunacidEntrance.yosei_lower_to_patchouli]),
+    RegionData(LunacidRegion.yosei_lower, [LunacidEntrance.yosei_lower_to_tomb_upper_lobby, LunacidEntrance.yosei_lower_to_patchouli]),
+    RegionData(LunacidRegion.accursed_tomb_upper_lobby, [LunacidEntrance.tomb_upper_to_tomb]),
     RegionData(LunacidRegion.patchouli),
     RegionData(LunacidRegion.great_well_surface),
+    RegionData(LunacidRegion.sanguine_sea, [LunacidEntrance.sea_to_castle, LunacidEntrance.sea_to_tomb_lobby]),
+    RegionData(LunacidRegion.accursed_tomb_lobby, [LunacidEntrance.tomb_lobby_to_tomb]),
     RegionData(LunacidRegion.accursed_tomb, [LunacidEntrance.tomb_to_vampire, LunacidEntrance.tomb_to_mausoleum]),
     RegionData(LunacidRegion.vampire_tomb),
     RegionData(LunacidRegion.mausoleum),
@@ -88,35 +91,7 @@ consistent_regions = [
     RegionData(LunacidRegion.forlorn_arena, [LunacidEntrance.arena_to_fate]),
     RegionData(LunacidRegion.chamber_of_fate, [LunacidEntrance.fate_to_sleeper]),
     RegionData(LunacidRegion.grave_of_the_sleeper),
-]
 
-consistent_entrances = [
-    ConnectionData(LunacidEntrance.basin_to_wings_rest, LunacidRegion.wings_rest),
-    ConnectionData(LunacidEntrance.sheryl, LunacidRegion.sheryl_the_crow),
-    ConnectionData(LunacidEntrance.temple_interior_to_temple_secret, LunacidRegion.temple_of_silence_secret),
-    ConnectionData(LunacidEntrance.mire_to_secret, LunacidRegion.fetid_mire_secret),
-    ConnectionData(LunacidEntrance.prison_to_arena, LunacidRegion.forlorn_arena, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.prison_to_ash, LunacidRegion.labyrinth_of_ash, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.sea_to_tomb, LunacidRegion.accursed_tomb, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.chasm_to_surface, LunacidRegion.great_well_surface, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.yosei_to_canopy, LunacidRegion.forest_canopy, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.yosei_to_yosei_lower, LunacidRegion.yosei_lower),
-    ConnectionData(LunacidEntrance.yosei_lower_to_tomb, LunacidRegion.accursed_tomb, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.tomb_to_vampire, LunacidRegion.vampire_tomb),
-    ConnectionData(LunacidEntrance.tomb_to_mausoleum, LunacidRegion.mausoleum),
-    ConnectionData(LunacidEntrance.arena_to_fate, LunacidRegion.chamber_of_fate),
-    ConnectionData(LunacidEntrance.fate_to_sleeper, LunacidRegion.grave_of_the_sleeper),
-    ConnectionData(LunacidEntrance.archives_to_daedalus, LunacidRegion.daedalus),
-    ConnectionData(LunacidEntrance.grotto_to_tower, LunacidRegion.tower_abyss, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.grotto_to_sand, LunacidRegion.sand_temple),
-    ConnectionData(LunacidEntrance.prison_to_prison_dark, LunacidRegion.terminus_prison_dark),
-    ConnectionData(LunacidEntrance.yosei_lower_to_patchouli, LunacidRegion.patchouli),
-    ConnectionData(LunacidEntrance.wings_to_surface, LunacidRegion.great_well_surface),
-    ConnectionData(LunacidEntrance.prison_to_prison_upstairs, LunacidRegion.terminus_prison_upstairs)
-
-]
-
-lunacid_regions_basin = [
     RegionData(LunacidRegion.menu, [LunacidEntrance.menu_to_basin]),
     RegionData(LunacidRegion.hollow_basin, [LunacidEntrance.basin_to_wings_rest, LunacidEntrance.basin_to_archives, LunacidEntrance.basin_to_surface,
                                             LunacidEntrance.basin_to_temple]),
@@ -129,7 +104,7 @@ lunacid_regions_basin = [
     RegionData(LunacidRegion.forbidden_archives_3, [LunacidEntrance.archives_3_to_archives_1b, LunacidEntrance.archives_to_chasm]),
     RegionData(LunacidRegion.laetus_chasm, [LunacidEntrance.chasm_to_surface]),
     RegionData(LunacidRegion.yosei_forest, [LunacidEntrance.yosei_to_yosei_lower, LunacidEntrance.yosei_to_canopy]),
-    RegionData(LunacidRegion.sanguine_sea, [LunacidEntrance.sea_to_castle, LunacidEntrance.sea_to_tomb]),
+
     RegionData(LunacidRegion.castle_le_fanu, [LunacidEntrance.castle_to_red, LunacidEntrance.castle_to_white, LunacidEntrance.castle_to_battleground]),
     RegionData(LunacidRegion.castle_le_fanu_red),
     RegionData(LunacidRegion.castle_le_fanu_white, [LunacidEntrance.white_to_blue, LunacidEntrance.white_to_throne]),
@@ -139,7 +114,31 @@ lunacid_regions_basin = [
     RegionData(LunacidRegion.terminus_prison, [LunacidEntrance.prison_to_prison_upstairs, LunacidEntrance.prison_to_prison_dark]),
 ]
 
-lunacid_entrances_basin = [
+consistent_entrances = [
+    ConnectionData(LunacidEntrance.basin_to_wings_rest, LunacidRegion.wings_rest),
+    ConnectionData(LunacidEntrance.sheryl, LunacidRegion.sheryl_the_crow),
+    ConnectionData(LunacidEntrance.temple_interior_to_temple_secret, LunacidRegion.temple_of_silence_secret),
+    ConnectionData(LunacidEntrance.mire_to_secret, LunacidRegion.fetid_mire_secret),
+    ConnectionData(LunacidEntrance.prison_to_arena, LunacidRegion.forlorn_arena, flag=RandomizationFlag.RANDOMIZED),
+    ConnectionData(LunacidEntrance.prison_to_ash, LunacidRegion.labyrinth_of_ash, flag=RandomizationFlag.RANDOMIZED),
+    ConnectionData(LunacidEntrance.sea_to_tomb_lobby, LunacidRegion.accursed_tomb_lobby, flag=RandomizationFlag.RANDOMIZED),
+    ConnectionData(LunacidEntrance.tomb_lobby_to_tomb, LunacidRegion.accursed_tomb),
+    ConnectionData(LunacidEntrance.chasm_to_surface, LunacidRegion.great_well_surface, flag=RandomizationFlag.RANDOMIZED),
+    ConnectionData(LunacidEntrance.yosei_to_canopy, LunacidRegion.forest_canopy, flag=RandomizationFlag.RANDOMIZED),
+    ConnectionData(LunacidEntrance.yosei_to_yosei_lower, LunacidRegion.yosei_lower),
+    ConnectionData(LunacidEntrance.yosei_lower_to_tomb_upper_lobby, LunacidRegion.accursed_tomb_upper_lobby, flag=RandomizationFlag.RANDOMIZED),
+    ConnectionData(LunacidEntrance.tomb_upper_to_tomb, LunacidRegion.accursed_tomb),
+    ConnectionData(LunacidEntrance.tomb_to_vampire, LunacidRegion.vampire_tomb),
+    ConnectionData(LunacidEntrance.tomb_to_mausoleum, LunacidRegion.mausoleum),
+    ConnectionData(LunacidEntrance.arena_to_fate, LunacidRegion.chamber_of_fate),
+    ConnectionData(LunacidEntrance.fate_to_sleeper, LunacidRegion.grave_of_the_sleeper),
+    ConnectionData(LunacidEntrance.archives_to_daedalus, LunacidRegion.daedalus),
+    ConnectionData(LunacidEntrance.grotto_to_tower, LunacidRegion.tower_abyss, flag=RandomizationFlag.RANDOMIZED),
+    ConnectionData(LunacidEntrance.grotto_to_sand, LunacidRegion.sand_temple),
+    ConnectionData(LunacidEntrance.prison_to_prison_dark, LunacidRegion.terminus_prison_dark),
+    ConnectionData(LunacidEntrance.yosei_lower_to_patchouli, LunacidRegion.patchouli),
+    ConnectionData(LunacidEntrance.wings_to_surface, LunacidRegion.great_well_surface),
+    ConnectionData(LunacidEntrance.prison_to_prison_upstairs, LunacidRegion.terminus_prison_upstairs),
     ConnectionData(LunacidEntrance.menu_to_basin, LunacidRegion.hollow_basin),
     ConnectionData(LunacidEntrance.basin_to_archives, LunacidRegion.forbidden_archives_2, flag=RandomizationFlag.RANDOMIZED),
     ConnectionData(LunacidEntrance.basin_to_surface, LunacidRegion.great_well_surface, flag=RandomizationFlag.RANDOMIZED),
@@ -164,8 +163,9 @@ lunacid_entrances_basin = [
     ConnectionData(LunacidEntrance.throne_to_prison, LunacidRegion.terminus_prison, flag=RandomizationFlag.RANDOMIZED),
 ]
 
+
 def create_regions(region_factory: RegionFactory, random: Random, options) -> Tuple[Dict[str, Region], Dict[str, str]]:
-    final_regions = consistent_regions + lunacid_regions_basin
+    final_regions = consistent_regions
     regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in
                                   final_regions}
     entrances: Dict[str: Entrance] = {entrance.name: entrance
@@ -184,7 +184,7 @@ def create_regions(region_factory: RegionFactory, random: Random, options) -> Tu
 
 def randomize_connections(random: Random, options, regions_by_name) -> Tuple[List[ConnectionData], Dict[str, str]]:
     connections_to_randomize = []
-    final_connections = consistent_entrances + lunacid_entrances_basin
+    final_connections = consistent_entrances
     connections_by_name: Dict[str, ConnectionData] = {connection.name: connection for connection in final_connections}
     if options.entrance_randomization == options.entrance_randomization.option_true:
         connections_to_randomize = [connection for connection in final_connections if
