@@ -1,11 +1,18 @@
-from BaseClasses import CollectionState
-from . import LunacidTestBase
-from .. import Endings
+import unittest
+from random import random
+from typing import Set, Iterable
+
+from BaseClasses import CollectionState, MultiWorld, get_seed, Region, Entrance
+from . import LunacidTestBase, setup_solo_multiworld, LunacidTestCase
+from .. import Endings, LunacidWorld, Options, create_regions
+from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions, randomize_connections
 from ..data import item_count_data
 from ..data.item_count_data import base_weapons, base_spells
 from ..data.location_data import *
 from ..data.spell_data import all_spells, drop_spells
 from ..strings.items import Switch
+from ..strings.regions_entrances import LunacidEntrance
+from ...AutoWorld import World
 
 
 class TestAllLocationsAppended(LunacidTestBase):
@@ -127,7 +134,7 @@ class SwitchLockRegionTests(LunacidTestBase):
         self.collect_by_name(Switch.temple_switch)
         self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
         self.assertFalse(state.can_reach(LunacidRegion.forbidden_archives_3, "Region", player))
-        self.collect_by_name(Switch.archives_elevator_switch_2_to_3)
+        self.collect_by_name(Switch.archives_elevator_switches)
         self.assertTrue(state.can_reach(LunacidRegion.forbidden_archives_3, "Region", player))
         self.assertTrue(state.can_reach(LunacidRegion.fetid_mire, "Region", player))
         self.assertTrue(state.can_reach(LunacidRegion.sanguine_sea, "Region", player))
@@ -156,7 +163,7 @@ class SwitchLockRegionTestsEndingE(LunacidTestBase):
         self.collect_by_name(Switch.temple_switch)
         self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
         self.assertFalse(state.can_reach(LunacidRegion.forbidden_archives_3, "Region", player))
-        self.collect_by_name(Switch.archives_elevator_switch_2_to_3)
+        self.collect_by_name(Switch.archives_elevator_switches)
         self.assertTrue(state.can_reach(LunacidRegion.forbidden_archives_3, "Region", player))
         self.assertTrue(state.can_reach(LunacidRegion.fetid_mire, "Region", player))
         self.assertTrue(state.can_reach(LunacidRegion.sanguine_sea, "Region", player))
@@ -171,7 +178,7 @@ class SwitchLockRegionTestsEndingE(LunacidTestBase):
         self.assertTrue(state.can_reach(LunacidRegion.grave_of_the_sleeper, "Region", player))
         self.collect_by_name(every_spell)
         self.collect_by_name(UniqueItem.white_tape)
-        self.collect_by_name([Switch.grotto_valve_switch_2, Switch.grotto_valve_switch_1])
+        self.collect_by_name(Switch.grotto_switches)
         mob_spell_regions = [LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_red, LunacidRegion.castle_le_fanu_white,
                              LunacidRegion.terminus_prison_dark,
                              LunacidRegion.labyrinth_of_ash, LunacidRegion.boiling_grotto, LunacidRegion.forbidden_archives_3, LunacidRegion.sand_temple,
@@ -242,3 +249,79 @@ class LightTest(LunacidTestBase):
         self.assertFalse(self.can_reach_region(LunacidRegion.temple_of_silence_entrance))
         self.assertFalse(self.can_reach_region(LunacidRegion.fetid_mire_secret))
         self.assertFalse(self.can_reach_region(LunacidRegion.yosei_forest))
+
+
+connections_by_name = {connection.name for connection in consistent_entrances}
+regions_by_name = {region.name for region in consistent_regions}
+
+
+class TestRegions(unittest.TestCase):
+    def test_region_exits_lead_somewhere(self):
+        for region in consistent_regions:
+            with self.subTest(region=region):
+                for exits in region.exits:
+                    self.assertIn(exits, connections_by_name,
+                                  f"{region.name} is leading to {exits} but it does not exist.")
+
+    def test_connection_lead_somewhere(self):
+        for connection in consistent_entrances:
+            with self.subTest(connection=connection):
+                self.assertIn(connection.destination, regions_by_name,
+                              f"{connection.name} is leading to {connection.destination} but it does not exist.")
+
+
+def explore_connections_tree_up_to_blockers(blocked_entrances: Set[str]):
+    explored_entrances = set()
+    explored_regions = set()
+    entrances_to_explore = set()
+    current_node_name = "Menu"
+    current_node = regions_by_name[current_node_name]
+    entrances_to_explore.update(current_node.exits)
+    while entrances_to_explore:
+        current_entrance_name = entrances_to_explore.pop()
+        current_entrance = connections_by_name[current_entrance_name]
+        current_node_name = current_entrance.destination
+
+        explored_entrances.add(current_entrance_name)
+        explored_regions.add(current_node_name)
+
+        if current_entrance_name in blocked_entrances:
+            continue
+
+        current_node = regions_by_name[current_node_name]
+        entrances_to_explore.update({entrance for entrance in current_node.exits if entrance not in explored_entrances})
+    return explored_regions
+
+
+class TestEntranceRando(LunacidTestCase):
+    options = {"entrance_randomization": "true"}
+
+    def entrance_check(self, entrance: str, multiworld: MultiWorld):
+        surface_entrance_destination = multiworld.get_entrance(entrance, 1).connected_region.name
+        shuffled_connection = multiworld.worlds[1].randomized_entrances[entrance]
+        destination = ""
+        for connections in consistent_entrances:
+            if connections.name == shuffled_connection:
+                destination = connections.destination
+                break
+        self.assertTrue(destination == surface_entrance_destination, destination + " is not " + surface_entrance_destination)
+
+    def check_entrances_are_consistent(self, multiworld: MultiWorld):
+        randomized_entrances = [connection.name for connection in consistent_entrances if RandomizationFlag.RANDOMIZED in connection.flag]
+        for entrance in randomized_entrances:
+            self.entrance_check(entrance, multiworld)
+
+    def test_entrances_of_several_games(self):
+        option_dict = {
+            Options.EntranceRandomization.internal_name: Options.EntranceRandomization.option_true
+        }
+        for i in range(100):
+            seed = int(random() * pow(10, 18) - 1)
+            with self.subTest(f"Seed: {seed}"):
+                print(f"Seed: {seed}")
+                multiworld = setup_solo_multiworld(option_dict, seed)
+                self.check_entrances_are_consistent(multiworld)
+
+
+
+

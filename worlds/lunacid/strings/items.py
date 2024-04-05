@@ -66,6 +66,16 @@ class UniqueItem:
     skeleton_rattle = "Skeletal Rattle"
 
 
+class RareDrops:
+    angel_feather = "Angel Feather"
+    shrimp = "Shrimp"
+
+
+class UnusedItems:
+    tent = "Tent"
+    curry = "Curry"
+
+
 class Progressives:
     vampiric_symbol = "Progressive Vampiric Symbol"
 
