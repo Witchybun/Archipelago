@@ -69,7 +69,7 @@ class UniqueItem:
 
 class RareDrops:
     angel_feather = "Angel Feather"
-    shrimp = "Shrimp"
+    shrimp = "Pink Shrimp"
 
 
 class UnusedItems:
