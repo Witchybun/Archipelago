@@ -80,7 +80,7 @@ class BaseLocation:
 
     yosei_barrels = "YF: Barrel Group"
     yosei_blood_pool = "YF: Blood Pool"
-    yosei_branch_in_tree = "YF: Banches Within Tree"
+    yosei_branch_in_tree = "YF: Branches Within Tree"
     yosei_chest_near_tree = "YF: Chest Near Tree"
     yosei_blood_plant_insides = "YF: Blood Plant's Insides"
     yosei_hanging_in_trees = "YF: Hanging In The Trees"
@@ -127,7 +127,7 @@ class BaseLocation:
     castle_upper_floor_coffin_small = "CLF: Upper Floor Coffin Room (Small Room)"
     castle_upper_floor_coffin_large = "CLF: Upper Floor Coffin Room (Large Room)"
     castle_upper_floor_coffin_double = "CLF: Upper Floor Coffin Room (Double)"
-    castle_upper_floor_coffin_hallway = "CLF:  Upper Floor Coffin Room (Halllway)"
+    castle_upper_floor_coffin_hallway = "CLF:  Upper Floor Coffin Room (Hallway)"
 
     ballroom_small_room_lounge = "SB: Entry Small Room Lounge"
     ballroom_entry_hidden_couch_top = "SB: Entry Hidden Couch Top"
@@ -232,6 +232,10 @@ class BaseLocation:
     ash_path_maze = "LA: NNSNSSNSNN Lost Maze"
 
     fate_lucid_blade = "CF: Calamis' Weapon of Choice"
+
+    abyss_locations = [abyss_prize, abyss_floor_50, abyss_floor_45, abyss_floor_40, abyss_floor_35, abyss_floor_30, abyss_floor_25, abyss_floor_20,
+                       abyss_floor_15, abyss_floor_10, abyss_floor_5]
+    coin_locations = [sea_kill_jotunn, mausoleum_kill_death, temple_blood_altar]
 
 
 class ShopLocation:
