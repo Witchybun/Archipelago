@@ -20,6 +20,7 @@ class Alchemy:
     obsidian = "Obsidian"
     onyx = "Onyx"
     ocean_bone_shard = "Ocean Bone Shard"
+    ocean_bone_shell = "Ocean Bone Shell"
     bloodweed = "Bloodweed"
     ikurrilb_root = "Ikurr'ilb Root"
     destroying_angel_mushroom = "Destroying Angel Mushroom"
@@ -85,7 +86,7 @@ class Coins:
     silver_2 = "Silver (2)"
     silver_50 = "Silver (50)"
     silver_100 = "Silver (100)"
-    silver_10 = "Silver (10)"
+    silver = "Silver"
     strange_coin = "Strange Coin"
 
 
@@ -113,7 +114,6 @@ class Switch:
     ballroom_switch = "Sealed Ballroom Switch Key"
     grotto_valves_switches = "Grotto Fire Switch Keyring"
     grotto_switches = "Sand Temple Switches Keyring"
-    grotto_temple_switch = "Sand Temple Back Switch Key"
     prison_shortcut_switch = "Terminus Prison Back Alley Switch Key"
     prison_arena_switch = "Forlorn Arena Gate Switch Key"
     arena_water_switch = "Temple of Water Switch Key"
