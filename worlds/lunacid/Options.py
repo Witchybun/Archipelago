@@ -11,9 +11,9 @@ class LunacidOption(Protocol):
 class Ending(Choice):
     """Choose which ending is required to complete the game.
     Ending A: Reach Chamber of the Sleeper without all spells and awaken the Dreamer.
-    Ending B: Obtain 30 Strange Coins and enter the door located in the Labyrinth of Ash.
+    Ending B: Obtain enough Strange Coins and enter the door located in the Labyrinth of Ash.
     Ending CD: Reach Chamber of the Sleeper and stare into the water pool.
-    Ending E: Reach Chamber of the Sleeper with all spells and awaken the Dreamer."""
+    Ending E: Reach Chamber of the Sleeper with all spells after watching the White VHS Tape and awaken the Dreamer."""
     internal_name = "ending"
     display_name = "Ending"
     option_any_ending = 0
@@ -21,7 +21,25 @@ class Ending(Choice):
     option_ending_b = 2
     option_ending_cd = 3
     option_ending_e = 4
-    default = 0
+    default = 1
+
+
+class Class(Choice):
+    """The class you play as.
+    Note: The following classes are handled differently in the game:
+    Royal receives nothing from Demi, and so the location doesn't exist for them.
+    Vampire has free access to the cattle cells and the first area, so the first vampiric symbol is unnecessary."""
+    internal_name = "starting_class"
+    display_name = "Class"
+    option_thief = 0
+    option_knight = 1
+    option_witch = 2
+    option_vampire = 3
+    option_undead = 4
+    option_royal = 5
+    option_cleric = 6
+    option_shinobi = 7
+    option_forsaken = 8
 
 
 class EntranceRandomization(Toggle):
@@ -49,20 +67,23 @@ class WeaponExperience(Range):
     default = 100
 
 
-class StrangeCoinBundle(Choice):
-    """Changes the drop total of the strange coins from 10 to any divisor of 30, helping it become more of a maguffin hunt.
+class RequiredStrangeCoins(Range):
+    """Changes the required coins needed to open the door for Ending B."""
+    internal_name = "required_strange_coin"
+    display_name = "Required Strange Coins"
+    range_start = 1
+    range_end = 60
+    default = 30
+
+
+class TotalStrangeCoins(Range):
+    """The total amount of strange coins placed in the multiworld.  Matches required if lower than it.
     Note: Filler will be replaced to compensate."""
-    internal_name = "strange_coin_bundle"
-    display_name = "Strange Coin Bundle"
-    option_one = 0
-    option_two = 1
-    option_three = 2
-    option_five = 3
-    option_six = 4
-    option_ten = 5
-    option_fifteen = 6
-    option_thirty = 7
-    default = 5
+    internal_name = "total_strange_coin"
+    display_name = "Total Strange Coins"
+    range_start = 1
+    range_end = 60
+    default = 30
 
 
 class RandomElements(Toggle):
@@ -104,6 +125,35 @@ class SecretDoorLock(Toggle):
     display_name = "Secret Door Lock"
 
 
+class ExcludeTower(Toggle):
+    """Option to not include the entirety of Tower of Abyss, as it can be time-consuming.
+    Will remove the Tower of Abyss Keyring (if Door Locks is Chosen), Crystal Lamp, Moonlight,
+    and an Earth and Ocean Elixir from the pool."""
+    internal_name = "exclude_tower"
+    display_name = "Exclude Tower"
+
+
+class ExcludeCoinLocations(Toggle):
+    """Excludes the locations where one has to shoot a blood spell in the Temple of Silence, Kill the Jotunn, and kill Death.
+    Perhaps it just makes you feel bad.  With this the locations just don't give anything."""
+    internal_name = "exclude_coin_locations"
+    display_name = "Exclude Coin Locations"
+
+
+class CraftedFiller(Toggle):
+    """Allows for items mainly made with alchemy to be added as filler.  This excludes Crystal Shards, Health Vials, Mana Vials, Antidotes, and Cloth Bandages.
+    Note: Bombs are overpowered, so it might make the game too easy."""
+    internal_name = "crafted_filler"
+    display_name = "Crafted Filler"
+
+
+class DropFiller(Toggle):
+    """Adds Angel Feather, Shrimp, and dropped alchemy materials into the filler pool.
+    Note: Angel Feather is overpowered, so it might make the game too easy."""
+    internal_name = "drop_filler"
+    display_name = "Drop Filler"
+
+
 class FillerBundle(Range):
     """Changes how many of the non-unique filler items are given to the player when such an item is received."""
     internal_name = "filler_bundle"
@@ -125,16 +175,22 @@ class TrapPercent(Range):
 @dataclass
 class LunacidOptions(PerGameCommonOptions):
     ending: Ending
+    starting_class: Class
     entrance_randomization: EntranceRandomization
     experience: Experience
-    random_elements: RandomElements
     weapon_experience: WeaponExperience
-    strange_coin_bundle: StrangeCoinBundle
-    filler_bundle: FillerBundle
+    random_elements: RandomElements
+    required_strange_coin: RequiredStrangeCoins
+    total_strange_coin: TotalStrangeCoins
     shopsanity: Shopsanity
     dropsanity: Dropsanity
     secret_door_lock: SecretDoorLock
     switch_locks: SwitchLocks
     door_locks: DoorLocks
+    exclude_tower: ExcludeTower
+    exclude_coin_locations: ExcludeCoinLocations
+    crafted_filler: CraftedFiller
+    drop_filler: DropFiller
+    filler_bundle: FillerBundle
     trap_percent: TrapPercent
     death_link: DeathLink

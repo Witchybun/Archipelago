@@ -3,7 +3,7 @@ from typing import List
 from BaseClasses import ItemClassification
 
 from .game_item import GameItem
-from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives
+from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives, RareDrops, UnusedItems
 
 
 @dataclass(frozen=True)
@@ -45,7 +45,7 @@ spectral_candle = create_item(16, Creation.spectral_candle, ItemClassification.f
 dark_urn = create_item(17, GenericItem.dark_urn, ItemClassification.filler)
 wisp_heart = create_item(18, Creation.wisp_heart, ItemClassification.filler)
 staff_of_osiris = create_item(19, Creation.staff_of_osiris, ItemClassification.filler)
-white_tape = create_item(20, UniqueItem.white_tape, ItemClassification.progression)
+white_tape = create_item(20, UniqueItem.white_tape, ItemClassification.useful)
 vhs_tape = create_item(21, UniqueItem.vhs_tape, ItemClassification.progression)
 corrupted_key = create_item(22, UniqueItem.corrupted_key, ItemClassification.progression)
 skull_of_josiah = create_item(23, UniqueItem.skull_of_josiah, ItemClassification.progression)
@@ -66,19 +66,33 @@ silver_5 = create_item(39, Coins.silver_5, ItemClassification.filler)
 silver_2 = create_item(40, Coins.silver_2, ItemClassification.filler)
 silver_50 = create_item(41, Coins.silver_50, ItemClassification.filler)
 silver_100 = create_item(42, Coins.silver_100, ItemClassification.filler)
-strange_coin = create_item(43, Coins.strange_coin, ItemClassification.progression)
+strange_coin = create_item(43, Coins.strange_coin, ItemClassification.useful)
 oil_lantern = create_item(44, UniqueItem.oil_lantern, ItemClassification.progression)
 bomb = create_item(45, Creation.bomb, ItemClassification.filler)
 poison_urn = create_item(46, Creation.poison_urn, ItemClassification.filler)
-silver_10 = create_item(47, Coins.silver_10, ItemClassification.filler)
+silver = create_item(47, Coins.silver, ItemClassification.filler)
 skeleton_egg = create_item(48, UniqueItem.skeleton_egg, ItemClassification.progression)
 dried_rat = create_item(49, UniqueItem.dried_rat, ItemClassification.useful)
 dusty_crystal_orb = create_item(50, UniqueItem.dusty_crystal_orb, ItemClassification.progression)
-skeleton_rattle = create_item(51, UniqueItem.skeleton_rattle, ItemClassification.useful),
+skeleton_rattle = create_item(51, UniqueItem.skeleton_rattle, ItemClassification.useful)
+shrimp = create_item(52, RareDrops.shrimp, ItemClassification.filler)
+angel_feather = create_item(53, RareDrops.angel_feather, ItemClassification.filler)
+tent = create_item(54, UnusedItems.tent, ItemClassification.useful)
+fire_opal = create_item(56, Alchemy.fire_opal, ItemClassification.filler)
+lotus_seed_pod = create_item(57, Alchemy.lotus_seed_pod, ItemClassification.filler)
+onyx = create_item(58, Alchemy.onyx, ItemClassification.filler)
+destroying_angel_mushroom = create_item(59, Alchemy.destroying_angel_mushroom, ItemClassification.filler)
+ocean_bone_shard = create_item(60, Alchemy.ocean_bone_shard, ItemClassification.filler)
+ocean_bone_shell = create_item(61, Alchemy.ocean_bone_shell, ItemClassification.filler)
+yellow_morel = create_item(62, Alchemy.yellow_morel, ItemClassification.filler)
+bloodweed = create_item(63, Alchemy.bloodweed, ItemClassification.filler)
+opal = create_item(64, Alchemy.opal, ItemClassification.filler)
+obsidian = create_item(65, Alchemy.obsidian, ItemClassification.filler)
+ikurrilb_root = create_item(66, Alchemy.ikurrilb_root, ItemClassification.filler)
 
 
 item_light_sources = [UniqueItem.crystal_lantern, UniqueItem.oil_lantern]
-money = [silver_5, silver_50, silver_100, silver_2, silver_10]
+money = [silver]
 
 all_item_data_by_name = {item.name: item for item in all_items}
 all_filler_items = {item for item in all_items if item.classification == ItemClassification.filler}
