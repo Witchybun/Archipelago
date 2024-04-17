@@ -28,7 +28,7 @@ def allsanity_options():
         Options.DoorLocks.internal_name: Options.DoorLocks.option_true,
         Options.Shopsanity.internal_name: Options.Shopsanity.option_true,
         Options.Dropsanity.internal_name: Options.Dropsanity.option_true,
-        Options.StrangeCoinBundle.internal_name: Options.StrangeCoinBundle.option_one,
+        Options.RequiredStrangeCoins.internal_name: 60,
         Options.RandomElements.internal_name: Options.RandomElements.option_true,
         Options.SecretDoorLock.internal_name: Options.SecretDoorLock.option_true,
         Options.SwitchLocks.internal_name: Options.SwitchLocks.option_true

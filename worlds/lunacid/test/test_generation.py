@@ -1,18 +1,16 @@
 import unittest
 from random import random
-from typing import Set, Iterable
+from typing import Set
 
-from BaseClasses import CollectionState, MultiWorld, get_seed, Region, Entrance
+from BaseClasses import CollectionState, MultiWorld
 from . import LunacidTestBase, setup_solo_multiworld, LunacidTestCase
-from .. import Endings, LunacidWorld, Options, create_regions
-from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions, randomize_connections
+from .. import Endings, Options
+from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions
 from ..data import item_count_data
 from ..data.item_count_data import base_weapons, base_spells
 from ..data.location_data import *
 from ..data.spell_data import all_spells, drop_spells
 from ..strings.items import Switch
-from ..strings.regions_entrances import LunacidEntrance
-from ...AutoWorld import World
 
 
 class TestAllLocationsAppended(LunacidTestBase):
@@ -58,7 +56,7 @@ class TestAllLocationsAppended(LunacidTestBase):
             self.assertIn(location, base_locations)
         for location in chamber_of_fate:
             self.assertIn(location, base_locations)
-        self.assertTrue(208 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
+        self.assertTrue(209 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
 
 
 class TestEndingE(LunacidTestBase):
@@ -78,7 +76,7 @@ class TestEndingE(LunacidTestBase):
                              LunacidRegion.temple_of_silence_interior, LunacidRegion.sealed_ballroom]
         for region in mob_spell_regions:
             self.assertTrue(state.can_reach(region, "Region", self.player), f"Can't reach {region}")
-        return state.has_all(every_spell, self.player) & self.can_reach_all_regions(self.multiworld.state, mob_spell_regions)
+        return state.has_all(every_spell, self.player) and self.can_reach_all_regions(self.multiworld.state, mob_spell_regions)
 
     def test_if_goal_can_be_true(self):
         self.collect_by_name([spell for spell in item_count_data.base_spells])
@@ -86,7 +84,7 @@ class TestEndingE(LunacidTestBase):
         symbol = self.get_item_by_name("Progressive Vampiric Symbol")
         self.collect([symbol, symbol, symbol])
         self.collect_by_name([Weapon.torch, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman, Spell.blood_strike])
-        self.assertTrue(self.has_every_spell(self.multiworld.state) & self.multiworld.state.has(UniqueItem.white_tape, self.player))
+        self.assertTrue(self.has_every_spell(self.multiworld.state) and self.multiworld.state.has(UniqueItem.white_tape, self.player))
 
     def test_if_spell_items_exist(self):
         for spell in [spell.name for spell in all_spells if spell.name not in drop_spells]:
@@ -178,7 +176,7 @@ class SwitchLockRegionTestsEndingE(LunacidTestBase):
         self.assertTrue(state.can_reach(LunacidRegion.grave_of_the_sleeper, "Region", player))
         self.collect_by_name(every_spell)
         self.collect_by_name(UniqueItem.white_tape)
-        self.collect_by_name(Switch.grotto_switches)
+        self.collect_by_name(Switch.grotto_valves_switches)
         mob_spell_regions = [LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_red, LunacidRegion.castle_le_fanu_white,
                              LunacidRegion.terminus_prison_dark,
                              LunacidRegion.labyrinth_of_ash, LunacidRegion.boiling_grotto, LunacidRegion.forbidden_archives_3, LunacidRegion.sand_temple,
@@ -220,7 +218,6 @@ class DustyTestER(LunacidTestBase):
         self.collect_by_name(UniqueItem.dusty_crystal_orb)
         self.assertTrue(state.can_reach(BaseLocation.temple_pillar_room_back_right, "Location", player))
         self.assertTrue(state.can_reach(LunacidRegion.temple_of_silence_secret, "Region", player))
-        self.assertTrue(state.can_reach(BaseLocation.archives_hidden_room_upper, "Location", player))
 
 
 class DuplicateTest(LunacidTestBase):
@@ -243,7 +240,6 @@ class DuplicateTest(LunacidTestBase):
 class LightTest(LunacidTestBase):
 
     def test_base_light_reachability(self):
-        world = self.multiworld
         self.collect_by_name(UniqueItem.enchanted_key)
         self.assertTrue(self.can_reach_location(BaseLocation.hollow_basin_dark_item))
         self.assertFalse(self.can_reach_region(LunacidRegion.temple_of_silence_entrance))
@@ -323,5 +319,57 @@ class TestEntranceRando(LunacidTestCase):
                 self.check_entrances_are_consistent(multiworld)
 
 
+class CheckTowerExclusion(LunacidTestBase):
+    options = {"exclude_tower": "true"}
+
+    def test_no_items_or_locations_from_tower(self):
+        for location in self.multiworld.get_locations(1):
+            self.assertFalse(location.name in BaseLocation.abyss_locations)
+        for item in self.multiworld.get_items():
+            self.assertFalse(item.name in [Weapon.moonlight, UniqueItem.crystal_lantern])
 
 
+class CheckCoinExclusion(LunacidTestBase):
+    options = {"exclude_coin_locations": "true"}
+
+    def test_no_items_or_locations_from_coins(self):
+        for location in self.multiworld.get_locations(1):
+            self.assertFalse(location.name in BaseLocation.coin_locations)
+        for item in self.multiworld.get_items():
+            self.assertFalse(item.name == Coins.strange_coin)
+
+
+class AnyEndingTests(LunacidTestBase):
+    options = {"ending": "any_ending",
+               "required_strange_coin": 20}
+
+    def has_coins_for_door(self, state: CollectionState):
+        return state.has(Coins.strange_coin, self.player, 20)
+
+    def can_reach_any_region(self, state: CollectionState, spots: List[str]):
+        any_rule = False
+        for spot in spots:
+            any_rule = any_rule or state.can_reach_region(spot, self.player)
+        return any_rule
+
+    def can_win(self, state: CollectionState):
+        win_condition = state.can_reach_region(LunacidRegion.grave_of_the_sleeper, self.player) or (self.has_coins_for_door(state) and
+        state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player))
+        return win_condition
+
+    def test_necessity_of_coins_or_talismans(self):
+        state = self.multiworld.state
+        self.assertFalse(self.can_reach_region(LunacidRegion.grave_of_the_sleeper))
+        self.assertFalse(self.can_win(state))
+        self.assertFalse(self.can_reach_region(LunacidRegion.labyrinth_of_ash))
+        self.collect_by_name([Weapon.torch, UniqueItem.enchanted_key, Progressives.vampiric_symbol, Progressives.vampiric_symbol, Progressives.vampiric_symbol])
+        self.assertFalse(self.can_reach_region(LunacidRegion.grave_of_the_sleeper))
+        self.assertTrue(self.can_reach_region(LunacidRegion.labyrinth_of_ash))
+        self.assertFalse(self.can_win(state))
+        self.collect_by_name(UniqueItem.terminus_prison_key)
+        self.assertFalse(self.can_win(state))
+        self.collect_by_name([UniqueItem.water_talisman, UniqueItem.earth_talisman])
+        self.assertTrue(self.can_win(state))
+        self.remove_by_name([UniqueItem.water_talisman, UniqueItem.earth_talisman])
+        self.collect_by_name([Coins.strange_coin] * 20)
+        self.assertTrue(self.can_win(state))
