@@ -12,7 +12,7 @@ from .data.item_data import item_light_sources
 from .Options import LunacidOptions
 from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
-from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door
+from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door, Coins
 from .strings.locations import BaseLocation, ShopLocation, DropLocation
 from .strings.weapons import Weapon
 
@@ -39,7 +39,6 @@ class LunacidRules:
             LunacidRegion.temple_of_silence_secret: lambda state: self.has_light_source(state),
             LunacidRegion.accursed_tomb: lambda state: self.has_light_source(state),
             LunacidRegion.fetid_mire_secret: lambda state: self.has_crystal_orb(state, self.world.options),
-            LunacidRegion.castle_le_fanu_white: lambda state: state.has(Progressives.vampiric_symbol, self.player, 1),
             LunacidRegion.castle_le_fanu_blue: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2),
             LunacidRegion.chamber_of_fate: lambda state: state.has_all({UniqueItem.earth_talisman, UniqueItem.water_talisman}, self.player),
             LunacidRegion.sealed_ballroom_secret: lambda state: self.has_crystal_orb(state, self.world.options),
@@ -67,6 +66,8 @@ class LunacidRules:
             REVERSE(LunacidEntrance.basin_to_archives): lambda state: self.has_door_key(Door.basin_broken_steps, state, self.world.options),
             REVERSE(LunacidEntrance.temple_to_mire): lambda state: self.has_light_source(state) and self.has_door_key(Door.basin_temple_sewers, state,
                                                                                                                       self.world.options),
+
+            LunacidEntrance.castle_to_white: lambda state: state.has(Progressives.vampiric_symbol, self.player, 1) or self.is_vampire(self.world.options),
             LunacidEntrance.mire_to_sea: lambda state: self.has_door_key(Door.sea_westward, state, self.world.options),
             REVERSE(LunacidEntrance.mire_to_sea): lambda state: self.has_door_key(Door.sea_westward, state, self.world.options),
             LunacidEntrance.sea_to_tomb_lobby: lambda state: self.has_door_key(Door.sea_eastward, state, self.world.options),
@@ -76,18 +77,23 @@ class LunacidRules:
             REVERSE(LunacidEntrance.sea_to_castle): lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
             LunacidEntrance.yosei_lower_to_tomb_upper_lobby: lambda state: self.has_door_key(Door.forest_patchouli, state, self.world.options),
             LunacidEntrance.castle_to_ballroom: lambda state: self.has_door_key(Door.ballroom_key, state, self.world.options) and
-            self.can_reach_region(state, LunacidRegion.castle_le_fanu) and (
-                    self.has_ranged_element_access(
-                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison], state) or
-                    (self.has_element_access(
-                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
-                         Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
+                                                              state.can_reach_region(LunacidRegion.castle_le_fanu, self.player) and (
+                                                                      self.has_ranged_element_access(
+                                                                          [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
+                                                                           Elements.ice_and_poison], state) or
+                                                                      (self.has_element_access(
+                                                                          [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
+                                                                           Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
             REVERSE(LunacidEntrance.castle_to_ballroom): lambda state: self.has_door_key(Door.ballroom_key, state, self.world.options) and
-                                                                       self.can_reach_region(state, LunacidRegion.castle_le_fanu) and (
-                    self.has_ranged_element_access(
-                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison], state) or
-                    (self.has_element_access([Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
-                                              Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
+                                                                       state.can_reach_region(LunacidRegion.castle_le_fanu, self.player) and (
+                                                                               self.has_ranged_element_access(
+                                                                                   [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light,
+                                                                                    Elements.poison, Elements.ice_and_poison], state) or
+                                                                               (self.has_element_access(
+                                                                                   [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light,
+                                                                                    Elements.poison,
+                                                                                    Elements.ice_and_poison], state) and state.has(Spell.rock_bridge,
+                                                                                                                                   self.player))),
             LunacidEntrance.white_to_throne: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3) and
                                                            self.has_door_key(Door.throne_key, state, self.world.options),
             REVERSE(LunacidEntrance.white_to_throne): lambda state: state.has(Progressives.vampiric_symbol, self.player, 3) and
@@ -106,7 +112,7 @@ class LunacidRules:
                                                                 LunacidRegion.temple_of_silence_interior, None, self.player)),
             LunacidEntrance.yosei_to_yosei_lower: lambda state: self.can_jump_given_height(state, "Medium", self.world.options) or self.has_blood_spell_access(
                 state),
-            LunacidEntrance.castle_to_red: self.has_blood_spell_access,
+            LunacidEntrance.castle_to_red: self.has_blood_spell_access or self.is_vampire(self.world.options),
             LunacidEntrance.castle_to_grotto: lambda state: self.has_door_key(Door.burning_key, state, self.world.options),
             REVERSE(LunacidEntrance.castle_to_grotto): lambda state: self.has_door_key(Door.burning_key, state, self.world.options),
             LunacidEntrance.yosei_to_canopy: lambda state: self.has_keys_for_canopy(state, self.world.options) and
@@ -121,17 +127,20 @@ class LunacidRules:
                                                            and state.has(UniqueItem.terminus_prison_key, self.player) and
                                                            self.has_door_key(Door.forlorn_key, state, self.world.options),
             LunacidEntrance.prison_to_ash: lambda state: self.has_door_key(Door.ash_key, state, self.world.options),
-            LunacidEntrance.arena_to_fate: lambda state: self.has_door_key(Door.sucs_key, state, self.world.options),
+            LunacidEntrance.arena_to_fate: lambda state: state.has_all([UniqueItem.water_talisman, UniqueItem.earth_talisman], self.player) and
+                                                         self.has_door_key(Door.sucs_key, state, self.world.options),
             LunacidEntrance.fate_to_sleeper: lambda state: self.has_door_key(Door.sleeper_key, state, self.world.options),
         }
 
         self.location_rules = {
-            "Throne of Prince Crilall Fanu": lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state) & self.can_level_reasonably(state),
-            BaseLocation.wings_rest_demi_orb: lambda state: self.can_reach_region(state, LunacidRegion.grave_of_the_sleeper),
+            "Throne of Prince Crilall Fanu": lambda state: self.has_element_access([Elements.light, Elements.dark_and_light, Elements.fire,
+                                                                                    Elements.dark_and_fire, Elements.normal_and_fire], state) and
+                                                           self.can_level_reasonably(state),
+            BaseLocation.wings_rest_demi_orb: lambda state: state.can_reach_region(LunacidRegion.grave_of_the_sleeper, self.player),
             BaseLocation.temple_blood_altar: self.has_blood_spell_access,
             BaseLocation.hollow_basin_dark_item: lambda state: state.has(UniqueItem.enchanted_key, self.player),
             BaseLocation.temple_sewer_puzzle: lambda state: state.has(UniqueItem.vhs_tape, self.player) and
-                                                            self.can_reach_region(state, LunacidRegion.vampire_tomb) and
+                                                            state.can_reach_region(LunacidRegion.vampire_tomb, self.player) and
                                                             self.has_crystal_orb(state, self.world.options),
             BaseLocation.archives_strange_corpse: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.archives_hidden_room_lower: lambda state: self.has_crystal_orb(state, self.world.options),
@@ -200,23 +209,23 @@ class LunacidRules:
             "Free Sir Hicket": lambda state: state.has(Spell.ignis_calor, self.player),
             BaseLocation.ash_path_maze: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.ash_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
-            ShopLocation.buy_steel_needle: lambda state: self.can_reach_region(state, LunacidRegion.sanguine_sea),  # Push out of sphere 0
-            ShopLocation.buy_crossbow: lambda state: self.can_reach_region(state, LunacidRegion.sanguine_sea),  # Push out of sphere 0
-            ShopLocation.buy_rapier: lambda state: self.can_reach_region(state, LunacidRegion.sanguine_sea),  # Push out of sphere 0
-            ShopLocation.buy_ocean_elixir_sheryl: lambda state: self.can_purchase_item(state, self.world.options),
-            ShopLocation.buy_privateer_musket: lambda state: self.can_purchase_item(state, self.world.options),
-            ShopLocation.buy_oil_lantern: lambda state: self.can_purchase_item(state, self.world.options),
-            ShopLocation.buy_jotunn_slayer: lambda state: self.can_reach_location(state, BaseLocation.fate_lucid_blade),
-            DropLocation.sucsarian_drop_1: lambda state: self.can_reach_region(state, LunacidRegion.forlorn_arena),
-            DropLocation.sucsarian_drop_2: lambda state: self.can_reach_region(state, LunacidRegion.forlorn_arena),
-            DropLocation.jailor_drop: lambda state: self.can_reach_region(state, LunacidRegion.terminus_prison) and
+            ShopLocation.buy_steel_needle: lambda state: self.can_farm_money(state),  # Push out of sphere 0
+            ShopLocation.buy_crossbow: lambda state: self.can_farm_money(state),  # Push out of sphere 0
+            ShopLocation.buy_rapier: lambda state: self.can_farm_money(state),  # Push out of sphere 0
+            ShopLocation.buy_ocean_elixir_sheryl: lambda state: self.can_purchase_item(state, self.world.options) and self.can_farm_money(state),
+            ShopLocation.buy_privateer_musket: lambda state: self.can_purchase_item(state, self.world.options) and self.can_farm_money(state),
+            ShopLocation.buy_oil_lantern: lambda state: self.can_purchase_item(state, self.world.options) and self.can_farm_money(state),
+            ShopLocation.buy_jotunn_slayer: lambda state: self.can_reach_location(state, BaseLocation.fate_lucid_blade) and self.can_farm_money(state),
+            DropLocation.sucsarian_drop_1: lambda state: state.can_reach_region(LunacidRegion.forlorn_arena, self.player),
+            DropLocation.sucsarian_drop_2: lambda state: state.can_reach_region(LunacidRegion.forlorn_arena, self.player),
+            DropLocation.jailor_drop: lambda state: state.can_reach_region(LunacidRegion.terminus_prison, self.player) and
                                                     state.has(UniqueItem.terminus_prison_key, self.player),
-            DropLocation.cetea_drop: lambda state: self.can_reach_region(state, LunacidRegion.labyrinth_of_ash),
+            DropLocation.cetea_drop: lambda state: state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player),
             DropLocation.vampire_drop: lambda state: self.can_reach_any_region(state, [LunacidRegion.castle_le_fanu_red,
                                                                                        LunacidRegion.castle_le_fanu_white]),
-            DropLocation.horse_drop: lambda state: self.can_reach_region(state, LunacidRegion.sealed_ballroom),
-            DropLocation.anpu_drop_1: lambda state: self.can_reach_region(state, LunacidRegion.sand_temple),
-            DropLocation.anpu_drop_2: lambda state: self.can_reach_region(state, LunacidRegion.sand_temple),
+            DropLocation.horse_drop: lambda state: state.can_reach_region(LunacidRegion.sealed_ballroom, self.player),
+            DropLocation.anpu_drop_1: lambda state: state.can_reach_region(LunacidRegion.sand_temple, self.player),
+            DropLocation.anpu_drop_2: lambda state: state.can_reach_region(LunacidRegion.sand_temple, self.player),
             DropLocation.obsidian_skeleton_drop_1: lambda state: self.can_reach_any_region(state, [LunacidRegion.boiling_grotto,
                                                                                                    LunacidRegion.terminus_prison_dark]),
             DropLocation.obsidian_skeleton_drop_2: lambda state: self.can_reach_any_region(state, [LunacidRegion.boiling_grotto,
@@ -225,29 +234,30 @@ class LunacidRules:
             DropLocation.chimera_drop: lambda state: self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_3,
                                                                                        LunacidRegion.forbidden_archives_1b]),
             DropLocation.skeleton_spell_drop: lambda state: self.can_reach_any_region(state, [LunacidRegion.fetid_mire, LunacidRegion.boiling_grotto,
-                                                                                              LunacidRegion.terminus_prison_dark]),
+                                                                                              LunacidRegion.terminus_prison_dark, LunacidRegion.mausoleum]),
             DropLocation.skeleton_weapon_drop: lambda state: self.can_reach_any_region(state, [LunacidRegion.fetid_mire, LunacidRegion.boiling_grotto,
-                                                                                               LunacidRegion.terminus_prison_dark]),
-            DropLocation.kodama_drop: lambda state: self.can_reach_region(state, LunacidRegion.yosei_forest),
-            DropLocation.mummy_drop: lambda state: self.can_reach_region(state, LunacidRegion.temple_of_silence_interior),
+                                                                                               LunacidRegion.terminus_prison_dark, LunacidRegion.mausoleum]),
+            DropLocation.kodama_drop: lambda state: state.can_reach_region(LunacidRegion.yosei_forest, self.player),
+            DropLocation.mummy_drop: lambda state: state.can_reach_region(LunacidRegion.temple_of_silence_secret, self.player),
             DropLocation.sea_demon: lambda state: self.can_reach_any_region(state, [LunacidRegion.sanguine_sea, LunacidRegion.mausoleum]),
-            DropLocation.snail_drop: lambda state: self.can_reach_region(state, LunacidRegion.hollow_basin),
-            DropLocation.milk_snail_drop: lambda state: self.can_reach_region(state, LunacidRegion.hollow_basin),
+            DropLocation.snail_drop: lambda state: state.can_reach_region(LunacidRegion.hollow_basin, self.player),
+            DropLocation.milk_snail_drop: lambda state: self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_1b,
+                                                                                          LunacidRegion.forbidden_archives_3]),
         }
 
-    def can_reach_region(self, state: CollectionState, spot: str):
-        return state.can_reach(spot, "Region", self.player)
+    def is_vampire(self, options: LunacidOptions):
+        return options.starting_class == options.starting_class.option_vampire
 
     def can_reach_any_region(self, state: CollectionState, spots: List[str]):
         any_rule = False
         for spot in spots:
-            any_rule = any_rule or self.can_reach_region(state, spot)
+            any_rule = any_rule or state.can_reach_region(spot, self.player)
         return any_rule
 
     def can_reach_all_regions(self, state: CollectionState, spots: List[str]):
         all_rule = True
         for spot in spots:
-            all_rule = all_rule and self.can_reach_region(state, spot)
+            all_rule = all_rule and state.can_reach_region(spot, self.player)
         return all_rule
 
     def can_reach_location(self, state: CollectionState, spot: str):
@@ -278,8 +288,15 @@ class LunacidRules:
         return state.has_any(sources, self.player)
 
     def can_level_reasonably(self, state: CollectionState):
-        return self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_2, LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
-                                                 LunacidRegion.sealed_ballroom, LunacidRegion.fetid_mire, LunacidRegion.forest_canopy, LunacidRegion.forlorn_arena])
+        can_you = self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_2, LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
+                                                 LunacidRegion.sealed_ballroom, LunacidRegion.fetid_mire, LunacidRegion.forest_canopy,
+                                                 LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_white, LunacidRegion.castle_le_fanu_red,
+                                                    LunacidRegion.sanguine_sea, LunacidRegion.terminus_prison, LunacidRegion.temple_of_silence_secret])
+        return can_you
+
+    def can_farm_money(self, state: CollectionState):
+        return (state.can_reach_region(LunacidRegion.temple_of_silence_interior, self.player) and
+                self.can_reach_any_region(state, [LunacidRegion.boiling_grotto, LunacidRegion.accursed_tomb, LunacidRegion.forbidden_archives_1b]))
 
     def has_spell(self, spell: str, state: CollectionState):
         return state.has(spell, self.player)
@@ -297,7 +314,7 @@ class LunacidRules:
                              LunacidRegion.temple_of_silence_interior, LunacidRegion.sealed_ballroom]
         if options.dropsanity == options.dropsanity.option_false:
             every_spell = base_spells
-            return self.has_all_spells(every_spell, state) & self.can_reach_all_regions(state, mob_spell_regions)
+            return self.has_all_spells(every_spell, state) and self.can_reach_all_regions(state, mob_spell_regions)
         else:
             return self.has_all_spells(every_spell, state)
 
@@ -312,7 +329,10 @@ class LunacidRules:
     def has_keys_for_basin_door(self, state: CollectionState, options: LunacidOptions) -> bool:
         if options.shopsanity == options.shopsanity.option_false:
             return True
-        return state.has(UniqueItem.enchanted_key, self.player)
+        if options.entrance_randomization == options.entrance_randomization.option_true:
+            return state.has(UniqueItem.enchanted_key, self.player, 2)
+        else:
+            return state.has(UniqueItem.enchanted_key, self.player)
 
     def has_keys_for_canopy(self, state: CollectionState, options: LunacidOptions) -> bool:
         if options.shopsanity == options.shopsanity.option_false:
@@ -349,9 +369,18 @@ class LunacidRules:
         element_options = [item for item in self.elements if self.elements[item] in element and item in ranged_options]
         return state.has_any(element_options, self.player)
 
+    def has_coins_for_door(self, options: LunacidOptions, state: CollectionState):
+        return state.has(Coins.strange_coin, self.player, options.required_strange_coin.value)
+
+    def can_buy_jotunn(self, options: LunacidOptions, state: CollectionState):
+        if options.shopsanity == options.shopsanity.option_true:
+            return state.has(Weapon.jotunn_slayer, self.player)
+        return self.can_reach_location(state, BaseLocation.fate_lucid_blade) and self.can_farm_money(state)
+
     def can_defeat_the_prince(self, state: CollectionState):
         return (self.has_element_access([Elements.light, Elements.dark_and_light], state) and
-                self.can_reach_any_region(state, [LunacidRegion.castle_le_fanu_white, LunacidRegion.forbidden_archives_2, LunacidRegion.sealed_ballroom, LunacidRegion.boiling_grotto, LunacidRegion.forlorn_arena]))
+                self.can_reach_any_region(state, [LunacidRegion.castle_le_fanu_white, LunacidRegion.forbidden_archives_2,
+                                                  LunacidRegion.sealed_ballroom, LunacidRegion.boiling_grotto, LunacidRegion.forlorn_arena]))
 
     def set_lunacid_rules(self, world_elements: Dict[str, str]) -> None:
         multiworld = self.world.multiworld

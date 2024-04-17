@@ -35,7 +35,6 @@ archives_elevator_2_to_3 = create_switch(211, Switch.archives_elevator_switches,
 ballroom_switch = create_switch(213, Switch.ballroom_switch, ItemClassification.useful)
 grotto_valve_switch_1 = create_switch(214, Switch.grotto_valves_switches, ItemClassification.progression)
 grotto_calor_switch = create_switch(216, Switch.grotto_switches, ItemClassification.useful)
-grotto_temple_switch = create_switch(217, Switch.grotto_temple_switch, ItemClassification.useful)
 prison_shortcut_switch = create_switch(218, Switch.prison_shortcut_switch, ItemClassification.progression)
 prison_arena_switch = create_switch(219, Switch.prison_arena_switch, ItemClassification.progression)
 arena_water_switch = create_switch(220, Switch.arena_water_switch, ItemClassification.useful)
