@@ -198,6 +198,9 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
         if item == UniqueItem.white_tape and options.ending == options.ending.option_ending_e:
             items.append(item_factory(item, ItemClassification.progression))
             continue
+        elif item == UniqueItem.dusty_crystal_orb and options.secret_door_lock == options.secret_door_lock.option_true:
+            items.append(item_factory(item, ItemClassification.progression))
+            continue
         items.append(item_factory(item))
     for item in base_special_item_counts:
         items.extend(item_factory(special_item) for special_item in [item] * base_special_item_counts[item])
