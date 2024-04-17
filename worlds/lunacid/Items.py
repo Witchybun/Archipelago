@@ -11,12 +11,12 @@ from .data.door_data import all_doors
 from .data.location_data import base_locations, shop_locations, mob_drop_locations
 from .data.item_data import all_items
 from .data.item_count_data import (base_weapons, base_spells, base_special_item_counts, base_unique_items, shop_weapons, shop_unique_items, shop_item_count,
-                                   drop_weapons, drop_spells, switches, filler_items, traps, doors)
+                                   drop_weapons, drop_spells, switches, filler_items, traps, doors_no_tower, crafted_items, drop_items)
 from .data.switch_data import all_switches
 from .data.trap_data import all_traps
 from .data.weapon_data import all_weapons, starting_weapon, shop_starting_weapons, drop_starting_weapons, ranged_weapons, weapons_by_element
 from .data.spell_data import all_spells, all_spells_by_name, starting_spells, drop_starting_spells, ranged_spells, spells_by_element
-from .strings.items import UniqueItem, Progressives, Coins
+from .strings.items import UniqueItem, Progressives, Coins, Door
 from .strings.properties import Elements, Types
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,8 @@ def determine_weapon_elements(random: Random) -> Dict[str, str]:
     return elements
 
 
-def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], weapon_elements: Dict[str, str], options: LunacidOptions, random: Random) -> (List[Item], Item):
+def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], weapon_elements: Dict[str, str],
+                 options: LunacidOptions, random: Random) -> (List[Item], Item):
     items = []
     lunacid_items = create_lunacid_items(item_factory, weapon_elements, options)
     for item in items_to_exclude:
@@ -121,6 +122,8 @@ def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict
 
 def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict[str, str], options: LunacidOptions, items: List[Item]):
     for item in base_weapons:
+        if item == Weapon.moonlight and options.exclude_tower == options.exclude_tower.option_true:
+            continue
         if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
             items.append(item_factory(item, ItemClassification.progression))
         elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
@@ -192,16 +195,38 @@ def determine_item_classification(item: str, progression: bool):
 
 def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
     for item in base_unique_items:
+        if item == UniqueItem.white_tape and options.ending == options.ending.option_ending_e:
+            items.append(item_factory(item, ItemClassification.progression))
+            continue
         items.append(item_factory(item))
     for item in base_special_item_counts:
         items.extend(item_factory(special_item) for special_item in [item] * base_special_item_counts[item])
-    items.extend(item_factory(coin) for coin in [Coins.strange_coin] * get_coin_count(options))
+    if options.exclude_tower == options.exclude_tower.option_false:
+        items.append(item_factory(UniqueItem.earth_elixir))
+        items.append(item_factory(UniqueItem.ocean_elixir))
+        items.append(item_factory(UniqueItem.crystal_lantern))
     if options.shopsanity == options.shopsanity.option_true:
         for item in shop_unique_items:
             items.append(item_factory(item))
         for item in shop_item_count:
             items.extend([item_factory(filler) for filler in [item] * shop_item_count[item]])
+    create_strange_coins(item_factory, options, items)
     return items
+
+
+def create_strange_coins(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
+    if options.ending != options.ending.option_ending_b and options.ending != options.ending.option_any_ending:
+        return
+    total_coins = max(options.required_strange_coin.value, options.total_strange_coin.value)
+    required_coins = options.required_strange_coin.value
+    count = 0
+    while count < required_coins:
+        items.append(item_factory(Coins.strange_coin, ItemClassification.progression))
+        count += 1
+    count = 0
+    while count < total_coins - required_coins:
+        items.append(item_factory(Coins.strange_coin))
+        count += 1
 
 
 def create_switch_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
@@ -215,8 +240,10 @@ def create_switch_items(item_factory: LunacidItemFactory, options: LunacidOption
 def create_door_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
     if options.door_locks == options.door_locks.option_false:
         return items
-    for key in doors:
+    for key in doors_no_tower:
         items.append(item_factory(key))
+    if options.exclude_tower == options.exclude_tower.option_false:
+        items.append(item_factory(Door.tower_key))
     return items
 
 
@@ -224,6 +251,10 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
     if filler_slots == 0:
         return items
     filler_list = filler_items.copy()
+    if options.crafted_filler == options.crafted_filler.option_true:
+        filler_list.extend(crafted_items)
+    if options.drop_filler == options.drop_filler.option_true:
+        filler_list.extend(drop_items)
     trap_list = traps.copy()
     trap_percent = options.trap_percent.value / 100
     filler_count = filler_slots
@@ -233,26 +264,6 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
         items.extend([item_factory(filler) for filler in random.choices(trap_list, k=trap_count)])
     items.extend([item_factory(filler) for filler in random.choices(filler_list, k=filler_count)])
     return items
-
-
-def get_coin_count(options: LunacidOptions):
-    coin_setting = options.strange_coin_bundle
-    if coin_setting == coin_setting.option_one:
-        return 30
-    if coin_setting == coin_setting.option_two:
-        return 15
-    if coin_setting == coin_setting.option_three:
-        return 10
-    if coin_setting == coin_setting.option_five:
-        return 6
-    if coin_setting == coin_setting.option_six:
-        return 5
-    if coin_setting == coin_setting.option_ten:
-        return 3
-    if coin_setting == coin_setting.option_fifteen:
-        return 2
-    if coin_setting == coin_setting.option_thirty:
-        return 1
 
 
 all_filler = [item for item in item_table if item.classification is ItemClassification.filler]

@@ -25,15 +25,15 @@ def create_trap(code: int, name: str, classification: ItemClassification):
     return trap
 
 
-health_viai = create_trap(61, Traps.health_viai, ItemClassification.trap)
-poison = create_trap(62, Traps.poison_trap, ItemClassification.trap)
-blindness = create_trap(63, Traps.blindness_trap, ItemClassification.trap)
-slowness = create_trap(64, Traps.slowness_trap, ItemClassification.trap)
-mana_drain = create_trap(65, Traps.mana_drain_trap, ItemClassification.trap)
-xp_drain = create_trap(66, Traps.xp_drain_trap, ItemClassification.trap)
-curse = create_trap(67, Traps.curse_trap, ItemClassification.trap)
-bleed = create_trap(68, Traps.bleed_trap, ItemClassification.trap)
-eggnog = create_trap(69, Traps.eggnog, ItemClassification.trap)
-coal = create_trap(70, Traps.coal, ItemClassification.trap)
+health_viai = create_trap(70, Traps.health_viai, ItemClassification.trap)
+poison = create_trap(71, Traps.poison_trap, ItemClassification.trap)
+blindness = create_trap(72, Traps.blindness_trap, ItemClassification.trap)
+slowness = create_trap(73, Traps.slowness_trap, ItemClassification.trap)
+mana_drain = create_trap(74, Traps.mana_drain_trap, ItemClassification.trap)
+xp_drain = create_trap(75, Traps.xp_drain_trap, ItemClassification.trap)
+curse = create_trap(76, Traps.curse_trap, ItemClassification.trap)
+bleed = create_trap(77, Traps.bleed_trap, ItemClassification.trap)
+eggnog = create_trap(78, Traps.eggnog, ItemClassification.trap)
+coal = create_trap(79, Traps.coal, ItemClassification.trap)
 
 
