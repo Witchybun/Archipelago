@@ -1,4 +1,4 @@
-from ..strings.items import UniqueItem, GenericItem, Creation, Alchemy, Coins, Switch, Progressives, Traps, Door
+from ..strings.items import UniqueItem, GenericItem, Creation, Alchemy, Coins, Switch, Progressives, Traps, Door, RareDrops, UnusedItems
 from ..strings.weapons import Weapon
 from ..strings.spells import Spell, MobSpell
 
@@ -77,7 +77,6 @@ base_unique_items = [
     Alchemy.fractured_life,
     UniqueItem.earth_talisman,
     UniqueItem.enchanted_key,
-    UniqueItem.crystal_lantern,
     UniqueItem.terminus_prison_key,
     Alchemy.broken_sword,
     Alchemy.fractured_death,
@@ -91,34 +90,57 @@ base_unique_items = [
 base_special_item_counts = {
     UniqueItem.black_book: 3,
     Progressives.vampiric_symbol: 3,
-    UniqueItem.ocean_elixir: 7,
-    UniqueItem.earth_elixir: 10,
+    UniqueItem.ocean_elixir: 6,
+    UniqueItem.earth_elixir: 9,
 }
 
 filler_items = [
     Creation.crystal_shard,
     Creation.health_vial,
     Creation.mana_vial,
-    GenericItem.blood_wine,
     Creation.antidote,
-    Creation.poison_throwing_knife,
-    Creation.holy_water,
+    GenericItem.blood_wine,
     UniqueItem.survey_banner,
-    Coins.silver_10,
+    Coins.silver,
     GenericItem.dark_urn,
     GenericItem.light_urn,
-    Creation.spectral_candle,
     Alchemy.ashes,
     GenericItem.cloth_bandage,
-    Creation.staff_of_osiris,
-    Creation.moonlight_vial,
     Alchemy.ectoplasm,
     Alchemy.snowflake_obsidian,
     Alchemy.moon_petal,
+    Alchemy.opal,
+    Alchemy.fire_opal,
+    Alchemy.ikurrilb_root,
+    Alchemy.onyx,
+    Alchemy.obsidian,
+    Alchemy.ocean_bone_shell,
+    Alchemy.ocean_bone_shard,
+    Alchemy.destroying_angel_mushroom,
+    Alchemy.yellow_morel,
+    Alchemy.bloodweed,
+    Alchemy.lotus_seed_pod,
+]
+
+crafted_items = [
+    Creation.poison_throwing_knife,
+    Creation.holy_water,
+    Creation.spectral_candle,
+    Creation.staff_of_osiris,
+    Creation.moonlight_vial,
     Creation.wisp_heart,
     Creation.fairy_moss,
     Creation.bomb,
-    Creation.poison_urn,
+    Creation.poison_urn,]
+
+drop_items = [
+    RareDrops.shrimp,
+    RareDrops.angel_feather
+]
+
+unused_items = [
+    UnusedItems.tent,
+    UnusedItems.curry
 ]
 
 shop_weapons = [Weapon.rapier,
@@ -168,7 +190,6 @@ switches = [Switch.hollow_basin_switch_near_demi,
             Switch.tomb_light_switches,
             Switch.ballroom_switch,
             Switch.grotto_valves_switches,
-            Switch.grotto_temple_switch,
             Switch.grotto_switches,
             Switch.prison_shortcut_switch,
             Switch.prison_arena_switch,
@@ -177,26 +198,25 @@ switches = [Switch.hollow_basin_switch_near_demi,
             Switch.ash_switch,
             ]
 
-doors = [Door.basin_temple_sewers,
-         Door.basin_broken_steps,
-         Door.basin_rickety_bridge,
-         Door.tower_key,
-         Door.chasm_surface_door,
-         Door.ballroom_rooms_key,
-         Door.sleeper_key,
-         Door.sucs_key,
-         Door.ash_key,
-         Door.burning_key,
-         Door.forlorn_key,
-         Door.prison_key,
-         Door.throne_key,
-         Door.ballroom_key,
-         Door.archives_sealed_door,
-         Door.sea_double_doors,
-         Door.sea_eastward,
-         Door.sea_westward,
-         Door.forest_patchouli,
-         Door.forest_door_in_trees]
+doors_no_tower = [Door.basin_temple_sewers,
+                  Door.basin_broken_steps,
+                  Door.basin_rickety_bridge,
+                  Door.chasm_surface_door,
+                  Door.ballroom_rooms_key,
+                  Door.sleeper_key,
+                  Door.sucs_key,
+                  Door.ash_key,
+                  Door.burning_key,
+                  Door.forlorn_key,
+                  Door.prison_key,
+                  Door.ballroom_key,
+                  Door.throne_key,
+                  Door.archives_sealed_door,
+                  Door.sea_double_doors,
+                  Door.sea_eastward,
+                  Door.sea_westward,
+                  Door.forest_patchouli,
+                  Door.forest_door_in_trees]
 
 traps = [Traps.health_viai,
          Traps.slowness_trap,

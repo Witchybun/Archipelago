@@ -1,4 +1,4 @@
-from typing import Dict, Any, Iterable, Optional, TextIO
+from typing import Dict, Any, Iterable, TextIO
 import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
@@ -13,7 +13,7 @@ from .strings.weapons import Weapon
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
 from .strings.locations import BaseLocation
-from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_START, ItemDict, create_items, get_coin_count, determine_starting_weapon, \
+from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_START, ItemDict, create_items, determine_starting_weapon, \
     determine_weapon_elements
 from .Locations import (location_table, base_location_table, shop_locations_table, mob_drop_locations_table, LocationDict,
                         LOCATION_CODE_START)
@@ -78,7 +78,8 @@ class LunacidWorld(World):
                 self.options.shopsanity.value = passthrough["shopsanity"]
                 self.options.random_elements.value = passthrough["random_elements"]
                 self.options.entrance_randomization.value = passthrough["entrance_randomization"]
-                self.options.strange_coin_bundle.value = passthrough["strange_coin_bundle"]
+                self.options.required_strange_coin.value = passthrough["required_strange_coin"]
+                self.options.total_strange_coin.value = passthrough["total_strange_coin"]
                 self.options.door_locks.value = passthrough["door_locks"]
                 self.options.switch_locks.value = passthrough["switch_locks"]
                 self.options.secret_door_lock.value = passthrough["secret_door_lock"]
@@ -108,7 +109,8 @@ class LunacidWorld(World):
             self.weapon_elements = determine_weapon_elements(self.multiworld.random)
         else:
             self.weapon_elements = weapons_by_element
-        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.options, self.multiworld.random)
+        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.options,
+                                                                self.multiworld.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
@@ -135,6 +137,12 @@ class LunacidWorld(World):
                 continue
             if location in mob_drop_locations_table and self.options.dropsanity == self.options.dropsanity.option_false:
                 continue
+            if location.name in BaseLocation.abyss_locations and self.options.exclude_tower == self.options.exclude_tower.option_true:
+                continue
+            if location.name in BaseLocation.coin_locations and self.options.exclude_coin_locations == self.options.exclude_coin_locations.option_true:
+                continue
+            if location.name == BaseLocation.wings_rest_demi_gift and self.options.starting_class == self.options.starting_class.option_royal:
+                continue
             region: Region = world_regions[location.region]
             region.add_locations({name: code})
 
@@ -142,8 +150,10 @@ class LunacidWorld(World):
 
         if self.options.ending == self.options.ending.option_ending_b:
             ending_region = world.get_region(LunacidRegion.labyrinth_of_ash, player)
-        else:
+        elif self.options.ending != self.options.ending.option_any_ending:
             ending_region = world.get_region(LunacidRegion.grave_of_the_sleeper, player)
+        else:
+            ending_region = world.get_region(LunacidRegion.forlorn_arena, player)
         throne_region = world.get_region(LunacidRegion.throne_chamber, player)
         crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
         crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
@@ -151,19 +161,25 @@ class LunacidWorld(World):
         grotto_region = world.get_region(LunacidRegion.boiling_grotto, player)
         hicket = Location(player, "Free Sir Hicket", None, grotto_region)
         hicket.place_locked_item(self.create_event("Sir Hicket's Freedom from Armor"))
-        victory = Location(player, Endings.wake_dreamer, None, ending_region)
         if self.options.ending == self.options.ending.option_ending_cd:
             victory = Location(player, Endings.look_into_abyss, None, ending_region)
         elif self.options.ending == self.options.ending.option_ending_b:
             victory = Location(player, Endings.open_door, None, ending_region)
+        elif self.options.ending == self.options.ending.option_ending_a or self.options.ending == self.options.ending.option_ending_e:
+            victory = Location(player, Endings.wake_dreamer, None, ending_region)
+        else:
+            victory = Location(player, "The Dreamer or the Door", None, ending_region)
         victory.place_locked_item(self.create_event(Victory.victory))
         ending_region.locations.append(victory)
 
         if self.options.ending == self.options.ending.option_ending_b:
-            coin_count = get_coin_count(self.options)
-            set_rule(victory, lambda state: state.has(Coins.strange_coin, player, coin_count))
+            set_rule(victory, lambda state: LunacidRules(self).has_coins_for_door(self.options, state))
         elif self.options.ending == self.options.ending.option_ending_e:
             set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state, self.options) and state.has(UniqueItem.white_tape, self.player))
+        elif self.options.ending == self.options.ending.option_any_ending:
+            set_rule(victory, lambda state: state.can_reach_region(LunacidRegion.grave_of_the_sleeper, self.player) or
+                                            (LunacidRules(self).has_coins_for_door(self.options, state) and
+                                             state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player)))
 
         world.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
 
@@ -181,11 +197,11 @@ class LunacidWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.4.0",
+            "client_version": "0.5.0",
             "elements": self.weapon_elements,
-            **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "strange_coin_bundle",
+            **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
                                    "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "door_locks", "random_elements", "secret_door_lock",
-                                   "death_link"),
+                                   "death_link", "exclude_tower", "exclude_coin_locations", "starting_class"),
             "entrances": self.randomized_entrances
         }
 

@@ -99,7 +99,7 @@ silver_rapier = create_weapon(144, Weapon.silver_rapier, Elements.light, Types.m
 heritage_sword = create_weapon(145, Weapon.heritage_sword, Elements.normal, Types.melee, ItemClassification.useful)
 
 ranged_weapons = [weapon.name for weapon in all_weapons if weapon.style == Types.ranged or weapon.style == Types.both]
-weapon_light_sources = [Weapon.torch, Weapon.twisted_staff, Weapon.moonlight, Weapon.broken_hilt]
+weapon_light_sources = [Weapon.torch, Weapon.twisted_staff, Weapon.moonlight]
 weapons_by_element = {weapon.name: weapon.element for weapon in all_weapons}
 
 starting_weapon = [Weapon.replica_sword, Weapon.battle_axe, Weapon.stone_club, Weapon.ritual_dagger, Weapon.torch, Weapon.steel_spear,

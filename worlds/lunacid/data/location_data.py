@@ -27,6 +27,7 @@ wings_rest = [
     LocationData(2, BaseLocation.wings_rest_crystal_shard, LunacidRegion.wings_rest, Creation.crystal_shard),
     LocationData(3, BaseLocation.wings_rest_clives_gift, LunacidRegion.wings_rest, Creation.health_vial),
     LocationData(4, BaseLocation.wings_rest_demi_orb, LunacidRegion.wings_rest, UniqueItem.dusty_crystal_orb),
+    LocationData(5, BaseLocation.wings_rest_demi_gift, LunacidRegion.wings_rest, UniqueItem.dried_rat),
 ]
 
 hollow_basin = [
