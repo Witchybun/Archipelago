@@ -118,7 +118,8 @@ class LunacidRules:
             LunacidEntrance.yosei_to_canopy: lambda state: self.has_keys_for_canopy(state, self.world.options) and
                                                            self.has_door_key(Door.forest_door_in_trees, state, self.world.options),
             LunacidEntrance.archives_3_to_archives_1b: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switches, self.world.options)
-                                                                     or self.can_jump_given_height(state, "High", self.world.options),
+                                                                     or self.can_jump_given_height(state, "High", self.world.options)
+                                                                     or state.has(Spell.spirit_warp, self.player),
             LunacidEntrance.archives_2_to_archives_3: lambda state: self.has_key_to_switch(state, Switch.archives_elevator_switches, self.world.options)
                                                                     or self.can_jump_given_height(state, "High", self.world.options),
             LunacidEntrance.grotto_to_tower: lambda state: self.has_crystal_orb(state, self.world.options),
