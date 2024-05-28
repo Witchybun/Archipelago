@@ -39,7 +39,7 @@ class Weapon:
     privateer_musket = "Privateer Musket"
 
     brittle_arming_sword = "Brittle Arming Sword"
-    golden_kopesh = "Golden Kopesh"
+    golden_kopesh = "Golden Khopesh"
     golden_sickle = "Golden Sickle"
     ice_sickle = "Ice Sickle"
     jailor_candle = "Jailor's Candle"
