@@ -78,8 +78,6 @@ class LunacidWorld(World):
                 self.options.shopsanity.value = passthrough["shopsanity"]
                 self.options.random_elements.value = passthrough["random_elements"]
                 self.options.entrance_randomization.value = passthrough["entrance_randomization"]
-                self.options.required_strange_coin.value = passthrough["required_strange_coin"]
-                self.options.total_strange_coin.value = passthrough["total_strange_coin"]
                 self.options.door_locks.value = passthrough["door_locks"]
                 self.options.switch_locks.value = passthrough["switch_locks"]
                 self.options.secret_door_lock.value = passthrough["secret_door_lock"]
@@ -197,7 +195,7 @@ class LunacidWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.5.0",
+            "client_version": "0.5.4",
             "elements": self.weapon_elements,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
                                    "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "door_locks", "random_elements", "secret_door_lock",
