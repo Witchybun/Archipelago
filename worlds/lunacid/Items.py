@@ -21,8 +21,6 @@ from .strings.properties import Elements, Types
 
 logger = logging.getLogger(__name__)
 
-ITEM_CODE_START = 771111110
-
 
 @dataclass(frozen=True)
 class ItemDict:
@@ -43,17 +41,17 @@ all_locations = base_locations + shop_locations + mob_drop_locations
 def initialize_items_by_name() -> List[ItemDict]:
     items = []
     for item in all_items:
-        items.append(ItemDict(ITEM_CODE_START + item.code, item.name, item.classification, 0))
+        items.append(ItemDict(item.code, item.name, item.classification, 0))
     for weapon in all_weapons:
-        items.append(ItemDict(ITEM_CODE_START + weapon.code, weapon.name, weapon.classification, 0))
+        items.append(ItemDict(weapon.code, weapon.name, weapon.classification, 0))
     for spell in all_spells:
-        items.append(ItemDict(ITEM_CODE_START + spell.code, spell.name, spell.classification, 0))
+        items.append(ItemDict(spell.code, spell.name, spell.classification, 0))
     for switch in all_switches:
-        items.append(ItemDict(ITEM_CODE_START + switch.code, switch.name, switch.classification, 0))
+        items.append(ItemDict(switch.code, switch.name, switch.classification, 0))
     for trap in all_traps:
-        items.append(ItemDict(ITEM_CODE_START + trap.code, trap.name, trap.classification, 0))
+        items.append(ItemDict(trap.code, trap.name, trap.classification, 0))
     for door in all_doors:
-        items.append(ItemDict(ITEM_CODE_START + door.code, door.name, door.classification, 0))
+        items.append(ItemDict(door.code, door.name, door.classification, 0))
     return items
 
 
