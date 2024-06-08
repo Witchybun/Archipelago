@@ -110,7 +110,7 @@ class Switch:
     tomb_switches = "Accursed Tomb Switch Keyring"
     tomb_light_switches = "Prometheus Fire Switch Keyring"
     archives_switch = "Forbidden Archives Shortcut Switch Key"
-    archives_elevator_switches = "Archive Elevator Switch Keyring"
+    archives_elevator_switches = "Forbidden Archives Elevator Switch Keyring"
     ballroom_switch = "Sealed Ballroom Switch Key"
     grotto_valves_switches = "Grotto Fire Switch Keyring"
     grotto_switches = "Sand Temple Switches Keyring"
