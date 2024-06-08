@@ -13,10 +13,9 @@ from .strings.weapons import Weapon
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
 from .strings.locations import BaseLocation
-from .Items import item_table, complete_items_by_name, group_table, ITEM_CODE_START, ItemDict, create_items, determine_starting_weapon, \
+from .Items import item_table, complete_items_by_name, group_table, ItemDict, create_items, determine_starting_weapon, \
     determine_weapon_elements
-from .Locations import (location_table, base_location_table, shop_locations_table, mob_drop_locations_table, LocationDict,
-                        LOCATION_CODE_START)
+from .Locations import (location_table, base_location_table, shop_locations_table, mob_drop_locations_table, LocationDict)
 from .Regions import link_lunacid_areas, create_regions
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
@@ -195,7 +194,7 @@ class LunacidWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.5.4",
+            "client_version": "0.5.6",
             "elements": self.weapon_elements,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
                                    "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "door_locks", "random_elements", "secret_door_lock",
