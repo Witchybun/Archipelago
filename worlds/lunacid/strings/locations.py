@@ -1,3 +1,6 @@
+from typing import Dict, List
+
+
 class BaseLocation:
     wings_rest_crystal_shard = "WR: Bench"
     wings_rest_ocean_elixir = "WR: Rafters"
@@ -249,24 +252,191 @@ class ShopLocation:
     buy_privateer_musket = "Buy Privateer Musket"
     buy_jotunn_slayer = "Buy Jotunn Slayer"
 
+    shop_locations = [buy_rapier, buy_crossbow, buy_jotunn_slayer, buy_ocean_elixir_patchouli, buy_ocean_elixir_sheryl,
+                      buy_oil_lantern, buy_enchanted_key, buy_steel_needle, buy_privateer_musket]
+
+
+unique_drop_locations = []
+other_drop_locations = []
+
+
+def unique_drop(name: str):
+    if name not in unique_drop_locations:
+        unique_drop_locations.append(name)
+    return name
+
+
+def other_drop(name: str):
+    if name not in other_drop_locations:
+        other_drop_locations.append(name)
+    return name
+
 
 class DropLocation:
-    snail_drop = "Snail: Summon Snail Drop"
-    mummy_drop = "Mummy: Rusted Sword Drop"
-    milk_snail_drop = "Milk Snail: Ice Sickle Drop"
-    skeleton_weapon_drop = "Skeleton: Skeleton Axe Drop"
-    skeleton_spell_drop = "Skeleton: Dark Skull Drop"
-    phantom_drop = "Phantom: Cursed Blade Drop"
-    kodama_drop = "Kodama: Summon Kodama Drop"
-    chimera_drop = "Chimera: Quick Stride Drop"
-    vampire_drop = "Vampire Page: Lyrian Longsword Drop"
-    horse_drop = "Malformed Horse: Brittle Arming Sword Drop"
-    obsidian_skeleton_drop_1 = "Obsidian Skeleton: Obsidian Cursebrand Drop"
-    obsidian_skeleton_drop_2 = "Obsidian Skeleton: Obsidian Poisonguard Drop"
-    anpu_drop_1 = "Anpu: Golden Kopesh Drop"
-    anpu_drop_2 = "Anpu: Golden Sickle Drop"
-    jailor_drop = "Jailor: Jailor's Candle Drop"
-    sucsarian_drop_1 = "Sucsarian: Sucsarian Dagger Drop"
-    sucsarian_drop_2 = "Sucsarian: Sucsarian Spear Drop"
-    cetea_drop = "Cetea: Tornado Drop"
-    sea_demon = "Abyssal Demon: Ocean Elixir Drop"
+    #  Hollow Basin
+    snail = unique_drop("Snail: Summon Snail Drop")
+    snail_2c = other_drop("Snail: Small Silver Drop")
+    snail_10c = other_drop("Snail: Large Silver Drop")
+    snail_ocean = other_drop("Snail: Ocean Bone Shard Drop")
+    milk_snail = unique_drop("Milk Snail: Ice Sickle Drop")
+    milk_5c = other_drop("Milk Snail: Small Silver Drop")
+    milk_10c = other_drop("Milk Snail: Large Silver Drop")
+    milk_ocean = other_drop("Milk Snail: Ocean Bone Shard Drop")
+    shulker_obsidian = other_drop("Shulker: Obsidian Drop")
+    shulker_onyx = other_drop("Shulker: Onyx Drop")
+    mummy_mana_vial = other_drop("Mummy: Mana Vial Drop")
+    mummy_onyx = other_drop("Mummy: Onyx Drop")
+    mummy_2c = other_drop("Mummy: Small Silver Drop")
+    mummy_10c = other_drop("Mummy Knight: Medium Silver Drop")
+    mummy_knight = unique_drop("Mummy Knight: Rusted Sword Drop")
+    #  Forbidden Archives
+    necronomicon_fire_opal = other_drop("Necronomicon: Fire Opal Drop")
+    necronomicon_5c = other_drop("Necronomicon: Small Silver Drop")
+    necronomicon_10c = other_drop("Necronomicon: Medium Silver Drop")
+    necronomicon_mana_vial = other_drop("Necronomicon: Mana Vial Drop")
+    chimera_drop = unique_drop("Chimera: Quick Stride Drop")
+    chimera_light_urn = other_drop("Chimera: Light Urn Drop")
+    chimera_holy_water = other_drop("Chimera: Holy Water Drop")
+    enlightened_mana_vial = other_drop("Enlightened One: Mana Vial Drop")
+    enlightened_ocean_bone_shell = other_drop("Enlightened One: Ocean Bone Shell Drop")
+    #  Fetid Mire
+    slime_skeleton = other_drop("Slime Skeleton: Ashes Drop")
+    skeleton_weapon = unique_drop("Skeleton: Skeleton Axe Drop")
+    skeleton_spell = unique_drop("Skeleton: Dark Skull Drop")
+    skeleton_10c = other_drop("Skeleton: Medium Silver Drop")
+    skeleton_mana_vial = other_drop("Skeleton: Mana Vial")
+    skeleton_onyx = other_drop("Skeleton: Onyx Drop")
+    skeleton_bones = other_drop("Skeleton: Bones Drop")
+    rat_king_10c = other_drop("Rat King: Medium Silver Drop")
+    rat_king_lotus_seed = other_drop("Rat King: Lotus Seed Pod Drop")
+    rat = other_drop("Rat: Small Silver Drop")
+    #  Yosei Forest + Forest Canopy
+    kodama_drop = unique_drop("Kodama: Summon Kodama Drop")
+    kodama_2c = other_drop("Kodama: Small Silver Drop")
+    kodama_10c = other_drop("Kodama: Medium Silver Drop")
+    kodama_opal = other_drop("Kodama: Opal Drop")
+    yakul_10c = other_drop("Yakul: Medium Silver Drop")
+    yakul_fire_opal = other_drop("Yakul: Fire Opal Drop")
+    yakul_opal = other_drop("Yakul: Opal Drop")
+    yakul_health_vial = other_drop("Yakul: Health Vial Drop")
+    venus_10c = other_drop("Venus: Medium Silver Drop")
+    venus_yellow_morel = other_drop("Venus: Yellow Morel Drop")
+    venus_dest_angel = other_drop("Venus: Destroying Angel Mushroom Drop")
+    neptune_10c = other_drop("Neptune: Medium Silver Drop")
+    neptune_yellow_morel = other_drop("Neptune: Yellow Morel Drop")
+    neptune_dest_angel = other_drop("Neptune: Destroying Angel Mushroom Drop")
+    unilateralis_10c = other_drop("Unilateralis: Medium Silver Drop")
+    unilateralis_yellow_morel = other_drop("Unilateralis: Yellow Morel Drop")
+    unilateralis_dest_angel = other_drop("Unilateralis: Destroying Angel Mushroom Drop")
+    #  Sanguine Sea
+    hemalith_health_vial = other_drop("Hemalith: Health Vial Drop")
+    hemalith_shrimp = other_drop("Hemalith: Pink Shrimp Drop")
+    hemallith_bloodweed = other_drop("Hemalith: Bloodweed Drop")
+    sea_demon = unique_drop("Abyssal Demon: Ocean Elixir Drop")
+    #  Accursed Tomb
+    mi_go_ocean_bone_shell = other_drop("Mi-Go: Ocean Bone Shell Drop")
+    mi_go_10c = other_drop("Mi-Go: Medium Silver Drop")
+    mi_go_snowflake_obsidian = other_drop("Mi-Go: Snowflake Obsidian")
+    mare_10c = other_drop("Mare: Medium Silver Drop")
+    mare_obsidian = other_drop("Mare: Obsidian Drop")
+    mare_onyx = other_drop("Mare: Onyx Drop")
+    painting_fire_opal = other_drop("Cursed Painting: Fire Opal Drop")
+    painting_10c = other_drop("Cursed Painting: Medium Silver Drop")
+    painting_mana_vial = other_drop("Cursed Painting: Mana Vial Pickup")
+    painting_20c = other_drop("Cursed Painting: Large Silver Drop")
+    #  Castle Le Fanu
+    phantom = unique_drop("Phantom: Cursed Blade Drop")
+    phantom_10c = other_drop("Phantom: Medium Silver Drop")
+    phantom_holy_water = other_drop("Phantom: Holy Water Drop")
+    phantom_moon_vial = other_drop("Phantom: Moonlight Vial Drop")
+    phantom_ectoplasm = other_drop("Phantom: Ectoplasm Drop")
+    vampire_drop = unique_drop("Vampire Page: Lyrian Longsword Drop")
+    vampire_5c = other_drop("Vampire: Small Silver Drop")
+    vampire_vampiric_ashes = other_drop("Vampire: Vampiric Ashes Drop")
+    vampire_bandage = other_drop("Vampire: Cloth Bandage Drop")
+    vampire_20c = other_drop("Vampire Page: Large Silver Drop")
+    malformed_vampiric_ashes = other_drop("Malformed: Vampiric Ashes Drop")
+    great_bat_health_vial = other_drop("Great Bat: Health Vial Drop")
+    great_bat_obsidian = other_drop("Great Bat: Obsidian Drop")
+    great_bat_10c = other_drop("Great Bat: Medium Silver Drop")
+    poltergeist_10c = other_drop("Poltergeist: Medium Silver Drop")
+    poltergeist_ectoplasm = other_drop("Poltergeist: Ectoplasm Drop")
+    #  Sealed Ballroom
+    horse_drop = unique_drop("Malformed Horse: Brittle Arming Sword Drop")
+    horse_10c = other_drop("Malformed Horse: Medium Silver Drop")
+    horse_mana_vial = other_drop("Malformed Horse: Mana Vial Drop")
+    hallowed_husk_10c = other_drop("Hallowed Husk: Medium Silver Drop")
+    hallowed_husk_bones = other_drop("Hallowed Husk: Bones Drop")
+    hallowed_husk_bandage = other_drop("Hallowed Husk: Cloth Bandage Drop")
+    hallowed_husk_light_urn = other_drop("Hallowed Husk: Light Urn Drop")
+    hallowed_husk_goldeness = other_drop("Hallowed Husk: Fool's Gold Drop")
+    hallowed_husk_holy_water = other_drop("Hallowed Husk: Holy Water Drop")
+    #  Boiling Grotto
+    ikkurilb_root = other_drop("Ikkur'ilb: Ikkur'ilb Root Drop")
+    ikkurilb_10c = other_drop("Ikkur'ilb: Medium Silver Drop")
+    ikkurilb_snowflake_obsidian = other_drop("Ikkur'ilb: Snowflake Obsidian Drop")
+    mimic_moon_vial = other_drop("Mimic: Moonlight Vial Drop")
+    mimic_obsidian = other_drop("Mimic: Obsidian Drop")
+    mimic_fools_gold = other_drop("Mimic: Fools Gold Drop")
+    obsidian_skeleton_drop_1 = unique_drop("Obsidian Skeleton: Obsidian Cursebrand Drop")
+    obsidian_skeleton_drop_2 = unique_drop("Obsidian Skeleton: Obsidian Poisonguard Drop")
+    obsidian_skeleton_10c = other_drop("Obsidian Skeleton: Medium Silver Drop")
+    obsidian_skeleton_bones = other_drop("Obsidian Skeleton: Bones Drop")
+    obsidian_skeleton_mana_vial = other_drop("Obsidian Skeleton: Mana Vial Drop")
+    obsidian_skeleton_obsidian = other_drop("Obsidian Skeleton: Obsidian Drop")
+    anpu_drop_1 = unique_drop("Anpu: Golden Khopesh Drop")
+    anpu_drop_2 = unique_drop("Anpu: Golden Sickle Drop")
+    anpu_10c = other_drop("Anpu: Medium Silver Drop")
+    anpu_fire_opal = other_drop("Anpu: Fire Opal Drop")
+    serpent_antidote = other_drop("Serpent: Antidote Drop")
+    serpent_5c = other_drop("Serpent: Small Silver Drop")
+    embalmed_bandage = other_drop("Embalmed: Cloth Bandage Drop")
+    embalmed_ashes = other_drop("Embalmed: Ashes Drop")
+    embalmed_bones = other_drop("Embalmed: Bones Drop")
+    #  Terminus Prison
+    jailor_drop = unique_drop("Jailor: Jailor's Candle Drop")
+    jailor_10c = other_drop("Jailor: Medium Silver Drop")
+    jailor_candle = other_drop("Jailor: Spectral Candle Drop")
+    jailor_bandage = other_drop("Jailor: Cloth Bandage Drop")
+    jailor_health_vial = other_drop("Jailor: Health Vial Drop")
+    jailor_angel = other_drop("Jailor: Angel's Feather Drop")
+    lunam_ectoplasm = other_drop("Cerritulus Lunam: Ectoplasm Drop")
+    lunam_10c = other_drop("Cerritulus Lunam: Medium Silver Drop")
+    lunam_snowflake_obsidian = other_drop("Cerritulus Lunam: Snowflake Obsidian Drop")
+    giant_dark_urn = other_drop("Giant Skeleton: Dark Urn Drop")
+    giant_bones = other_drop("Giant Skeleton: Bones Drop")
+    giant_mana_vial = other_drop("Giant Skeleton: Mana Vial Drop")
+    giant_onyx = other_drop("Giant Skeleton: Onyx Drop")
+    giant_spell = unique_drop("Giant Skeleton: Dark Skull Drop")
+    #  Forlorn Arena
+    sucsarian_drop_1 = unique_drop("Sucsarian: Sucsarian Dagger Drop")
+    sucsarian_drop_2 = unique_drop("Sucsarian: Sucsarian Spear Drop")
+    sucsarian_10c = other_drop("Sucsarian: Medium Silver Drop")
+    sucsarian_obsidian = other_drop("Sucsarian: Obsidian Drop")
+    sucsarian_snowflake_obsidian = other_drop("Sucsarian: Snowflake Obsidian Drop")
+    sucsarian_throwing_knife = other_drop("Sucsarian: Throwing Knife Drop")
+    vesta_fairy_moss = other_drop("Vesta: Fairy Moss Drop")
+    vesta_yellow_morel = other_drop("Vesta: Yellow Morel Drop")
+    vesta_dest_angel = other_drop("Vesta: Destroying Angel Mushroom Drop")
+    ceres_fairy_moss = other_drop("Ceres: Fairy Moss Drop")
+    ceres_yellow_morel = other_drop("Ceres: Yellow Morel Drop")
+    ceres_dest_angel = other_drop("Ceres: Destroying Angel Mushroom Drop")
+    gloom_fairy_moss = other_drop("Gloom Wood: Fairy Moss Drop")
+    gloom_health_vial = other_drop("Gloom Wood: Health Vial Drop")
+    gloom_dest_angel = other_drop("Gloom Wood: Destroying Angel Mushroom Drop")
+    #  Labyrinth of Ash
+    cetea_drop = unique_drop("Cetea: Tornado Drop")
+    cetea_10c = other_drop("Cetea: Medium Silver Drop")
+    cetea_ocean_bone_shell = other_drop("Cetea: Ocean Bone Shell Drop")
+
+
+all_drops = unique_drop_locations + other_drop_locations
+all_drops_by_enemy: Dict[str, List[str]] = {}
+
+for location in all_drops:
+    enemy = location.split(": ")[0]
+    if enemy not in all_drops_by_enemy:
+        all_drops_by_enemy[enemy] = [location]
+        continue
+    all_drops_by_enemy[enemy].append(location)
+
