@@ -87,7 +87,8 @@ consistent_regions = [
     RegionData(LunacidRegion.sand_temple),
     RegionData(LunacidRegion.terminus_prison_upstairs),
     RegionData(LunacidRegion.terminus_prison_dark, [LunacidEntrance.prison_to_ash, LunacidEntrance.prison_to_arena]),
-    RegionData(LunacidRegion.labyrinth_of_ash),
+    RegionData(LunacidRegion.labyrinth_of_ash, [LunacidEntrance.labyrinth_of_ash_to_holy_seat_of_gold]),
+    RegionData(LunacidRegion.holy_seat_of_gold),
     RegionData(LunacidRegion.forlorn_arena, [LunacidEntrance.arena_to_fate]),
     RegionData(LunacidRegion.chamber_of_fate, [LunacidEntrance.fate_to_sleeper]),
     RegionData(LunacidRegion.grave_of_the_sleeper),
@@ -109,7 +110,8 @@ consistent_regions = [
     RegionData(LunacidRegion.castle_le_fanu_red),
     RegionData(LunacidRegion.castle_le_fanu_white, [LunacidEntrance.white_to_blue, LunacidEntrance.white_to_throne]),
     RegionData(LunacidRegion.castle_le_fanu_blue, [LunacidEntrance.castle_to_grotto, LunacidEntrance.castle_to_ballroom]),
-    RegionData(LunacidRegion.boiling_grotto, [LunacidEntrance.grotto_to_tower, LunacidEntrance.grotto_to_sand]),
+    RegionData(LunacidRegion.boiling_grotto, [LunacidEntrance.grotto_to_tower, LunacidEntrance.grotto_to_secret, LunacidEntrance.grotto_to_sand]),
+    RegionData(LunacidRegion.boiling_grotto_secret),
     RegionData(LunacidRegion.throne_chamber, [LunacidEntrance.throne_to_prison]),
     RegionData(LunacidRegion.terminus_prison, [LunacidEntrance.prison_to_prison_upstairs, LunacidEntrance.prison_to_prison_dark]),
 ]
@@ -161,6 +163,8 @@ consistent_entrances = [
     ConnectionData(LunacidEntrance.castle_to_ballroom, LunacidRegion.sealed_ballroom, flag=RandomizationFlag.RANDOMIZED),
     ConnectionData(LunacidEntrance.castle_to_grotto, LunacidRegion.boiling_grotto, flag=RandomizationFlag.RANDOMIZED),
     ConnectionData(LunacidEntrance.throne_to_prison, LunacidRegion.terminus_prison, flag=RandomizationFlag.RANDOMIZED),
+    ConnectionData(LunacidEntrance.labyrinth_of_ash_to_holy_seat_of_gold, LunacidRegion.holy_seat_of_gold),
+    ConnectionData(LunacidEntrance.grotto_to_secret, LunacidRegion.boiling_grotto_secret),
 ]
 
 

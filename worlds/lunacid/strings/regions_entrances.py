@@ -21,6 +21,7 @@ class LunacidRegion:
     castle_le_fanu_blue = "Castle Le Fanu Blue Area"
     castle_le_fanu_red = "Castle Le Fanu Red Area"
     boiling_grotto = "Boiling Grotto"
+    boiling_grotto_secret = "Boiling Grotto Secret"
     forbidden_archives_1 = "Forbidden Archives 1F"
     forbidden_archives_2 = "Forbidden Archives 2F"
     forbidden_archives_3 = "Forbidden Archives 3F"
@@ -36,6 +37,7 @@ class LunacidRegion:
     terminus_prison_dark = "Terminus Prison Dark Areas"
     tower_abyss = "Tower of Abyss"
     labyrinth_of_ash = "Labyrinth of Ash"
+    holy_seat_of_gold = "Holy Seat of Gold"
     forlorn_arena = "Forlorn Arena"
     chamber_of_fate = "Chamber of Fate"
     grave_of_the_sleeper = "Grave of the Sleeper"
@@ -85,6 +87,7 @@ class LunacidEntrance:
     castle_to_grotto = "Castle Le Fanu Blue Area to Boiling Grotto"
     throne_to_prison = "Throne Chamber to Terminus Prison"
     grotto_to_tower = "Boiling Grotto to Tower of Abyss"
+    grotto_to_secret = "Boiling Grotto to Boiling Grotto Secret"
     prison_to_ash = "Terminus Prison Dark Areas to Labyrinth of Ash"
     prison_to_arena = "Terminus Prison Dark Areas to Forlorn Arena"
     arena_to_fate = "Forlorn Arena to Chamber of Fate"
@@ -94,6 +97,7 @@ class LunacidEntrance:
     prison_to_prison_dark = "Terminus Prison to Terminus Prison Dark Areas"
     yosei_lower_to_patchouli = "Yosei Lower to Patchouli"
     prison_to_prison_upstairs = "Terminus Prison to Terminus Prison Upstairs"
+    labyrinth_of_ash_to_holy_seat_of_gold = "Labyrinth of Ash to Holy Seat of Gold"
 
     # Used for yosei starting
     yosei_to_wings_rest = "Yosei Forest to Wing's Rest"
