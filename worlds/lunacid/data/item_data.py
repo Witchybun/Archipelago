@@ -3,7 +3,8 @@ from typing import List
 from BaseClasses import ItemClassification
 
 from .game_item import GameItem
-from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives, RareDrops, UnusedItems
+from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives, RareDrops, \
+    Upgrade, Voucher
 
 
 @dataclass(frozen=True)
@@ -73,25 +74,29 @@ dusty_crystal_orb = create_item(46, UniqueItem.dusty_crystal_orb, ItemClassifica
 skeleton_rattle = create_item(47, UniqueItem.skeleton_rattle, ItemClassification.useful)
 shrimp = create_item(48, RareDrops.shrimp, ItemClassification.filler)
 angel_feather = create_item(49, RareDrops.angel_feather, ItemClassification.filler)
-tent = create_item(50, UnusedItems.tent, ItemClassification.useful)
-fire_opal = create_item(51, Alchemy.fire_opal, ItemClassification.filler)
-lotus_seed_pod = create_item(52, Alchemy.lotus_seed_pod, ItemClassification.filler)
-onyx = create_item(53, Alchemy.onyx, ItemClassification.filler)
-destroying_angel_mushroom = create_item(54, Alchemy.destroying_angel_mushroom, ItemClassification.filler)
-ocean_bone_shard = create_item(55, Alchemy.ocean_bone_shard, ItemClassification.filler)
-ocean_bone_shell = create_item(56, Alchemy.ocean_bone_shell, ItemClassification.filler)
-yellow_morel = create_item(57, Alchemy.yellow_morel, ItemClassification.filler)
-bloodweed = create_item(58, Alchemy.bloodweed, ItemClassification.filler)
-opal = create_item(59, Alchemy.opal, ItemClassification.filler)
-obsidian = create_item(60, Alchemy.obsidian, ItemClassification.filler)
-ikurrilb_root = create_item(61, Alchemy.ikurrilb_root, ItemClassification.filler)
+fire_opal = create_item(50, Alchemy.fire_opal, ItemClassification.filler)
+lotus_seed_pod = create_item(51, Alchemy.lotus_seed_pod, ItemClassification.filler)
+onyx = create_item(52, Alchemy.onyx, ItemClassification.filler)
+destroying_angel_mushroom = create_item(53, Alchemy.destroying_angel_mushroom, ItemClassification.filler)
+ocean_bone_shard = create_item(54, Alchemy.ocean_bone_shard, ItemClassification.filler)
+ocean_bone_shell = create_item(55, Alchemy.ocean_bone_shell, ItemClassification.filler)
+yellow_morel = create_item(56, Alchemy.yellow_morel, ItemClassification.filler)
+bloodweed = create_item(57, Alchemy.bloodweed, ItemClassification.filler)
+opal = create_item(58, Alchemy.opal, ItemClassification.filler)
+obsidian = create_item(59, Alchemy.obsidian, ItemClassification.filler)
+ikurrilb_root = create_item(60, Alchemy.ikurrilb_root, ItemClassification.filler)
+initial_voucher = create_item(61, Voucher.sheryl_initial_voucher, ItemClassification.useful)
+golden_voucher = create_item(62, Voucher.sheryl_golden_voucher, ItemClassification.useful)
+dreamer_voucher = create_item(63, Voucher.sheryl_dreamer_voucher, ItemClassification.progression)
+simp_voucher = create_item(64, Voucher.patchouli_simp_discount, ItemClassification.useful)
+
 
 
 item_light_sources = [UniqueItem.crystal_lantern, UniqueItem.oil_lantern]
 money = [silver]
 
 all_item_data_by_name = {item.name: item for item in all_items}
-all_filler_items = {item for item in all_items if item.classification == ItemClassification.filler}
+all_filler_items = {item.name for item in all_items if item.classification == ItemClassification.filler}
 max_item_count_by_item = {
     black_book: 3,
     earth_talisman: 1,
