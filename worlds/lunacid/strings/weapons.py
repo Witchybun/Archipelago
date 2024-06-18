@@ -69,3 +69,17 @@ class Weapon:
     silver_rapier = "Silver Rapier"
     heritage_sword = "Heritage Sword"
 
+    base_weapons = [replica_sword, torch, ritual_dagger, wooden_shield, stone_club, steel_spear, battle_axe,
+                    broken_hilt, corrupted_dagger, dark_rapier, halberd, blade_of_jusztina,
+                    twisted_staff, vampire_hunter_sword, elfen_bow, elfen_sword, wolfram_greatsword,
+                    axe_of_harming,  wand_of_power, blade_of_ophelia, marauder_black_flail,
+                    blessed_wind, iron_claw, moonlight, broken_lance, fishing_spear, hammer_of_cruelty,
+                    obsidian_seal, shadow_blade,  serpent_fang, lucid_blade,
+                    ]
+
+    shop_weapons = [rapier, crossbow, jotunn_slayer, privateer_musket, steel_needle]
+
+    drop_weapons = [rusted_sword, ice_sickle, skeleton_axe, cursed_blade, obsidian_cursebrand,
+                    obsidian_poisonguard, golden_kopesh, golden_sickle, brittle_arming_sword,
+                    jailor_candle, lyrian_longsword, sucsarian_spear, sucsarian_dagger,
+                    ]
