@@ -94,15 +94,31 @@ class RandomElements(Toggle):
 
 
 class Shopsanity(Toggle):
-    """Choose whether the unique items Sheryl the Crow sells are locations."""
+    """Choose whether the unique items Sheryl the Crow sells are locations.
+    Adds 9 locations."""
     internal_name = "shopsanity"
     display_name = "Shuffle Shop Items"
 
 
-class Dropsanity(Toggle):
-    """Choose whether the unique items monsters drop are locations."""
+class Dropsanity(Choice):
+    """Choose whether the items monsters drop are locations.
+    Off: All drops are vanilla.
+    Uniques: Only the unique first-drop items (weapons, spells, elixirs) are locations.  Adds 19 locations.
+    Randomized: Each drop is a location.  WARNING SOME DROPS ARE HORRIBLE TO GET.  Adds 143 locations."""
     internal_name = "dropsanity"
     display_name = "Mob Drops"
+    option_off = 0
+    option_uniques = 1
+    option_randomized = 2
+    default = 0
+
+
+class NormalizedDrops(Toggle):
+    """Every enemy drop is normalized against the chance of dropping nothing.  Specifically, if an enemy
+    has a weight of X to drop nothing, everything else also has a weight of X, and is split evenly for every
+    item it could drop.  Helps with the sin of the Angel Feather."""
+    internal_name = "normalized_drops"
+    display_name = "Normalized Drops"
 
 
 class SwitchLocks(Toggle):
@@ -128,14 +144,14 @@ class SecretDoorLock(Toggle):
 class ExcludeTower(Toggle):
     """Option to not include the entirety of Tower of Abyss, as it can be time-consuming.
     Will remove the Tower of Abyss Keyring (if Door Locks is Chosen), Crystal Lamp, Moonlight,
-    and an Earth and Ocean Elixir from the pool."""
+    and an Earth and Ocean Elixir from the pool.  Removes 11 locations."""
     internal_name = "exclude_tower"
     display_name = "Exclude Tower"
 
 
 class ExcludeCoinLocations(Toggle):
     """Excludes the locations where one has to shoot a blood spell in the Temple of Silence, Kill the Jotunn, and kill Death.
-    Perhaps it just makes you feel bad.  With this the locations just don't give anything."""
+    Perhaps it just makes you feel bad.  With this the locations just don't give anything.  Removes 3 locations."""
     internal_name = "exclude_coin_locations"
     display_name = "Exclude Coin Locations"
 
@@ -184,6 +200,7 @@ class LunacidOptions(PerGameCommonOptions):
     total_strange_coin: TotalStrangeCoins
     shopsanity: Shopsanity
     dropsanity: Dropsanity
+    normalized_drops: NormalizedDrops
     secret_door_lock: SecretDoorLock
     switch_locks: SwitchLocks
     door_locks: DoorLocks
