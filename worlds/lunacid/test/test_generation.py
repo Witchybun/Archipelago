@@ -6,8 +6,6 @@ from BaseClasses import CollectionState, MultiWorld
 from . import LunacidTestBase, setup_solo_multiworld, LunacidTestCase
 from .. import Endings, Options
 from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions
-from ..data import item_count_data
-from ..data.item_count_data import base_weapons, base_spells
 from ..data.location_data import *
 from ..data.spell_data import all_spells, drop_spells
 from ..strings.items import Switch
@@ -79,7 +77,7 @@ class TestEndingE(LunacidTestBase):
         return state.has_all(every_spell, self.player) and self.can_reach_all_regions(self.multiworld.state, mob_spell_regions)
 
     def test_if_goal_can_be_true(self):
-        self.collect_by_name([spell for spell in item_count_data.base_spells])
+        self.collect_by_name([spell for spell in Spell.base_spells])
         self.collect_by_name([UniqueItem.white_tape])
         symbol = self.get_item_by_name("Progressive Vampiric Symbol")
         self.collect([symbol, symbol, symbol])
@@ -97,7 +95,7 @@ class TestEndingE(LunacidTestBase):
 
 class TestEndingEButDropsanity(LunacidTestBase):
     options = {"ending": "ending_e",
-               "dropsanity": "true"}
+               "dropsanity": "randomized"}
 
     def has_spell(self, spell: str, state: CollectionState):
         return state.has(spell, self.player)
@@ -108,7 +106,7 @@ class TestEndingEButDropsanity(LunacidTestBase):
         return state.has_all(every_spell, self.player)
 
     def test_goal_state(self):
-        every_spell = list(set.union(set(item_count_data.base_spells), set(item_count_data.drop_spells)))
+        every_spell = list(set.union(set(Spell.base_spells), set(MobSpell.drop_spells)))
         self.assertFalse(self.multiworld.state.can_reach(LunacidRegion.chamber_of_fate, "Region", self.player))
         self.collect_by_name([Weapon.torch, Progressives.vampiric_symbol, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman])
 
@@ -155,7 +153,7 @@ class SwitchLockRegionTestsEndingE(LunacidTestBase):
     def test_switch_reachability(self):
         state = self.multiworld.state
         player = self.player
-        every_spell = item_count_data.base_spells
+        every_spell = Spell.base_spells
         self.collect_by_name([Weapon.torch, Progressives.vampiric_symbol, UniqueItem.terminus_prison_key, UniqueItem.water_talisman, UniqueItem.earth_talisman])
         self.assertFalse(state.can_reach(LunacidRegion.temple_of_silence_interior, "Region", player))
         self.collect_by_name(Switch.temple_switch)
@@ -223,13 +221,13 @@ class DustyTestER(LunacidTestBase):
 class DuplicateTest(LunacidTestBase):
     def test_base_duplicate_weapons(self):
         world = self.multiworld
-        for weapon in base_weapons:
+        for weapon in Weapon.base_weapons:
             count = 0
             for item in world.itempool:
                 if item.name == weapon:
                     count += 1
             self.assertTrue(count < 2, "There are duplicate weapons.")
-        for spell in base_spells:
+        for spell in Spell.base_spells:
             count = 0
             for item in world.itempool:
                 if item.name == spell:
