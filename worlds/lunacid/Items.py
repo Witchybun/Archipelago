@@ -8,16 +8,16 @@ from typing import Dict, List, Union, Protocol
 from . import Weapon
 from .Options import LunacidOptions
 from .data.door_data import all_doors
-from .data.location_data import base_locations, shop_locations, mob_drop_locations
+from .data.location_data import base_locations, shop_locations, unique_drop_locations
 from .data.item_data import all_items
-from .data.item_count_data import (base_weapons, base_spells, base_special_item_counts, base_unique_items, shop_weapons, shop_unique_items, shop_item_count,
-                                   drop_weapons, drop_spells, switches, filler_items, traps, doors_no_tower, crafted_items, drop_items)
 from .data.switch_data import all_switches
 from .data.trap_data import all_traps
 from .data.weapon_data import all_weapons, starting_weapon, shop_starting_weapons, drop_starting_weapons, ranged_weapons, weapons_by_element
 from .data.spell_data import all_spells, all_spells_by_name, starting_spells, drop_starting_spells, ranged_spells, spells_by_element
-from .strings.items import UniqueItem, Progressives, Coins, Door
+from .strings.items import UniqueItem, Coins, Door, Voucher, base_unique_items, \
+    base_special_item_counts, shop_unique_items, shop_item_count, Switch, filler_items, crafted_items, drop_items, Trap
 from .strings.properties import Elements, Types
+from .strings.spells import Spell, MobSpell
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class LunacidItemFactory(Protocol):
         raise NotImplementedError
 
 
-all_locations = base_locations + shop_locations + mob_drop_locations
+all_locations = base_locations + shop_locations + unique_drop_locations
 
 
 def initialize_items_by_name() -> List[ItemDict]:
@@ -119,7 +119,7 @@ def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict
 
 
 def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict[str, str], options: LunacidOptions, items: List[Item]):
-    for item in base_weapons:
+    for item in Weapon.base_weapons:
         if item == Weapon.moonlight and options.exclude_tower == options.exclude_tower.option_true:
             continue
         if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
@@ -129,15 +129,15 @@ def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict
         else:
             items.append(item_factory(item))
     if options.shopsanity == options.shopsanity.option_true:
-        for item in shop_weapons:
+        for item in Weapon.shop_weapons:
             if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
                 items.append(item_factory(item, ItemClassification.progression))
             elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
                 items.append(item_factory(item, ItemClassification.progression))
             else:
                 items.append(item_factory(item))
-    if options.dropsanity == options.dropsanity.option_true:
-        for item in drop_weapons:
+    if options.dropsanity != options.dropsanity.option_off:
+        for item in Weapon.drop_weapons:
             if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
                 items.append(item_factory(item, ItemClassification.progression))
             elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
@@ -151,7 +151,7 @@ def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[
     force_progressive = False
     if options.ending == options.ending.option_ending_e:
         force_progressive = True
-    for item in base_spells:
+    for item in Spell.base_spells:
         if all_spells_by_name[item].style == Types.support:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
         elif equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
@@ -160,8 +160,8 @@ def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[
             items.append(item_factory(item, ItemClassification.progression))
         else:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
-    if options.dropsanity == options.dropsanity.option_true:
-        for item in drop_spells:
+    if options.dropsanity != options.dropsanity.option_off:
+        for item in MobSpell.drop_spells:
             if all_spells_by_name[item].style == Types.support:
                 items.append(item_factory(item, determine_item_classification(item, force_progressive)))
             elif equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
@@ -177,7 +177,7 @@ def determine_starting_weapon(random: Random, options: LunacidOptions):
     starting_selection = starting_weapon + starting_spells
     if options.shopsanity == options.shopsanity.option_true:
         starting_selection += shop_starting_weapons
-    if options.dropsanity == options.dropsanity.option_true:
+    if options.dropsanity != options.dropsanity.option_off:
         starting_selection += drop_starting_weapons + drop_starting_spells
     chosen_weapon_name = random.choice(starting_selection)
     return chosen_weapon_name
@@ -211,6 +211,14 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
             items.append(item_factory(item))
         for item in shop_item_count:
             items.extend([item_factory(filler) for filler in [item] * shop_item_count[item]])
+        for item in Voucher.vouchers:
+            items.append(item_factory(item, ItemClassification.progression))
+    else:
+        for item in Voucher.vouchers:
+            items.append(item_factory(item))
+
+    #  if options.movement_items == options.movement_items.option_true:
+    #    items.extend(item_factory(jump_item) for jump_item in [Upgrade.jump_power] * 4)
     create_strange_coins(item_factory, options, items)
     return items
 
@@ -233,7 +241,7 @@ def create_strange_coins(item_factory: LunacidItemFactory, options: LunacidOptio
 def create_switch_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
     if options.switch_locks == options.switch_locks.option_false:
         return items
-    for item in switches:
+    for item in Switch.switches:
         items.append(item_factory(item))
     return items
 
@@ -241,7 +249,7 @@ def create_switch_items(item_factory: LunacidItemFactory, options: LunacidOption
 def create_door_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]):
     if options.door_locks == options.door_locks.option_false:
         return items
-    for key in doors_no_tower:
+    for key in Door.doors_no_tower:
         items.append(item_factory(key))
     if options.exclude_tower == options.exclude_tower.option_false:
         items.append(item_factory(Door.tower_key))
@@ -256,7 +264,7 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
         filler_list.extend(crafted_items)
     if options.drop_filler == options.drop_filler.option_true:
         filler_list.extend(drop_items)
-    trap_list = traps.copy()
+    trap_list = Trap.all_traps.copy()
     trap_percent = options.trap_percent.value / 100
     filler_count = filler_slots
     if trap_percent != 0:
@@ -268,10 +276,3 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
 
 
 all_filler = [item for item in item_table if item.classification is ItemClassification.filler]
-
-group_table: Dict[str, List[str]] = {
-    "vampiric symbol": [Progressives.vampiric_symbol],
-    "switch": switches,
-    "vhs": [UniqueItem.vhs_tape, UniqueItem.white_tape],
-    "talisman": [UniqueItem.earth_talisman, UniqueItem.water_talisman]
-}

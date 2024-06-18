@@ -70,11 +70,7 @@ class UniqueItem:
 class RareDrops:
     angel_feather = "Angel Feather"
     shrimp = "Pink Shrimp"
-
-
-class UnusedItems:
-    tent = "Tent"
-    curry = "Curry"
+    fools_gold = "Fool's Gold"
 
 
 class Progressives:
@@ -82,15 +78,88 @@ class Progressives:
 
 
 class Coins:
-    silver_5 = "Silver (5)"
-    silver_2 = "Silver (2)"
-    silver_50 = "Silver (50)"
-    silver_100 = "Silver (100)"
     silver = "Silver"
     strange_coin = "Strange Coin"
 
 
-class Traps:
+base_unique_items = [
+    UniqueItem.vhs_tape,
+    UniqueItem.corrupted_key,
+    UniqueItem.white_tape,
+    UniqueItem.skull_of_josiah,
+    Alchemy.fractured_life,
+    UniqueItem.earth_talisman,
+    UniqueItem.enchanted_key,
+    UniqueItem.terminus_prison_key,
+    Alchemy.broken_sword,
+    Alchemy.fractured_death,
+    UniqueItem.water_talisman,
+    UniqueItem.skeleton_egg,
+    UniqueItem.dried_rat,
+    UniqueItem.dusty_crystal_orb,
+    UniqueItem.skeleton_rattle
+]
+
+base_special_item_counts = {
+    UniqueItem.black_book: 3,
+    Progressives.vampiric_symbol: 3,
+    UniqueItem.ocean_elixir: 6,
+    UniqueItem.earth_elixir: 9,
+}
+
+filler_items = [
+    Creation.crystal_shard,
+    Creation.health_vial,
+    Creation.mana_vial,
+    Creation.antidote,
+    GenericItem.blood_wine,
+    UniqueItem.survey_banner,
+    Coins.silver,
+    GenericItem.dark_urn,
+    GenericItem.light_urn,
+    Alchemy.ashes,
+    GenericItem.cloth_bandage,
+    Alchemy.ectoplasm,
+    Alchemy.snowflake_obsidian,
+    Alchemy.moon_petal,
+    Alchemy.opal,
+    Alchemy.fire_opal,
+    Alchemy.ikurrilb_root,
+    Alchemy.onyx,
+    Alchemy.obsidian,
+    Alchemy.ocean_bone_shell,
+    Alchemy.ocean_bone_shard,
+    Alchemy.destroying_angel_mushroom,
+    Alchemy.yellow_morel,
+    Alchemy.bloodweed,
+    Alchemy.lotus_seed_pod,
+]
+
+crafted_items = [
+    Creation.poison_throwing_knife,
+    Creation.holy_water,
+    Creation.spectral_candle,
+    Creation.staff_of_osiris,
+    Creation.moonlight_vial,
+    Creation.wisp_heart,
+    Creation.fairy_moss,
+    Creation.bomb,
+    Creation.poison_urn, ]
+
+drop_items = [
+    RareDrops.shrimp,
+    RareDrops.angel_feather,
+    RareDrops.fools_gold
+]
+
+shop_unique_items = [UniqueItem.oil_lantern,
+                     UniqueItem.enchanted_key
+                     ]
+
+shop_item_count = {UniqueItem.ocean_elixir: 2}
+
+
+class Trap:
     health_viai = "Health ViaI"
     blindness_trap = "Blindness Trap"
     slowness_trap = "Slowness Trap"
@@ -101,6 +170,10 @@ class Traps:
     bleed_trap = "Bleed Trap"
     eggnog = "Eggnog"
     coal = "Coal"
+
+    all_traps = [health_viai, slowness_trap, bleed_trap, curse_trap, blindness_trap, mana_drain_trap,
+                 xp_drain_trap, poison_trap, eggnog, coal
+                 ]
 
 
 class Switch:
@@ -119,6 +192,12 @@ class Switch:
     arena_water_switch = "Temple of Water Switch Key"
     arena_earth_switch = "Temple of Earth Switch Key"
     ash_switch = "Labyrinth of Ash Switch Key"
+
+    switches = [hollow_basin_switch_near_demi, temple_switch, fetid_mire_switch, archives_switch,
+                archives_elevator_switches, tomb_switches, tomb_light_switches, ballroom_switch,
+                grotto_valves_switches, grotto_switches, prison_shortcut_switch, prison_arena_switch,
+                arena_water_switch, arena_earth_switch, ash_switch,
+                ]
 
 
 class Door:
@@ -142,3 +221,28 @@ class Door:
     sleeper_key = "Dreamer Key"
     ballroom_rooms_key = "Ballroom Side Rooms Keyring"
     tower_key = "Tower of Abyss Keyring"
+
+    doors_no_tower = [basin_temple_sewers, basin_broken_steps, basin_rickety_bridge, chasm_surface_door,
+                      ballroom_rooms_key, sleeper_key, sucs_key, ash_key, burning_key, forlorn_key,
+                      prison_key, ballroom_key, throne_key, archives_sealed_door, sea_double_doors,
+                      sea_eastward, sea_westward, forest_patchouli, forest_door_in_trees
+                      ]
+
+    all_door_keys = [basin_temple_sewers, basin_broken_steps, basin_rickety_bridge, chasm_surface_door,
+                     ballroom_rooms_key, sleeper_key, sucs_key, ash_key, burning_key, forlorn_key,
+                     prison_key, ballroom_key, throne_key, archives_sealed_door, sea_double_doors,
+                     sea_eastward, sea_westward, forest_patchouli, forest_door_in_trees, tower_key
+                     ]
+
+
+class Upgrade:
+    jump_power = "Progressive Jump Power"
+
+
+class Voucher:
+    sheryl_initial_voucher = "Sheryl's Initial Offerings Voucher"
+    sheryl_golden_voucher = "Sheryl's Golden Armor Voucher"
+    sheryl_dreamer_voucher = "Sheryl's Dreamer Voucher"
+    patchouli_simp_discount = "Patchouli's Drink Voucher"
+
+    vouchers = [sheryl_dreamer_voucher, sheryl_initial_voucher, sheryl_golden_voucher, patchouli_simp_discount]
