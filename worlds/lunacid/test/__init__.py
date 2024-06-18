@@ -27,7 +27,7 @@ def allsanity_options():
         Options.Ending.internal_name: Options.Ending.option_ending_e,
         Options.DoorLocks.internal_name: Options.DoorLocks.option_true,
         Options.Shopsanity.internal_name: Options.Shopsanity.option_true,
-        Options.Dropsanity.internal_name: Options.Dropsanity.option_true,
+        Options.Dropsanity.internal_name: Options.Dropsanity.option_randomized,
         Options.RequiredStrangeCoins.internal_name: 60,
         Options.RandomElements.internal_name: Options.RandomElements.option_true,
         Options.SecretDoorLock.internal_name: Options.SecretDoorLock.option_true,
@@ -104,10 +104,10 @@ class LunacidTestBase(WorldTestBase, LunacidTestCase):
         return should_run_default_tests
 
     def get_real_locations(self) -> List[Location]:
-        return [location for location in self.multiworld.get_locations(self.player) if not location.event]
+        return [location for location in self.multiworld.get_locations(self.player) if not location.is_event]
 
     def get_real_location_names(self) -> List[str]:
-        return [location.name for location in self.multiworld.get_locations(self.player) if not location.event]
+        return [location.name for location in self.multiworld.get_locations(self.player) if not location.is_event]
 
 
 pre_generated_worlds = {}
@@ -202,7 +202,7 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
         for i in range(1, len(test_options) + 1):
             player_options = test_options[i - 1]
             value = option(player_options[name]) if name in player_options else option.from_any(option.default)
-            Options.update({i: value})
+            options.update({i: value})
         setattr(args, name, options)
     multiworld.set_options(args)
 
