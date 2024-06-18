@@ -32,6 +32,14 @@ class Spell:
     wind_slicer = "Wind Slicer"
     jingle_bells = "Jingle Bells"
 
+    base_spells = [ghost_light, flame_spear, lithomancy, flame_flare, blood_strike, ice_spear, barrier,
+                   slime_orb, wind_dash, summon_fairy, coffin, lightning, blood_drain, holy_warmth,
+                   light_reveal, earth_strike, poison_mist, wind_slicer, corpse_transformation,
+                   fire_worm, bestial_communion, moon_beam, summon_ice_sword, earth_thorn, ice_tear,
+                   rock_bridge, ignis_calor, icarian_flight, blue_flame_arc, lava_chasm, spirit_warp,
+                   jingle_bells
+                   ]
+
 
 class MobSpell:
     summon_snail = "Summon Snail"
@@ -39,3 +47,5 @@ class MobSpell:
     tornado = "Tornado"
     dark_skull = "Dark Skull"
     quick_stride = "Quick Stride"
+
+    drop_spells = [summon_snail, summon_kodama, quick_stride, dark_skull, tornado]
