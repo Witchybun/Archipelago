@@ -30,7 +30,7 @@ def create_enemy(name: str, positions: List[str]):
 
 
 snail = create_enemy(Enemy.snail, [LunacidRegion.hollow_basin])
-milk_snail = create_enemy(Enemy.snail, [LunacidRegion.hollow_basin, LunacidRegion.forbidden_archives_3, LunacidRegion.forbidden_archives_1b])
+milk_snail = create_enemy(Enemy.milk_snail, [LunacidRegion.hollow_basin, LunacidRegion.forbidden_archives_3, LunacidRegion.forbidden_archives_1b])
 shulker = create_enemy(Enemy.shulker, [LunacidRegion.hollow_basin])
 mummy = create_enemy(Enemy.mummy, [LunacidRegion.temple_of_silence_interior])
 mummy_knight = create_enemy(Enemy.mummy_knight, [LunacidRegion.temple_of_silence_interior, LunacidRegion.temple_of_silence_secret])

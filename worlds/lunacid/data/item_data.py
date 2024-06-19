@@ -85,10 +85,11 @@ bloodweed = create_item(57, Alchemy.bloodweed, ItemClassification.filler)
 opal = create_item(58, Alchemy.opal, ItemClassification.filler)
 obsidian = create_item(59, Alchemy.obsidian, ItemClassification.filler)
 ikurrilb_root = create_item(60, Alchemy.ikurrilb_root, ItemClassification.filler)
-initial_voucher = create_item(61, Voucher.sheryl_initial_voucher, ItemClassification.useful)
-golden_voucher = create_item(62, Voucher.sheryl_golden_voucher, ItemClassification.useful)
-dreamer_voucher = create_item(63, Voucher.sheryl_dreamer_voucher, ItemClassification.progression)
-simp_voucher = create_item(64, Voucher.patchouli_simp_discount, ItemClassification.useful)
+fools_gold = create_item(61, RareDrops.fools_gold, ItemClassification.filler)
+initial_voucher = create_item(62, Voucher.sheryl_initial_voucher, ItemClassification.useful)
+golden_voucher = create_item(63, Voucher.sheryl_golden_voucher, ItemClassification.useful)
+dreamer_voucher = create_item(64, Voucher.sheryl_dreamer_voucher, ItemClassification.progression)
+simp_voucher = create_item(65, Voucher.patchouli_simp_discount, ItemClassification.useful)
 
 
 
