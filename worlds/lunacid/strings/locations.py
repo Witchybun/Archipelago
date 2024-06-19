@@ -354,6 +354,7 @@ class DropLocation:
     vampire_5c = other_drop("Vampire: Small Silver Drop")
     vampire_vampiric_ashes = other_drop("Vampire: Vampiric Ashes Drop")
     vampire_bandage = other_drop("Vampire: Cloth Bandage Drop")
+    vampire_page_ashes = other_drop("Vampire Page: Vampiric Ashes Drop")
     vampire_20c = other_drop("Vampire Page: Large Silver Drop")
     malformed_vampiric_ashes = other_drop("Malformed: Vampiric Ashes Drop")
     great_bat_health_vial = other_drop("Great Bat: Health Vial Drop")
