@@ -6,9 +6,11 @@ from BaseClasses import CollectionState, MultiWorld
 from . import LunacidTestBase, setup_solo_multiworld, LunacidTestCase
 from .. import Endings, Options
 from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions
+from ..data.enemy_data import all_enemies_by_name
 from ..data.location_data import *
 from ..data.spell_data import all_spells, drop_spells
-from ..strings.items import Switch
+from ..strings.enemies import Enemy
+from ..strings.items import Switch, Door
 
 
 class TestAllLocationsAppended(LunacidTestBase):
@@ -90,6 +92,8 @@ class TestEndingE(LunacidTestBase):
             for item in self.multiworld.itempool:
                 if item.name == spell:
                     does_exist = True
+            if self.multiworld.get_location(BaseLocation.hollow_basin_starting_sword, 1).item.name == spell:
+                does_exist = True
             self.assertTrue(does_exist, f"The spell {spell} does not exist in the itempool.")
 
 
@@ -371,3 +375,23 @@ class AnyEndingTests(LunacidTestBase):
         self.remove_by_name([UniqueItem.water_talisman, UniqueItem.earth_talisman])
         self.collect_by_name([Coins.strange_coin] * 20)
         self.assertTrue(self.can_win(state))
+
+
+class DropsanityAllTestsWithKeys(LunacidTestBase):
+    options = {"dropsanity": "randomized",
+               "door_locks": "true"}
+
+    def can_reach_any_region(self, state: CollectionState, spots: List[str]):
+        for spot in spots:
+            if state.can_reach_region(spot, self.player):
+                return True
+        return False
+
+    def test_if_drops_are_truly_locked_away(self):
+        state = self.multiworld.state
+        self.assertTrue(self.can_reach_region(LunacidRegion.hollow_basin))
+        self.assertTrue(self.can_reach_any_region(state, all_enemies_by_name[Enemy.milk_snail].regions))
+        self.assertTrue(self.can_reach_location(DropLocation.milk_ocean))
+        self.assertFalse(self.can_reach_location(DropLocation.necronomicon_5c))
+        self.collect_by_name(Door.basin_broken_steps)
+        self.assertTrue(self.can_reach_location(DropLocation.necronomicon_5c))
