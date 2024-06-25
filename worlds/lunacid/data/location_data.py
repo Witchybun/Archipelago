@@ -408,7 +408,7 @@ other_drop_locations = [  # The regions and drops are wrong, but are assigned el
     LocationData(502, DropLocation.vampire_vampiric_ashes, LunacidRegion.hollow_basin, Coins.silver),
     LocationData(503, DropLocation.vampire_bandage, LunacidRegion.hollow_basin, Coins.silver),
     LocationData(504, DropLocation.vampire_page_ashes, LunacidRegion.hollow_basin, Coins.silver),
-    LocationData(505, DropLocation.vampire_20c, LunacidRegion.hollow_basin, Coins.silver),
+    LocationData(505, DropLocation.vampire_page_20c, LunacidRegion.hollow_basin, Coins.silver),
     LocationData(506, DropLocation.malformed_vampiric_ashes, LunacidRegion.hollow_basin, Coins.silver),
     LocationData(507, DropLocation.great_bat_health_vial, LunacidRegion.hollow_basin, Coins.silver),
     LocationData(508, DropLocation.great_bat_obsidian, LunacidRegion.hollow_basin, Coins.silver),
@@ -467,6 +467,9 @@ other_drop_locations = [  # The regions and drops are wrong, but are assigned el
     LocationData(561, DropLocation.gloom_dest_angel, LunacidRegion.hollow_basin, Coins.silver),
     LocationData(562, DropLocation.cetea_10c, LunacidRegion.hollow_basin, Coins.silver),
     LocationData(563, DropLocation.cetea_ocean_bone_shell, LunacidRegion.hollow_basin, Coins.silver),
+    LocationData(564, DropLocation.mummy_knight_onyx, LunacidRegion.temple_of_silence_interior, Coins.silver),
+    LocationData(565, DropLocation.mummy_knight_10c, LunacidRegion.hollow_basin, Coins.silver),
+    LocationData(566, DropLocation.mummy_knight_5c, LunacidRegion.hollow_basin, Coins.silver),
 ]
 
 

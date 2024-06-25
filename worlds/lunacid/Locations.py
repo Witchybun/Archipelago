@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from .data.location_data import base_locations, shop_locations, unique_drop_locations, other_drop_locations
 
+LOCATION_CODE_START = 771111110
+
 
 @dataclass(frozen=True)
 class LocationDict:
@@ -16,13 +18,13 @@ def initialize_locations():
     other_drop_locations_cleaned = []
 
     for location in base_locations:
-        base_locations_cleaned.append(LocationDict(location.id, location.name, location.region))
+        base_locations_cleaned.append(LocationDict(LOCATION_CODE_START + location.id, location.name, location.region))
     for location in shop_locations:
-        shop_locations_cleaned.append(LocationDict(location.id, location.name, location.region))
+        shop_locations_cleaned.append(LocationDict(LOCATION_CODE_START + location.id, location.name, location.region))
     for location in unique_drop_locations:
-        unique_drop_locations_cleaned.append(LocationDict(location.id, location.name, location.region))
+        unique_drop_locations_cleaned.append(LocationDict(LOCATION_CODE_START + location.id, location.name, location.region))
     for location in other_drop_locations:
-        other_drop_locations_cleaned.append(LocationDict(location.id, location.name, location.region))
+        other_drop_locations_cleaned.append(LocationDict(LOCATION_CODE_START + location.id, location.name, location.region))
     locations = base_locations_cleaned + shop_locations_cleaned + unique_drop_locations_cleaned + other_drop_locations_cleaned
     return locations, base_locations_cleaned, shop_locations_cleaned, unique_drop_locations_cleaned, other_drop_locations_cleaned
 
