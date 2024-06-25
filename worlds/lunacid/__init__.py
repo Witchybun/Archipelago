@@ -12,9 +12,9 @@ from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
 from .strings.locations import BaseLocation, ShopLocation, unique_drop_locations, other_drop_locations
 from .Items import item_table, complete_items_by_name, ItemDict, create_items, determine_starting_weapon, \
-    determine_weapon_elements, all_filler
+    determine_weapon_elements, all_filler, ITEM_CODE_START
 from .Locations import (location_table, base_location_table, shop_locations_table, unique_drop_locations_table,
-                        LocationDict, other_drop_locations_table)
+                        LocationDict, other_drop_locations_table, LOCATION_CODE_START)
 from .Regions import link_lunacid_areas, create_regions
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
@@ -212,6 +212,7 @@ class LunacidWorld(World):
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "client_version": "0.6.0",
+            "starting_weapon": self.starting_weapon,
             "elements": self.weapon_elements,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
                                    "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "door_locks", "random_elements", "secret_door_lock",
@@ -222,7 +223,9 @@ class LunacidWorld(World):
         return slot_data
 
     # for the universal tracker, doesn't get called in standard gen
-    @staticmethod
-    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
         # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
+        self.starting_weapon = slot_data["starting_weapon"]
+        self.weapon_elements = slot_data["elements"]
+        self.randomized_entrances = slot_data["entrances"]
         return slot_data
