@@ -289,7 +289,7 @@ class LunacidRules:
             DropLocation.vampire_vampiric_ashes: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire].regions),
             DropLocation.vampire_bandage: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire].regions),
             DropLocation.vampire_page_ashes: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire_page].regions),
-            DropLocation.vampire_20c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire_page].regions),
+            DropLocation.vampire_page_20c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire_page].regions),
             DropLocation.malformed_vampiric_ashes: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.malformed].regions),
             DropLocation.great_bat_health_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_bat].regions),
             DropLocation.great_bat_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_bat].regions),
@@ -348,7 +348,9 @@ class LunacidRules:
             DropLocation.gloom_dest_angel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.gloom_wood].regions),
             DropLocation.cetea_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.cetea].regions),
             DropLocation.cetea_ocean_bone_shell: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.cetea].regions),
-
+            DropLocation.mummy_knight_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
+            DropLocation.mummy_knight_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
+            DropLocation.mummy_knight_5c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
         }
 
     def is_vampire(self, options: LunacidOptions):
