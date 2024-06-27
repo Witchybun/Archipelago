@@ -101,7 +101,7 @@ base_unique_items = [
 ]
 
 base_special_item_counts = {
-    UniqueItem.black_book: 3,
+    UniqueItem.black_book: 2,
     Progressives.vampiric_symbol: 3,
     UniqueItem.ocean_elixir: 6,
     UniqueItem.earth_elixir: 9,

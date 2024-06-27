@@ -218,6 +218,8 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
     else:
         for item in Voucher.vouchers:
             items.append(item_factory(item))
+    if options.dropsanity != options.dropsanity.option_off:
+        items.append(item_factory(UniqueItem.black_book))
 
     #  if options.movement_items == options.movement_items.option_true:
     #    items.extend(item_factory(jump_item) for jump_item in [Upgrade.jump_power] * 4)
