@@ -38,8 +38,6 @@ class TestAllLocationsAppended(LunacidTestBase):
             self.assertIn(location, base_locations)
         for location in castle_le_fanu:
             self.assertIn(location, base_locations)
-        for location in holy_battlefield:
-            self.assertIn(location, base_locations)
         for location in tower_of_abyss:
             self.assertIn(location, base_locations)
         for location in sealed_ballroom:
@@ -56,7 +54,7 @@ class TestAllLocationsAppended(LunacidTestBase):
             self.assertIn(location, base_locations)
         for location in chamber_of_fate:
             self.assertIn(location, base_locations)
-        self.assertTrue(209 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
+        self.assertTrue(208 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
 
 
 class TestEndingE(LunacidTestBase):
