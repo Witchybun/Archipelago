@@ -169,10 +169,6 @@ castle_le_fanu = [
     LocationData(154, BaseLocation.castle_upper_floor_coffin_hallway, LunacidRegion.castle_le_fanu_blue, Progressives.vampiric_symbol),
 ]
 
-holy_battlefield = [
-    LocationData(160, BaseLocation.battlefield_book, LunacidRegion.holy_battleground, UniqueItem.black_book),
-]
-
 sealed_ballroom = [
     LocationData(166, BaseLocation.ballroom_small_room_lounge, LunacidRegion.sealed_ballroom, GenericItem.blood_wine),
     LocationData(167, BaseLocation.ballroom_entry_hidden_couch_top, LunacidRegion.sealed_ballroom_secret, Weapon.steel_needle),
@@ -263,8 +259,8 @@ terminus_prison = [
 forlorn_arena = [
     LocationData(284, BaseLocation.arena_broken_sword, LunacidRegion.forlorn_arena, Alchemy.broken_sword),
     LocationData(285, BaseLocation.arena_rock_parkour, LunacidRegion.forlorn_arena, Creation.health_vial),
-    LocationData(286, BaseLocation.arena_earth_hidden_plant_haven, LunacidRegion.forlorn_arena, Weapon.shadow_blade),
-    LocationData(287, BaseLocation.arena_earth_hidden_room, LunacidRegion.forlorn_arena, UniqueItem.earth_elixir),
+    LocationData(286, BaseLocation.arena_earth_hidden_plant_haven, LunacidRegion.earth_temple_secret, Weapon.shadow_blade),
+    LocationData(287, BaseLocation.arena_earth_hidden_room, LunacidRegion.earth_temple_secret, UniqueItem.earth_elixir),
     LocationData(288, BaseLocation.arena_earth_earthen_temple, LunacidRegion.forlorn_arena, Alchemy.fractured_life),
     LocationData(289, BaseLocation.arena_earth_chest_near_switch, LunacidRegion.forlorn_arena, UniqueItem.earth_talisman),
     LocationData(290, BaseLocation.arena_water_room_near_water, LunacidRegion.forlorn_arena, Creation.fairy_moss),
@@ -296,7 +292,7 @@ chamber_of_fate = [
 ]
 
 base_locations = wings_rest + hollow_basin + great_well_surface + the_fetid_mire + the_sacrosant_sea + accursed_tomb + yosei_forest + \
-                 forest_canopy + forbidden_archives + castle_le_fanu + holy_battlefield + sealed_ballroom + laetus_chasm + throne_room + boiling_grotto + \
+                 forest_canopy + forbidden_archives + castle_le_fanu + sealed_ballroom + laetus_chasm + throne_room + boiling_grotto + \
                  tower_of_abyss + terminus_prison + forlorn_arena + labyrinth_of_ash + chamber_of_fate
 base_items: List[str] = []
 [base_items.append(location.original_item) for location in base_locations if location.original_item not in base_items]
@@ -470,6 +466,7 @@ other_drop_locations = [  # The regions and drops are wrong, but are assigned el
     LocationData(564, DropLocation.mummy_knight_onyx, LunacidRegion.temple_of_silence_interior, Coins.silver),
     LocationData(565, DropLocation.mummy_knight_10c, LunacidRegion.hollow_basin, Coins.silver),
     LocationData(566, DropLocation.mummy_knight_5c, LunacidRegion.hollow_basin, Coins.silver),
+    LocationData(567, DropLocation.sanguis_book, LunacidRegion.hollow_basin, Coins.silver),
 ]
 
 
