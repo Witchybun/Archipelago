@@ -83,3 +83,6 @@ class Weapon:
                     obsidian_poisonguard, golden_kopesh, golden_sickle, brittle_arming_sword,
                     jailor_candle, lyrian_longsword, sucsarian_spear, sucsarian_dagger,
                     ]
+
+    quench_weapons = [dark_greatsword, silver_rapier, shining_blade, poison_claw, iron_claw, iron_club, iron_torch, fire_sword, steel_lance, double_crossbow,
+                      elfen_longsword, steel_claw, steel_club, lyrian_greatsword, saint_ishii, heritage_sword]

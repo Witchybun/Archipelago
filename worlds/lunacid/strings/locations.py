@@ -384,7 +384,7 @@ class DropLocation:
     mimic_fools_gold = other_drop("Mimic: Fools Gold Drop")
     obsidian_skeleton_drop_1 = unique_drop("Obsidian Skeleton: Obsidian Cursebrand Drop")
     obsidian_skeleton_drop_2 = unique_drop("Obsidian Skeleton: Obsidian Poisonguard Drop")
-    obsidian_skeleton_10c = other_drop("Obsidian Skeleton: Medium Silver Drop")
+    obsidian_skeleton_10c = other_drop("Obsidian Skeleton: Large Silver Drop")
     obsidian_skeleton_bones = other_drop("Obsidian Skeleton: Bones Drop")
     obsidian_skeleton_mana_vial = other_drop("Obsidian Skeleton: Mana Vial Drop")
     obsidian_skeleton_obsidian = other_drop("Obsidian Skeleton: Obsidian Drop")
@@ -415,7 +415,7 @@ class DropLocation:
     #  Forlorn Arena
     sucsarian_drop_1 = unique_drop("Sucsarian: Sucsarian Dagger Drop")
     sucsarian_drop_2 = unique_drop("Sucsarian: Sucsarian Spear Drop")
-    sucsarian_10c = other_drop("Sucsarian: Medium Silver Drop")
+    sucsarian_10c = other_drop("Sucsarian: Large Silver Drop")
     sucsarian_obsidian = other_drop("Sucsarian: Obsidian Drop")
     sucsarian_snowflake_obsidian = other_drop("Sucsarian: Snowflake Obsidian Drop")
     sucsarian_throwing_knife = other_drop("Sucsarian: Throwing Knife Drop")
@@ -427,11 +427,12 @@ class DropLocation:
     ceres_dest_angel = other_drop("Ceres: Destroying Angel Mushroom Drop")
     gloom_fairy_moss = other_drop("Gloom Wood: Fairy Moss Drop")
     gloom_health_vial = other_drop("Gloom Wood: Health Vial Drop")
-    gloom_dest_angel = other_drop("Gloom Wood: Destroying Angel Mushroom Drop")
+    gloom_dest_angel = other_drop("Gloom Wood: Mana Vial Drop")
     #  Labyrinth of Ash
     cetea_drop = unique_drop("Cetea: Tornado Drop")
     cetea_10c = other_drop("Cetea: Medium Silver Drop")
     cetea_ocean_bone_shell = other_drop("Cetea: Ocean Bone Shell Drop")
+    sanguis_book = unique_drop("Sanguis Umbra: Black Book Drop")
 
 
 all_drops = unique_drop_locations + other_drop_locations
@@ -443,4 +444,26 @@ for location in all_drops:
         all_drops_by_enemy[enemy] = [location]
         continue
     all_drops_by_enemy[enemy].append(location)
+
+
+class Quench:
+    brittle_arming_sword = "Quench Brittle Arming Sword"
+    broken_hilt = "Quench Broken Hilt"
+    broken_lance = "Quench Broken Lance"
+    crossbow = "Crossbow"
+    elfen_sword = "Quench Elfen Sword"
+    iron_claw = "Quench Iron Claw"
+    iron_club = "Quench Iron Club"
+    lyrian_longsword = "Quench Lyrian Longsword"
+    obsidian_cursebrand = "Quench Obsidian Cursebrand"
+    obsidian_poisonguard = "Quench Obsidian Poisonguard"
+    obsidian_seal = "Quench Obsidian Seal"
+    rapier = "Quench Rapier"
+    replica_sword = "Quench Replica Sword"
+    rusted_sword = "Quench Rusted Sword"
+    shadow_blade = "Quench Shadow Blade"
+    shining_blde = "Quench Shining Blade"
+    steel_claw = "Quench Steel Claw"
+    stone_club = "Quench Stone Club"
+    torch = "Quench Torch"
 
