@@ -47,6 +47,7 @@ class LunacidRegion:
     patchouli = "Patchouli"
     sand_temple = "Sand Temple"
     terminus_prison_upstairs = "Terminus Prison Upstairs"
+    earth_temple_secret = "Earth Temple (Secret Rooms)"
 
 
 class LunacidEntrance:
@@ -105,4 +106,5 @@ class LunacidEntrance:
     temple_interior_to_temple_entrance = "Temple of Silence Interior to Temple of Silence Entrance"
     temple_interior_to_basin = "Temple of Silence Interior to Hollow Basin"
     temple_to_basin = "Temple of Silence Entrance to Hollow Basin"
+    arena_to_earth_secret = "Forlorn Arena to Temple of Earth (Secret Rooms)"
 
