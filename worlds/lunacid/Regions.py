@@ -89,7 +89,7 @@ consistent_regions = [
     RegionData(LunacidRegion.terminus_prison_dark, [LunacidEntrance.prison_to_ash, LunacidEntrance.prison_to_arena]),
     RegionData(LunacidRegion.labyrinth_of_ash, [LunacidEntrance.labyrinth_of_ash_to_holy_seat_of_gold]),
     RegionData(LunacidRegion.holy_seat_of_gold),
-    RegionData(LunacidRegion.forlorn_arena, [LunacidEntrance.arena_to_fate]),
+    RegionData(LunacidRegion.forlorn_arena, [LunacidEntrance.arena_to_fate, LunacidEntrance.arena_to_earth_secret]),
     RegionData(LunacidRegion.chamber_of_fate, [LunacidEntrance.fate_to_sleeper]),
     RegionData(LunacidRegion.grave_of_the_sleeper),
 
@@ -114,6 +114,7 @@ consistent_regions = [
     RegionData(LunacidRegion.boiling_grotto_secret),
     RegionData(LunacidRegion.throne_chamber, [LunacidEntrance.throne_to_prison]),
     RegionData(LunacidRegion.terminus_prison, [LunacidEntrance.prison_to_prison_upstairs, LunacidEntrance.prison_to_prison_dark]),
+    RegionData(LunacidRegion.earth_temple_secret)
 ]
 
 consistent_entrances = [
@@ -165,6 +166,7 @@ consistent_entrances = [
     ConnectionData(LunacidEntrance.throne_to_prison, LunacidRegion.terminus_prison, flag=RandomizationFlag.RANDOMIZED),
     ConnectionData(LunacidEntrance.labyrinth_of_ash_to_holy_seat_of_gold, LunacidRegion.holy_seat_of_gold),
     ConnectionData(LunacidEntrance.grotto_to_secret, LunacidRegion.boiling_grotto_secret),
+    ConnectionData(LunacidEntrance.arena_to_earth_secret, LunacidRegion.earth_temple_secret),
 ]
 
 
