@@ -133,6 +133,7 @@ class LunacidRules:
                                                          self.has_door_key(Door.sucs_key, state, self.world.options),
             LunacidEntrance.fate_to_sleeper: lambda state: self.has_door_key(Door.sleeper_key, state, self.world.options),
             LunacidEntrance.grotto_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
+            LunacidEntrance.arena_to_earth_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             }
 
         self.location_rules = {
@@ -148,9 +149,9 @@ class LunacidRules:
             BaseLocation.archives_strange_corpse: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.archives_hidden_room_lower: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.archives_hidden_room_upper: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.archives_daedalus_one: lambda state: state.has(UniqueItem.black_book, self.player),
-            BaseLocation.archives_daedalus_two: lambda state: state.has(UniqueItem.black_book, self.player, 2),
-            BaseLocation.archives_daedalus_third: lambda state: state.has(UniqueItem.black_book, self.player, 3),
+            BaseLocation.archives_daedalus_one: lambda state: self.has_black_book_count(self.world.options, state, 1),
+            BaseLocation.archives_daedalus_two: lambda state: self.has_black_book_count(self.world.options, state, 2),
+            BaseLocation.archives_daedalus_third: lambda state: self.has_black_book_count(self.world.options, state, 3),
             BaseLocation.sea_pillar: lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, self.player),
             BaseLocation.tomb_demi_chest: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             BaseLocation.chasm_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
@@ -189,8 +190,6 @@ class LunacidRules:
             BaseLocation.sand_second_floor_dead_end: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             BaseLocation.sand_chest_overlooking_crypt: lambda state: self.can_jump_given_height(state, "High", self.world.options),
             BaseLocation.sand_lunacid_sandwich: lambda state: state.has(Spell.spirit_warp, self.player),
-            BaseLocation.arena_earth_hidden_room: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.arena_earth_hidden_plant_haven: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.arena_water_hidden_alcove_before: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.arena_water_hidden_alcove_right: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.arena_water_hidden_alcove_left: lambda state: self.has_crystal_orb(state, self.world.options),
@@ -351,6 +350,7 @@ class LunacidRules:
             DropLocation.mummy_knight_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
             DropLocation.mummy_knight_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
             DropLocation.mummy_knight_5c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
+            DropLocation.sanguis_book: lambda state: state.can_reach_region(LunacidRegion.holy_battleground, self.player),
         }
 
     def is_vampire(self, options: LunacidOptions):
@@ -480,6 +480,19 @@ class LunacidRules:
 
     def has_coins_for_door(self, options: LunacidOptions, state: CollectionState):
         return state.has(Coins.strange_coin, self.player, options.required_strange_coin.value)
+
+    def has_black_book_count(self, options: LunacidOptions, state: CollectionState, amount: int):
+        if options.dropsanity == options.dropsanity.option_off:
+            can_reach_battle = state.can_reach_region(LunacidRegion.holy_battleground, self.player)
+            if amount == 1:
+                return can_reach_battle or state.has(UniqueItem.black_book, self.player)
+            if amount == 2:
+                split_case = can_reach_battle and state.has(UniqueItem.black_book, self.player)
+                return split_case or state.has(UniqueItem.black_book, self.player, 2)
+            if amount == 3:
+                return can_reach_battle and state.has(UniqueItem.black_book, self.player, 2)
+        else:
+            return state.has(UniqueItem.black_book, self.player, amount)
 
     def can_buy_jotunn(self, options: LunacidOptions, state: CollectionState):
         if options.shopsanity == options.shopsanity.option_true:
