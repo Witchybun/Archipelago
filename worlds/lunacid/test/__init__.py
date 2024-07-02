@@ -169,7 +169,7 @@ def parse_class_option_keys(test_options: dict) -> dict:
                 parsed_options[option.internal_name] = value
             else:
                 assert option in LunacidOptions.type_hints, \
-                    f"All keys of world_options must be a possible Stardew Valley option, {option} is not."
+                    f"All keys of world_options must be a possible Lunacid option, {option} is not."
                 parsed_options[option] = value
 
     return parsed_options
