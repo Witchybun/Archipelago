@@ -30,6 +30,7 @@ def create_item(code: int, name: str, classification: ItemClassification):
 # ID - Classification Data
 
 
+# Uses a structure of BASE ITEM + type offset + pseudo value.  The base item ID will eventually be deprecated in favor of starting at 1.
 ITEM_CODE_START = 771111110
 base_start_id = 0
 
@@ -230,7 +231,7 @@ base_spells = [
     create_item(ITEM_CODE_START + spell_start_id + 32, Spell.jingle_bells, ItemClassification.useful)
 ]
 
-mob_spells = [
+drop_spells = [
     create_item(ITEM_CODE_START + spell_start_id + 33, MobSpell.summon_snail, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 34, MobSpell.dark_skull, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 35, MobSpell.summon_kodama, ItemClassification.useful),
@@ -275,7 +276,7 @@ doors = [
     create_item(ITEM_CODE_START + door_start_id + 14, Door.forlorn_key, ItemClassification.progression),
     create_item(ITEM_CODE_START + door_start_id + 15, Door.burning_key, ItemClassification.progression),
     create_item(ITEM_CODE_START + door_start_id + 16, Door.ash_key, ItemClassification.progression),
-    create_item(ITEM_CODE_START + door_start_id + 17, Door.sucs_key, ItemClassification.progression),
+    create_item(ITEM_CODE_START + door_start_id + 17, Door.sucsarian_key, ItemClassification.progression),
     create_item(ITEM_CODE_START + door_start_id + 18, Door.sleeper_key, ItemClassification.progression),
     create_item(ITEM_CODE_START + door_start_id + 19, Door.ballroom_rooms_key, ItemClassification.progression),
     create_item(ITEM_CODE_START + door_start_id + 20, Door.tower_key, ItemClassification.progression),
@@ -284,43 +285,29 @@ doors = [
 
 # Item Groups
 
-starting_weapon = [Weapon.replica_sword, Weapon.battle_axe, Weapon.stone_club, Weapon.ritual_dagger, Weapon.torch, Weapon.steel_spear,
-                   Weapon.wooden_shield, Weapon.broken_hilt, Weapon.elfen_bow, Weapon.elfen_sword,
-                   Spell.flame_spear, Spell.ice_spear, Spell.wind_slicer, Spell.slime_orb, Spell.earth_strike
-                   ]
-shop_starting_weapons = [Weapon.crossbow, Weapon.rapier, Weapon.steel_needle]
-drop_starting_weapons = [Weapon.skeleton_axe, Weapon.rusted_sword, Weapon.ice_sickle, MobSpell.dark_skull]
-
-base_light_sources = [
-    UniqueItem.crystal_lantern,
-    UniqueItem.oil_lantern,
-    Weapon.torch,
-    Weapon.twisted_staff,
-    Weapon.moonlight,
-    Spell.flame_flare,
-    Spell.ghost_light
+# Starting Weapons
+starting_weapon = [
+    Weapon.replica_sword, Weapon.battle_axe, Weapon.stone_club,
+    Weapon.ritual_dagger, Weapon.torch, Weapon.steel_spear,
+    Weapon.wooden_shield, Weapon.broken_hilt, Weapon.elfen_bow,
+    Weapon.elfen_sword, Spell.flame_spear, Spell.ice_spear,
+    Spell.wind_slicer, Spell.slime_orb, Spell.earth_strike
+    ]
+shop_starting_weapons = [
+    Weapon.crossbow, Weapon.rapier, Weapon.steel_needle
+]
+drop_starting_weapons = [
+    Weapon.skeleton_axe, Weapon.rusted_sword, Weapon.ice_sickle,
+    MobSpell.dark_skull
 ]
 
-shop_light_sources = [
-    UniqueItem.oil_lantern
-]
-
+# Item Data used for generation
 base_unique_items = [
-    UniqueItem.vhs_tape,
-    UniqueItem.corrupted_key,
-    UniqueItem.white_tape,
-    UniqueItem.skull_of_josiah,
-    Alchemy.fractured_life,
-    UniqueItem.earth_talisman,
-    UniqueItem.enchanted_key,
-    UniqueItem.terminus_prison_key,
-    Alchemy.broken_sword,
-    Alchemy.fractured_death,
-    UniqueItem.water_talisman,
-    UniqueItem.skeleton_egg,
-    UniqueItem.dried_rat,
-    UniqueItem.dusty_crystal_orb,
-    UniqueItem.skeleton_rattle
+    UniqueItem.vhs_tape, UniqueItem.corrupted_key, UniqueItem.white_tape,
+    UniqueItem.skull_of_josiah, Alchemy.fractured_life, UniqueItem.earth_talisman,
+    UniqueItem.enchanted_key, UniqueItem.terminus_prison_key, Alchemy.broken_sword,
+    Alchemy.fractured_death, UniqueItem.water_talisman, UniqueItem.skeleton_egg,
+    UniqueItem.dried_rat, UniqueItem.dusty_crystal_orb, UniqueItem.skeleton_rattle
 ]
 
 base_special_item_counts = {
@@ -331,59 +318,49 @@ base_special_item_counts = {
 }
 
 filler_items = [
-    Creation.crystal_shard,
-    Creation.health_vial,
-    Creation.mana_vial,
-    Creation.antidote,
-    GenericItem.blood_wine,
-    UniqueItem.survey_banner,
-    Coins.silver,
-    GenericItem.dark_urn,
-    GenericItem.light_urn,
-    Alchemy.ashes,
-    GenericItem.cloth_bandage,
-    Alchemy.ectoplasm,
-    Alchemy.snowflake_obsidian,
-    Alchemy.moon_petal,
-    Alchemy.opal,
-    Alchemy.fire_opal,
-    Alchemy.ikurrilb_root,
-    Alchemy.onyx,
-    Alchemy.obsidian,
-    Alchemy.ocean_bone_shell,
-    Alchemy.ocean_bone_shard,
-    Alchemy.destroying_angel_mushroom,
-    Alchemy.yellow_morel,
-    Alchemy.bloodweed,
+    Creation.crystal_shard, Creation.health_vial, Creation.mana_vial,
+    Creation.antidote, GenericItem.blood_wine, UniqueItem.survey_banner,
+    Coins.silver, GenericItem.dark_urn, GenericItem.light_urn,
+    Alchemy.ashes, GenericItem.cloth_bandage, Alchemy.ectoplasm,
+    Alchemy.snowflake_obsidian, Alchemy.moon_petal, Alchemy.opal,
+    Alchemy.fire_opal, Alchemy.ikurrilb_root, Alchemy.onyx,
+    Alchemy.obsidian, Alchemy.ocean_bone_shell, Alchemy.ocean_bone_shard,
+    Alchemy.destroying_angel_mushroom, Alchemy.yellow_morel, Alchemy.bloodweed,
     Alchemy.lotus_seed_pod,
 ]
 
 crafted_items = [
-    Creation.poison_throwing_knife,
-    Creation.holy_water,
-    Creation.spectral_candle,
-    Creation.staff_of_osiris,
-    Creation.moonlight_vial,
-    Creation.wisp_heart,
-    Creation.fairy_moss,
-    Creation.bomb,
-    Creation.poison_urn,
+    Creation.poison_throwing_knife, Creation.holy_water, Creation.spectral_candle,
+    Creation.staff_of_osiris, Creation.moonlight_vial, Creation.wisp_heart,
+    Creation.fairy_moss, Creation.bomb, Creation.poison_urn,
 ]
 
 drop_items = [
-    RareDrops.shrimp,
-    RareDrops.angel_feather,
-    RareDrops.fools_gold
+    RareDrops.shrimp, RareDrops.angel_feather, RareDrops.fools_gold
 ]
 
 shop_unique_items = [
-    UniqueItem.oil_lantern,
-    UniqueItem.enchanted_key
+    UniqueItem.oil_lantern, UniqueItem.enchanted_key
 ]
 
 shop_item_count = {
     UniqueItem.ocean_elixir: 2
 }
+
+# Items for Rules
+blood_spells = [Spell.blood_drain, Spell.blood_strike]
+
+base_light_sources = [
+    UniqueItem.crystal_lantern, UniqueItem.oil_lantern, Weapon.torch,
+    Weapon.twisted_staff, Weapon.moonlight, Spell.flame_flare, Spell.ghost_light
+]
+
+shop_light_sources = [
+    UniqueItem.oil_lantern
+]
+
+drop_spell_names = [drop.name for drop in drop_spells]
+
 
 all_item_data_by_name = {item.name: item for item in all_items}
 all_filler_items = {item.name for item in all_items if item.classification == ItemClassification.filler}
