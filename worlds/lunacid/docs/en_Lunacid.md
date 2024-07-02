@@ -9,7 +9,7 @@ The game's randomization changes the base game by
 - removing the initial barrier at the start of the game,
 - shuffling starting class and weapon,
 - allowing shuffling entrances,
-- choosing whether or not to lock doors or switches unless an item is obtained, 
+- choosing whether to lock doors or switches unless an item is obtained, 
 - selecting which ending is necessary for victory,
 - determining how many Strange Coins are required to complete Ending B,
 - giving yourself more experience gain rates,
@@ -53,14 +53,14 @@ farm Archipelago items:
 furniture, weapons, hats, and so on).
 - The initial drop was already found.
 
-When this occurs, the drop item name will be colored olive green and it will say the
+When this occurs, the drop item name will be colored olive green, and it will say the
 item is gifted.
 
 ## Known quirks
 - Sometimes when being sent key items to open doors, they might not work if you 
 are still in the same area.  A reload should fix this.
-- When connecting, the slot name is case sensitive; the font used by the game 
+- When connecting, the slot name is case-sensitive; the font used by the game 
 obscures this as it is always in upper case.
-- If the game does not get past a connect, its likely that the server has winded down,
-or there is a version mismatch.  Check the LogOutut of BepInEx if you aren't sure.
+- If the game does not get past a connection attempt, it's likely that the server has winded down,
+or there is a version mismatch.  Check the LogOutput of BepInEx if you aren't sure.
 - If the game's port changes, you can edit the save's JSON file to change the port.
