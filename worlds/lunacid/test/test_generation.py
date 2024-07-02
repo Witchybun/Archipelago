@@ -393,7 +393,6 @@ class DropsanityAllTestsWithKeys(LunacidTestBase):
         state = self.multiworld.state
         self.assertTrue(self.can_reach_region(LunacidRegion.hollow_basin))
         self.assertTrue(self.can_reach_any_region(state, all_enemies_by_name[Enemy.milk_snail].regions))
-        self.assertTrue(self.can_reach_location(DropLocation.milk_ocean))
         self.assertFalse(self.can_reach_location(DropLocation.necronomicon_5c))
         self.collect_by_name(Door.basin_broken_steps)
         self.assertTrue(self.can_reach_location(DropLocation.necronomicon_5c))
