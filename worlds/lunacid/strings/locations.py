@@ -390,7 +390,7 @@ class DropLocation:
     obsidian_skeleton_obsidian = other_drop("Obsidian Skeleton: Obsidian Drop")
     anpu_drop_1 = unique_drop("Anpu: Golden Khopesh Drop")
     anpu_drop_2 = unique_drop("Anpu: Golden Sickle Drop")
-    anpu_10c = other_drop("Anpu: Medium Silver Drop")
+    anpu_10c = other_drop("Anpu: Large Silver Drop")
     anpu_fire_opal = other_drop("Anpu: Fire Opal Drop")
     serpent_antidote = other_drop("Serpent: Antidote Drop")
     serpent_5c = other_drop("Serpent: Small Silver Drop")
