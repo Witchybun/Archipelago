@@ -3,20 +3,20 @@ import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import Options
-from .data.item_data import all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons, shop_starting_weapons, LunacidItemData
-from .data.weapon_data import weapons_by_element
-from .strings.items import Creation, Coins, UniqueItem, Progressives, Switch, Door, Trap
 from .strings.weapons import Weapon
+from .data.item_data import all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons, shop_starting_weapons, LunacidItemData
+from .data.weapon_info import weapons_by_element
+from .strings.items import Creation, Coins, UniqueItem, Progressives, Switch, Door, Trap
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
 from .strings.locations import BaseLocation, ShopLocation, unique_drop_locations, other_drop_locations
 from .Items import item_table, complete_items_by_name, create_items, determine_starting_weapon, \
     determine_weapon_elements, all_filler
+from .Options import LunacidOptions
 from .Locations import create_locations, location_table
 from .Regions import link_lunacid_areas, create_regions
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
-from .Options import LunacidOptions
 
 
 class LunacidItem(Item):
@@ -48,7 +48,7 @@ class LunacidWorld(World):
     game = "Lunacid"
     topology_present = False
     item_name_to_id = {item.name: item.code for item in item_table}
-    location_name_to_id = {loc.name: loc.code for loc in location_table}
+    location_name_to_id = {location.name: location.location_id for location in location_table}
 
     item_name_groups = {
         "Vampiric Symbols": [Progressives.vampiric_symbol],
@@ -117,10 +117,7 @@ class LunacidWorld(World):
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)]) - 3
         excluded_items = self.multiworld.precollected_items[self.player]
-        if self.options.random_elements == self.options.random_elements.option_true:
-            self.weapon_elements = determine_weapon_elements(self.multiworld.random)
-        else:
-            self.weapon_elements = weapons_by_element
+        self.weapon_elements = determine_weapon_elements(self.options, self.multiworld.random)
         (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.options,
                                                                 self.multiworld.random)
         self.starting_weapon = starting_weapon_choice
