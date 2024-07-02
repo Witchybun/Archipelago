@@ -3,18 +3,16 @@ import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import Options
-from .data.item_data import money, max_item_count_by_item, all_item_data_by_name, all_filler_items
-from .data.spell_data import starting_spells, drop_starting_spells
-from .data.weapon_data import starting_weapon, drop_starting_weapons, shop_starting_weapons, weapons_by_element
+from .data.item_data import all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons, shop_starting_weapons, LunacidItemData
+from .data.weapon_data import weapons_by_element
 from .strings.items import Creation, Coins, UniqueItem, Progressives, Switch, Door, Trap
 from .strings.weapons import Weapon
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
 from .strings.locations import BaseLocation, ShopLocation, unique_drop_locations, other_drop_locations
-from .Items import item_table, complete_items_by_name, ItemDict, create_items, determine_starting_weapon, \
-    determine_weapon_elements, all_filler, ITEM_CODE_START
-from .Locations import (location_table, base_location_table, shop_locations_table, unique_drop_locations_table,
-                        LocationDict, other_drop_locations_table, LOCATION_CODE_START)
+from .Items import item_table, complete_items_by_name, create_items, determine_starting_weapon, \
+    determine_weapon_elements, all_filler
+from .Locations import create_locations, location_table
 from .Regions import link_lunacid_areas, create_regions
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
@@ -110,7 +108,7 @@ class LunacidWorld(World):
         return Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(money)
+        return Coins.silver
 
     def set_rules(self):
         LunacidRules(self).set_lunacid_rules(self.weapon_elements)
@@ -137,28 +135,18 @@ class LunacidWorld(World):
         world = self.multiworld
         player = self.player
 
-        def create_region(name: str, exits: Iterable[str]) -> Region:
-            lunacid_region = Region(name, player, world)
+        def create_region(region_name: str, exits: Iterable[str]) -> Region:
+            lunacid_region = Region(region_name, player, world)
             lunacid_region.exits = [Entrance(player, exit_name, lunacid_region) for exit_name in exits]
             return lunacid_region
 
         world_regions, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
-
-        for location in location_table:
+        locations = create_locations(self.options)
+        for location in locations:
             name = location.name
-            code = location.code
-            if location in shop_locations_table and self.options.shopsanity == self.options.shopsanity.option_false:
-                continue
-            if location in unique_drop_locations_table and self.options.dropsanity == self.options.dropsanity.option_off:
-                continue
-            if location in other_drop_locations_table and self.options.dropsanity != self.options.dropsanity.option_randomized:
-                continue
-            if location.name in BaseLocation.abyss_locations and self.options.exclude_tower == self.options.exclude_tower.option_true:
-                continue
-            if location.name in BaseLocation.coin_locations and self.options.exclude_coin_locations == self.options.exclude_coin_locations.option_true:
-                continue
+            location_id = location.location_id
             region: Region = world_regions[location.region]
-            region.add_locations({name: code})
+            region.add_locations({name: location_id})
 
         self.multiworld.regions.extend(world_regions.values())
 
@@ -212,7 +200,6 @@ class LunacidWorld(World):
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "client_version": "0.6.2",
-            "starting_weapon": self.starting_weapon,
             "elements": self.weapon_elements,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
                                    "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "door_locks", "random_elements", "secret_door_lock",
