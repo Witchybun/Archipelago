@@ -82,83 +82,6 @@ class Coins:
     strange_coin = "Strange Coin"
 
 
-base_unique_items = [
-    UniqueItem.vhs_tape,
-    UniqueItem.corrupted_key,
-    UniqueItem.white_tape,
-    UniqueItem.skull_of_josiah,
-    Alchemy.fractured_life,
-    UniqueItem.earth_talisman,
-    UniqueItem.enchanted_key,
-    UniqueItem.terminus_prison_key,
-    Alchemy.broken_sword,
-    Alchemy.fractured_death,
-    UniqueItem.water_talisman,
-    UniqueItem.skeleton_egg,
-    UniqueItem.dried_rat,
-    UniqueItem.dusty_crystal_orb,
-    UniqueItem.skeleton_rattle
-]
-
-base_special_item_counts = {
-    UniqueItem.black_book: 2,
-    Progressives.vampiric_symbol: 3,
-    UniqueItem.ocean_elixir: 6,
-    UniqueItem.earth_elixir: 9,
-}
-
-filler_items = [
-    Creation.crystal_shard,
-    Creation.health_vial,
-    Creation.mana_vial,
-    Creation.antidote,
-    GenericItem.blood_wine,
-    UniqueItem.survey_banner,
-    Coins.silver,
-    GenericItem.dark_urn,
-    GenericItem.light_urn,
-    Alchemy.ashes,
-    GenericItem.cloth_bandage,
-    Alchemy.ectoplasm,
-    Alchemy.snowflake_obsidian,
-    Alchemy.moon_petal,
-    Alchemy.opal,
-    Alchemy.fire_opal,
-    Alchemy.ikurrilb_root,
-    Alchemy.onyx,
-    Alchemy.obsidian,
-    Alchemy.ocean_bone_shell,
-    Alchemy.ocean_bone_shard,
-    Alchemy.destroying_angel_mushroom,
-    Alchemy.yellow_morel,
-    Alchemy.bloodweed,
-    Alchemy.lotus_seed_pod,
-]
-
-crafted_items = [
-    Creation.poison_throwing_knife,
-    Creation.holy_water,
-    Creation.spectral_candle,
-    Creation.staff_of_osiris,
-    Creation.moonlight_vial,
-    Creation.wisp_heart,
-    Creation.fairy_moss,
-    Creation.bomb,
-    Creation.poison_urn, ]
-
-drop_items = [
-    RareDrops.shrimp,
-    RareDrops.angel_feather,
-    RareDrops.fools_gold
-]
-
-shop_unique_items = [UniqueItem.oil_lantern,
-                     UniqueItem.enchanted_key
-                     ]
-
-shop_item_count = {UniqueItem.ocean_elixir: 2}
-
-
 class Trap:
     health_viai = "Health ViaI"
     blindness_trap = "Blindness Trap"
@@ -221,6 +144,7 @@ class Door:
     sleeper_key = "Dreamer Key"
     ballroom_rooms_key = "Ballroom Side Rooms Keyring"
     tower_key = "Tower of Abyss Keyring"
+    musical_key = "Ashen Doors Keyring"
 
     doors_no_tower = [basin_temple_sewers, basin_broken_steps, basin_rickety_bridge, chasm_surface_door,
                       ballroom_rooms_key, sleeper_key, sucs_key, ash_key, burning_key, forlorn_key,
