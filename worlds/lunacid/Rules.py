@@ -7,9 +7,9 @@ from .strings.enemies import Enemy
 from .strings.properties import Elements
 from ..generic.Rules import CollectionRule
 
-from .data.spell_data import spell_light_sources, drop_spells, ranged_spells, blood_spells
-from .data.weapon_data import ranged_weapons, weapon_light_sources
-from .data.item_data import item_light_sources
+from .data.spell_info import ranged_spells
+from .data.weapon_info import ranged_weapons
+from .data.item_data import base_light_sources, shop_light_sources, blood_spells
 from .Options import LunacidOptions
 from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
@@ -130,11 +130,11 @@ class LunacidRules:
                                                            self.has_door_key(Door.forlorn_key, state, self.world.options),
             LunacidEntrance.prison_to_ash: lambda state: self.has_door_key(Door.ash_key, state, self.world.options),
             LunacidEntrance.arena_to_fate: lambda state: state.has_all([UniqueItem.water_talisman, UniqueItem.earth_talisman], self.player) and
-                                                         self.has_door_key(Door.sucs_key, state, self.world.options),
+                                                         self.has_door_key(Door.sucsarian_key, state, self.world.options),
             LunacidEntrance.fate_to_sleeper: lambda state: self.has_door_key(Door.sleeper_key, state, self.world.options),
             LunacidEntrance.grotto_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.arena_to_earth_secret: lambda state: self.has_crystal_orb(state, self.world.options),
-            }
+        }
 
         self.location_rules = {
             "Throne of Prince Crilall Fanu": lambda state: self.has_element_access([Elements.light, Elements.dark_and_light, Elements.fire,
@@ -184,7 +184,8 @@ class LunacidRules:
             BaseLocation.prison_f3_bottomless_pit: lambda state: state.has_any({Spell.icarian_flight, Spell.spirit_warp}, self.player),
             BaseLocation.grotto_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.grotto_triple_secret_chest: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.sand_basement_snake_pit: lambda state: self.can_jump_given_height(state, "High", self.world.options),
+            BaseLocation.sand_basement_snake_pit: lambda state: self.can_jump_given_height(state, "High", self.world.options) &
+                                                                self.has_crystal_orb(state, self.world.options),
             BaseLocation.sand_hidden_sarcophagus: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.sand_second_floor_snake: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             BaseLocation.sand_second_floor_dead_end: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
@@ -394,16 +395,14 @@ class LunacidRules:
         return state.has(key, self.player)
 
     def has_light_source(self, state: CollectionState) -> bool:
-        sources = []
-        sources.extend(source for source in spell_light_sources)
-        sources.extend(source for source in weapon_light_sources)
-        sources.extend(source for source in item_light_sources)
+        sources = base_light_sources.copy()
+        sources.extend(source for source in shop_light_sources)
         return state.has_any(sources, self.player)
 
     def can_level_reasonably(self, state: CollectionState):
         can_you = self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_2, LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
-                                                 LunacidRegion.sealed_ballroom, LunacidRegion.fetid_mire, LunacidRegion.forest_canopy,
-                                                 LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_white, LunacidRegion.castle_le_fanu_red,
+                                                    LunacidRegion.sealed_ballroom, LunacidRegion.fetid_mire, LunacidRegion.forest_canopy,
+                                                    LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_white, LunacidRegion.castle_le_fanu_red,
                                                     LunacidRegion.sanguine_sea, LunacidRegion.terminus_prison, LunacidRegion.temple_of_silence_secret])
         return can_you
 
@@ -414,7 +413,7 @@ class LunacidRules:
         return state.has_all(spells, self.player)
 
     def has_every_spell(self, state: CollectionState, options: LunacidOptions, starting_weapon: str = None) -> bool:
-        every_spell = list(set.union(set(Spell.base_spells), set(drop_spells)))
+        every_spell = list(set.union(set(Spell.base_spells), set(MobSpell.drop_spells)))
         if starting_weapon is not None and starting_weapon in every_spell:
             every_spell.remove(starting_weapon)
         mob_spell_regions = [LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_red, LunacidRegion.castle_le_fanu_white,
@@ -497,7 +496,7 @@ class LunacidRules:
     def can_buy_jotunn(self, options: LunacidOptions, state: CollectionState):
         if options.shopsanity == options.shopsanity.option_true:
             return state.has(Weapon.jotunn_slayer, self.player)
-        return self.can_reach_location(state, BaseLocation.fate_lucid_blade) and state.has(Voucher.sheryl_dreamer_voucher)
+        return self.can_reach_location(state, BaseLocation.fate_lucid_blade) and state.has(Voucher.sheryl_dreamer_voucher, self.player)
 
     def can_defeat_the_prince(self, state: CollectionState):
         return (self.has_element_access([Elements.light, Elements.dark_and_light], state) and

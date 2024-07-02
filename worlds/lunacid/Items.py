@@ -7,9 +7,9 @@ from typing import Dict, List, Union, Protocol
 from . import Weapon
 from .Options import LunacidOptions
 from .data.item_data import all_items, LunacidItemData, base_unique_items, starting_weapon, shop_starting_weapons, drop_starting_weapons, \
-    base_special_item_counts, shop_unique_items, shop_item_count, filler_items, crafted_items, drop_items
-from .data.weapon_data import all_weapons, ranged_weapons, weapons_by_element
-from .data.spell_data import all_spells, all_spells_by_name, ranged_spells, spells_by_element
+    base_special_item_counts, shop_unique_items, shop_item_count, filler_items, crafted_items, drop_items, all_item_data_by_name
+from .data.weapon_info import all_weapons, ranged_weapons, all_weapon_info_by_name
+from .data.spell_info import all_spells, ranged_spells, all_spell_info_by_name
 from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap
 from .strings.properties import Elements, Types
 from .strings.spells import Spell, MobSpell
@@ -31,15 +31,22 @@ def initialize_items_by_name() -> List[LunacidItemData]:
 
 item_table = initialize_items_by_name()
 complete_items_by_name = {item.name: item for item in item_table}
-all_items_by_element = weapons_by_element
-for spell in spells_by_element:
-    all_items_by_element[spell] = spells_by_element[spell]
+all_items_by_element = {weapon: all_weapon_info_by_name[weapon].element for weapon in all_weapon_info_by_name }
+for spell in all_spell_info_by_name:
+    all_items_by_element[spell] = all_spell_info_by_name[spell].element
 
 
-def determine_weapon_elements(random: Random) -> Dict[str, str]:
+def determine_weapon_elements(options: LunacidOptions, random: Random) -> Dict[str, str]:
+    elements = {}
+    if options.random_elements == options.random_elements.option_false:
+        for weapon in all_weapon_info_by_name:
+            elements[weapon] = all_weapon_info_by_name[weapon].element
+        for spell in all_spell_info_by_name:
+            elements[spell] = all_spell_info_by_name[spell].element
+        return elements
     excluded_list = [Weapon.lucid_blade, Weapon.wand_of_power]
     excluded_list.extend([item.name for item in all_spells if item.style == Types.support or item.element == Elements.ignore])
-    elements = {}
+
     weapons = [weapon for weapon in all_weapons if weapon.name not in excluded_list]
     spells = [item.name for item in all_spells if item.name not in excluded_list]
     for item in weapons:
@@ -98,7 +105,7 @@ def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict
             continue
         if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
             items.append(item_factory(item, ItemClassification.progression))
-        elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
+        elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons:
             items.append(item_factory(item, ItemClassification.progression))
         else:
             items.append(item_factory(item))
@@ -106,7 +113,7 @@ def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict
         for item in Weapon.shop_weapons:
             if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
                 items.append(item_factory(item, ItemClassification.progression))
-            elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
+            elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons:
                 items.append(item_factory(item, ItemClassification.progression))
             else:
                 items.append(item_factory(item))
@@ -114,7 +121,7 @@ def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict
         for item in Weapon.drop_weapons:
             if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
                 items.append(item_factory(item, ItemClassification.progression))
-            elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
+            elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons:
                 items.append(item_factory(item, ItemClassification.progression))
             else:
                 items.append(item_factory(item))
@@ -122,25 +129,23 @@ def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict
 
 
 def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[str, str], options: LunacidOptions, items: List[Item]) -> List[Item]:
-    force_progressive = False
-    if options.ending == options.ending.option_ending_e:
-        force_progressive = True
+    force_progressive = (options.ending == options.ending.option_ending_e)
     for item in Spell.base_spells:
-        if all_spells_by_name[item].style == Types.support:
+        if all_spell_info_by_name[item].style == Types.support:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
-        elif equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
+        elif [item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
             items.append(item_factory(item, ItemClassification.progression))
-        elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
+        elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_spells:
             items.append(item_factory(item, ItemClassification.progression))
         else:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
     if options.dropsanity != options.dropsanity.option_off:
         for item in MobSpell.drop_spells:
-            if all_spells_by_name[item].style == Types.support:
+            if all_spell_info_by_name[item].style == Types.support:
                 items.append(item_factory(item, determine_item_classification(item, force_progressive)))
             elif equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
                 items.append(item_factory(item, ItemClassification.progression))
-            elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_weapons or item in ranged_spells:
+            elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_spells:
                 items.append(item_factory(item, ItemClassification.progression))
             else:
                 items.append(item_factory(item, determine_item_classification(item, force_progressive)))
@@ -158,11 +163,10 @@ def determine_starting_weapon(random: Random, options: LunacidOptions) -> str:
 
 
 def determine_item_classification(item: str, progression: bool) -> ItemClassification:
-    spell_data = all_spells_by_name[item]
     if progression:
         return ItemClassification.progression
     else:
-        return spell_data.classification
+        return all_item_data_by_name[item].classification
 
 
 def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]) -> List[Item]:
