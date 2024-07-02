@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-from BaseClasses import ItemClassification
 from typing import List
 
-from .game_item import GameItem
 from ..strings.properties import Elements, Types
 from ..strings.weapons import Weapon
 
@@ -108,4 +106,4 @@ ranged_weapons = [weapon.name for weapon in all_weapons if weapon.style == Types
 weapons_by_element = {weapon.name: weapon.element for weapon in all_weapons}
 
 
-all_weapons_by_name = {weapon.name: weapon for weapon in all_weapons}
+all_weapon_info_by_name = {weapon.name: weapon for weapon in all_weapons}

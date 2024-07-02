@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Dict
-from BaseClasses import ItemClassification
 
-from .game_item import GameItem
 from ..strings.properties import Types, Elements
 from ..strings.spells import Spell, MobSpell
 
@@ -14,7 +12,7 @@ class SpellInfo:
     style: str
 
     def __repr__(self):
-        return f"{self.name} (Classification: {self.classification})"
+        return f"{self.name} (Element: {self.element}, Style: {self.style})"
 
 
 all_spells: List[SpellInfo] = []
@@ -69,15 +67,8 @@ drop_spells = [
     spell_information(MobSpell.quick_stride, Elements.normal, Types.support),
 ]
 
-
-spells_by_element = {spell.name: spell.element for spell in all_spells}
 ranged_spells = [spell.name for spell in all_spells if spell.style == Types.ranged]
 support_spells = [spell.name for spell in all_spells if spell.style == Types.support]
-blood_spells = [Spell.blood_drain, Spell.blood_strike]
-spell_light_sources = [Spell.flame_flare, Spell.ghost_light]
 
-drop_spells = [MobSpell.summon_snail, MobSpell.dark_skull, MobSpell.summon_kodama, MobSpell.tornado, MobSpell.quick_stride]
-
-
-
-all_spells_by_name: Dict[str, SpellItem] = {spell.name: spell for spell in all_spells}
+all_spell_info_by_name: Dict[str, SpellInfo] = {spell.name: spell for spell in all_spells}
+spells_by_element = {spell.name: spell.element for spell in all_spells}

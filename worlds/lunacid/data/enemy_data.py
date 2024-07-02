@@ -24,9 +24,9 @@ def create_enemy(name: str, positions: List[str]):
         drops = []
     else:
         drops = all_drops_by_enemy[name]
-    enemy = EnemyData(name, drops, positions)
-    all_enemies.append(enemy)
-    return enemy
+    enemy_data = EnemyData(name, drops, positions)
+    all_enemies.append(enemy_data)
+    return enemy_data
 
 
 snail = create_enemy(Enemy.snail, [LunacidRegion.hollow_basin])
