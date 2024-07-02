@@ -8,7 +8,7 @@ You will need:
 
 ## Installation
 
-- Download and unpackage the BepInEx version for x64 into your Lunacid installation folder.  If you don't know where it is, in Steam you can right click and Manage -> Browse Local Files will get you there.
+- Download and unpack the BepInEx version for x64 into your Lunacid installation folder.  If you don't know where it is, in Steam you can right-click and Manage -> Browse Local Files will get you there.
 - **LINUX ONLY**: Right click Lunacid in Steam, go to Properties, and in Launch Options put `WINEDLLOVERRIDES="winhttp.dll=n,b" %command%`.
 - Launch the game at least once, close.
 - In BepInEx/plugins, take the folder in the mod zip named "LunacidAP" and place it here.
@@ -20,7 +20,7 @@ Hosting a game locally is simply taking the Lunacid.yaml file, editing it to sui
 
 ## In-game setup
 
-- Create a new save.  The first part of character creation is to login.  After a successful connect, you'll be allowed to make a new character. 
+- Create a new save.  The first part of character creation is to log in.  After a successful connect, you'll be allowed to make a new character. 
 - If successful, all data is saved to a file, found in the base game's folder under ArchSaves.
 - Enjoy playing!
 
@@ -32,6 +32,6 @@ Hosting a game locally is simply taking the Lunacid.yaml file, editing it to sui
 
 *Q: I was sent a key to open a door, but it won't open.*
 
-**A: This is now bug report worthy, but short-term, walk to where the item exists, then leave the same area, or reload the area.  If its the talismans, you may have to reopen the chests.**
+**A: This is now bug report worthy, but short-term, walk to where the item exists, then leave the same area, or reload the area.  If it's the talismans, you may have to reopen the chests.**
 
 If more stuff comes up I'll add it here.  Probably will, you know how it is.

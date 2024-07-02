@@ -4,13 +4,15 @@ from typing import Set
 
 from BaseClasses import CollectionState, MultiWorld
 from . import LunacidTestBase, setup_solo_multiworld, LunacidTestCase
-from .. import Endings, Options
+from .. import Endings, Options, Weapon
 from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions
 from ..data.enemy_data import all_enemies_by_name
 from ..data.location_data import *
-from ..data.spell_data import all_spells, drop_spells
+from ..data.spell_info import all_spells
+from ..data.item_data import drop_spell_names
 from ..strings.enemies import Enemy
-from ..strings.items import Switch, Door
+from ..strings.items import Switch, Door, UniqueItem, Progressives, Coins
+from ..strings.spells import Spell, MobSpell
 
 
 class TestAllLocationsAppended(LunacidTestBase):
@@ -30,7 +32,7 @@ class TestAllLocationsAppended(LunacidTestBase):
             self.assertIn(location, base_locations)
         for location in accursed_tomb:
             self.assertIn(location, base_locations)
-        for location in the_sacrosant_sea:
+        for location in the_sanguine_sea:
             self.assertIn(location, base_locations)
         for location in laetus_chasm:
             self.assertIn(location, base_locations)
@@ -67,13 +69,15 @@ class TestEndingE(LunacidTestBase):
         return all_rule
 
     def has_every_spell(self, state: CollectionState) -> bool:
-        every_spell = [spell.name for spell in all_spells if spell.name not in drop_spells]
+        every_spell = [spell.name for spell in all_spells if spell.name not in drop_spell_names]
         mob_spell_regions = [LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_red, LunacidRegion.castle_le_fanu_white,
                              LunacidRegion.terminus_prison_dark,
                              LunacidRegion.labyrinth_of_ash, LunacidRegion.boiling_grotto, LunacidRegion.forbidden_archives_3, LunacidRegion.sand_temple,
                              LunacidRegion.temple_of_silence_interior, LunacidRegion.sealed_ballroom]
         for region in mob_spell_regions:
             self.assertTrue(state.can_reach(region, "Region", self.player), f"Can't reach {region}")
+        for spell in every_spell:
+            self.assertTrue(state.has(spell, self.player), f"Player does not have {spell}")
         return state.has_all(every_spell, self.player) and self.can_reach_all_regions(self.multiworld.state, mob_spell_regions)
 
     def test_if_goal_can_be_true(self):
@@ -85,7 +89,7 @@ class TestEndingE(LunacidTestBase):
         self.assertTrue(self.has_every_spell(self.multiworld.state) and self.multiworld.state.has(UniqueItem.white_tape, self.player))
 
     def test_if_spell_items_exist(self):
-        for spell in [spell.name for spell in all_spells if spell.name not in drop_spells]:
+        for spell in [spell.name for spell in all_spells if spell.name not in drop_spell_names]:
             does_exist = False
             for item in self.multiworld.itempool:
                 if item.name == spell:
@@ -354,7 +358,7 @@ class AnyEndingTests(LunacidTestBase):
 
     def can_win(self, state: CollectionState):
         win_condition = state.can_reach_region(LunacidRegion.grave_of_the_sleeper, self.player) or (self.has_coins_for_door(state) and
-        state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player))
+                                                                                                    state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player))
         return win_condition
 
     def test_necessity_of_coins_or_talismans(self):
