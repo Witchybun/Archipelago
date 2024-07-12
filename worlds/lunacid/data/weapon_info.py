@@ -56,7 +56,7 @@ base_weapons = [
     weapon_information(Weapon.wooden_shield, Elements.normal, Types.melee),
     weapon_information(Weapon.crossbow, Elements.normal, Types.ranged),
     weapon_information(Weapon.steel_needle, Elements.normal, Types.melee),
-    weapon_information(Weapon.lucid_blade, Elements.ignore, Types.both),
+    weapon_information(Weapon.lucid_blade, Elements.light, Types.both),
     weapon_information(Weapon.hammer_of_cruelty, Elements.dark_and_light, Types.melee),
 ]
 
@@ -101,6 +101,9 @@ forge_weapons = [
     weapon_information(Weapon.heritage_sword, Elements.normal, Types.melee),
 ]
 
+alchemy_weapons = [
+    weapon_information(Weapon.limbo, Elements.dark_and_light, Types.melee)
+]
 
 ranged_weapons = [weapon.name for weapon in all_weapons if weapon.style == Types.ranged or weapon.style == Types.both]
 weapons_by_element = {weapon.name: weapon.element for weapon in all_weapons}

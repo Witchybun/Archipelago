@@ -10,11 +10,12 @@ from ..generic.Rules import CollectionRule
 from .data.spell_info import ranged_spells
 from .data.weapon_info import ranged_weapons
 from .data.item_data import base_light_sources, shop_light_sources, blood_spells
+from .data.plant_data import all_alchemy_plant_data
 from .Options import LunacidOptions
 from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
 from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door, Coins, Voucher
-from .strings.locations import BaseLocation, ShopLocation, all_drops_by_enemy, DropLocation
+from .strings.locations import BaseLocation, ShopLocation, all_drops_by_enemy, DropLocation, Quench, AlchemyLocation
 from .strings.weapons import Weapon
 
 if TYPE_CHECKING:
@@ -212,6 +213,8 @@ class LunacidRules:
             "Free Sir Hicket": lambda state: state.has(Spell.ignis_calor, self.player),
             BaseLocation.ash_path_maze: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.ash_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
+
+            # Shop Location Runes
             ShopLocation.buy_steel_needle: lambda state: state.has(Voucher.sheryl_initial_voucher, self.player),
             ShopLocation.buy_crossbow: lambda state: state.has(Voucher.sheryl_initial_voucher, self.player),
             ShopLocation.buy_rapier: lambda state: state.has(Voucher.sheryl_initial_voucher, self.player),
@@ -224,6 +227,8 @@ class LunacidRules:
             ShopLocation.buy_jotunn_slayer: lambda state: self.can_reach_location(state, BaseLocation.fate_lucid_blade)
                                                           and state.has(Voucher.sheryl_dreamer_voucher, self.player),
             ShopLocation.buy_ocean_elixir_patchouli: lambda state: state.has(Voucher.patchouli_simp_discount, self.player),
+
+            # All Drop Location Rules Yikes
             DropLocation.snail_2c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.snail].regions),
             DropLocation.snail_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.snail].regions),
             DropLocation.snail_ocean: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.snail].regions),
@@ -351,7 +356,66 @@ class LunacidRules:
             DropLocation.mummy_knight_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
             DropLocation.mummy_knight_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
             DropLocation.mummy_knight_5c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
+            DropLocation.lupine_spell: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lupine_skeleton].regions),
+            DropLocation.lupine_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lupine_skeleton].regions),
+            DropLocation.lupine_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lupine_skeleton].regions),
+            DropLocation.lupine_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lupine_skeleton].regions),
+            DropLocation.infested_antidote: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.infested_corpse].regions),
+            DropLocation.infested_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.infested_corpse].regions),
             DropLocation.sanguis_book: lambda state: state.can_reach_region(LunacidRegion.holy_battleground, self.player),
+
+            # All Quenchsanity Rules
+            Quench.rapier: lambda state: self.can_get_weapon(state, Weapon.rapier, self.world.options),
+            Quench.shadow_blade: lambda state: self.can_get_weapon(state, Weapon.shadow_blade, self.world.options),
+            Quench.shining_blade: lambda state: self.can_get_weapon(state, Weapon.shining_blade, self.world.options),
+            Quench.rusted_sword: lambda state: self.can_get_weapon(state, Weapon.rusted_sword, self.world.options),
+            Quench.torch: lambda state: self.can_get_weapon(state, Weapon.torch, self.world.options),
+            Quench.replica_sword: lambda state: self.can_get_weapon(state, Weapon.replica_sword, self.world.options),
+            Quench.obsidian_poisonguard: lambda state: self.can_get_weapon(state, Weapon.obsidian_poisonguard, self.world.options),
+            Quench.obsidian_cursebrand: lambda state: self.can_get_weapon(state, Weapon.obsidian_cursebrand, self.world.options),
+            Quench.lyrian_longsword: lambda state: self.can_get_weapon(state, Weapon.lyrian_longsword, self.world.options),
+            Quench.elfen_sword: lambda state: self.can_get_weapon(state, Weapon.elfen_sword, self.world.options),
+            Quench.crossbow: lambda state: self.can_get_weapon(state, Weapon.crossbow, self.world.options),
+            Quench.broken_lance: lambda state: self.can_get_weapon(state, Weapon.broken_lance, self.world.options),
+            Quench.broken_hilt: lambda state: self.can_get_weapon(state, Weapon.broken_hilt, self.world.options),
+            Quench.brittle_arming_sword: lambda state: self.can_get_weapon(state, Weapon.brittle_arming_sword, self.world.options),
+            Quench.stone_club: lambda state: self.can_get_weapon(state, Weapon.stone_club, self.world.options),
+            Quench.iron_club: lambda state: self.can_get_weapon(state, Weapon.iron_torch, self.world.options),
+            Quench.iron_claw: lambda state: self.can_get_weapon(state, Weapon.iron_claw, self.world.options),
+            Quench.steel_claw: lambda state: self.can_get_weapon(state, Weapon.steel_claw, self.world.options),
+            Quench.obsidian_seal: lambda state: self.can_get_weapon(state, Weapon.obsidian_seal, self.world.options),
+            Quench.scythe: lambda state: self.can_kill_death(state, self.world.options),
+
+            # All Etna's Pupil Rules
+            AlchemyLocation.explosives: lambda state: self.can_obtain_all_alchemy_items([Alchemy.ashes, Alchemy.fire_opal], state, self.world.options),
+            AlchemyLocation.knife: lambda state: self.can_obtain_alchemy_item(Alchemy.ocean_bone_shard, state, self.world.options),
+            AlchemyLocation.health: lambda state: self.can_obtain_all_alchemy_items([Alchemy.opal, Alchemy.yellow_morel, Alchemy.lotus_seed_pod],
+                                                                                    state, self.world.options),
+            AlchemyLocation.mana: lambda state: self.can_obtain_all_alchemy_items([Alchemy.opal, Alchemy.onyx, Alchemy.lotus_seed_pod], state,
+                                                                                  self.world.options),
+            AlchemyLocation.moonlight: lambda state: self.can_obtain_all_alchemy_items([Alchemy.ashes, Alchemy.moon_petal, Alchemy.obsidian], state,
+                                                                                       self.world.options),
+            AlchemyLocation.spectral: lambda state: self.can_obtain_all_alchemy_items([Alchemy.ectoplasm, Alchemy.ikurrilb_root, Alchemy.fire_opal], state,
+                                                                                      self.world.options),
+            AlchemyLocation.poison_knife: lambda state: self.can_obtain_all_alchemy_items([Alchemy.destroying_angel_mushroom, Alchemy.ocean_bone_shell], state,
+                                                                                          self.world.options),
+            AlchemyLocation.staff_of_osiris: lambda state: self.can_obtain_all_alchemy_items([Alchemy.onyx, Alchemy.ikurrilb_root, Alchemy.bones], state,
+                                                                                             self.world.options),
+            AlchemyLocation.poison_urn: lambda state: self.can_obtain_all_alchemy_items([Alchemy.destroying_angel_mushroom, Alchemy.ocean_bone_shard,
+                                                                                         Alchemy.bloodweed], state, self.world.options),
+            AlchemyLocation.fairy_moss: lambda state: self.can_obtain_all_alchemy_items([Alchemy.moon_petal, Alchemy.bloodweed, Alchemy.yellow_morel], state,
+                                                                                        self.world.options),
+            AlchemyLocation.antidote: lambda state: self.can_obtain_all_alchemy_items([Alchemy.destroying_angel_mushroom, Alchemy.lotus_seed_pod], state,
+                                                                                      self.world.options),
+            AlchemyLocation.banner: lambda state: self.can_obtain_all_alchemy_items([Alchemy.ashes, Alchemy.bones], state,
+                                                                                    self.world.options),
+            AlchemyLocation.holy: lambda state: self.can_obtain_all_alchemy_items([Alchemy.moon_petal, Alchemy.opal], state,
+                                                                                  self.world.options),
+            AlchemyLocation.warp: lambda state: self.can_obtain_all_alchemy_items([Alchemy.snowflake_obsidian, Alchemy.onyx, Alchemy.obsidian], state,
+                                                                                  self.world.options),
+            AlchemyLocation.wisp: lambda state: self.can_obtain_all_alchemy_items([Alchemy.snowflake_obsidian, Alchemy.ectoplasm, Alchemy.moon_petal], state,
+                                                                                  self.world.options),
+            AlchemyLocation.limbo: lambda state: state.has_all([Alchemy.broken_sword, Alchemy.fractured_life, Alchemy.fractured_death], self.player),
         }
 
     def is_vampire(self, options: LunacidOptions):
@@ -507,10 +571,56 @@ class LunacidRules:
         locations = all_drops_by_enemy[enemy]
         return self.can_reach_any_region(state, locations)
 
+    def can_get_weapon(self, state: CollectionState, weapon: str, options: LunacidOptions):
+        if weapon in Weapon.base_weapons:
+            return state.has(weapon, self.player)
+        elif weapon in Weapon.shop_weapons:
+            if options.shopsanity == options.shopsanity.option_true:
+                return state.has(weapon, self.player)
+            else:
+                return state.has(Voucher.sheryl_initial_voucher, self.player)
+        if weapon in Weapon.drop_weapons:
+            if options.dropsanity != options.dropsanity.option_off:
+                return state.has(weapon, self.player)
+            for enemy in all_drops_by_enemy:
+                if weapon in all_drops_by_enemy[enemy]:
+                    return self.can_reach_any_region(state, all_enemies_by_name[enemy].regions)
+        if weapon in Weapon.quenchsanity_weapons:
+            return state.has(weapon, self.player)
+        return False
+
+    def can_kill_death(self, state: CollectionState, options: LunacidOptions):
+        if options.etnas_pupil == options.etnas_pupil.option_true:
+            return state.has(Weapon.limbo, self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player),
+
+        return state.has_all({Alchemy.fractured_life, Alchemy.fractured_death, Alchemy.broken_sword},
+                             self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player),
+
+    def can_obtain_alchemy_item(self, alchemy_item: str, state: CollectionState, options: LunacidOptions):
+        if options.dropsanity == options.dropsanity.option_randomized:
+            return state.has(alchemy_item, self.player)
+        acceptable_regions = []
+        for enemy in all_drops_by_enemy:
+            if alchemy_item in all_drops_by_enemy[enemy]:
+                for region in all_enemies_by_name[enemy].regions:
+                    if region not in acceptable_regions:
+                        acceptable_regions.append(region)
+        for plant in all_alchemy_plant_data:
+            if alchemy_item == plant.drop:
+                for region in plant.regions:
+                    if region not in acceptable_regions:
+                        acceptable_regions.append(region)
+        return self.can_reach_any_region(state, acceptable_regions)
+
+    def can_obtain_all_alchemy_items(self, alchemy_items: List[str], state: CollectionState, options: LunacidOptions):
+        alchemy_rule = False
+        for item in alchemy_items:
+            alchemy_rule = alchemy_rule and self.can_obtain_alchemy_item(item, state, options)
+        return alchemy_rule
+
     def set_lunacid_rules(self, world_elements: Dict[str, str]) -> None:
         multiworld = self.world.multiworld
         self.elements = world_elements
-        self.update_lunacid_dropsanity_rules_for_the_lazy()
         for region in multiworld.get_regions(self.player):
             if region.name in self.region_rules:
                 for entrance in region.entrances:
@@ -523,12 +633,3 @@ class LunacidRules:
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = loc.access_rule and self.location_rules[loc.name]
-
-    def update_lunacid_dropsanity_rules_for_the_lazy(self):
-        for enemy in all_enemies_by_name:
-            if not all_enemies_by_name[enemy].drops:
-                continue
-            for drop in all_enemies_by_name[enemy].drops:
-                self.location_rules.update({
-                    drop: lambda state: self.can_reach_any_region(state, all_enemies_by_name[enemy].regions)
-                })
