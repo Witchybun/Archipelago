@@ -7,6 +7,7 @@ class BaseLocation:
     wings_rest_clives_gift = "WR: Clive's Gift"
     wings_rest_demi_gift = "WR: Demi's Introduction Gift"
     wings_rest_demi_orb = "WR: Demi's Victory Gift"
+    wings_rest_present = "WR: Christmas Present"
 
     hollow_basin_starting_sword = "HB: Starting Weapon"
     hollow_basin_right_water_right = "HB: Rightmost Water Room (Right)"
@@ -91,6 +92,7 @@ class BaseLocation:
     yosei_room_defended_by_blood_plant = "YF: Room Defended by Blood Plant"
     yosei_patchouli_key = "YF: Patchouli's Canopy Offer"
     yosei_patchouli_quest = "YF: Patchouli's Reward"
+    yosei_patchouli_eggnog = "YF: Patchouli's Yuletide Offering"
 
     canopy_branch_edge = "FC: Branch Lower Edge"
     branch_cave = "FC: Branch Cave"
@@ -239,6 +241,9 @@ class BaseLocation:
     abyss_locations = [abyss_prize, abyss_floor_50, abyss_floor_45, abyss_floor_40, abyss_floor_35, abyss_floor_30, abyss_floor_25, abyss_floor_20,
                        abyss_floor_15, abyss_floor_10, abyss_floor_5]
     coin_locations = [sea_kill_jotunn, mausoleum_kill_death, temple_blood_altar]
+    daedalus_locations = [archives_daedalus_third, archives_daedalus_one, archives_daedalus_two]
+
+    christmas_locations = [yosei_patchouli_eggnog, wings_rest_present]
 
 
 class ShopLocation:
@@ -260,13 +265,13 @@ unique_drop_locations = []
 other_drop_locations = []
 
 
-def unique_drop(name: str):
+def unique_drop(name: str) -> str:
     if name not in unique_drop_locations:
         unique_drop_locations.append(name)
     return name
 
 
-def other_drop(name: str):
+def other_drop(name: str) -> str:
     if name not in other_drop_locations:
         other_drop_locations.append(name)
     return name
@@ -294,8 +299,8 @@ class DropLocation:
     mummy_knight_5c = other_drop("Mummy Knight: Small Silver Drop")
     #  Forbidden Archives
     necronomicon_fire_opal = other_drop("Necronomicon: Fire Opal Drop")
-    necronomicon_5c = other_drop("Necronomicon: Small Silver Drop")
-    necronomicon_10c = other_drop("Necronomicon: Medium Silver Drop")
+    necronomicon_5c = other_drop("Necronomicon: Medium Silver Drop")
+    necronomicon_10c = other_drop("Necronomicon: Large Silver Drop")
     necronomicon_mana_vial = other_drop("Necronomicon: Mana Vial Drop")
     chimera_drop = unique_drop("Chimera: Quick Stride Drop")
     chimera_light_urn = other_drop("Chimera: Light Urn Drop")
@@ -399,7 +404,7 @@ class DropLocation:
     embalmed_bones = other_drop("Embalmed: Bones Drop")
     #  Terminus Prison
     jailor_drop = unique_drop("Jailor: Jailor's Candle Drop")
-    jailor_10c = other_drop("Jailor: Medium Silver Drop")
+    jailor_10c = other_drop("Jailor: Large Silver Drop")
     jailor_candle = other_drop("Jailor: Spectral Candle Drop")
     jailor_bandage = other_drop("Jailor: Cloth Bandage Drop")
     jailor_health_vial = other_drop("Jailor: Health Vial Drop")
@@ -412,6 +417,12 @@ class DropLocation:
     giant_mana_vial = other_drop("Giant Skeleton: Mana Vial Drop")
     giant_onyx = other_drop("Giant Skeleton: Onyx Drop")
     giant_spell = unique_drop("Giant Skeleton: Dark Skull Drop")
+    lupine_spell = unique_drop("Lupine Skeleton: Dark Skull Drop")
+    lupine_10c = other_drop("Lupine Skeleton: Medium Silver Drop")
+    lupine_bones = other_drop("Lupine Skeleton: Bones Drop")
+    lupine_onyx = other_drop("Lupine Skeleton: Onyx Drop")
+    infested_antidote = other_drop("Infested Corpse: Antidote Drop")
+    infested_bones = other_drop("Infested Corpse: Bones")
     #  Forlorn Arena
     sucsarian_drop_1 = unique_drop("Sucsarian: Sucsarian Dagger Drop")
     sucsarian_drop_2 = unique_drop("Sucsarian: Sucsarian Spear Drop")
@@ -439,18 +450,20 @@ all_drops = unique_drop_locations + other_drop_locations
 all_drops_by_enemy: Dict[str, List[str]] = {}
 
 for location in all_drops:
-    enemy = location.split(": ")[0]
+    location_split = location.split(": ")
+    enemy = str(location_split[0])
+    drop = str(location_split[1]).replace(" Drop", "")
     if enemy not in all_drops_by_enemy:
-        all_drops_by_enemy[enemy] = [location]
+        all_drops_by_enemy[enemy] = [drop]
         continue
-    all_drops_by_enemy[enemy].append(location)
+    all_drops_by_enemy[enemy].append(drop)
 
 
 class Quench:
     brittle_arming_sword = "Quench Brittle Arming Sword"
     broken_hilt = "Quench Broken Hilt"
     broken_lance = "Quench Broken Lance"
-    crossbow = "Crossbow"
+    crossbow = "Quench Crossbow"
     elfen_sword = "Quench Elfen Sword"
     iron_claw = "Quench Iron Claw"
     iron_club = "Quench Iron Club"
@@ -462,8 +475,30 @@ class Quench:
     replica_sword = "Quench Replica Sword"
     rusted_sword = "Quench Rusted Sword"
     shadow_blade = "Quench Shadow Blade"
-    shining_blde = "Quench Shining Blade"
+    shining_blade = "Quench Shining Blade"
     steel_claw = "Quench Steel Claw"
     stone_club = "Quench Stone Club"
     torch = "Quench Torch"
+    scythe = "Quench Death Scythe"
 
+
+class AlchemyLocation:
+    explosives = "Alchemize Explosives"
+    health = "Alchemize Healing Remedy"
+    mana = "Alchemize Mana Remedy"
+    warp = "Alchemize Unstable Stone"
+    antidote = "Alchemize Antivenom"
+    knife = "Alchemize Sharp Object"
+    poison_knife = "Alchemize Venomous Object"
+    moonlight = "Alchemize Concentrated Lunacy"
+    fairy_moss = "Alchemize Nature"
+    spectral = "Alchemize Hostility Barrier"
+    wisp = "Alchemize Simple Life"
+    limbo = "Alchemize Golden Sin of Abdul"
+    banner = "Alchemize Cleromancy Tool"
+    holy = "Alchemize Water of Life"
+    poison_urn = "Alchemize Concentrated Poison"
+    staff_of_osiris = "Alchemize Defense Construct"
+
+    all_alchemy_locations = [explosives, health, mana, warp, antidote, knife, poison_knife, moonlight, fairy_moss, spectral, wisp,
+                             limbo, banner, holy, poison_urn, staff_of_osiris]

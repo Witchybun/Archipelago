@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, List
 
-from ..strings.locations import BaseLocation, ShopLocation, DropLocation
+from ..strings.locations import BaseLocation, ShopLocation, DropLocation, Quench, AlchemyLocation
 from ..strings.regions_entrances import LunacidRegion
 
 
@@ -32,6 +32,7 @@ wings_rest = [
     create_location(LOCATION_CODE_START + base_location_start + 3, BaseLocation.wings_rest_clives_gift, LunacidRegion.wings_rest),
     create_location(LOCATION_CODE_START + base_location_start + 4, BaseLocation.wings_rest_demi_orb, LunacidRegion.wings_rest),
     create_location(LOCATION_CODE_START + base_location_start + 5, BaseLocation.wings_rest_demi_gift, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + base_location_start + 6, BaseLocation.wings_rest_present, LunacidRegion.wings_rest),
 ]
 
 hollow_basin = [
@@ -125,6 +126,7 @@ yosei_forest = [
     create_location(LOCATION_CODE_START + base_location_start + 101, BaseLocation.yosei_room_defended_by_blood_plant, LunacidRegion.yosei_lower),
     create_location(LOCATION_CODE_START + base_location_start + 102, BaseLocation.yosei_patchouli_key, LunacidRegion.yosei_lower),
     create_location(LOCATION_CODE_START + base_location_start + 103, BaseLocation.yosei_patchouli_quest, LunacidRegion.yosei_lower),
+    create_location(LOCATION_CODE_START + base_location_start + 104, BaseLocation.yosei_patchouli_eggnog, LunacidRegion.yosei_lower),
 ]
 
 forest_canopy = [
@@ -335,6 +337,7 @@ unique_drop_locations = [
     create_location(LOCATION_CODE_START + unique_drop_location_start + 18, DropLocation.giant_spell),
     create_location(LOCATION_CODE_START + unique_drop_location_start + 19, DropLocation.cetea_drop),
     create_location(LOCATION_CODE_START + unique_drop_location_start + 20, DropLocation.sea_demon),
+    create_location(LOCATION_CODE_START + unique_drop_location_start + 21, DropLocation.lupine_spell),
 ]
 
 other_drop_location_start = 450
@@ -467,7 +470,54 @@ other_drop_locations = [
     create_location(LOCATION_CODE_START + other_drop_location_start + 126, DropLocation.mummy_knight_10c),
     create_location(LOCATION_CODE_START + other_drop_location_start + 127, DropLocation.mummy_knight_5c),
     create_location(LOCATION_CODE_START + other_drop_location_start + 128, DropLocation.sanguis_book),
+    create_location(LOCATION_CODE_START + other_drop_location_start + 129, DropLocation.lupine_10c),
+    create_location(LOCATION_CODE_START + other_drop_location_start + 130, DropLocation.lupine_onyx),
+    create_location(LOCATION_CODE_START + other_drop_location_start + 131, DropLocation.lupine_bones),
+    create_location(LOCATION_CODE_START + other_drop_location_start + 132, DropLocation.infested_bones),
+    create_location(LOCATION_CODE_START + other_drop_location_start + 133, DropLocation.infested_antidote),
+
 ]
 
+quench_location_start = 600
+quench_locations = [
+    create_location(LOCATION_CODE_START + quench_location_start + 1, Quench.steel_claw, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 2, Quench.iron_claw, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 3, Quench.iron_club, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 4, Quench.stone_club, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 5, Quench.torch, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 6, Quench.brittle_arming_sword, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 7, Quench.broken_hilt, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 8, Quench.broken_lance, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 9, Quench.crossbow, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 10, Quench.elfen_sword, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 11, Quench.lyrian_longsword, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 12, Quench.obsidian_seal, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 13, Quench.obsidian_cursebrand, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 14, Quench.obsidian_poisonguard, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 15, Quench.rapier, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 16, Quench.replica_sword, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 17, Quench.rusted_sword, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 18, Quench.shadow_blade, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 19, Quench.shining_blade, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + quench_location_start + 20, Quench.scythe, LunacidRegion.wings_rest),
+]
 
-
+alchemy_location_start = 650
+alchemy_locations = [
+    create_location(LOCATION_CODE_START + alchemy_location_start + 1, AlchemyLocation.moonlight, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 2, AlchemyLocation.spectral, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 3, AlchemyLocation.explosives, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 4, AlchemyLocation.poison_knife, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 5, AlchemyLocation.staff_of_osiris, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 6, AlchemyLocation.poison_urn, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 7, AlchemyLocation.fairy_moss, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 8, AlchemyLocation.antidote, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 9, AlchemyLocation.banner, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 10, AlchemyLocation.health, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 11, AlchemyLocation.holy, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 12, AlchemyLocation.knife, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 13, AlchemyLocation.limbo, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 14, AlchemyLocation.mana, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 15, AlchemyLocation.warp, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + alchemy_location_start + 16, AlchemyLocation.wisp, LunacidRegion.wings_rest),
+]

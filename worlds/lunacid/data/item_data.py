@@ -98,6 +98,9 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 63, Voucher.sheryl_golden_voucher, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 64, Voucher.sheryl_dreamer_voucher, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 65, Voucher.patchouli_simp_discount, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 66, Alchemy.fiddlehead, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 67, Alchemy.fire_coral, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 68, Alchemy.bones, ItemClassification.filler),
     ]
 
 trap_start_id = 100
@@ -176,7 +179,7 @@ drop_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 49, Weapon.lyrian_longsword, ItemClassification.useful),
 ]
 
-forge_weapons = [
+quench_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 50, Weapon.lyrian_greatsword, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 51, Weapon.dark_greatsword, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 52, Weapon.shining_blade, ItemClassification.useful),
@@ -193,6 +196,10 @@ forge_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 63, Weapon.saint_ishii, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 64, Weapon.silver_rapier, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 65, Weapon.heritage_sword, ItemClassification.useful),
+]
+
+alchemy_weapons = [
+    create_item(ITEM_CODE_START + weapon_start_id + 1, Weapon.limbo, ItemClassification.useful),
 ]
 
 spell_start_id = 250
@@ -301,6 +308,10 @@ drop_starting_weapons = [
     MobSpell.dark_skull
 ]
 
+quench_starting_weapons = [
+    Weapon.heritage_sword, Weapon.iron_torch, Weapon.iron_club, Weapon.steel_club, Weapon.elfen_longsword, Weapon.fire_sword
+]
+
 # Item Data used for generation
 base_unique_items = [
     UniqueItem.vhs_tape, UniqueItem.corrupted_key, UniqueItem.white_tape,
@@ -311,7 +322,6 @@ base_unique_items = [
 ]
 
 base_special_item_counts = {
-    UniqueItem.black_book: 2,
     Progressives.vampiric_symbol: 3,
     UniqueItem.ocean_elixir: 6,
     UniqueItem.earth_elixir: 9,

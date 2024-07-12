@@ -1,15 +1,17 @@
+from time import strftime
 from typing import Dict, Any, Iterable, TextIO
 import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
+from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from . import Options
 from .strings.weapons import Weapon
 from .data.item_data import all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons, shop_starting_weapons, LunacidItemData
 from .data.weapon_info import weapons_by_element
-from .strings.items import Creation, Coins, UniqueItem, Progressives, Switch, Door, Trap
+from .strings.items import Creation, Coins, UniqueItem, Progressives, Switch, Door, Trap, Alchemy
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
-from .strings.locations import BaseLocation, ShopLocation, unique_drop_locations, other_drop_locations
+from .strings.locations import BaseLocation, ShopLocation, unique_drop_locations, other_drop_locations, AlchemyLocation, all_drops
 from .Items import item_table, complete_items_by_name, create_items, determine_starting_weapon, \
     determine_weapon_elements, all_filler
 from .Options import LunacidOptions
@@ -73,6 +75,7 @@ class LunacidWorld(World):
 
     options_dataclass = LunacidOptions
     options: LunacidOptions
+    is_christmas = (strftime('%B') == "December")
     starting_weapon: LunacidItem
     weapon_elements: Dict[str, str]
     randomized_entrances: Dict[str, str]
@@ -108,18 +111,22 @@ class LunacidWorld(World):
         return Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def get_filler_item_name(self) -> str:
-        return Coins.silver
+        return self.random.choice(all_filler_items)
 
     def set_rules(self):
         LunacidRules(self).set_lunacid_rules(self.weapon_elements)
 
     def create_items(self):
+        extra = 3
+        if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
+            extra += 16
+
         locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player)]) - 3
+                               for location in self.multiworld.get_locations(self.player)]) - extra
         excluded_items = self.multiworld.precollected_items[self.player]
         self.weapon_elements = determine_weapon_elements(self.options, self.multiworld.random)
-        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.options,
-                                                                self.multiworld.random)
+        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.is_christmas,
+                                                                self.options, self.multiworld.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
@@ -138,7 +145,7 @@ class LunacidWorld(World):
             return lunacid_region
 
         world_regions, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
-        locations = create_locations(self.options)
+        locations = create_locations(self.options, self.is_christmas)
         for location in locations:
             name = location.name
             location_id = location.location_id
@@ -182,6 +189,16 @@ class LunacidWorld(World):
 
         world.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
 
+    def pre_fill(self) -> None:
+        if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
+            alchemy_items = []
+            for alchemy_item in Alchemy.necessary_alchemy_items:
+                alchemy_items.append(Item(alchemy_item, ItemClassification.progression, self.item_name_to_id[alchemy_item], self.player))
+            drop_locations = [location for location in self.multiworld.get_locations() if location.name in all_drops]
+            self.random.shuffle(drop_locations)
+            fill_restrictive(self.multiworld, self.multiworld.state, drop_locations, alchemy_items,
+                             single_player_placement=True, lock=True)
+
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,
         if as stage it's right under the common header before per-player options."""
@@ -196,11 +213,12 @@ class LunacidWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.6.2",
+            "client_version": "0.7.0",
+            "is_christmas": self.is_christmas,
             "elements": self.weapon_elements,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
-                                   "filler_bundle", "shopsanity", "dropsanity", "switch_locks", "door_locks", "random_elements", "secret_door_lock",
-                                   "death_link", "exclude_tower", "exclude_coin_locations", "starting_class", "normalized_drops"),
+                                   "filler_bundle", "shopsanity", "dropsanity", "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
+                                   "secret_door_lock", "death_link", "exclude_tower", "exclude_coin_locations", "exclude_daedalus", "starting_class", "normalized_drops"),
             "entrances": self.randomized_entrances
         }
 

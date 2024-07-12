@@ -69,12 +69,14 @@ class Weapon:
     silver_rapier = "Silver Rapier"
     heritage_sword = "Heritage Sword"
 
+    limbo = "Limbo"
+
     base_weapons = [replica_sword, torch, ritual_dagger, wooden_shield, stone_club, steel_spear, battle_axe,
                     broken_hilt, corrupted_dagger, dark_rapier, halberd, blade_of_jusztina,
                     twisted_staff, vampire_hunter_sword, elfen_bow, elfen_sword, wolfram_greatsword,
-                    axe_of_harming,  wand_of_power, blade_of_ophelia, marauder_black_flail,
+                    axe_of_harming, wand_of_power, blade_of_ophelia, marauder_black_flail,
                     blessed_wind, iron_claw, moonlight, broken_lance, fishing_spear, hammer_of_cruelty,
-                    obsidian_seal, shadow_blade,  serpent_fang, lucid_blade,
+                    obsidian_seal, shadow_blade, serpent_fang, lucid_blade,
                     ]
 
     shop_weapons = [rapier, crossbow, jotunn_slayer, privateer_musket, steel_needle]
@@ -84,5 +86,11 @@ class Weapon:
                     jailor_candle, lyrian_longsword, sucsarian_spear, sucsarian_dagger,
                     ]
 
-    quench_weapons = [dark_greatsword, silver_rapier, shining_blade, poison_claw, iron_claw, iron_club, iron_torch, fire_sword, steel_lance, double_crossbow,
-                      elfen_longsword, steel_claw, steel_club, lyrian_greatsword, saint_ishii, heritage_sword]
+    quenchsanity_weapons = [dark_greatsword, silver_rapier, shining_blade, poison_claw, iron_claw, iron_club, iron_torch, fire_sword, steel_lance, double_crossbow,
+                            elfen_longsword, steel_claw, steel_club, lyrian_greatsword, saint_ishii, heritage_sword]
+
+    quenchable_weapons = [replica_sword, torch, stone_club, broken_hilt, elfen_sword, wolfram_greatsword,
+                          iron_claw, broken_lance, obsidian_seal, shadow_blade, obsidian_cursebrand, obsidian_poisonguard, brittle_arming_sword,
+                          lyrian_longsword, iron_club, steel_claw, rapier, crossbow, rusted_sword,
+                          shining_blade,
+                          ]
