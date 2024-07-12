@@ -129,7 +129,8 @@ class LunacidRules:
             LunacidEntrance.prison_to_arena: lambda state: self.has_key_to_switch(state, Switch.prison_arena_switch, self.world.options)
                                                            and state.has(UniqueItem.terminus_prison_key, self.player) and
                                                            self.has_door_key(Door.forlorn_key, state, self.world.options),
-            LunacidEntrance.prison_to_ash: lambda state: self.has_door_key(Door.ash_key, state, self.world.options),
+            LunacidEntrance.prison_to_ash_entrance: lambda state: self.has_door_key(Door.ash_key, state, self.world.options),
+            LunacidEntrance.ash_entrance_to_ash: lambda state: self.has_door_key(Door.musical_key, state, self.world.options),
             LunacidEntrance.arena_to_fate: lambda state: state.has_all([UniqueItem.water_talisman, UniqueItem.earth_talisman], self.player) and
                                                          self.has_door_key(Door.sucsarian_key, state, self.world.options),
             LunacidEntrance.fate_to_sleeper: lambda state: self.has_door_key(Door.sleeper_key, state, self.world.options),
