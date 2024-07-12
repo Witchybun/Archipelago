@@ -21,13 +21,13 @@ def create_locations(options: LunacidOptions, is_christmas: bool) -> List[Lunaci
 
 def create_base_locations(options: LunacidOptions, is_christmas: bool, locations: List[LunacidLocation]) -> List[LunacidLocation]:
     for location in base_locations:
-        if location.name in BaseLocation.abyss_locations and options.exclude_tower == options.exclude_tower.option_true:
+        if location.name in BaseLocation.abyss_locations and "Tower of Abyss" in options.remove_locations:
             continue
-        if location.name in BaseLocation.coin_locations and options.exclude_coin_locations == options.exclude_coin_locations.option_true:
+        if location.name in BaseLocation.coin_locations and "Strange Coins" in options.remove_locations:
             continue
         if location.name in BaseLocation.christmas_locations and not is_christmas:
             continue
-        if location.name in BaseLocation.daedalus_locations and options.exclude_daedalus == options.exclude_daedalus.option_true:
+        if location.name in BaseLocation.daedalus_locations and "Daedalus" in options.remove_locations:
             continue
         locations.append(location)
     return locations
