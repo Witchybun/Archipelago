@@ -113,6 +113,21 @@ class Dropsanity(Choice):
     default = 0
 
 
+class Quenchsanity(Toggle):
+    """If a weapon can gain experience, if it is quenched, it returns a check.
+    Quenching a weapon now no longer upgrades the weapons, and all quench weapons are added to the pool.
+    Exceptions: Brittle Arming Sword repairs itself for the sake of the player, and Death Scythe is removed from the inventory as normal."""
+    internal_name = "quenchsanity"
+    display_name = "Quenchsanity"
+
+
+class EtnasPupil(Toggle):
+    """Become Etna's pupil!  As in, all alchemy creations are locations to check.  Cmon saying -sanity a lot is boring.
+    If Dropsanity: Randomized is selected, each material is force placed on drops or alchemy spots to ensure repeatability."""
+    internal_name = "etnas_pupil"
+    display_name = "Etna's Pupil"
+
+
 class NormalizedDrops(Toggle):
     """Every enemy drop is normalized against the chance of dropping nothing.  Specifically, if an enemy
     has a weight of X to drop nothing, everything else also has a weight of X, and is split evenly for every
@@ -154,6 +169,12 @@ class ExcludeCoinLocations(Toggle):
     Perhaps it just makes you feel bad.  With this the locations just don't give anything.  Removes 3 locations."""
     internal_name = "exclude_coin_locations"
     display_name = "Exclude Coin Locations"
+
+
+class ExcludeDaedalus(Toggle):
+    """Excludes the locations associated with giving Daedalus Black Books.  Also removes the Black Books from the pool."""
+    internal_name = "exclude_daedalus"
+    display_name = "Exclude Daedalus"
 
 
 class CraftedFiller(Toggle):
@@ -200,12 +221,15 @@ class LunacidOptions(PerGameCommonOptions):
     total_strange_coin: TotalStrangeCoins
     shopsanity: Shopsanity
     dropsanity: Dropsanity
+    quenchsanity: Quenchsanity
+    etnas_pupil: EtnasPupil
     normalized_drops: NormalizedDrops
     secret_door_lock: SecretDoorLock
     switch_locks: SwitchLocks
     door_locks: DoorLocks
     exclude_tower: ExcludeTower
     exclude_coin_locations: ExcludeCoinLocations
+    exclude_daedalus: ExcludeDaedalus
     crafted_filler: CraftedFiller
     drop_filler: DropFiller
     filler_bundle: FillerBundle
