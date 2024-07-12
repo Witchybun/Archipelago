@@ -323,7 +323,7 @@ class TestEntranceRando(LunacidTestCase):
 
 
 class CheckTowerExclusion(LunacidTestBase):
-    options = {"exclude_tower": "true"}
+    options = {"remove_locations": frozenset({"Tower of Abyss"})}
 
     def test_no_items_or_locations_from_tower(self):
         for location in self.multiworld.get_locations(1):
@@ -333,7 +333,7 @@ class CheckTowerExclusion(LunacidTestBase):
 
 
 class CheckCoinExclusion(LunacidTestBase):
-    options = {"exclude_coin_locations": "true"}
+    options = {"remove_locations": frozenset({"Strange Coins"})}
 
     def test_no_items_or_locations_from_coins(self):
         for location in self.multiworld.get_locations(1):
