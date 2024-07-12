@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar, Protocol
 
-from Options import Choice, Toggle, DeathLink, PerGameCommonOptions, Range
+from Options import Choice, Toggle, DeathLink, PerGameCommonOptions, Range, OptionSet
 
 
 class LunacidOption(Protocol):
@@ -27,7 +27,6 @@ class Ending(Choice):
 class Class(Choice):
     """The class you play as.
     Note: The following classes are handled differently in the game:
-    Royal receives nothing from Demi, and so the location doesn't exist for them.
     Vampire has free access to the cattle cells and the first area, so the first vampiric symbol is unnecessary."""
     internal_name = "starting_class"
     display_name = "Class"
@@ -156,25 +155,18 @@ class SecretDoorLock(Toggle):
     display_name = "Secret Door Lock"
 
 
-class ExcludeTower(Toggle):
-    """Option to not include the entirety of Tower of Abyss, as it can be time-consuming.
-    Will remove the Tower of Abyss Keyring (if Door Locks is Chosen), Crystal Lamp, Moonlight,
-    and an Earth and Ocean Elixir from the pool.  Removes 11 locations."""
-    internal_name = "exclude_tower"
-    display_name = "Exclude Tower"
-
-
-class ExcludeCoinLocations(Toggle):
-    """Excludes the locations where one has to shoot a blood spell in the Temple of Silence, Kill the Jotunn, and kill Death.
-    Perhaps it just makes you feel bad.  With this the locations just don't give anything.  Removes 3 locations."""
-    internal_name = "exclude_coin_locations"
-    display_name = "Exclude Coin Locations"
-
-
-class ExcludeDaedalus(Toggle):
-    """Excludes the locations associated with giving Daedalus Black Books.  Also removes the Black Books from the pool."""
-    internal_name = "exclude_daedalus"
-    display_name = "Exclude Daedalus"
+class RemoveLocations(OptionSet):
+    """Removes certain locations from being in the pool at all.  Helps to avoid situations where even filler is not wanted on locations you would not do.
+    Choices are as follows with additional item removal information associated with the location removal:
+    Tower of Abyss: Also removes Crystal Lamp, Moonlight, and an Earth and Ocean Elixir from the pool.  11 Locations.
+    Strange Coins: Removes blood altar location in Temple of Silence, Kill the Jotunn and Kill Death.  3 Locations.
+    Daedalus: Removes all Black Books from the pool.  3 Locations."""
+    internal_name = "remove_locations"
+    display_name = "Remove Locations"
+    valid_keys = frozenset({"Tower of Abyss", "Strange Coins", "Daedalus"})
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset()
 
 
 class CraftedFiller(Toggle):
@@ -227,9 +219,7 @@ class LunacidOptions(PerGameCommonOptions):
     secret_door_lock: SecretDoorLock
     switch_locks: SwitchLocks
     door_locks: DoorLocks
-    exclude_tower: ExcludeTower
-    exclude_coin_locations: ExcludeCoinLocations
-    exclude_daedalus: ExcludeDaedalus
+    remove_locations: RemoveLocations
     crafted_filler: CraftedFiller
     drop_filler: DropFiller
     filler_bundle: FillerBundle
