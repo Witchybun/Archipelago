@@ -36,8 +36,7 @@ class Spell:
                    slime_orb, wind_dash, summon_fairy, coffin, lightning, blood_drain, holy_warmth,
                    light_reveal, earth_strike, poison_mist, wind_slicer, corpse_transformation,
                    fire_worm, bestial_communion, moon_beam, summon_ice_sword, earth_thorn, ice_tear,
-                   rock_bridge, ignis_calor, icarian_flight, blue_flame_arc, lava_chasm, spirit_warp,
-                   jingle_bells
+                   rock_bridge, ignis_calor, icarian_flight, blue_flame_arc, lava_chasm, spirit_warp
                    ]
 
 

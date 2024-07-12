@@ -55,6 +55,7 @@ class Enemy:
     jailor = "Jailor"
     lupine_skeleton = "Lupine Skeleton"
     giant_skeleton = "Giant Skeleton"
+    infested_corpse = "Infested Corpse"
 
     sucsarian = "Sucsarian"
     ceres = "Ceres"
