@@ -6,6 +6,8 @@ class GenericItem:
 
 
 class Alchemy:
+    fire_coral = "Fire Coral"
+    fiddlehead = "Fiddlehead"
     ectoplasm = "Ectoplasm"
     snowflake_obsidian = "Snowflake Obsidian"
     moon_petal = "Moon Petal"
@@ -24,9 +26,11 @@ class Alchemy:
     bloodweed = "Bloodweed"
     ikurrilb_root = "Ikurr'ilb Root"
     destroying_angel_mushroom = "Destroying Angel Mushroom"
-    bomb = "Bomb"
     poison_urn = "Poison Urn"
-    limbo = "Limbo"
+    bones = "Bones"
+
+    necessary_alchemy_items = [ashes, fire_opal, opal, yellow_morel, lotus_seed_pod, snowflake_obsidian, onyx, obsidian, destroying_angel_mushroom, ocean_bone_shard,
+                               ocean_bone_shell, moon_petal, bloodweed, ectoplasm, bones, ikurrilb_root]
 
 
 class Creation:
@@ -95,9 +99,10 @@ class Trap:
     coal = "Coal"
 
     all_traps = [health_viai, slowness_trap, bleed_trap, curse_trap, blindness_trap, mana_drain_trap,
-                 xp_drain_trap, poison_trap, eggnog, coal
+                 xp_drain_trap, poison_trap
                  ]
 
+    christmas_gifts = [eggnog, coal]
 
 class Switch:
     hollow_basin_switch_near_demi = "Hollow Basin Switch Key"
