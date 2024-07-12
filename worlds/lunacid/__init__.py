@@ -5,6 +5,7 @@ from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassifi
 from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from . import Options
+from .OptionGroups import lunacid_option_groups
 from .strings.weapons import Weapon
 from .data.item_data import all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons, shop_starting_weapons, LunacidItemData
 from .data.weapon_info import weapons_by_element
@@ -74,6 +75,7 @@ class LunacidWorld(World):
     required_client_version = (0, 5, 0)
 
     options_dataclass = LunacidOptions
+    option_groups = lunacid_option_groups
     options: LunacidOptions
     is_christmas = (strftime('%B') == "December")
     starting_weapon: LunacidItem
@@ -218,7 +220,7 @@ class LunacidWorld(World):
             "elements": self.weapon_elements,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
                                    "filler_bundle", "shopsanity", "dropsanity", "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
-                                   "secret_door_lock", "death_link", "exclude_tower", "exclude_coin_locations", "exclude_daedalus", "starting_class", "normalized_drops"),
+                                   "secret_door_lock", "death_link", "remove_locations", "starting_class", "normalized_drops"),
             "entrances": self.randomized_entrances
         }
 
