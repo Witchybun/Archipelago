@@ -284,7 +284,7 @@ forlorn_arena = [
 ]
 
 labyrinth_of_ash = [
-    create_location(LOCATION_CODE_START + base_location_start + 307, BaseLocation.ash_entry_coffin, LunacidRegion.labyrinth_of_ash),
+    create_location(LOCATION_CODE_START + base_location_start + 307, BaseLocation.ash_entry_coffin, LunacidRegion.labyrinth_of_ash_entrance),
     create_location(LOCATION_CODE_START + base_location_start + 308, BaseLocation.ash_giant_remains, LunacidRegion.labyrinth_of_ash),
     create_location(LOCATION_CODE_START + base_location_start + 309, BaseLocation.ash_cetea_statue, LunacidRegion.labyrinth_of_ash),
     create_location(LOCATION_CODE_START + base_location_start + 310, BaseLocation.ash_rocks_near_switch, LunacidRegion.labyrinth_of_ash),
