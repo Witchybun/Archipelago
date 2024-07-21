@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from typing import ClassVar, Protocol
 
-from Options import Choice, Toggle, DeathLink, PerGameCommonOptions, Range, OptionSet
+from Options import Choice, Toggle, DeathLink, PerGameCommonOptions, Range, OptionSet, OptionDict
+from worlds.lunacid.data.item_data import filler_items, drop_items, crafted_items
+from .strings.items import Trap
 
 
 class LunacidOption(Protocol):
@@ -27,7 +29,8 @@ class Ending(Choice):
 class Class(Choice):
     """The class you play as.
     Note: The following classes are handled differently in the game:
-    Vampire has free access to the cattle cells and the first area, so the first vampiric symbol is unnecessary."""
+    Vampire has free access to the cattle cells and the first area, so the first vampiric symbol is unnecessary.
+    Custom is an advanced option.  If on a website its values will not be visible.  You know how it is smh."""
     internal_name = "starting_class"
     display_name = "Class"
     option_thief = 0
@@ -39,6 +42,7 @@ class Class(Choice):
     option_cleric = 6
     option_shinobi = 7
     option_forsaken = 8
+    option_custom = 9
 
 
 class EntranceRandomization(Toggle):
@@ -169,27 +173,33 @@ class RemoveLocations(OptionSet):
     default = frozenset()
 
 
-class CraftedFiller(Toggle):
-    """Allows for items mainly made with alchemy to be added as filler.  This excludes Crystal Shards, Health Vials, Mana Vials, Antidotes, and Cloth Bandages.
-    Note: Bombs are overpowered, so it might make the game too easy."""
-    internal_name = "crafted_filler"
-    display_name = "Crafted Filler"
+class Filler(OptionSet):
+    """Lets you decide which filler are added to the game.  If the set is empty, only silver is included.
+    Amount received in game is a random value between 1~5, favoring 1~2.
+    Acceptable Filler: Blood Wine, Light Urn, Cloth Bandage, Dark Urn, Bomb, Poison Urn, Wisp Heart, Staff of Osiris,
+    Moonlight Vial, Spectral Candle, Health Vial, Mana Vial, Fairy Moss, Crystal Shard, Poison Throwing Knife,
+    Throwing Knife, Holy Water, Antidote, Survey Banner, Pink Shrimp, Angel Feather, Fool's Gold, Ectoplasm,
+    Snowflake Obsidian, Moon Petal, Fire Opal, Ashes, Fiddlehead, Fire Coral, Vampiric Ashes,
+    Opal, Yellow Morel, Lotus Seed Pod, Obsidian, Onyx, Ocean Bone Shard, Bloodweed, Ikurr'ilb Root,
+    Destroying Angel Mushroom, Ocean Bone Shell, Bones, Fool's Gold."""
+    internal_name = "filler"
+    display_name = "Filler"
+    valid_keys = frozenset(filler_items + drop_items + crafted_items)
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset(filler_items)
 
 
-class DropFiller(Toggle):
-    """Adds Angel Feather, Shrimp, and dropped alchemy materials into the filler pool.
-    Note: Angel Feather is overpowered, so it might make the game too easy."""
-    internal_name = "drop_filler"
-    display_name = "Drop Filler"
-
-
-class FillerBundle(Range):
-    """Changes how many of the non-unique filler items are given to the player when such an item is received."""
-    internal_name = "filler_bundle"
-    display_name = "Filler Bundle"
-    range_start = 1
-    range_end = 5
-    default = 1
+class Traps(OptionSet):
+    """Lets you decide which traps are in your game.  If empty, same as having 0 Trap Percent.
+    Certain joyous traps are allowed during Christmas, otherwise are ignored.
+    Acceptable Traps: "Bleed Trap", "Poison Trap", "Curse Trap", "Slowness Trap", "Blindness Trap", "Mana Drain Trap", "XP Drain Trap", Coal, Eggnog."""
+    internal_name = "traps"
+    display_name = "Traps"
+    valid_keys = frozenset(Trap.all_traps + Trap.christmas_gifts)
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset(Trap.all_traps)
 
 
 class TrapPercent(Range):
@@ -199,6 +209,51 @@ class TrapPercent(Range):
     range_start = 0
     range_end = 100
     default = 20
+
+
+class ItemColors(OptionDict):
+    """Lets you determine the colors of items in-game using hexadecimal.  This includes Progression, Useful, Trap, Filler, Gifts, and
+    Cheated (!getitem, starting inventory, etc).  If an item has multiple flags, the colors are averaged."""
+    internal_name = "item_colors"
+    valid_keys = ["Progression", "Useful", "Trap", "Filler", "Gift", "Cheat"]
+    display_name = "Item Colors"
+    default = {
+        "Progression": "#AF99EF",
+        "Useful": "#6D8BE8",
+        "Trap": "#FA8072",
+        "Filler": "#00EEEE",
+        "Gift": "#9DAE11",
+        "Cheat": "#FF0000",
+    }
+
+
+class CustomClass(OptionDict):
+    """If 'Custom' is chosen for starting class, this is used as a stand-in for that information.
+    If Name or Description is 'RANDOM', or any stat is -1, a random value will be supplied.
+    Level ranges from 1 to 10.
+    Stats (Strength to Resistance) range from 1 to 20.
+    Resistances (Normal Res to Dark Res) range from 0 to 300."""
+    internal_name = "custom_class"
+    display_name = "Custom Class"
+    valid_keys = ["Name", "Description", "Level", "Strength", "Speed", "Intelligence", "Defense", "Dexterity", "Resistance", "Normal Res",
+                  "Fire Res", "Ice Res", "Poison Res", "Light Res", "Dark Res"]
+    default = {
+        "Name": "RANDOM",
+        "Description": "RANDOM",
+        "Level": -1,
+        "Strength": -1,
+        "Speed": -1,
+        "Intelligence": -1,
+        "Defense": -1,
+        "Dexterity": -1,
+        "Resistance": -1,
+        "Normal Res": -1,
+        "Fire Res": -1,
+        "Ice Res": -1,
+        "Poison Res": -1,
+        "Light Res": -1,
+        "Dark Res": -1,
+    }
 
 
 @dataclass
@@ -220,8 +275,9 @@ class LunacidOptions(PerGameCommonOptions):
     switch_locks: SwitchLocks
     door_locks: DoorLocks
     remove_locations: RemoveLocations
-    crafted_filler: CraftedFiller
-    drop_filler: DropFiller
-    filler_bundle: FillerBundle
+    filler: Filler
+    traps: Traps
     trap_percent: TrapPercent
+    item_colors: ItemColors
+    custom_class: CustomClass
     death_link: DeathLink
