@@ -386,7 +386,7 @@ class DropLocation:
     ikkurilb_snowflake_obsidian = other_drop("Ikurr'ilb: Snowflake Obsidian Drop")
     mimic_moon_vial = other_drop("Mimic: Moonlight Vial Drop")
     mimic_obsidian = other_drop("Mimic: Obsidian Drop")
-    mimic_fools_gold = other_drop("Mimic: Fools Gold Drop")
+    mimic_fools_gold = other_drop("Mimic: Fool's Gold Drop")
     obsidian_skeleton_drop_1 = unique_drop("Obsidian Skeleton: Obsidian Cursebrand Drop")
     obsidian_skeleton_drop_2 = unique_drop("Obsidian Skeleton: Obsidian Poisonguard Drop")
     obsidian_skeleton_10c = other_drop("Obsidian Skeleton: Large Silver Drop")

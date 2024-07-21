@@ -1,7 +1,7 @@
 from Options import DeathLink, ProgressionBalancing, Accessibility, OptionGroup
 from .Options import (Ending, Class, EntranceRandomization, Experience, WeaponExperience, RandomElements, RequiredStrangeCoins, TotalStrangeCoins,
-                      Shopsanity, Dropsanity, Quenchsanity, EtnasPupil, NormalizedDrops, SecretDoorLock, SwitchLocks, DoorLocks, RemoveLocations, CraftedFiller,
-                      DropFiller, FillerBundle, TrapPercent)
+                      Shopsanity, Dropsanity, Quenchsanity, EtnasPupil, NormalizedDrops, SecretDoorLock, SwitchLocks, DoorLocks, RemoveLocations,
+                      TrapPercent, ItemColors, CustomClass, Filler, Traps)
 
 lunacid_option_groups = [
     OptionGroup("General", [
@@ -28,12 +28,13 @@ lunacid_option_groups = [
         WeaponExperience,
         NormalizedDrops,
         RemoveLocations,
-        CraftedFiller,
-        DropFiller,
-        FillerBundle,
+        Filler,
+        Traps,
         TrapPercent
     ]),
     OptionGroup("Advanced Options", [
+        ItemColors,
+        CustomClass,
         RemoveLocations,
         DeathLink,
         ProgressionBalancing,
