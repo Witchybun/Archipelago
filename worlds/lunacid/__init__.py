@@ -6,6 +6,7 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from . import Options
 from .OptionGroups import lunacid_option_groups
+from .strings.custom_features import all_classes, DefaultColors
 from .strings.weapons import Weapon
 from .data.item_data import all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons, shop_starting_weapons, LunacidItemData
 from .data.weapon_info import weapons_by_element
@@ -81,6 +82,9 @@ class LunacidWorld(World):
     starting_weapon: LunacidItem
     weapon_elements: Dict[str, str]
     randomized_entrances: Dict[str, str]
+    custom_class_name: str = ""
+    custom_class_description: str = ""
+    custom_class_stats: Dict[str, int] = {}
     web = LunacidWeb()
     logger = logging.getLogger()
 
@@ -100,6 +104,8 @@ class LunacidWorld(World):
                 self.options.door_locks.value = passthrough["door_locks"]
                 self.options.switch_locks.value = passthrough["switch_locks"]
                 self.options.secret_door_lock.value = passthrough["secret_door_lock"]
+        self.package_custom_class()
+        self.verify_item_colors()
 
     def create_item(self, name: str, override_classification: ItemClassification = None) -> "LunacidItem":
         item_id: int = self.item_name_to_id[name]
@@ -191,6 +197,70 @@ class LunacidWorld(World):
 
         world.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
 
+    def package_custom_class(self) -> None:
+        def package_custom_class_stat(stat: str, minimum: int, maximum: int) -> None:
+            stat_data = min(maximum, self.options.custom_class.get(stat, -1))
+            if stat_data == -1:
+                self.custom_class_stats[stat] = self.random.randrange(minimum, maximum)
+            else:
+                self.custom_class_stats[stat] = max(minimum, stat_data)
+
+        name = self.options.custom_class.get("Name", "RANDOM")
+        description = self.options.custom_class.get("Description", "RANDOM")
+        if name == "RANDOM" and description == "RANDOM":
+            chosen_class = self.random.choice(list(all_classes.keys()))
+            self.custom_class_name = chosen_class
+            self.custom_class_description = all_classes[chosen_class]
+        elif name == "RANDOM":
+            chosen_class = self.random.choice(list(all_classes.keys()))
+            self.custom_class_name = chosen_class
+            self.custom_class_description = description
+        elif description == "RANDOM":
+            chosen_class = self.random.choice(list(all_classes.keys()))
+            self.custom_class_name = name
+            self.custom_class_description = all_classes[chosen_class]
+        else:
+            self.custom_class_name = name
+            self.custom_class_description = description
+        package_custom_class_stat("Level", 1, 10)
+        package_custom_class_stat("Strength", 1, 20)
+        package_custom_class_stat("Speed", 1, 20)
+        package_custom_class_stat("Intelligence", 1, 20)
+        package_custom_class_stat("Defense", 1, 20)
+        package_custom_class_stat("Dexterity", 1, 20)
+        package_custom_class_stat("Resistance", 1, 20)
+        package_custom_class_stat("Normal Res", 0, 20)
+        package_custom_class_stat("Fire Res", 0, 300)
+        package_custom_class_stat("Ice Res", 0, 300)
+        package_custom_class_stat("Poison Res", 0, 300)
+        package_custom_class_stat("Light Res", 0, 300)
+        package_custom_class_stat("Dark Res", 0, 300)
+
+    def verify_item_colors(self) -> None:
+        self.fix_colors("Progression", DefaultColors.progression)
+        self.fix_colors("Useful", DefaultColors.useful)
+        self.fix_colors("Trap", DefaultColors.trap)
+        self.fix_colors("Filler", DefaultColors.filler)
+        self.fix_colors("Gift", DefaultColors.gift)
+        self.fix_colors("Cheat", DefaultColors.cheat)
+
+    def fix_colors(self, name: str, default_color: str):
+        if name not in self.options.item_colors:
+            self.options.item_colors.value[name] = default_color
+        elif not self.is_hex(self.options.item_colors.value[name]):
+            self.options.item_colors.value[name] = default_color
+
+    def is_hex(self, possible_hex: str) -> bool:
+        pure_hex = possible_hex.replace("#", "")
+        # We sin in this bitch
+        try:
+            if len(pure_hex) != 6:
+                return False
+            int(pure_hex, 16)
+            return True
+        except ValueError:
+            return False
+
     def pre_fill(self) -> None:
         if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
             alchemy_items = []
@@ -215,12 +285,15 @@ class LunacidWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.7.0",
+            "client_version": "0.7.2",
             "is_christmas": self.is_christmas,
             "elements": self.weapon_elements,
+            "created_class_name": self.custom_class_name,
+            "created_class_description": self.custom_class_description,
+            "created_class_stats": self.custom_class_stats,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
-                                   "filler_bundle", "shopsanity", "dropsanity", "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
-                                   "secret_door_lock", "death_link", "remove_locations", "starting_class", "normalized_drops"),
+                                   "shopsanity", "dropsanity", "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
+                                   "secret_door_lock", "death_link", "remove_locations", "starting_class", "normalized_drops", "item_colors"),
             "entrances": self.randomized_entrances
         }
 

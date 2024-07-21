@@ -120,9 +120,9 @@ def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict
 def append_item_with_progression_determined_by_element_and_range(item_factory: LunacidItemFactory, item: str, ranged_list: List[str], options: LunacidOptions,
                                                                  equipment_by_elements: Dict[str, str], items: List[Item]):
     if equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
-        items.append(item_factory(item, ItemClassification.progression))
+        items.append(item_factory(item, ItemClassification.progression | ItemClassification.useful))
     elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_list:
-        items.append(item_factory(item, ItemClassification.progression))
+        items.append(item_factory(item, ItemClassification.progression | ItemClassification.useful))
     elif options.quenchsanity == options.quenchsanity.option_true and item in Weapon.quenchable_weapons:
         items.append(item_factory(item, ItemClassification.progression))
     else:
@@ -137,9 +137,9 @@ def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[
         if all_spell_info_by_name[item].style == Types.support:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
         elif [item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
-            items.append(item_factory(item, ItemClassification.progression))
+            items.append(item_factory(item, ItemClassification.progression | ItemClassification.useful))
         elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_spells:
-            items.append(item_factory(item, ItemClassification.progression))
+            items.append(item_factory(item, ItemClassification.progression | ItemClassification.useful))
         else:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
     if options.dropsanity != options.dropsanity.option_off:
@@ -147,9 +147,9 @@ def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[
             if all_spell_info_by_name[item].style == Types.support:
                 items.append(item_factory(item, determine_item_classification(item, force_progressive)))
             elif equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
-                items.append(item_factory(item, ItemClassification.progression))
+                items.append(item_factory(item, ItemClassification.progression | ItemClassification.useful))
             elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_spells:
-                items.append(item_factory(item, ItemClassification.progression))
+                items.append(item_factory(item, ItemClassification.progression | ItemClassification.useful))
             else:
                 items.append(item_factory(item, determine_item_classification(item, force_progressive)))
     return items
@@ -169,7 +169,7 @@ def determine_starting_weapon(random: Random, options: LunacidOptions) -> str:
 
 def determine_item_classification(item: str, progression: bool) -> ItemClassification:
     if progression:
-        return ItemClassification.progression
+        return ItemClassification.progression | ItemClassification.useful
     else:
         return all_item_data_by_name[item].classification
 
@@ -221,7 +221,7 @@ def create_strange_coins(item_factory: LunacidItemFactory, options: LunacidOptio
         count += 1
     count = 0
     while count < total_coins - required_coins:
-        items.append(item_factory(Coins.strange_coin))
+        items.append(item_factory(Coins.strange_coin, ItemClassification.progression | ItemClassification.useful))
         count += 1
 
 
@@ -246,15 +246,13 @@ def create_door_items(item_factory: LunacidItemFactory, options: LunacidOptions,
 def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random, filler_slots: int, is_christmas: bool, items: List[Item]) -> List[Item]:
     if filler_slots == 0:
         return items
-    filler_list = filler_items.copy()
-    if options.crafted_filler == options.crafted_filler.option_true:
-        filler_list.extend(crafted_items)
-    if options.drop_filler == options.drop_filler.option_true:
-        filler_list.extend(drop_items)
-    trap_list = Trap.all_traps.copy()
-    if is_christmas:
-        trap_list = trap_list.extend(Trap.christmas_gifts)
+    filler_list = [Coins.silver] + list(options.filler.value)
+    trap_list = list(options.traps.value)
+    if not is_christmas:
+        trap_list = [trap for trap in trap_list if trap != Trap.coal or trap != Trap.eggnog]
     trap_percent = options.trap_percent.value / 100
+    if not trap_list:
+        trap_percent = 0
     filler_count = filler_slots
     if trap_percent != 0:
         trap_count = int(filler_slots * trap_percent)
