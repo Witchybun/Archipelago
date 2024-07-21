@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from typing import List
 from BaseClasses import ItemClassification
 
-from .. import Weapon
 from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives, RareDrops, \
     Voucher, Trap, Switch, Door
+from ..strings.weapons import Weapon
 from ..strings.spells import Spell, MobSpell
 
 
@@ -59,7 +59,7 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 22, UniqueItem.corrupted_key, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 23, UniqueItem.skull_of_josiah, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 24, Progressives.vampiric_symbol, ItemClassification.progression),
-    create_item(ITEM_CODE_START + base_start_id + 27, UniqueItem.crystal_lantern, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 27, UniqueItem.crystal_lantern, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 28, UniqueItem.terminus_prison_key, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 29, UniqueItem.enchanted_key, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 30, UniqueItem.survey_banner, ItemClassification.filler),
@@ -71,8 +71,8 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 36, Alchemy.broken_sword, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 37, UniqueItem.water_talisman, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 38, UniqueItem.earth_talisman, ItemClassification.progression),
-    create_item(ITEM_CODE_START + base_start_id + 39, Coins.strange_coin, ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 40, UniqueItem.oil_lantern, ItemClassification.progression),
+    create_item(ITEM_CODE_START + base_start_id + 39, Coins.strange_coin, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 40, UniqueItem.oil_lantern, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 41, Creation.bomb, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 42, Creation.poison_urn, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 43, Coins.silver, ItemClassification.filler),
@@ -131,13 +131,13 @@ base_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 7, Weapon.broken_lance, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 8, Weapon.corrupted_dagger, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 9, Weapon.dark_rapier, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 10, Weapon.elfen_bow, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 10, Weapon.elfen_bow, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 11, Weapon.elfen_sword, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 12, Weapon.fishing_spear, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 13, Weapon.marauder_black_flail, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 14, Weapon.halberd, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 15, Weapon.iron_claw, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 16, Weapon.moonlight, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 16, Weapon.moonlight, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 17, Weapon.obsidian_seal, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 18, Weapon.replica_sword, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 19, Weapon.ritual_dagger, ItemClassification.useful),
@@ -146,21 +146,21 @@ base_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 22, Weapon.steel_spear, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 23, Weapon.stone_club, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 24, Weapon.torch, ItemClassification.progression),
-    create_item(ITEM_CODE_START + weapon_start_id + 25, Weapon.twisted_staff, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 25, Weapon.twisted_staff, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 26, Weapon.vampire_hunter_sword, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 27, Weapon.wand_of_power, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 27, Weapon.wand_of_power, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 28, Weapon.wolfram_greatsword, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 29, Weapon.wooden_shield, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 30, Weapon.crossbow,  ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 30, Weapon.crossbow,  ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 31, Weapon.steel_needle, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 32, Weapon.lucid_blade, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 32, Weapon.lucid_blade, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 33, Weapon.hammer_of_cruelty, ItemClassification.useful),
 ]
 
 shop_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 34, Weapon.jotunn_slayer, ItemClassification.progression),
     create_item(ITEM_CODE_START + weapon_start_id + 35, Weapon.rapier, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 36, Weapon.privateer_musket, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 36, Weapon.privateer_musket, ItemClassification.progression | ItemClassification.useful),
 ]
 
 drop_weapons = [
@@ -173,7 +173,7 @@ drop_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 43, Weapon.obsidian_poisonguard, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 44, Weapon.golden_kopesh, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 45, Weapon.golden_sickle, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 46, Weapon.jailor_candle, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 46, Weapon.jailor_candle, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 47, Weapon.sucsarian_dagger, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 48, Weapon.sucsarian_spear, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 49, Weapon.lyrian_longsword, ItemClassification.useful),
@@ -186,9 +186,9 @@ quench_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 53, Weapon.poison_claw, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 54, Weapon.iron_club, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 55, Weapon.iron_torch, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 56, Weapon.fire_sword, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 56, Weapon.fire_sword, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 57, Weapon.steel_lance, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 58, Weapon.double_crossbow, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 58, Weapon.double_crossbow, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 59, Weapon.death_scythe, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 60, Weapon.elfen_longsword, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 61, Weapon.steel_claw, ItemClassification.useful),
@@ -204,21 +204,21 @@ alchemy_weapons = [
 
 spell_start_id = 250
 base_spells = [
-    create_item(ITEM_CODE_START + spell_start_id + 1, Spell.barrier, ItemClassification.progression),
+    create_item(ITEM_CODE_START + spell_start_id + 1, Spell.barrier, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 2, Spell.bestial_communion, ItemClassification.useful),
-    create_item(ITEM_CODE_START + spell_start_id + 3, Spell.blood_drain, ItemClassification.progression),
-    create_item(ITEM_CODE_START + spell_start_id + 4, Spell.blood_strike, ItemClassification.progression),
+    create_item(ITEM_CODE_START + spell_start_id + 3, Spell.blood_drain, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + spell_start_id + 4, Spell.blood_strike, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 5, Spell.blue_flame_arc, ItemClassification.useful),
-    create_item(ITEM_CODE_START + spell_start_id + 6, Spell.coffin, ItemClassification.progression),
+    create_item(ITEM_CODE_START + spell_start_id + 6, Spell.coffin, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 7, Spell.corpse_transformation, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 8, Spell.earth_strike, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 9, Spell.earth_thorn, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 10, Spell.fire_worm, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 11, Spell.flame_flare, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 12, Spell.flame_spear, ItemClassification.useful),
-    create_item(ITEM_CODE_START + spell_start_id + 13, Spell.ghost_light, ItemClassification.progression),
+    create_item(ITEM_CODE_START + spell_start_id + 13, Spell.ghost_light, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 14, Spell.holy_warmth, ItemClassification.useful),
-    create_item(ITEM_CODE_START + spell_start_id + 15, Spell.icarian_flight, ItemClassification.progression),
+    create_item(ITEM_CODE_START + spell_start_id + 15, Spell.icarian_flight, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 16, Spell.ice_spear, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 17, Spell.ice_tear, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 18, Spell.ignis_calor, ItemClassification.progression),
@@ -228,7 +228,7 @@ base_spells = [
     create_item(ITEM_CODE_START + spell_start_id + 22, Spell.lithomancy, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 23, Spell.moon_beam, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 24, Spell.poison_mist, ItemClassification.useful),
-    create_item(ITEM_CODE_START + spell_start_id + 25, Spell.rock_bridge, ItemClassification.progression),
+    create_item(ITEM_CODE_START + spell_start_id + 25, Spell.rock_bridge, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 26, Spell.slime_orb, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 27, Spell.spirit_warp, ItemClassification.progression),
     create_item(ITEM_CODE_START + spell_start_id + 28, Spell.summon_fairy, ItemClassification.useful),
@@ -254,11 +254,11 @@ switches = [
     create_item(ITEM_CODE_START + switch_start_id + 4, Switch.tomb_switches, ItemClassification.useful),
     create_item(ITEM_CODE_START + switch_start_id + 5, Switch.tomb_light_switches, ItemClassification.useful),
     create_item(ITEM_CODE_START + switch_start_id + 6, Switch.archives_switch, ItemClassification.useful),
-    create_item(ITEM_CODE_START + switch_start_id + 7, Switch.archives_elevator_switches, ItemClassification.progression),
+    create_item(ITEM_CODE_START + switch_start_id + 7, Switch.archives_elevator_switches, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + switch_start_id + 8, Switch.ballroom_switch, ItemClassification.useful),
     create_item(ITEM_CODE_START + switch_start_id + 9, Switch.grotto_valves_switches, ItemClassification.progression),
     create_item(ITEM_CODE_START + switch_start_id + 10, Switch.grotto_switches, ItemClassification.useful),
-    create_item(ITEM_CODE_START + switch_start_id + 11, Switch.prison_shortcut_switch, ItemClassification.progression),
+    create_item(ITEM_CODE_START + switch_start_id + 11, Switch.prison_shortcut_switch, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + switch_start_id + 12, Switch.prison_arena_switch, ItemClassification.progression),
     create_item(ITEM_CODE_START + switch_start_id + 13, Switch.arena_water_switch, ItemClassification.useful),
     create_item(ITEM_CODE_START + switch_start_id + 14, Switch.arena_earth_switch, ItemClassification.useful),
@@ -330,7 +330,7 @@ base_special_item_counts = {
 filler_items = [
     Creation.crystal_shard, Creation.health_vial, Creation.mana_vial,
     Creation.antidote, GenericItem.blood_wine, UniqueItem.survey_banner,
-    Coins.silver, GenericItem.dark_urn, GenericItem.light_urn,
+    GenericItem.dark_urn, GenericItem.light_urn,
     Alchemy.ashes, GenericItem.cloth_bandage, Alchemy.ectoplasm,
     Alchemy.snowflake_obsidian, Alchemy.moon_petal, Alchemy.opal,
     Alchemy.fire_opal, Alchemy.ikurrilb_root, Alchemy.onyx,
