@@ -87,6 +87,10 @@ class Coins:
     strange_coin = "Strange Coin"
 
 
+class CustomItem:
+    experience = "Deep Knowledge"
+
+
 class Trap:
     health_viai = "Health ViaI"
     blindness_trap = "Blindness Trap"
@@ -104,6 +108,7 @@ class Trap:
                  ]
 
     christmas_gifts = [eggnog, coal]
+
 
 class Switch:
     hollow_basin_switch_near_demi = "Hollow Basin Switch Key"
