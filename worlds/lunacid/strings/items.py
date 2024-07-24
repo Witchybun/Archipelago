@@ -28,6 +28,7 @@ class Alchemy:
     destroying_angel_mushroom = "Destroying Angel Mushroom"
     poison_urn = "Poison Urn"
     bones = "Bones"
+    vampiric_ashes = "Vampiric Ashes"
 
     necessary_alchemy_items = [ashes, fire_opal, opal, yellow_morel, lotus_seed_pod, snowflake_obsidian, onyx, obsidian, destroying_angel_mushroom, ocean_bone_shard,
                                ocean_bone_shell, moon_petal, bloodweed, ectoplasm, bones, ikurrilb_root]
