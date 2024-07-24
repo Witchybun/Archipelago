@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from typing import ClassVar, Protocol
 
 from Options import Choice, Toggle, DeathLink, PerGameCommonOptions, Range, OptionSet, OptionDict
-from worlds.lunacid.data.item_data import filler_items, drop_items, crafted_items
-from .strings.items import Trap
+from worlds.lunacid.data.item_data import all_filler_items
+from .strings.items import Trap, Coins
 
 
 class LunacidOption(Protocol):
@@ -181,13 +181,13 @@ class Filler(OptionSet):
     Throwing Knife, Holy Water, Antidote, Survey Banner, Pink Shrimp, Angel Feather, Fool's Gold, Ectoplasm,
     Snowflake Obsidian, Moon Petal, Fire Opal, Ashes, Fiddlehead, Fire Coral, Vampiric Ashes,
     Opal, Yellow Morel, Lotus Seed Pod, Obsidian, Onyx, Ocean Bone Shard, Bloodweed, Ikurr'ilb Root,
-    Destroying Angel Mushroom, Ocean Bone Shell, Bones, Fool's Gold."""
+    Destroying Angel Mushroom, Ocean Bone Shell, Bones."""
     internal_name = "filler"
     display_name = "Filler"
-    valid_keys = frozenset(filler_items + drop_items + crafted_items)
+    valid_keys = frozenset([item for item in all_filler_items if item != Coins.silver])
     preset_none = frozenset()
     preset_all = valid_keys
-    default = frozenset(filler_items)
+    default = frozenset([item for item in all_filler_items if item != Coins.silver])
 
 
 class Traps(OptionSet):
