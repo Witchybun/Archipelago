@@ -311,7 +311,6 @@ shop_locations = [
     create_location(LOCATION_CODE_START + shop_location_start + 5, ShopLocation.buy_jotunn_slayer, LunacidRegion.sheryl_the_crow),
     create_location(LOCATION_CODE_START + shop_location_start + 6, ShopLocation.buy_privateer_musket, LunacidRegion.sheryl_the_crow),
     create_location(LOCATION_CODE_START + shop_location_start + 7, ShopLocation.buy_steel_needle, LunacidRegion.sheryl_the_crow),
-    create_location(LOCATION_CODE_START + shop_location_start + 8, ShopLocation.buy_ocean_elixir_sheryl, LunacidRegion.sheryl_the_crow),
     create_location(LOCATION_CODE_START + shop_location_start + 9, ShopLocation.buy_ocean_elixir_patchouli, LunacidRegion.patchouli),
 ]
 
