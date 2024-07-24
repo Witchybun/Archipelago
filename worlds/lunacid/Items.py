@@ -209,7 +209,6 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
     create_strange_coins(item_factory, options, items)
     return items
 
-
 def create_strange_coins(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]) -> None:
     if options.ending != options.ending.option_ending_b and options.ending != options.ending.option_any_ending:
         return
