@@ -101,6 +101,8 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 66, Alchemy.fiddlehead, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 67, Alchemy.fire_coral, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 68, Alchemy.bones, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 69, Alchemy.vampiric_ashes, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 70, Creation.throwing_knife, ItemClassification.filler),
     ]
 
 trap_start_id = 100
@@ -327,28 +329,6 @@ base_special_item_counts = {
     UniqueItem.earth_elixir: 9,
 }
 
-filler_items = [
-    Creation.crystal_shard, Creation.health_vial, Creation.mana_vial,
-    Creation.antidote, GenericItem.blood_wine, UniqueItem.survey_banner,
-    GenericItem.dark_urn, GenericItem.light_urn,
-    Alchemy.ashes, GenericItem.cloth_bandage, Alchemy.ectoplasm,
-    Alchemy.snowflake_obsidian, Alchemy.moon_petal, Alchemy.opal,
-    Alchemy.fire_opal, Alchemy.ikurrilb_root, Alchemy.onyx,
-    Alchemy.obsidian, Alchemy.ocean_bone_shell, Alchemy.ocean_bone_shard,
-    Alchemy.destroying_angel_mushroom, Alchemy.yellow_morel, Alchemy.bloodweed,
-    Alchemy.lotus_seed_pod,
-]
-
-crafted_items = [
-    Creation.poison_throwing_knife, Creation.holy_water, Creation.spectral_candle,
-    Creation.staff_of_osiris, Creation.moonlight_vial, Creation.wisp_heart,
-    Creation.fairy_moss, Creation.bomb, Creation.poison_urn,
-]
-
-drop_items = [
-    RareDrops.shrimp, RareDrops.angel_feather, RareDrops.fools_gold
-]
-
 shop_unique_items = [
     UniqueItem.oil_lantern, UniqueItem.enchanted_key
 ]
@@ -373,4 +353,4 @@ drop_spell_names = [drop.name for drop in drop_spells]
 
 
 all_item_data_by_name = {item.name: item for item in all_items}
-all_filler_items = {item.name for item in all_items if item.classification == ItemClassification.filler}
+all_filler_items = [item.name for item in all_items if item.classification == ItemClassification.filler]
