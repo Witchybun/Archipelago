@@ -5,6 +5,8 @@ from typing import Set
 from BaseClasses import CollectionState, MultiWorld, Item, ItemClassification
 from . import LunacidTestBase, setup_solo_multiworld, LunacidTestCase
 from .. import Endings, Options, Weapon
+from ..Items import item_table
+from ..Locations import location_table
 from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions
 from ..data.enemy_data import all_enemies_by_name
 from ..data.location_data import *
@@ -15,7 +17,7 @@ from ..strings.items import Switch, Door, UniqueItem, Progressives, Coins, Alche
 from ..strings.spells import Spell, MobSpell
 
 
-class TestAllLocationsAppended(LunacidTestBase):
+class TestGeneric(LunacidTestBase):
 
     def test_if_base_locations_appended(self):
         for location in wings_rest:
@@ -57,6 +59,20 @@ class TestAllLocationsAppended(LunacidTestBase):
         for location in chamber_of_fate:
             self.assertIn(location, base_locations)
         self.assertTrue(210 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
+
+    def test_no_duplicate_ids(self):
+        constructed_item_table = {}
+        for item in item_table:
+            if item.name not in constructed_item_table:
+                constructed_item_table[item.name] = item.code
+                continue
+            self.assertFalse(True, f"Found duplicate ID for {item.name}: {item.code} vs {constructed_item_table[item.name]}")
+        constructed_location_table = {}
+        for location in location_table:
+            if location.name not in constructed_location_table:
+                constructed_item_table[location.name] = location.location_id
+                continue
+            self.assertFalse(True, f"Found duplicate ID for {location.name}: {location.location_id} vs {constructed_item_table[location.name]}")
 
 
 class TestEndingE(LunacidTestBase):
