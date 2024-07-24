@@ -23,6 +23,9 @@ from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
 
 
+logger = logging.getLogger()
+
+
 class LunacidItem(Item):
     game: str = "Lunacid"
 
@@ -263,12 +266,15 @@ class LunacidWorld(World):
 
     def pre_fill(self) -> None:
         if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
+            logger.info(f"Randomized Drops and Etna's Pupil found in generation for Player {self.player}.  "
+                        f"Adding progressives to dropsanity locations regardless of settings.")
             alchemy_items = []
             for alchemy_item in Alchemy.necessary_alchemy_items:
                 alchemy_items.append(Item(alchemy_item, ItemClassification.progression, self.item_name_to_id[alchemy_item], self.player))
-            drop_locations = [location for location in self.multiworld.get_locations() if location.name in all_drops]
-            self.random.shuffle(drop_locations)
-            fill_restrictive(self.multiworld, self.multiworld.state, drop_locations, alchemy_items,
+            alchemy_items *= 5  # make sure there's enough of them to go around
+            repeat_locations = [location for location in self.multiworld.get_locations() if location.name in all_drops]
+            self.random.shuffle(repeat_locations)
+            fill_restrictive(self.multiworld, self.multiworld.state, repeat_locations, alchemy_items,
                              single_player_placement=True, lock=True)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
