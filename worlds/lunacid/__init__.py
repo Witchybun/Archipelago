@@ -128,12 +128,8 @@ class LunacidWorld(World):
         LunacidRules(self).set_lunacid_rules(self.weapon_elements)
 
     def create_items(self):
-        extra = 3
-        if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
-            extra += 16
-
         locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player)]) - extra
+                               for location in self.multiworld.get_locations(self.player)if location.item is None]) - 1
         excluded_items = self.multiworld.precollected_items[self.player]
         self.weapon_elements = determine_weapon_elements(self.options, self.multiworld.random)
         (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.is_christmas,
@@ -266,16 +262,17 @@ class LunacidWorld(World):
 
     def pre_fill(self) -> None:
         if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
+            state = self.multiworld.get_all_state(False)
             logger.info(f"Randomized Drops and Etna's Pupil found in generation for Player {self.player}.  "
                         f"Adding progressives to dropsanity locations regardless of settings.")
             alchemy_items = []
             for alchemy_item in Alchemy.necessary_alchemy_items:
-                alchemy_items.append(Item(alchemy_item, ItemClassification.progression, self.item_name_to_id[alchemy_item], self.player))
+                alchemy_items.append(Item(alchemy_item, ItemClassification.progression | ItemClassification.useful, self.item_name_to_id[alchemy_item], self.player))
             alchemy_items *= 5  # make sure there's enough of them to go around
             repeat_locations = [location for location in self.multiworld.get_locations() if location.name in all_drops]
             self.random.shuffle(repeat_locations)
-            fill_restrictive(self.multiworld, self.multiworld.state, repeat_locations, alchemy_items,
-                             single_player_placement=True, lock=True)
+            fill_restrictive(self.multiworld, state, repeat_locations, alchemy_items,
+                             single_player_placement=True, lock=True, allow_excluded=True)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,
