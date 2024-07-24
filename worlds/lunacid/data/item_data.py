@@ -3,7 +3,7 @@ from typing import List
 from BaseClasses import ItemClassification
 
 from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives, RareDrops, \
-    Voucher, Trap, Switch, Door
+    Voucher, Trap, Switch, Door, CustomItem
 from ..strings.weapons import Weapon
 from ..strings.spells import Spell, MobSpell
 
@@ -103,6 +103,7 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 68, Alchemy.bones, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 69, Alchemy.vampiric_ashes, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 70, Creation.throwing_knife, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 71, CustomItem.experience, ItemClassification.filler),
     ]
 
 trap_start_id = 100
