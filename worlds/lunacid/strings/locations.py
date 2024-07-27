@@ -445,6 +445,10 @@ class DropLocation:
     cetea_ocean_bone_shell = other_drop("Cetea: Ocean Bone Shell Drop")
     sanguis_book = unique_drop("Sanguis Umbra: Black Book Drop")
 
+    starter_drops = [snail, snail_2c, snail_10c, snail_ocean, milk_snail, milk_5c, milk_10c,
+    milk_ocean, shulker_obsidian, shulker_onyx, mummy_mana_vial, mummy_onyx, mummy_2c, mummy_10c, mummy_knight,
+    mummy_knight_onyx, mummy_knight_10c, mummy_knight_5c]
+
 
 all_drops = unique_drop_locations + other_drop_locations
 all_drops_by_enemy: Dict[str, List[str]] = {}

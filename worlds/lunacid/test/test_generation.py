@@ -13,6 +13,7 @@ from ..data.location_data import *
 from ..data.spell_info import all_spells
 from ..data.item_data import drop_spell_names
 from ..strings.enemies import Enemy
+from ..strings.locations import DropLocation
 from ..strings.items import Switch, Door, UniqueItem, Progressives, Coins, Alchemy
 from ..strings.spells import Spell, MobSpell
 
@@ -407,8 +408,10 @@ class DropsanityAllTestsWithKeys(LunacidTestBase):
     def test_if_drops_are_truly_locked_away(self):
         state = self.multiworld.state
         self.assertTrue(self.can_reach_region(LunacidRegion.hollow_basin))
-        self.assertTrue(self.can_reach_any_region(state, all_enemies_by_name[Enemy.milk_snail].regions))
-        self.assertFalse(self.can_reach_location(DropLocation.necronomicon_5c))
+        for location in other_drop_locations:
+            if location.name in DropLocation.starter_drops:
+                continue
+            self.assertFalse(self.can_reach_location(location.name))
         self.collect_by_name(Door.basin_broken_steps)
         self.assertTrue(self.can_reach_location(DropLocation.necronomicon_5c))
 
