@@ -174,7 +174,7 @@ class RemoveLocations(OptionSet):
 
 
 class Filler(OptionSet):
-    """Lets you decide which filler are added to the game.  If the set is empty, only silver is included.
+    """Lets you decide which filler are added to the game.  If the set is empty, only silver and exp is included.
     Amount received in game is a random value between 1~5, favoring 1~2.
     Acceptable Filler: Blood Wine, Light Urn, Cloth Bandage, Dark Urn, Bomb, Poison Urn, Wisp Heart, Staff of Osiris,
     Moonlight Vial, Spectral Candle, Health Vial, Mana Vial, Fairy Moss, Crystal Shard, Poison Throwing Knife,
