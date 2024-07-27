@@ -10,7 +10,7 @@ from .data.item_data import all_items, LunacidItemData, base_unique_items, start
     base_special_item_counts, shop_unique_items, shop_item_count, all_item_data_by_name, quench_starting_weapons
 from .data.weapon_info import all_weapons, ranged_weapons, all_weapon_info_by_name
 from .data.spell_info import all_spells, ranged_spells, all_spell_info_by_name
-from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap
+from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap, CustomItem
 from .strings.properties import Elements, Types
 from .strings.spells import Spell, MobSpell
 
@@ -246,7 +246,7 @@ def create_door_items(item_factory: LunacidItemFactory, options: LunacidOptions,
 def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random, filler_slots: int, is_christmas: bool, items: List[Item]) -> List[Item]:
     if filler_slots == 0:
         return items
-    filler_list = [Coins.silver] + list(options.filler.value)
+    filler_list = [Coins.silver, CustomItem.experience] + list(options.filler.value)
     trap_list = list(options.traps.value)
     if not is_christmas:
         trap_list = [trap for trap in trap_list if trap != Trap.coal or trap != Trap.eggnog]
