@@ -64,3 +64,5 @@ class Enemy:
 
     centaur = "Centaur"
     cetea = "Cetea"
+
+    demon = "Abyssal Demon"
