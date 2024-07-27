@@ -79,6 +79,7 @@ ceres = create_enemy(Enemy.ceres, [LunacidRegion.forlorn_arena])
 vesta = create_enemy(Enemy.vesta, [LunacidRegion.forlorn_arena])
 gloom_wood = create_enemy(Enemy.gloom_wood, [LunacidRegion.forlorn_arena])
 cetea = create_enemy(Enemy.cetea, [LunacidRegion.labyrinth_of_ash])
+demon = create_enemy(Enemy.demon, [LunacidRegion.sanguine_sea, LunacidRegion.mausoleum])
 
 
 all_enemies_by_name = {}
