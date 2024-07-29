@@ -288,7 +288,7 @@ class LunacidWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.7.2",
+            "client_version": "0.7.3",
             "is_christmas": self.is_christmas,
             "elements": self.weapon_elements,
             "created_class_name": self.custom_class_name,
