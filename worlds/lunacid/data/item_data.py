@@ -202,7 +202,7 @@ quench_weapons = [
 ]
 
 alchemy_weapons = [
-    create_item(ITEM_CODE_START + weapon_start_id + 1, Weapon.limbo, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 66, Weapon.limbo, ItemClassification.useful),
 ]
 
 spell_start_id = 250
