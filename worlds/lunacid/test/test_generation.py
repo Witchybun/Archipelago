@@ -11,7 +11,7 @@ from ..Regions import consistent_entrances, RandomizationFlag, consistent_region
 from ..data.enemy_data import all_enemies_by_name
 from ..data.location_data import *
 from ..data.spell_info import all_spells
-from ..data.item_data import drop_spell_names
+from ..data.item_data import drop_spell_names, all_items
 from ..strings.enemies import Enemy
 from ..strings.locations import DropLocation
 from ..strings.items import Switch, Door, UniqueItem, Progressives, Coins, Alchemy
@@ -63,17 +63,17 @@ class TestGeneric(LunacidTestBase):
 
     def test_no_duplicate_ids(self):
         constructed_item_table = {}
-        for item in item_table:
+        for item in all_items:
             if item.name not in constructed_item_table:
                 constructed_item_table[item.name] = item.code
                 continue
-            self.assertFalse(True, f"Found duplicate ID for {item.name}: {item.code} vs {constructed_item_table[item.name]}")
+            self.assertFalse(item.name not in constructed_item_table, f"Found duplicate ID for {item.name}: {item.code} vs {constructed_item_table[item.name]}")
         constructed_location_table = {}
         for location in location_table:
             if location.name not in constructed_location_table:
                 constructed_item_table[location.name] = location.location_id
                 continue
-            self.assertFalse(True, f"Found duplicate ID for {location.name}: {location.location_id} vs {constructed_item_table[location.name]}")
+            self.assertFalse(location.name not in constructed_location_table, f"Found duplicate ID for {location.name}: {location.location_id} vs {constructed_item_table[location.name]}")
 
 
 class TestEndingE(LunacidTestBase):
