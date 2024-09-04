@@ -96,6 +96,12 @@ class RandomElements(Toggle):
     display_name = "Random Elements"
 
 
+class EnemyRandomization(Toggle):
+    """Shuffles the in-game enemies around. Each enemy in the game is replaced by some other enemy."""
+    internal_name = "enemy_randomization"
+    display_name = "Enemy Randomization"
+
+
 class Shopsanity(Toggle):
     """Choose whether the unique items Sheryl the Crow sells are locations.
     Adds 9 locations."""
@@ -209,6 +215,13 @@ class TrapPercent(Range):
     range_start = 0
     range_end = 100
     default = 20
+
+
+class CustomMusic(Toggle):
+    """Lets you use custom music.  If on, will read from a CustomMusic folder in the game's base directory.  Only accepts mp3 files.
+    If no music is supplied, will be the same as if this setting was off."""
+    internal_name = "custom_music"
+    display_name = "Custom Music"
 
 
 class ItemColors(OptionDict):

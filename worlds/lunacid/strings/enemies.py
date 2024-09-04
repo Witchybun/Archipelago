@@ -10,6 +10,7 @@ class Enemy:
     slime = "Slime"
     slime_skeleton = "Slime Skeleton"
     skeleton = "Skeleton"
+    skeleton_weapon = "Skeleton (Weapon)"
     rat = "Rat"
     rat_king = "Rat King"
     rat_queen = "Rat Queen"
@@ -57,7 +58,8 @@ class Enemy:
     giant_skeleton = "Giant Skeleton"
     infested_corpse = "Infested Corpse"
 
-    sucsarian = "Sucsarian"
+    sucsarian_dagger = "Sucsarian (Dagger)"
+    sucsarian_spear = "Sucsarian (Spear)"
     ceres = "Ceres"
     vesta = "Vesta"
     gloom_wood = "Gloom Wood"
@@ -66,3 +68,10 @@ class Enemy:
     cetea = "Cetea"
 
     demon = "Abyssal Demon"
+
+    randomizable_enemies = [
+        snail, milk_snail, shulker, mummy, mummy_knight, slime_skeleton, skeleton, rat, rat_king, rat_queen, mimic, devil_slime, yakul, kodama, lunaga, venus, neptune,
+        unilateralis, tillandsia, enlightened_one, necronomicon, cursed_painting, poltergeist, vampire, vampire_page, giant_bat, malformed, malformed_horse, hallowed_husk,
+        ikurrilb, obsidian_skeleton, serpent, anpu, embalmed, lunam, jailor, lupine_skeleton, giant_skeleton, infested_corpse, sucsarian_dagger, ceres, vesta, gloom_wood,
+        centaur, cetea, hemalith, mare, mi_go, phantom, sucsarian_spear, skeleton_weapon
+                            ]
