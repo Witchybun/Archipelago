@@ -24,7 +24,7 @@ def create_location(location_id: Optional[int], name: str, region: Optional[str]
 
 
 # Uses a structure of BASE LOCATION + type offset + pseudo value.  The base location ID will eventually be deprecated in favor of starting at 1.
-LOCATION_CODE_START = 771111110
+LOCATION_CODE_START = 0
 base_location_start = 0
 wings_rest = [
     create_location(LOCATION_CODE_START + base_location_start + 1, BaseLocation.wings_rest_ocean_elixir, LunacidRegion.wings_rest),
