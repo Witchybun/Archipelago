@@ -31,7 +31,7 @@ def create_item(code: int, name: str, classification: ItemClassification):
 
 
 # Uses a structure of BASE ITEM + type offset + pseudo value.  The base item ID will eventually be deprecated in favor of starting at 1.
-ITEM_CODE_START = 771111110
+ITEM_CODE_START = 0
 base_start_id = 0
 
 core_items = [

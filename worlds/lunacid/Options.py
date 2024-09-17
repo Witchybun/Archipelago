@@ -97,7 +97,8 @@ class RandomElements(Toggle):
 
 
 class EnemyRandomization(Toggle):
-    """Shuffles the in-game enemies around. Each enemy in the game is replaced by some other enemy."""
+    """Shuffles the in-game enemies around. Each enemy in the game is replaced by some other enemy.
+    THIS IS EXPERIMENTAL.  Report any weirdness or problems."""
     internal_name = "enemy_randomization"
     display_name = "Enemy Randomization"
 
