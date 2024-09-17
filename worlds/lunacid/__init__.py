@@ -1,12 +1,14 @@
 from time import strftime
-from typing import Dict, Any, Iterable, TextIO
+from typing import Dict, Any, Iterable, TextIO, List, Tuple
 import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from . import Options
 from .OptionGroups import lunacid_option_groups
+from .data.enemy_positions import base_enemy_placement, EnemyPlacement, construct_flag_data_for_mod, construct_enemy_dictionary
 from .strings.custom_features import all_classes, DefaultColors
+from .strings.enemies import Enemy
 from .strings.weapons import Weapon
 from .data.item_data import all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons, shop_starting_weapons, LunacidItemData
 from .data.weapon_info import weapons_by_element
@@ -85,6 +87,8 @@ class LunacidWorld(World):
     starting_weapon: LunacidItem
     weapon_elements: Dict[str, str]
     randomized_entrances: Dict[str, str]
+    enemy_random_data: Dict[str, List[str]]
+    enemy_regions: Dict[str, List[str]]
     custom_class_name: str = ""
     custom_class_description: str = ""
     custom_class_stats: Dict[str, int] = {}
@@ -109,6 +113,7 @@ class LunacidWorld(World):
                 self.options.secret_door_lock.value = passthrough["secret_door_lock"]
         self.package_custom_class()
         self.verify_item_colors()
+        self.enemy_random_data, self.enemy_regions = self.randomize_enemies()
 
     def create_item(self, name: str, override_classification: ItemClassification = None) -> "LunacidItem":
         item_id: int = self.item_name_to_id[name]
@@ -125,11 +130,13 @@ class LunacidWorld(World):
         return self.random.choice(all_filler_items)
 
     def set_rules(self):
-        LunacidRules(self).set_lunacid_rules(self.weapon_elements)
+        LunacidRules(self).set_lunacid_rules(self.weapon_elements, self.enemy_regions)
 
     def create_items(self):
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)if location.item is None]) - 1
+        if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
+            locations_count -= 80
         excluded_items = self.multiworld.precollected_items[self.player]
         self.weapon_elements = determine_weapon_elements(self.options, self.multiworld.random)
         (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.is_christmas,
@@ -260,6 +267,46 @@ class LunacidWorld(World):
         except ValueError:
             return False
 
+    def randomize_enemies(self) -> Tuple[Dict[str, List[str]], Dict[str, List[str]]]:
+        chosen_enemies = []
+        enemy_counts = {}
+        randomized_enemy_placement = []
+        enemy_to_enemy_placement = {}
+        if self.options.enemy_randomization == self.options.enemy_randomization.option_true:
+            for enemy_data in base_enemy_placement:
+                picked_enemy = self.random.choice(Enemy.randomizable_enemies)
+                new_data = EnemyPlacement(enemy_data.scene, enemy_data.group_name, enemy_data.child_id, picked_enemy, enemy_data.region)
+                if picked_enemy not in chosen_enemies:
+                    chosen_enemies.append(picked_enemy)
+                if picked_enemy not in enemy_counts:
+                    enemy_counts[picked_enemy] = 1
+                else:
+                    enemy_counts[picked_enemy] += 1
+                if picked_enemy in enemy_to_enemy_placement:
+                    enemy_to_enemy_placement[picked_enemy].append(new_data)
+                else:
+                    enemy_to_enemy_placement[picked_enemy] = [new_data]
+                randomized_enemy_placement.append(new_data)
+            while chosen_enemies.sort() != Enemy.randomizable_enemies.sort():
+                acceptable_enemies = [enemy for enemy in enemy_counts if enemy_counts[enemy] > 1]
+                for checked_enemy in Enemy.randomizable_enemies:
+                    if checked_enemy not in chosen_enemies:
+                        random_enemy = self.random.choice(acceptable_enemies)
+                        random_data = self.random.choice(enemy_to_enemy_placement[random_enemy])
+                        enemy_to_enemy_placement[random_enemy].remove(random_data)
+                        randomized_enemy_placement.remove(random_data)
+                        enemy_counts[random_enemy] -= 1
+                        new_data = EnemyPlacement(random_data.scene, random_data.group_name, random_data.child_id, checked_enemy, random_data.region)
+                        enemy_to_enemy_placement[checked_enemy] = [new_data]
+                        enemy_counts[checked_enemy] = 1
+                        randomized_enemy_placement.append(new_data)
+                        chosen_enemies.append(checked_enemy)
+        else:
+            randomized_enemy_placement = base_enemy_placement
+        mod_data = construct_flag_data_for_mod(randomized_enemy_placement)
+        enemy_dictionary = construct_enemy_dictionary(randomized_enemy_placement)
+        return mod_data, enemy_dictionary
+
     def pre_fill(self) -> None:
         if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
             state = self.multiworld.get_all_state(False)
@@ -285,18 +332,23 @@ class LunacidWorld(World):
         for original_entrance, replaced_entrance in self.randomized_entrances.items():
             self.multiworld.spoiler.set_entrance(original_entrance, replaced_entrance, "entrance", self.player)
 
+    def add_enemy_regions_to_spoiler_log(self):
+        if self.options.enemy_randomization == self.options.enemy_randomization.option_false:
+            return
+
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.7.3",
+            "client_version": "0.8.0",
             "is_christmas": self.is_christmas,
             "elements": self.weapon_elements,
             "created_class_name": self.custom_class_name,
             "created_class_description": self.custom_class_description,
             "created_class_stats": self.custom_class_stats,
-            **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin",
+            "enemy_placement": self.enemy_random_data,
+            **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin", "enemy_randomization",
                                    "shopsanity", "dropsanity", "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
-                                   "secret_door_lock", "death_link", "remove_locations", "starting_class", "normalized_drops", "item_colors"),
+                                   "secret_door_lock", "death_link", "remove_locations", "starting_class", "normalized_drops", "item_colors", "custom_music"),
             "entrances": self.randomized_entrances
         }
 
