@@ -2,7 +2,7 @@ from BaseClasses import CollectionState
 from typing import Dict, List, TYPE_CHECKING
 
 from .Regions import REVERSE
-from .data.enemy_data import all_enemies_by_name
+from .data.enemy_positions import immovable_enemies
 from .strings.enemies import Enemy
 from .strings.properties import Elements
 from ..generic.Rules import CollectionRule
@@ -29,6 +29,7 @@ class LunacidRules:
     entrance_rules: Dict[str, CollectionRule]
     location_rules: Dict[str, CollectionRule]
     elements: Dict[str, str]
+    enemy_regions: Dict[str, List[str]]
 
     def __init__(self, world: "LunacidWorld") -> None:
         self.player = world.player
@@ -75,6 +76,7 @@ class LunacidRules:
             LunacidEntrance.sea_to_tomb_lobby: lambda state: self.has_door_key(Door.sea_eastward, state, self.world.options),
             LunacidEntrance.tomb_upper_to_tomb: lambda state: self.has_light_source(state) and self.can_jump_given_height(state, "High", self.world.options),
             LunacidEntrance.tomb_lobby_to_tomb: lambda state: self.has_light_source(state),
+            LunacidEntrance.tomb_to_tomb_platform: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             LunacidEntrance.sea_to_castle: lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
             REVERSE(LunacidEntrance.sea_to_castle): lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
             LunacidEntrance.yosei_lower_to_tomb_upper_lobby: lambda state: self.has_door_key(Door.forest_patchouli, state, self.world.options),
@@ -112,9 +114,10 @@ class LunacidRules:
             LunacidEntrance.basin_to_surface: lambda state: state.has_all({Spell.icarian_flight, Spell.spirit_warp}, self.player) or
                                                             (state.has(Spell.icarian_flight, self.player) and state.can_reach(
                                                                 LunacidRegion.temple_of_silence_interior, None, self.player)),
-            LunacidEntrance.yosei_to_yosei_lower: lambda state: self.can_jump_given_height(state, "Medium", self.world.options) or self.has_blood_spell_access(
-                state),
-            LunacidEntrance.castle_to_red: self.has_blood_spell_access or self.is_vampire(self.world.options),
+            LunacidEntrance.castle_to_red: lambda state: self.has_blood_spell_access(state) or self.is_vampire(self.world.options) or
+                                                         state.can_reach_region(LunacidRegion.castle_le_fanu_blue, self.player),
+            LunacidEntrance.red_to_red_deep: lambda state: self.has_blood_spell_access(state) or self.is_vampire(self.world.options),
+            LunacidEntrance.red_deep_to_red_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.castle_to_grotto: lambda state: self.has_door_key(Door.burning_key, state, self.world.options),
             REVERSE(LunacidEntrance.castle_to_grotto): lambda state: self.has_door_key(Door.burning_key, state, self.world.options),
             LunacidEntrance.yosei_to_canopy: lambda state: self.has_keys_for_canopy(state, self.world.options) and
@@ -136,6 +139,17 @@ class LunacidRules:
             LunacidEntrance.fate_to_sleeper: lambda state: self.has_door_key(Door.sleeper_key, state, self.world.options),
             LunacidEntrance.grotto_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.arena_to_earth_secret: lambda state: self.has_crystal_orb(state, self.world.options),
+            LunacidEntrance.sand_to_deep_snake: lambda state: self.can_jump_given_height(state, "High", self.world.options),
+            LunacidEntrance.sand_to_sand_secret: lambda state: self.has_crystal_orb(state, self.world.options),
+            LunacidEntrance.sand_to_secret_snake: lambda state: self.can_jump_given_height(state, "High", self.world.options) or
+                                                                self.has_crystal_orb(state, self.world.options) or state.has(Spell.spirit_warp, self.player),
+            LunacidEntrance.ballroom_to_doors: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
+            LunacidEntrance.arena_to_water: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
+            LunacidEntrance.water_to_deep: lambda state: self.can_jump_given_height(state, "High", self.world.options) or
+                                                         self.has_key_to_switch(state, Switch.arena_water_switch, self.world.options) or
+                                                         state.has(Spell.spirit_warp, self.player),
+            LunacidEntrance.water_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
+            LunacidEntrance.labyrinth_of_ash_to_holy_seat_of_gold: lambda state: self.has_door_key(Door.musical_key, state, self.world.options),
         }
 
         self.location_rules = {
@@ -155,7 +169,6 @@ class LunacidRules:
             BaseLocation.archives_daedalus_two: lambda state: self.has_black_book_count(self.world.options, state, 2),
             BaseLocation.archives_daedalus_third: lambda state: self.has_black_book_count(self.world.options, state, 3),
             BaseLocation.sea_pillar: lambda state: state.has_any({Spell.icarian_flight, Spell.rock_bridge}, self.player),
-            BaseLocation.tomb_demi_chest: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             BaseLocation.chasm_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.chasm_invisible_cliffside: lambda state: state.has_any([Spell.coffin, Spell.icarian_flight], self.player),
             BaseLocation.tomb_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
@@ -172,7 +185,6 @@ class LunacidRules:
             BaseLocation.yosei_room_defended_by_blood_plant: lambda state: self.has_blood_spell_access(state),
             BaseLocation.yosei_blood_plant_insides: lambda state: self.has_blood_spell_access(state),
             BaseLocation.castle_cell_center: lambda state: self.has_element_access(Elements.fire, state),
-            BaseLocation.castle_hidden_cell: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.castle_upper_floor_coffin_double: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3) and
                                                                          self.has_crystal_orb(state, self.world.options),
             BaseLocation.ballroom_side_chest_near_switch: lambda state: self.has_door_key(Door.ballroom_rooms_key, state, self.world.options),
@@ -186,23 +198,11 @@ class LunacidRules:
             BaseLocation.prison_f3_bottomless_pit: lambda state: state.has_any({Spell.icarian_flight, Spell.spirit_warp}, self.player),
             BaseLocation.grotto_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.grotto_triple_secret_chest: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.sand_basement_snake_pit: lambda state: self.can_jump_given_height(state, "High", self.world.options) &
-                                                                self.has_crystal_orb(state, self.world.options),
+            BaseLocation.sand_basement_snake_pit: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.sand_hidden_sarcophagus: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.sand_second_floor_snake: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
-            BaseLocation.sand_second_floor_dead_end: lambda state: self.can_jump_given_height(state, "Medium", self.world.options),
             BaseLocation.sand_chest_overlooking_crypt: lambda state: self.can_jump_given_height(state, "High", self.world.options),
             BaseLocation.sand_lunacid_sandwich: lambda state: state.has(Spell.spirit_warp, self.player),
-            BaseLocation.arena_water_hidden_alcove_before: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.arena_water_hidden_alcove_right: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.arena_water_hidden_alcove_left: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.arena_water_hidden_basement_left: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.arena_water_hidden_basement_right: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.arena_water_hidden_laser_room: lambda state: self.has_crystal_orb(state, self.world.options),
-            BaseLocation.arena_water_underwater_temple: lambda state: self.can_jump_given_height(state, "High", self.world.options) and
-                                                                      self.has_crystal_orb(state, self.world.options),
-            BaseLocation.arena_earth_earthen_temple: lambda state: self.can_jump_given_height(state, "High", self.world.options) and
-                                                                   self.has_crystal_orb(state, self.world.options),
+            BaseLocation.arena_earth_earthen_temple: lambda state: self.can_jump_given_height(state, "High", self.world.options),
             BaseLocation.prison_b2_egg_resting_place: lambda state: state.has(UniqueItem.skeleton_egg, self.player),
             BaseLocation.prison_f1_hidden_cell: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.prison_f1_hidden_debris_room: lambda state: self.has_crystal_orb(state, self.world.options),
@@ -230,158 +230,168 @@ class LunacidRules:
             ShopLocation.buy_ocean_elixir_patchouli: lambda state: state.has(Voucher.patchouli_simp_discount, self.player),
 
             # All Drop Location Rules Yikes
-            DropLocation.snail_2c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.snail].regions),
-            DropLocation.snail_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.snail].regions),
-            DropLocation.snail_ocean: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.snail].regions),
-            DropLocation.snail: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.snail].regions),
-            DropLocation.milk_5c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.milk_snail].regions),
-            DropLocation.milk_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.milk_snail].regions),
-            DropLocation.milk_ocean: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.milk_snail].regions),
-            DropLocation.milk_snail: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.milk_snail].regions),
-            DropLocation.shulker_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.shulker].regions),
-            DropLocation.shulker_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.shulker].regions),
-            DropLocation.mummy_knight_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
-            DropLocation.mummy_knight_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
-            DropLocation.mummy_knight_5c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
-            DropLocation.mummy_knight: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
-            DropLocation.mummy_mana_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy].regions),
-            DropLocation.mummy_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy].regions),
-            DropLocation.mummy_2c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy].regions),
-            DropLocation.mummy_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mummy_knight].regions),
-            DropLocation.necronomicon_fire_opal: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.necronomicon].regions),
-            DropLocation.necronomicon_5c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.necronomicon].regions),
-            DropLocation.necronomicon_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.necronomicon].regions),
-            DropLocation.necronomicon_mana_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.necronomicon].regions),
-            DropLocation.chimera_light_urn: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.chimera].regions),
-            DropLocation.chimera_holy_water: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.chimera].regions),
-            DropLocation.chimera_drop: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.chimera].regions),
-            DropLocation.enlightened_mana_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.enlightened_one].regions),
-            DropLocation.enlightened_ocean_bone_shell: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.enlightened_one].regions),
-            DropLocation.slime_skeleton: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.slime_skeleton].regions),
-            DropLocation.skeleton_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.skeleton].regions),
-            DropLocation.skeleton_mana_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.skeleton].regions),
-            DropLocation.skeleton_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.skeleton].regions),
-            DropLocation.skeleton_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.skeleton].regions),
-            DropLocation.skeleton_spell: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.skeleton].regions),
-            DropLocation.skeleton_weapon: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.skeleton].regions),
-            DropLocation.rat_king_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.rat_king].regions),
-            DropLocation.rat_king_lotus_seed: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.rat_king].regions),
-            DropLocation.rat: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.rat].regions),
-            DropLocation.kodama_drop: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.kodama].regions),
-            DropLocation.kodama_2c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.kodama].regions),
-            DropLocation.kodama_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.kodama].regions),
-            DropLocation.kodama_opal: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.kodama].regions),
-            DropLocation.yakul_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.yakul].regions),
-            DropLocation.yakul_fire_opal: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.yakul].regions),
-            DropLocation.yakul_opal: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.yakul].regions),
-            DropLocation.yakul_health_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.yakul].regions),
-            DropLocation.venus_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.venus].regions),
-            DropLocation.venus_yellow_morel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.venus].regions),
-            DropLocation.venus_dest_angel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.venus].regions),
-            DropLocation.neptune_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.neptune].regions),
-            DropLocation.neptune_yellow_morel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.neptune].regions),
-            DropLocation.neptune_dest_angel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.neptune].regions),
-            DropLocation.unilateralis_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.unilateralis].regions),
-            DropLocation.unilateralis_yellow_morel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.unilateralis].regions),
-            DropLocation.unilateralis_dest_angel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.unilateralis].regions),
-            DropLocation.hemalith_health_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hemalith].regions),
-            DropLocation.hemalith_shrimp: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hemalith].regions),
-            DropLocation.hemallith_bloodweed: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hemalith].regions),
-            DropLocation.mi_go_ocean_bone_shell: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mi_go].regions),
-            DropLocation.mi_go_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mi_go].regions),
-            DropLocation.mi_go_snowflake_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mi_go].regions),
-            DropLocation.mare_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mare].regions),
-            DropLocation.mare_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mare].regions),
-            DropLocation.mare_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mare].regions),
-            DropLocation.painting_fire_opal: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.cursed_painting].regions),
-            DropLocation.painting_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.cursed_painting].regions),
-            DropLocation.painting_mana_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.cursed_painting].regions),
-            DropLocation.painting_20c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.cursed_painting].regions),
-            DropLocation.phantom_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.phantom].regions),
-            DropLocation.phantom_holy_water: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.phantom].regions),
-            DropLocation.phantom_moon_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.phantom].regions),
-            DropLocation.phantom: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.phantom].regions),
-            DropLocation.phantom_ectoplasm: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.phantom].regions),
-            DropLocation.vampire_5c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire].regions),
-            DropLocation.vampire_vampiric_ashes: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire].regions),
-            DropLocation.vampire_bandage: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire].regions),
-            DropLocation.vampire_page_ashes: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire_page].regions),
-            DropLocation.vampire_page_20c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire_page].regions),
-            DropLocation.vampire_drop: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vampire_page].regions),
-            DropLocation.malformed_vampiric_ashes: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.malformed].regions),
-            DropLocation.great_bat_health_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_bat].regions),
-            DropLocation.great_bat_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_bat].regions),
-            DropLocation.great_bat_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_bat].regions),
-            DropLocation.poltergeist_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.poltergeist].regions),
-            DropLocation.poltergeist_ectoplasm: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.poltergeist].regions),
-            DropLocation.horse_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.malformed_horse].regions),
-            DropLocation.horse_mana_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.malformed_horse].regions),
-            DropLocation.horse_drop: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.malformed_horse].regions),
-            DropLocation.hallowed_husk_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hallowed_husk].regions),
-            DropLocation.hallowed_husk_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hallowed_husk].regions),
-            DropLocation.hallowed_husk_bandage: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hallowed_husk].regions),
-            DropLocation.hallowed_husk_light_urn: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hallowed_husk].regions),
-            DropLocation.hallowed_husk_goldeness: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hallowed_husk].regions),
-            DropLocation.hallowed_husk_holy_water: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.hallowed_husk].regions),
-            DropLocation.ikkurilb_root: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.ikurrilb].regions),
-            DropLocation.ikkurilb_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.ikurrilb].regions),
-            DropLocation.ikkurilb_snowflake_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.ikurrilb].regions),
-            DropLocation.mimic_moon_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mimic].regions),
-            DropLocation.mimic_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mimic].regions),
-            DropLocation.mimic_fools_gold: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.mimic].regions),
-            DropLocation.obsidian_skeleton_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.obsidian_skeleton].regions),
-            DropLocation.obsidian_skeleton_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.obsidian_skeleton].regions),
-            DropLocation.obsidian_skeleton_mana_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.obsidian_skeleton].regions),
-            DropLocation.obsidian_skeleton_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.obsidian_skeleton].regions),
-            DropLocation.obsidian_skeleton_drop_1: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.obsidian_skeleton].regions),
-            DropLocation.obsidian_skeleton_drop_2: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.obsidian_skeleton].regions),
-            DropLocation.anpu_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.anpu].regions),
-            DropLocation.anpu_fire_opal: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.anpu].regions),
-            DropLocation.anpu_drop_1: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.anpu].regions),
-            DropLocation.anpu_drop_2: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.anpu].regions),
-            DropLocation.serpent_antidote: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.serpent].regions),
-            DropLocation.serpent_5c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.serpent].regions),
-            DropLocation.embalmed_bandage: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.embalmed].regions),
-            DropLocation.embalmed_ashes: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.embalmed].regions),
-            DropLocation.embalmed_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.embalmed].regions),
-            DropLocation.jailor_drop: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.jailor].regions),
-            DropLocation.jailor_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.jailor].regions),
-            DropLocation.jailor_candle: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.jailor].regions),
-            DropLocation.jailor_bandage: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.jailor].regions),
-            DropLocation.jailor_health_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.jailor].regions),
-            DropLocation.jailor_angel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.jailor].regions),
-            DropLocation.lunam_ectoplasm: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lunam].regions),
-            DropLocation.lunam_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lunam].regions),
-            DropLocation.lunam_snowflake_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lunam].regions),
-            DropLocation.giant_spell: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_skeleton].regions),
-            DropLocation.giant_dark_urn: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_skeleton].regions),
-            DropLocation.giant_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_skeleton].regions),
-            DropLocation.giant_mana_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_skeleton].regions),
-            DropLocation.giant_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.giant_skeleton].regions),
-            DropLocation.lupine_spell: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lupine_skeleton].regions),
-            DropLocation.lupine_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lupine_skeleton].regions),
-            DropLocation.lupine_onyx: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lupine_skeleton].regions),
-            DropLocation.lupine_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.lupine_skeleton].regions),
-            DropLocation.infested_antidote: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.infested_corpse].regions),
-            DropLocation.infested_bones: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.infested_corpse].regions),
-            DropLocation.sucsarian_drop_1: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.sucsarian].regions),
-            DropLocation.sucsarian_drop_2: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.sucsarian].regions),
-            DropLocation.sucsarian_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.sucsarian].regions),
-            DropLocation.sucsarian_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.sucsarian].regions),
-            DropLocation.sucsarian_snowflake_obsidian: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.sucsarian].regions),
-            DropLocation.sucsarian_throwing_knife: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.sucsarian].regions),
-            DropLocation.vesta_fairy_moss: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vesta].regions),
-            DropLocation.vesta_yellow_morel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vesta].regions),
-            DropLocation.vesta_dest_angel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.vesta].regions),
-            DropLocation.ceres_fairy_moss: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.ceres].regions),
-            DropLocation.ceres_yellow_morel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.ceres].regions),
-            DropLocation.ceres_dest_angel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.ceres].regions),
-            DropLocation.gloom_fairy_moss: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.gloom_wood].regions),
-            DropLocation.gloom_health_vial: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.gloom_wood].regions),
-            DropLocation.gloom_dest_angel: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.gloom_wood].regions),
-            DropLocation.cetea_10c: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.cetea].regions),
-            DropLocation.cetea_ocean_bone_shell: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.cetea].regions),
-            DropLocation.sea_demon: lambda state: self.can_reach_any_region(state, all_enemies_by_name[Enemy.demon].regions),
+            DropLocation.snail_2c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.snail]),
+            DropLocation.snail_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.snail]),
+            DropLocation.snail_ocean: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.snail]),
+            DropLocation.snail: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.snail]),
+            DropLocation.milk_5c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.milk_snail]),
+            DropLocation.milk_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.milk_snail]),
+            DropLocation.milk_ocean: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.milk_snail]),
+            DropLocation.milk_snail: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.milk_snail]),
+            DropLocation.shulker_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.shulker]),
+            DropLocation.shulker_onyx: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.shulker]),
+            DropLocation.mummy_knight_onyx: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mummy_knight]),
+            DropLocation.mummy_knight_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mummy_knight]),
+            DropLocation.mummy_knight_5c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mummy_knight]),
+            DropLocation.mummy_knight: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mummy_knight]),
+            DropLocation.mummy_mana_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mummy]),
+            DropLocation.mummy_onyx: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mummy]),
+            DropLocation.mummy_2c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mummy]),
+            DropLocation.mummy_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mummy_knight]),
+            DropLocation.necronomicon_fire_opal: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.necronomicon]),
+            DropLocation.necronomicon_5c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.necronomicon]),
+            DropLocation.necronomicon_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.necronomicon]),
+            DropLocation.necronomicon_mana_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.necronomicon]),
+            DropLocation.chimera_light_urn: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.chimera]),
+            DropLocation.chimera_holy_water: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.chimera]),
+            DropLocation.chimera_drop: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.chimera]),
+            DropLocation.enlightened_mana_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.enlightened_one]),
+            DropLocation.enlightened_ocean_bone_shell: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.enlightened_one]),
+            DropLocation.slime_skeleton: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.slime_skeleton]),
+            DropLocation.skeleton_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton] or
+                                                                               self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton_weapon])),
+            DropLocation.skeleton_mana_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton] or
+                                                                                     self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton_weapon])),
+            DropLocation.skeleton_onyx: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton] or
+                                                                                self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton_weapon])),
+            DropLocation.skeleton_bones: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton] or
+                                                                                 self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton_weapon])),
+            DropLocation.skeleton_spell: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton_weapon]),
+            DropLocation.skeleton_weapon: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.skeleton_weapon]),
+            DropLocation.rat_king_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.rat_king]),
+            DropLocation.rat_king_lotus_seed: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.rat_king]),
+            DropLocation.rat: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.rat]),
+            DropLocation.kodama_drop: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.kodama]),
+            DropLocation.kodama_2c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.kodama]),
+            DropLocation.kodama_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.kodama]),
+            DropLocation.kodama_opal: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.kodama]),
+            DropLocation.yakul_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.yakul]),
+            DropLocation.yakul_fire_opal: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.yakul]),
+            DropLocation.yakul_opal: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.yakul]),
+            DropLocation.yakul_health_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.yakul]),
+            DropLocation.venus_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.venus]),
+            DropLocation.venus_yellow_morel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.venus]),
+            DropLocation.venus_dest_angel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.venus]),
+            DropLocation.neptune_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.neptune]),
+            DropLocation.neptune_yellow_morel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.neptune]),
+            DropLocation.neptune_dest_angel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.neptune]),
+            DropLocation.unilateralis_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.unilateralis]),
+            DropLocation.unilateralis_yellow_morel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.unilateralis]),
+            DropLocation.unilateralis_dest_angel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.unilateralis]),
+            DropLocation.hemalith_health_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hemalith]),
+            DropLocation.hemalith_shrimp: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hemalith]),
+            DropLocation.hemallith_bloodweed: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hemalith]),
+            DropLocation.mi_go_ocean_bone_shell: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mi_go]),
+            DropLocation.mi_go_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mi_go]),
+            DropLocation.mi_go_snowflake_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mi_go]),
+            DropLocation.mare_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mare]),
+            DropLocation.mare_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mare]),
+            DropLocation.mare_onyx: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mare]),
+            DropLocation.painting_fire_opal: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cursed_painting]),
+            DropLocation.painting_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cursed_painting]),
+            DropLocation.painting_mana_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cursed_painting]),
+            DropLocation.painting_20c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cursed_painting]),
+            DropLocation.phantom_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.phantom]),
+            DropLocation.phantom_holy_water: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.phantom]),
+            DropLocation.phantom_moon_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.phantom]),
+            DropLocation.phantom: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.phantom]),
+            DropLocation.phantom_ectoplasm: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.phantom]),
+            DropLocation.vampire_5c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vampire]),
+            DropLocation.vampire_vampiric_ashes: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vampire]),
+            DropLocation.vampire_bandage: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vampire]),
+            DropLocation.vampire_page_ashes: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vampire_page]),
+            DropLocation.vampire_page_20c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vampire_page]),
+            DropLocation.vampire_drop: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vampire_page]),
+            DropLocation.malformed_vampiric_ashes: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.malformed]),
+            DropLocation.great_bat_health_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.great_bat]),
+            DropLocation.great_bat_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.great_bat]),
+            DropLocation.great_bat_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.great_bat]),
+            DropLocation.poltergeist_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.poltergeist]),
+            DropLocation.poltergeist_ectoplasm: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.poltergeist]),
+            DropLocation.horse_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.malformed_horse]),
+            DropLocation.horse_mana_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.malformed_horse]),
+            DropLocation.horse_drop: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.malformed_horse]),
+            DropLocation.hallowed_husk_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hallowed_husk]),
+            DropLocation.hallowed_husk_bones: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hallowed_husk]),
+            DropLocation.hallowed_husk_bandage: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hallowed_husk]),
+            DropLocation.hallowed_husk_light_urn: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hallowed_husk]),
+            DropLocation.hallowed_husk_goldeness: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hallowed_husk]),
+            DropLocation.hallowed_husk_holy_water: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.hallowed_husk]),
+            DropLocation.ikkurilb_root: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.ikurrilb]),
+            DropLocation.ikkurilb_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.ikurrilb]),
+            DropLocation.ikkurilb_snowflake_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.ikurrilb]),
+            DropLocation.mimic_moon_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mimic]),
+            DropLocation.mimic_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mimic]),
+            DropLocation.mimic_fools_gold: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.mimic]),
+            DropLocation.obsidian_skeleton_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.obsidian_skeleton]),
+            DropLocation.obsidian_skeleton_bones: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.obsidian_skeleton]),
+            DropLocation.obsidian_skeleton_mana_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.obsidian_skeleton]),
+            DropLocation.obsidian_skeleton_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.obsidian_skeleton]),
+            DropLocation.obsidian_skeleton_drop_1: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.obsidian_skeleton]),
+            DropLocation.obsidian_skeleton_drop_2: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.obsidian_skeleton]),
+            DropLocation.anpu_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.anpu]) or
+                                                 self.can_reach_any_region(state, self.enemy_regions[Enemy.anpu_sword]),
+            DropLocation.anpu_fire_opal: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.anpu]) or
+                                                 self.can_reach_any_region(state, self.enemy_regions[Enemy.anpu_sword]),
+            DropLocation.anpu_drop_1: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.anpu_sword]),
+            DropLocation.anpu_drop_2: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.anpu]),
+            DropLocation.serpent_antidote: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.serpent]),
+            DropLocation.serpent_5c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.serpent]),
+            DropLocation.embalmed_bandage: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.embalmed]),
+            DropLocation.embalmed_ashes: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.embalmed]),
+            DropLocation.embalmed_bones: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.embalmed]),
+            DropLocation.jailor_drop: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.jailor]),
+            DropLocation.jailor_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.jailor]),
+            DropLocation.jailor_candle: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.jailor]),
+            DropLocation.jailor_bandage: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.jailor]),
+            DropLocation.jailor_health_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.jailor]),
+            DropLocation.jailor_angel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.jailor]),
+            DropLocation.lunam_ectoplasm: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.lunam]),
+            DropLocation.lunam_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.lunam]),
+            DropLocation.lunam_snowflake_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.lunam]),
+            DropLocation.giant_spell: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.giant_skeleton]),
+            DropLocation.giant_dark_urn: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.giant_skeleton]),
+            DropLocation.giant_bones: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.giant_skeleton]),
+            DropLocation.giant_mana_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.giant_skeleton]),
+            DropLocation.giant_onyx: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.giant_skeleton]),
+            DropLocation.lupine_spell: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.lupine_skeleton]),
+            DropLocation.lupine_bones: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.lupine_skeleton]),
+            DropLocation.lupine_onyx: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.lupine_skeleton]),
+            DropLocation.lupine_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.lupine_skeleton]),
+            DropLocation.infested_antidote: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.infested_corpse]),
+            DropLocation.infested_bones: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.infested_corpse]),
+            DropLocation.sucsarian_drop_1: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_dagger]),
+            DropLocation.sucsarian_drop_2: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_spear]),
+            DropLocation.sucsarian_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_spear] or
+                                                                                self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_dagger])),
+            DropLocation.sucsarian_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_spear] or
+                                                                                     self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_dagger])),
+            DropLocation.sucsarian_snowflake_obsidian: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_spear] or
+                                                                                               self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_dagger])),
+            DropLocation.sucsarian_throwing_knife: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_spear] or
+                                                                                           self.can_reach_any_region(state, self.enemy_regions[Enemy.sucsarian_dagger])),
+            DropLocation.vesta_fairy_moss: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vesta]),
+            DropLocation.vesta_yellow_morel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vesta]),
+            DropLocation.vesta_dest_angel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.vesta]),
+            DropLocation.ceres_fairy_moss: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.ceres]),
+            DropLocation.ceres_yellow_morel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.ceres]),
+            DropLocation.ceres_dest_angel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.ceres]),
+            DropLocation.gloom_fairy_moss: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.gloom_wood]),
+            DropLocation.gloom_health_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.gloom_wood]),
+            DropLocation.gloom_dest_angel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.gloom_wood]),
+            DropLocation.cetea_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cetea]),
+            DropLocation.cetea_ocean_bone_shell: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cetea]),
+            DropLocation.sea_demon: lambda state: self.can_reach_any_region(state, immovable_enemies[Enemy.demon]),
             DropLocation.sanguis_book: lambda state: state.can_reach_region(LunacidRegion.holy_battleground, self.player),
 
             # All Quenchsanity Rules
@@ -458,14 +468,10 @@ class LunacidRules:
 
     def can_jump_given_height(self, state: CollectionState, height: str, options: LunacidOptions) -> bool:
         if height == "Low":
-            #  if options.movement_items == options.movement_items.option_true:
-            #    return state.has(Upgrade.jump_power, self.player)
             return True
         elif height == "Medium":
             medium_spells = {Spell.barrier, Spell.icarian_flight, Spell.coffin, Spell.rock_bridge}
             movement_item_rule = True
-            #  if options.movement_items == options.movement_items.option_true:
-            #    movement_item_rule = state.has(Upgrade.jump_power, self.player, 2)
             if options.dropsanity != options.dropsanity.option_off:
                 medium_spells.add(MobSpell.summon_snail)
             return state.has_any(medium_spells, self.player) & movement_item_rule
@@ -604,7 +610,7 @@ class LunacidRules:
                 return state.has(weapon, self.player)
             for enemy in all_drops_by_enemy:
                 if weapon in all_drops_by_enemy[enemy]:
-                    return self.can_reach_any_region(state, all_enemies_by_name[enemy].regions)
+                    return self.can_reach_any_region(state, self.enemy_regions[enemy])
         if weapon in Weapon.quenchsanity_weapons:
             return state.has(weapon, self.player)
         return False
@@ -622,7 +628,7 @@ class LunacidRules:
         acceptable_regions = []
         for enemy in all_drops_by_enemy:
             if alchemy_item in all_drops_by_enemy[enemy]:
-                for region in all_enemies_by_name[enemy].regions:
+                for region in self.enemy_regions[enemy]:
                     if region not in acceptable_regions:
                         acceptable_regions.append(region)
         for plant in all_alchemy_plant_data:
@@ -638,9 +644,10 @@ class LunacidRules:
             alchemy_rule = alchemy_rule and self.can_obtain_alchemy_item(item, state, options)
         return alchemy_rule
 
-    def set_lunacid_rules(self, world_elements: Dict[str, str]) -> None:
+    def set_lunacid_rules(self, world_elements: Dict[str, str], enemy_regions: Dict[str, List[str]]) -> None:
         multiworld = self.world.multiworld
         self.elements = world_elements
+        self.enemy_regions = enemy_regions
         for region in multiworld.get_regions(self.player):
             if region.name in self.region_rules:
                 for entrance in region.entrances:
@@ -648,6 +655,7 @@ class LunacidRules:
                 for location in region.locations:
                     location.access_rule = self.region_rules[region.name]
             for entrance in region.entrances:
+                multiworld.register_indirect_condition(region, entrance)
                 if entrance.name in self.entrance_rules:
                     entrance.access_rule = entrance.access_rule and self.entrance_rules[entrance.name]
             for loc in region.locations:

@@ -109,7 +109,7 @@ accursed_tomb = [
 
     create_location(LOCATION_CODE_START + base_location_start + 84, BaseLocation.tomb_tomb_with_switch, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + base_location_start + 85, BaseLocation.tomb_tomb_with_corpse, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + base_location_start + 86, BaseLocation.tomb_demi_chest, LunacidRegion.accursed_tomb),
+    create_location(LOCATION_CODE_START + base_location_start + 86, BaseLocation.tomb_demi_chest, LunacidRegion.accursed_tomb_platform),
     create_location(LOCATION_CODE_START + base_location_start + 87, BaseLocation.tomb_near_light_switch, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + base_location_start + 88, BaseLocation.tomb_hidden_room, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + base_location_start + 89, BaseLocation.tomb_hidden_chest, LunacidRegion.accursed_tomb)
@@ -160,9 +160,9 @@ castle_le_fanu = [
     create_location(LOCATION_CODE_START + base_location_start + 140, BaseLocation.castle_outside_corner, LunacidRegion.castle_le_fanu),
     create_location(LOCATION_CODE_START + base_location_start + 141, BaseLocation.castle_cell_south, LunacidRegion.castle_le_fanu_red),
     create_location(LOCATION_CODE_START + base_location_start + 142, BaseLocation.castle_cell_west, LunacidRegion.castle_le_fanu_red),
-    create_location(LOCATION_CODE_START + base_location_start + 143, BaseLocation.castle_cell_center, LunacidRegion.castle_le_fanu_red),
+    create_location(LOCATION_CODE_START + base_location_start + 143, BaseLocation.castle_cell_center, LunacidRegion.castle_le_fanu_red_deep),
     create_location(LOCATION_CODE_START + base_location_start + 144, BaseLocation.castle_cell_north, LunacidRegion.castle_le_fanu_red),
-    create_location(LOCATION_CODE_START + base_location_start + 145, BaseLocation.castle_hidden_cell, LunacidRegion.castle_le_fanu_red),
+    create_location(LOCATION_CODE_START + base_location_start + 145, BaseLocation.castle_hidden_cell, LunacidRegion.castle_le_fanu_red_secret),
 
     create_location(LOCATION_CODE_START + base_location_start + 146, BaseLocation.castle_hallway_rubble_room, LunacidRegion.castle_le_fanu_white),
     create_location(LOCATION_CODE_START + base_location_start + 147, BaseLocation.castle_hallway_dining_room, LunacidRegion.castle_le_fanu_white),
@@ -176,16 +176,16 @@ castle_le_fanu = [
 ]
 
 sealed_ballroom = [
-    create_location(LOCATION_CODE_START + base_location_start + 166, BaseLocation.ballroom_small_room_lounge, LunacidRegion.sealed_ballroom),
+    create_location(LOCATION_CODE_START + base_location_start + 166, BaseLocation.ballroom_small_room_lounge, LunacidRegion.sealed_ballroom_doors),
     create_location(LOCATION_CODE_START + base_location_start + 167, BaseLocation.ballroom_entry_hidden_couch_top, LunacidRegion.sealed_ballroom_secret),
     create_location(LOCATION_CODE_START + base_location_start + 168, BaseLocation.ballroom_entry_hidden_couch_bottom, LunacidRegion.sealed_ballroom_secret),
     create_location(LOCATION_CODE_START + base_location_start + 169, BaseLocation.ballroom_entry_hidden_cave_in_lounge, LunacidRegion.sealed_ballroom_secret),
-    create_location(LOCATION_CODE_START + base_location_start + 170, BaseLocation.ballroom_entry_long_table, LunacidRegion.sealed_ballroom),
+    create_location(LOCATION_CODE_START + base_location_start + 170, BaseLocation.ballroom_entry_long_table, LunacidRegion.sealed_ballroom_doors),
     create_location(LOCATION_CODE_START + base_location_start + 171, BaseLocation.ballroom_side_hidden_cave, LunacidRegion.sealed_ballroom_secret),
-    create_location(LOCATION_CODE_START + base_location_start + 172, BaseLocation.ballroom_side_chest_near_switch, LunacidRegion.sealed_ballroom),
-    create_location(LOCATION_CODE_START + base_location_start + 173, BaseLocation.ballroom_side_painting, LunacidRegion.sealed_ballroom),
+    create_location(LOCATION_CODE_START + base_location_start + 172, BaseLocation.ballroom_side_chest_near_switch, LunacidRegion.sealed_ballroom_doors),
+    create_location(LOCATION_CODE_START + base_location_start + 173, BaseLocation.ballroom_side_painting, LunacidRegion.sealed_ballroom_doors),
     create_location(LOCATION_CODE_START + base_location_start + 174, BaseLocation.ballroom_side_hidden_casket_room, LunacidRegion.sealed_ballroom_secret),
-    create_location(LOCATION_CODE_START + base_location_start + 175, BaseLocation.ballroom_side_xp_drain, LunacidRegion.sealed_ballroom),
+    create_location(LOCATION_CODE_START + base_location_start + 175, BaseLocation.ballroom_side_xp_drain, LunacidRegion.sealed_ballroom_doors),
 ]
 
 laetus_chasm = [
@@ -211,7 +211,7 @@ boiling_grotto = [
 
     create_location(LOCATION_CODE_START + base_location_start + 206, BaseLocation.sand_top_right_sarcophagus, LunacidRegion.sand_temple),
     create_location(LOCATION_CODE_START + base_location_start + 207, BaseLocation.sand_second_floor_snake, LunacidRegion.sand_temple),
-    create_location(LOCATION_CODE_START + base_location_start + 208, BaseLocation.sand_basement_snake_pit, LunacidRegion.sand_temple),
+    create_location(LOCATION_CODE_START + base_location_start + 208, BaseLocation.sand_basement_snake_pit, LunacidRegion.deep_snake_pit),
     create_location(LOCATION_CODE_START + base_location_start + 209, BaseLocation.sand_room_buried_in_sand, LunacidRegion.sand_temple),
     create_location(LOCATION_CODE_START + base_location_start + 210, BaseLocation.sand_basement_rubble, LunacidRegion.sand_temple),
     create_location(LOCATION_CODE_START + base_location_start + 211, BaseLocation.sand_hidden_sarcophagus, LunacidRegion.sand_temple),
@@ -267,30 +267,30 @@ forlorn_arena = [
     create_location(LOCATION_CODE_START + base_location_start + 285, BaseLocation.arena_rock_parkour, LunacidRegion.forlorn_arena),
     create_location(LOCATION_CODE_START + base_location_start + 286, BaseLocation.arena_earth_hidden_plant_haven, LunacidRegion.earth_temple_secret),
     create_location(LOCATION_CODE_START + base_location_start + 287, BaseLocation.arena_earth_hidden_room, LunacidRegion.earth_temple_secret),
-    create_location(LOCATION_CODE_START + base_location_start + 288, BaseLocation.arena_earth_earthen_temple, LunacidRegion.forlorn_arena),
+    create_location(LOCATION_CODE_START + base_location_start + 288, BaseLocation.arena_earth_earthen_temple, LunacidRegion.earth_temple_secret),
     create_location(LOCATION_CODE_START + base_location_start + 289, BaseLocation.arena_earth_chest_near_switch, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 290, BaseLocation.arena_water_room_near_water, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 291, BaseLocation.arena_water_dead_end_near_water, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 292, BaseLocation.arena_water_collapsed_end_near_balcony, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 293, BaseLocation.arena_water_hidden_basement_left, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 294, BaseLocation.arena_water_hidden_basement_right, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 295, BaseLocation.arena_water_hidden_laser_room, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 296, BaseLocation.arena_water_hidden_alcove_before, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 297, BaseLocation.arena_water_hidden_alcove_left, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 298, BaseLocation.arena_water_hidden_alcove_right, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 299, BaseLocation.arena_water_hidden_alcove_before_switch, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 300, BaseLocation.arena_water_underwater_temple, LunacidRegion.forlorn_arena),
-    create_location(LOCATION_CODE_START + base_location_start + 301, BaseLocation.arena_water_chest_near_switch, LunacidRegion.forlorn_arena),
+    create_location(LOCATION_CODE_START + base_location_start + 290, BaseLocation.arena_water_room_near_water, LunacidRegion.water_temple),
+    create_location(LOCATION_CODE_START + base_location_start + 291, BaseLocation.arena_water_dead_end_near_water, LunacidRegion.water_temple),
+    create_location(LOCATION_CODE_START + base_location_start + 292, BaseLocation.arena_water_collapsed_end_near_balcony, LunacidRegion.water_temple),
+    create_location(LOCATION_CODE_START + base_location_start + 293, BaseLocation.arena_water_hidden_basement_left, LunacidRegion.water_temple_secret),
+    create_location(LOCATION_CODE_START + base_location_start + 294, BaseLocation.arena_water_hidden_basement_right, LunacidRegion.water_temple_secret),
+    create_location(LOCATION_CODE_START + base_location_start + 295, BaseLocation.arena_water_hidden_laser_room, LunacidRegion.water_temple_secret),
+    create_location(LOCATION_CODE_START + base_location_start + 296, BaseLocation.arena_water_hidden_alcove_before, LunacidRegion.water_temple_secret),
+    create_location(LOCATION_CODE_START + base_location_start + 297, BaseLocation.arena_water_hidden_alcove_left, LunacidRegion.water_temple_secret),
+    create_location(LOCATION_CODE_START + base_location_start + 298, BaseLocation.arena_water_hidden_alcove_right, LunacidRegion.water_temple_secret),
+    create_location(LOCATION_CODE_START + base_location_start + 299, BaseLocation.arena_water_hidden_alcove_before_switch, LunacidRegion.water_temple_secret),
+    create_location(LOCATION_CODE_START + base_location_start + 300, BaseLocation.arena_water_underwater_temple, LunacidRegion.water_temple_secret),
+    create_location(LOCATION_CODE_START + base_location_start + 301, BaseLocation.arena_water_chest_near_switch, LunacidRegion.water_temple_lower),
 ]
 
 labyrinth_of_ash = [
     create_location(LOCATION_CODE_START + base_location_start + 307, BaseLocation.ash_entry_coffin, LunacidRegion.labyrinth_of_ash_entrance),
-    create_location(LOCATION_CODE_START + base_location_start + 308, BaseLocation.ash_giant_remains, LunacidRegion.labyrinth_of_ash),
-    create_location(LOCATION_CODE_START + base_location_start + 309, BaseLocation.ash_cetea_statue, LunacidRegion.labyrinth_of_ash),
-    create_location(LOCATION_CODE_START + base_location_start + 310, BaseLocation.ash_rocks_near_switch, LunacidRegion.labyrinth_of_ash),
-    create_location(LOCATION_CODE_START + base_location_start + 311, BaseLocation.ash_forbidden_light_chest, LunacidRegion.labyrinth_of_ash),
-    create_location(LOCATION_CODE_START + base_location_start + 312, BaseLocation.ash_hidden_chest, LunacidRegion.labyrinth_of_ash),
-    create_location(LOCATION_CODE_START + base_location_start + 313, BaseLocation.ash_path_maze, LunacidRegion.labyrinth_of_ash),
+    create_location(LOCATION_CODE_START + base_location_start + 308, BaseLocation.ash_giant_remains, LunacidRegion.holy_seat_of_gold),
+    create_location(LOCATION_CODE_START + base_location_start + 309, BaseLocation.ash_cetea_statue, LunacidRegion.holy_seat_of_gold),
+    create_location(LOCATION_CODE_START + base_location_start + 310, BaseLocation.ash_rocks_near_switch, LunacidRegion.holy_seat_of_gold),
+    create_location(LOCATION_CODE_START + base_location_start + 311, BaseLocation.ash_forbidden_light_chest, LunacidRegion.holy_seat_of_gold),
+    create_location(LOCATION_CODE_START + base_location_start + 312, BaseLocation.ash_hidden_chest, LunacidRegion.holy_seat_of_gold),
+    create_location(LOCATION_CODE_START + base_location_start + 313, BaseLocation.ash_path_maze, LunacidRegion.holy_seat_of_gold),
 ]
 
 chamber_of_fate = [
