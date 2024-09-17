@@ -14,6 +14,7 @@ The game's randomization changes the base game by
 - determining how many Strange Coins are required to complete Ending B,
 - giving yourself more experience gain rates,
 - giving the Dusty Crystal Orb a purpose by potentially locking hidden walls,
+- allows custom music to be injected into the game,
 
 among other settings.
 
@@ -27,16 +28,20 @@ The base settings shuffle:
 With additional settings:
 - shuffle all drops enemies drop,
 - removing either Tower of Abyss or Coin locations from your game,
+- shuffle results from quenching
+- shuffle results from alchemy
+- shuffle enemy placement.
 
 with more planned as time moves on. 
 
 Items shuffled depend on your settings, but can include:
-- Weapons.
-- Spells.
-- Key items (Vampiric Symbols, Terminus Prison Key, etc).
-- Voucher items that reduce the cost of items to 0.
-- Crafted goods (Health Vials, Bombs, Throwing Knives).
-- Rare drops (Angelic Feather, Pink Shrimp).
+- weapons,
+- spells,
+- key items (Vampiric Symbols, Terminus Prison Key, etc),
+- voucher items that reduce the cost of items to 0,
+- crafted goods (Health Vials, Bombs, Throwing Knives),
+- rare drops (Angelic Feather, Pink Shrimp),
+- custom quality-of-life items (experience, additional drop chances).
 
 
 ## When the player receives an item, what happens?
@@ -64,3 +69,7 @@ obscures this as it is always in upper case.
 - If the game does not get past a connection attempt, it's likely that the server has winded down,
 or there is a version mismatch.  Check the LogOutput of BepInEx if you aren't sure.
 - If the game's port changes, you can edit the save's JSON file to change the port.
+- Some enemies cannot yet be randomized due to design quirks.  These are:
+  - the slimes in The Fetid Mire, due to the prefab not including them, to avoid a missed location,
+  - several embalmed in Boiling Grotto, due to their placement in the scene,
+  - some rats in The Fetid Mire, as their timing is off when the scene loads.

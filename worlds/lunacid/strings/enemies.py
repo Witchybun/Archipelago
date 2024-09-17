@@ -40,7 +40,7 @@ class Enemy:
     poltergeist = "Poltergeist"
     vampire = "Vampire"
     vampire_page = "Vampire Page"
-    giant_bat = "Giant Bat"
+    great_bat = "Great Bat"
     malformed = "Malformed"
 
     malformed_horse = "Malformed Horse"
@@ -50,6 +50,7 @@ class Enemy:
     obsidian_skeleton = "Obsidian Skeleton"
     serpent = "Serpent"
     anpu = "Anpu"
+    anpu_sword = "Anpu (Sword)"
     embalmed = "Embalmed"
 
     lunam = "Cerritulus Lunam"
@@ -70,8 +71,8 @@ class Enemy:
     demon = "Abyssal Demon"
 
     randomizable_enemies = [
-        snail, milk_snail, shulker, mummy, mummy_knight, slime_skeleton, skeleton, rat, rat_king, rat_queen, mimic, devil_slime, yakul, kodama, lunaga, venus, neptune,
-        unilateralis, tillandsia, enlightened_one, necronomicon, cursed_painting, poltergeist, vampire, vampire_page, giant_bat, malformed, malformed_horse, hallowed_husk,
+        snail, milk_snail, shulker, mummy, mummy_knight, slime_skeleton, skeleton, rat, rat_king, rat_queen, mimic, devil_slime, yakul, kodama, venus, neptune,
+        unilateralis, tillandsia, enlightened_one, necronomicon, cursed_painting, poltergeist, vampire, vampire_page, great_bat, malformed, malformed_horse, hallowed_husk,
         ikurrilb, obsidian_skeleton, serpent, anpu, embalmed, lunam, jailor, lupine_skeleton, giant_skeleton, infested_corpse, sucsarian_dagger, ceres, vesta, gloom_wood,
-        centaur, cetea, hemalith, mare, mi_go, phantom, sucsarian_spear, skeleton_weapon
+        centaur, cetea, hemalith, mare, mi_go, phantom, sucsarian_spear, skeleton_weapon, chimera, anpu_sword
                             ]

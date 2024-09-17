@@ -10,7 +10,7 @@ from .data.item_data import all_items, LunacidItemData, base_unique_items, start
     base_special_item_counts, shop_unique_items, shop_item_count, all_item_data_by_name, quench_starting_weapons
 from .data.weapon_info import all_weapons, ranged_weapons, all_weapon_info_by_name
 from .data.spell_info import all_spells, ranged_spells, all_spell_info_by_name
-from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap, CustomItem
+from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap, CustomItem, Upgrade
 from .strings.properties import Elements, Types
 from .strings.spells import Spell, MobSpell
 
@@ -203,7 +203,7 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
             items.append(item_factory(item))
     if options.dropsanity != options.dropsanity.option_off:
         items.append(item_factory(UniqueItem.black_book))
-
+        items.extend(item_factory(item) for item in [Upgrade.drop_chance]*3)
     #  if options.movement_items == options.movement_items.option_true:
     #    items.extend(item_factory(jump_item) for jump_item in [Upgrade.jump_power] * 4)
     create_strange_coins(item_factory, options, items)
