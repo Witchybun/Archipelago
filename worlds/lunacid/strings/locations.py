@@ -344,7 +344,7 @@ class DropLocation:
     #  Accursed Tomb
     mi_go_ocean_bone_shell = other_drop("Mi-Go: Ocean Bone Shell Drop")
     mi_go_10c = other_drop("Mi-Go: Medium Silver Drop")
-    mi_go_snowflake_obsidian = other_drop("Mi-Go: Snowflake Obsidian")
+    mi_go_snowflake_obsidian = other_drop("Mi-Go: Snowflake Obsidian Drop")
     mare_10c = other_drop("Mare: Medium Silver Drop")
     mare_obsidian = other_drop("Mare: Obsidian Drop")
     mare_onyx = other_drop("Mare: Onyx Drop")
