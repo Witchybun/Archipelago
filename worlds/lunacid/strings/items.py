@@ -172,6 +172,7 @@ class Door:
 
 class Upgrade:
     jump_power = "Progressive Jump Power"
+    drop_chance = "Text on Great Well Resourcefulness"
 
 
 class Voucher:

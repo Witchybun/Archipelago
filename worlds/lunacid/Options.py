@@ -277,6 +277,7 @@ class LunacidOptions(PerGameCommonOptions):
     experience: Experience
     weapon_experience: WeaponExperience
     random_elements: RandomElements
+    enemy_randomization: EnemyRandomization
     required_strange_coin: RequiredStrangeCoins
     total_strange_coin: TotalStrangeCoins
     shopsanity: Shopsanity
@@ -291,6 +292,7 @@ class LunacidOptions(PerGameCommonOptions):
     filler: Filler
     traps: Traps
     trap_percent: TrapPercent
+    custom_music: CustomMusic
     item_colors: ItemColors
     custom_class: CustomClass
     death_link: DeathLink
