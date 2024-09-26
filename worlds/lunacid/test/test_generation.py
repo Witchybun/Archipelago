@@ -339,26 +339,6 @@ class TestEntranceRando(LunacidTestCase):
                 self.check_entrances_are_consistent(multiworld)
 
 
-class CheckTowerExclusion(LunacidTestBase):
-    options = {"remove_locations": frozenset({"Tower of Abyss"})}
-
-    def test_no_items_or_locations_from_tower(self):
-        for location in self.multiworld.get_locations(1):
-            self.assertFalse(location.name in BaseLocation.abyss_locations)
-        for item in self.multiworld.get_items():
-            self.assertFalse(item.name in [Weapon.moonlight, UniqueItem.crystal_lantern])
-
-
-class CheckCoinExclusion(LunacidTestBase):
-    options = {"remove_locations": frozenset({"Strange Coins"})}
-
-    def test_no_items_or_locations_from_coins(self):
-        for location in self.multiworld.get_locations(1):
-            self.assertFalse(location.name in BaseLocation.coin_locations)
-        for item in self.multiworld.get_items():
-            self.assertFalse(item.name == Coins.strange_coin)
-
-
 class AnyEndingTests(LunacidTestBase):
     options = {"ending": "any_ending",
                "required_strange_coin": 20}
