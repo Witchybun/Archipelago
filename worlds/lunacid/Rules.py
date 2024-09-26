@@ -519,7 +519,7 @@ class LunacidRules:
     def can_purchase_item(self, state: CollectionState, options: LunacidOptions) -> bool:
         if options.shopsanity == options.shopsanity.option_false:
             return True
-        return state.has("Sir Hicket's Freedom from Armor", self.player)
+        return state.can_reach_region(LunacidRegion.boiling_grotto, self.player) and state.has(Spell.ignis_calor, self.player)
 
     def has_blood_spell_access(self, state: CollectionState) -> bool:
         return state.has_any(blood_spells, self.player)
