@@ -71,6 +71,9 @@ class UniqueItem:
     dusty_crystal_orb = "Dusty Crystal Orb"
     skeleton_rattle = "Skeletal Rattle"
 
+    completion_important = [white_tape, vhs_tape, black_book, enchanted_key, corrupted_key, terminus_prison_key, water_talisman, earth_talisman, dusty_crystal_orb,
+                            skeleton_egg, skull_of_josiah]
+
 
 class RareDrops:
     angel_feather = "Angel Feather"
