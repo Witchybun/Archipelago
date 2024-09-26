@@ -214,13 +214,13 @@ class LunacidRules:
             "Free Sir Hicket": lambda state: state.has(Spell.ignis_calor, self.player),
             BaseLocation.ash_path_maze: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.ash_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
+            BaseLocation.fate_lucid_blade: lambda state: state.has(Weapon.lucid_blade, self.player) or
+                                                         self.world.multiworld.get_location(BaseLocation.fate_lucid_blade, self.player).item == Weapon.lucid_blade,
 
             # Shop Location Runes
             ShopLocation.buy_steel_needle: lambda state: state.has(Voucher.sheryl_initial_voucher, self.player),
             ShopLocation.buy_crossbow: lambda state: state.has(Voucher.sheryl_initial_voucher, self.player),
             ShopLocation.buy_rapier: lambda state: state.has(Voucher.sheryl_initial_voucher, self.player),
-            ShopLocation.buy_ocean_elixir_sheryl: lambda state: self.can_purchase_item(state, self.world.options) and
-                                                                state.has(Voucher.sheryl_golden_voucher, self.player),
             ShopLocation.buy_privateer_musket: lambda state: self.can_purchase_item(state, self.world.options) and
                                                              state.has(Voucher.sheryl_golden_voucher, self.player),
             ShopLocation.buy_oil_lantern: lambda state: self.can_purchase_item(state, self.world.options) and
