@@ -207,6 +207,7 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
     #  if options.movement_items == options.movement_items.option_true:
     #    items.extend(item_factory(jump_item) for jump_item in [Upgrade.jump_power] * 4)
     create_strange_coins(item_factory, options, items)
+    items.append(item_factory(CustomItem.bestial_mastery))
     return items
 
 
