@@ -166,20 +166,6 @@ class SecretDoorLock(Toggle):
     display_name = "Secret Door Lock"
 
 
-class RemoveLocations(OptionSet):
-    """Removes certain locations from being in the pool at all.  Helps to avoid situations where even filler is not wanted on locations you would not do.
-    Choices are as follows with additional item removal information associated with the location removal:
-    Tower of Abyss: Also removes Crystal Lamp, Moonlight, and an Earth and Ocean Elixir from the pool.  11 Locations.
-    Strange Coins: Removes blood altar location in Temple of Silence, Kill the Jotunn and Kill Death.  3 Locations.
-    Daedalus: Removes all Black Books from the pool.  3 Locations."""
-    internal_name = "remove_locations"
-    display_name = "Remove Locations"
-    valid_keys = frozenset({"Tower of Abyss", "Strange Coins", "Daedalus"})
-    preset_none = frozenset()
-    preset_all = valid_keys
-    default = frozenset()
-
-
 class Filler(OptionSet):
     """Lets you decide which filler are added to the game.  If the set is empty, only silver and exp is included.
     Amount received in game is a random value between 1~5, favoring 1~2.
@@ -289,7 +275,6 @@ class LunacidOptions(PerGameCommonOptions):
     secret_door_lock: SecretDoorLock
     switch_locks: SwitchLocks
     door_locks: DoorLocks
-    remove_locations: RemoveLocations
     filler: Filler
     traps: Traps
     trap_percent: TrapPercent
