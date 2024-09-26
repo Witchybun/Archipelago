@@ -11,7 +11,7 @@ locations_by_name = {location.name: location for location in location_table}
 
 def create_locations(options: LunacidOptions, is_christmas: bool) -> List[LunacidLocation]:
     locations = []
-    create_base_locations(options, is_christmas, locations)
+    create_base_locations(is_christmas, locations)
     create_shop_locations(options, locations)
     create_drop_locations(options, locations)
     create_quench_locations(options, locations)
@@ -19,15 +19,9 @@ def create_locations(options: LunacidOptions, is_christmas: bool) -> List[Lunaci
     return locations
 
 
-def create_base_locations(options: LunacidOptions, is_christmas: bool, locations: List[LunacidLocation]) -> List[LunacidLocation]:
+def create_base_locations(is_christmas: bool, locations: List[LunacidLocation]) -> List[LunacidLocation]:
     for location in base_locations:
-        if location.name in BaseLocation.abyss_locations and "Tower of Abyss" in options.remove_locations:
-            continue
-        if location.name in BaseLocation.coin_locations and "Strange Coins" in options.remove_locations:
-            continue
         if location.name in BaseLocation.christmas_locations and not is_christmas:
-            continue
-        if location.name in BaseLocation.daedalus_locations and "Daedalus" in options.remove_locations:
             continue
         locations.append(location)
     return locations
