@@ -480,9 +480,7 @@ class LunacidRules:
             return state.has_any(high_spells, self.player)
 
     def has_door_key(self, key: str, state: CollectionState, options: LunacidOptions) -> bool:
-        if options.door_locks == options.door_locks.option_false:
-            return True
-        return state.has(key, self.player)
+        return options.door_locks == options.door_locks.option_false or state.has(key, self.player)
 
     def has_light_source(self, state: CollectionState) -> bool:
         sources = base_light_sources.copy()
@@ -538,9 +536,7 @@ class LunacidRules:
         return state.has(UniqueItem.enchanted_key, self.player, 2)
 
     def has_key_to_switch(self, state: CollectionState, key: str, options: LunacidOptions) -> bool:
-        if options.switch_locks == options.switch_locks.option_false:
-            return True
-        return state.has(key, self.player)
+        return options.switch_locks == options.switch_locks.option_false or state.has(key, self.player)
 
     def has_all_keys_to_switch(self, state: CollectionState, keys: List[str], options: LunacidOptions) -> bool:
         rule = True
