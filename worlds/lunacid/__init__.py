@@ -9,13 +9,14 @@ from .OptionGroups import lunacid_option_groups
 from .data.enemy_positions import base_enemy_placement, EnemyPlacement, construct_flag_data_for_mod, construct_enemy_dictionary
 from .strings.custom_features import all_classes, DefaultColors
 from .strings.enemies import Enemy
+from .strings.spells import Spell, MobSpell
 from .strings.weapons import Weapon
 from .data.item_data import all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons, shop_starting_weapons, LunacidItemData
 from .data.weapon_info import weapons_by_element
 from .strings.items import Creation, Coins, UniqueItem, Progressives, Switch, Door, Trap, Alchemy
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
-from .strings.locations import BaseLocation, ShopLocation, unique_drop_locations, other_drop_locations, AlchemyLocation, all_drops
+from .strings.locations import BaseLocation, ShopLocation, unique_drop_locations, other_drop_locations, AlchemyLocation, all_drops, Quench
 from .Items import item_table, complete_items_by_name, create_items, determine_starting_weapon, \
     determine_weapon_elements, all_filler
 from .Options import LunacidOptions
@@ -76,6 +77,8 @@ class LunacidWorld(World):
         "Shops": ShopLocation.shop_locations,
         "Unique Drops": unique_drop_locations,
         "Non-unique Drops": other_drop_locations,
+        "Quench": Quench.all_quenches,
+        "Alchemy": AlchemyLocation.all_alchemy_locations
     }
 
     required_client_version = (0, 5, 0)
@@ -332,23 +335,48 @@ class LunacidWorld(World):
         for original_entrance, replaced_entrance in self.randomized_entrances.items():
             self.multiworld.spoiler.set_entrance(original_entrance, replaced_entrance, "entrance", self.player)
 
-    def add_enemy_regions_to_spoiler_log(self):
-        if self.options.enemy_randomization == self.options.enemy_randomization.option_false:
-            return
+    def important_item_locations(self):
+        item_spots = {}
+        location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(Progressives.vampiric_symbol, self.player)]
+        item_spots[Progressives.vampiric_symbol] = location_info
+        location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(Weapon.lucid_blade, self.player)]
+        item_spots[Weapon.lucid_blade] = location_info
+        for item in UniqueItem.completion_important:
+            location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(item, self.player)]
+            item_spots[item] = location_info
+        if self.options.door_locks == self.options.door_locks.option_true:
+            for key in Door.all_door_keys:
+                location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(key, self.player)]
+                item_spots[key] = location_info
+        if self.options.switch_locks == self.options.switch_locks.option_true:
+            for key in Switch.switches:
+                location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(key, self.player)]
+                item_spots[key] = location_info
+        if self.options.ending == self.options.ending.option_ending_e:
+            for spell in Spell.base_spells:
+                location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(spell, self.player)]
+                item_spots[spell] = location_info
+            if self.options.dropsanity != self.options.dropsanity.option_off:
+                for spell in MobSpell.drop_spells:
+                    location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(spell, self.player)]
+                    item_spots[spell] = location_info
+        return item_spots
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        item_spots = self.important_item_locations()
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.8.0",
+            "client_version": "0.8.2",
             "is_christmas": self.is_christmas,
             "elements": self.weapon_elements,
             "created_class_name": self.custom_class_name,
             "created_class_description": self.custom_class_description,
             "created_class_stats": self.custom_class_stats,
             "enemy_placement": self.enemy_random_data,
+            "item_spots": item_spots,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience", "required_strange_coin", "enemy_randomization",
                                    "shopsanity", "dropsanity", "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
-                                   "secret_door_lock", "death_link", "remove_locations", "starting_class", "normalized_drops", "item_colors", "custom_music"),
+                                   "secret_door_lock", "death_link", "starting_class", "normalized_drops", "item_colors", "custom_music"),
             "entrances": self.randomized_entrances
         }
 
