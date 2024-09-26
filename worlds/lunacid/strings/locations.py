@@ -175,15 +175,35 @@ class BaseLocation:
     sand_triple_sarcophagus = "ST: Triple Sarcophagus"
 
     abyss_floor_5 = "TA: Floor 5 Chest"
+    abyss_heal_5 = "TA: Floor 5 Item 1"
+    abyss_crystal_5 = "TA: Floor 5 Item 2"
     abyss_floor_10 = "TA: Floor 10 Chest"
+    abyss_heal_10 = "TA: Floor 10 Item 1"
+    abyss_crystal_10 = "TA: Floor 10 Item 2"
     abyss_floor_15 = "TA: Floor 15 Chest"
+    abyss_heal_15 = "TA: Floor 15 Item 1"
+    abyss_crystal_15 = "TA: Floor 15 Item 2"
     abyss_floor_20 = "TA: Floor 20 Chest"
+    abyss_heal_20 = "TA: Floor 20 Item 1"
+    abyss_crystal_20 = "TA: Floor 20 Item 2"
     abyss_floor_25 = "TA: Floor 25 Chest"
+    abyss_heal_25 = "TA: Floor 25 Item 1"
+    abyss_crystal_25 = "TA: Floor 25 Item 2"
     abyss_floor_30 = "TA: Floor 30 Chest"
+    abyss_heal_30 = "TA: Floor 30 Item 1"
+    abyss_crystal_30 = "TA: Floor 30 Item 2"
     abyss_floor_35 = "TA: Floor 35 Chest"
+    abyss_heal_35 = "TA: Floor 35 Item 1"
+    abyss_crystal_35 = "TA: Floor 35 Item 2"
     abyss_floor_40 = "TA: Floor 40 Chest"
+    abyss_heal_40 = "TA: Floor 40 Item 1"
+    abyss_crystal_40 = "TA: Floor 40 Item 2"
     abyss_floor_45 = "TA: Floor 45 Chest"
+    abyss_heal_45 = "TA: Floor 45 Item 1"
+    abyss_crystal_45 = "TA: Floor 45 Item 2"
     abyss_floor_50 = "TA: Floor 50 Chest"
+    abyss_heal_50 = "TA: Floor 50 Item 1"
+    abyss_crystal_50 = "TA: Floor 50 Item 2"
     abyss_prize = "TA: Prize Beneath Tree"
 
     prison_f3_locked_left = "TP: Third Floor Locked Cell Left"
@@ -252,12 +272,11 @@ class ShopLocation:
     buy_steel_needle = "Buy Steel Needle"
     buy_crossbow = "Buy Crossbow"
     buy_oil_lantern = "Buy Oil Lantern"
-    buy_ocean_elixir_sheryl = "Buy Ocean Elixir (Sheryl)"
     buy_ocean_elixir_patchouli = "Buy Ocean Elixir (Patchouli)"
     buy_privateer_musket = "Buy Privateer Musket"
     buy_jotunn_slayer = "Buy Jotunn Slayer"
 
-    shop_locations = [buy_rapier, buy_crossbow, buy_jotunn_slayer, buy_ocean_elixir_patchouli, buy_ocean_elixir_sheryl,
+    shop_locations = [buy_rapier, buy_crossbow, buy_jotunn_slayer, buy_ocean_elixir_patchouli,
                       buy_oil_lantern, buy_enchanted_key, buy_steel_needle, buy_privateer_musket]
 
 
@@ -484,6 +503,9 @@ class Quench:
     stone_club = "Quench Stone Club"
     torch = "Quench Torch"
     scythe = "Quench Death Scythe"
+
+    all_quenches = [brittle_arming_sword, broken_hilt, broken_lance, crossbow, elfen_sword, iron_club, iron_claw, lyrian_longsword, obsidian_seal, obsidian_cursebrand,
+                    obsidian_poisonguard, rapier, replica_sword, rusted_sword, shadow_blade, shining_blade, steel_claw, stone_club, torch, scythe]
 
 
 class AlchemyLocation:

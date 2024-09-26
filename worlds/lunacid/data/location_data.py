@@ -235,6 +235,27 @@ tower_of_abyss = [
     create_location(LOCATION_CODE_START + base_location_start + 230, BaseLocation.abyss_floor_40, LunacidRegion.tower_abyss),
     create_location(LOCATION_CODE_START + base_location_start + 231, BaseLocation.abyss_floor_45, LunacidRegion.tower_abyss),
     create_location(LOCATION_CODE_START + base_location_start + 232, BaseLocation.abyss_floor_50, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 233, BaseLocation.abyss_heal_5, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 234, BaseLocation.abyss_crystal_5, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 235, BaseLocation.abyss_heal_10, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 236, BaseLocation.abyss_crystal_10, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 237, BaseLocation.abyss_heal_15, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 238, BaseLocation.abyss_crystal_15, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 239, BaseLocation.abyss_heal_20, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 240, BaseLocation.abyss_crystal_20, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 241, BaseLocation.abyss_heal_25, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 242, BaseLocation.abyss_crystal_25, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 243, BaseLocation.abyss_heal_30, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 244, BaseLocation.abyss_crystal_30, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 245, BaseLocation.abyss_heal_35, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 246, BaseLocation.abyss_crystal_35, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 247, BaseLocation.abyss_heal_40, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 248, BaseLocation.abyss_crystal_40, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 249, BaseLocation.abyss_heal_45, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 250, BaseLocation.abyss_crystal_45, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 251, BaseLocation.abyss_heal_50, LunacidRegion.tower_abyss),
+    create_location(LOCATION_CODE_START + base_location_start + 252, BaseLocation.abyss_crystal_50, LunacidRegion.tower_abyss),
+
 ]
 
 terminus_prison = [
