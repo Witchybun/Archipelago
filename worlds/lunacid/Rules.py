@@ -5,7 +5,7 @@ from .Regions import REVERSE
 from .data.enemy_positions import immovable_enemies
 from .strings.enemies import Enemy
 from .strings.properties import Elements
-from ..generic.Rules import CollectionRule
+from worlds.generic.Rules import CollectionRule
 
 from .data.spell_info import ranged_spells
 from .data.weapon_info import ranged_weapons
@@ -410,7 +410,7 @@ class LunacidRules:
             Quench.broken_hilt: lambda state: self.can_get_weapon(state, Weapon.broken_hilt, self.world.options),
             Quench.brittle_arming_sword: lambda state: self.can_get_weapon(state, Weapon.brittle_arming_sword, self.world.options),
             Quench.stone_club: lambda state: self.can_get_weapon(state, Weapon.stone_club, self.world.options),
-            Quench.iron_club: lambda state: self.can_get_weapon(state, Weapon.iron_torch, self.world.options),
+            Quench.iron_club: lambda state: self.can_get_weapon(state, Weapon.iron_club, self.world.options),
             Quench.iron_claw: lambda state: self.can_get_weapon(state, Weapon.iron_claw, self.world.options),
             Quench.steel_claw: lambda state: self.can_get_weapon(state, Weapon.steel_claw, self.world.options),
             Quench.obsidian_seal: lambda state: self.can_get_weapon(state, Weapon.obsidian_seal, self.world.options),
