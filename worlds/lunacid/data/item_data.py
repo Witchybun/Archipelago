@@ -105,6 +105,7 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 70, Creation.throwing_knife, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 71, CustomItem.experience, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 72, Upgrade.drop_chance, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 73, CustomItem.bestial_mastery, ItemClassification.useful),
     ]
 
 trap_start_id = 100
@@ -322,13 +323,15 @@ base_unique_items = [
     UniqueItem.skull_of_josiah, Alchemy.fractured_life, UniqueItem.earth_talisman,
     UniqueItem.enchanted_key, UniqueItem.terminus_prison_key, Alchemy.broken_sword,
     Alchemy.fractured_death, UniqueItem.water_talisman, UniqueItem.skeleton_egg,
-    UniqueItem.dried_rat, UniqueItem.dusty_crystal_orb, UniqueItem.skeleton_rattle
+    UniqueItem.dried_rat, UniqueItem.dusty_crystal_orb, UniqueItem.skeleton_rattle,
+    UniqueItem.crystal_lantern
 ]
 
 base_special_item_counts = {
     Progressives.vampiric_symbol: 3,
-    UniqueItem.ocean_elixir: 6,
-    UniqueItem.earth_elixir: 9,
+    UniqueItem.ocean_elixir: 7,
+    UniqueItem.earth_elixir: 10,
+    UniqueItem.black_book: 3,
 }
 
 shop_unique_items = [
