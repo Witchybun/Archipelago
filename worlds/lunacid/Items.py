@@ -100,8 +100,6 @@ def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict
 
 def create_weapons(item_factory: LunacidItemFactory, equipment_by_elements: Dict[str, str], options: LunacidOptions, items: List[Item]) -> List[Item]:
     for item in Weapon.base_weapons:
-        if item == Weapon.moonlight and "Tower of Abyss" in options.remove_locations:
-            continue
         append_item_with_progression_determined_by_element_and_range(item_factory, item, ranged_weapons, options, equipment_by_elements, items)
     if options.shopsanity == options.shopsanity.option_true:
         for item in Weapon.shop_weapons:
@@ -185,12 +183,6 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
         items.append(item_factory(item))
     for item in base_special_item_counts:
         items.extend(item_factory(special_item) for special_item in [item] * base_special_item_counts[item])
-    if "Daedalus" not in options.remove_locations:
-        items.extend(item_factory(book) for book in [UniqueItem.black_book] * 2)
-    if "Tower of Abyss" not in options.remove_locations:
-        items.append(item_factory(UniqueItem.earth_elixir))
-        items.append(item_factory(UniqueItem.ocean_elixir))
-        items.append(item_factory(UniqueItem.crystal_lantern))
     if options.shopsanity == options.shopsanity.option_true:
         for item in shop_unique_items:
             items.append(item_factory(item))
@@ -202,7 +194,6 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
         for item in Voucher.vouchers:
             items.append(item_factory(item))
     if options.dropsanity != options.dropsanity.option_off:
-        items.append(item_factory(UniqueItem.black_book))
         items.extend(item_factory(item) for item in [Upgrade.drop_chance]*3)
     #  if options.movement_items == options.movement_items.option_true:
     #    items.extend(item_factory(jump_item) for jump_item in [Upgrade.jump_power] * 4)
@@ -239,8 +230,6 @@ def create_door_items(item_factory: LunacidItemFactory, options: LunacidOptions,
         return items
     for key in Door.doors_no_tower:
         items.append(item_factory(key))
-    if "Tower of Abyss" not in options.remove_locations:
-        items.append(item_factory(Door.tower_key))
     return items
 
 
