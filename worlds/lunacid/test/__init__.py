@@ -137,10 +137,6 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, LunacidOption],
     for name, option in LunacidWorld.options_dataclass.type_hints.items():
         value = option.from_any(test_options.get(name, option.default))
 
-        if issubclass(option, VerifyKeys):
-            # Values should already be verified, but just in case...
-            option.verify_keys(value.value)
-
         setattr(args, name, {1: value})
     multiworld.set_options(args)
 
