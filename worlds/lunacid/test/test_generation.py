@@ -426,3 +426,10 @@ class EdnasPupilTestDropsanity(LunacidTestBase):
         shard.classification = ItemClassification.progression
         self.collect(shard)
         self.assertTrue(self.can_reach_location(AlchemyLocation.knife))
+
+
+class EnemyPlacementTests(LunacidTestBase):
+    options = {"dropsanity": "randomized"}
+
+    def test_no_cetea_until_end(self):
+        self.assertFalse(self.can_reach_location(DropLocation.cetea_drop))
