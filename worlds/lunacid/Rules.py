@@ -389,6 +389,7 @@ class LunacidRules:
             DropLocation.gloom_fairy_moss: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.gloom_wood]),
             DropLocation.gloom_health_vial: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.gloom_wood]),
             DropLocation.gloom_dest_angel: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.gloom_wood]),
+            DropLocation.cetea_drop: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cetea]),
             DropLocation.cetea_10c: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cetea]),
             DropLocation.cetea_ocean_bone_shell: lambda state: self.can_reach_any_region(state, self.enemy_regions[Enemy.cetea]),
             DropLocation.sea_demon: lambda state: self.can_reach_any_region(state, immovable_enemies[Enemy.demon]),
