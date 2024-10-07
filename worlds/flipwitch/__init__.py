@@ -5,10 +5,12 @@ from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassifi
 from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from . import options
-from .data.items import FlipwitchItemData
-from .strings.regions_entrances import FlipwitchRegion
-from .items import item_table, complete_items_by_name, create_items
 from .options import FlipwitchOptions
+from .data.items import FlipwitchItemData
+from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi
+from .strings.regions_entrances import FlipwitchRegion
+from .strings.items import Goal, Power, Upgrade, Key
+from .items import item_table, complete_items_by_name, create_items
 from .locations import create_locations, location_table
 from .regions import link_flipwitch_areas, create_regions
 from .rules import FlipwitchRules
@@ -30,7 +32,7 @@ class FlipwitchWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Albrekka", "Prin"]
+        ["Albrekka", "Prin", "SomeLazyGamer"]
     )]
 
 
@@ -40,7 +42,7 @@ class FlipwitchWorld(World):
     You'll have to use your wits in this quirky adventure to seduce everyone around you!
     """
 
-    game = "Flipwitch"
+    game = "Flipwitch Forbidden Sex Hex"
     topology_present = False
     item_name_to_id = {item.name: item.code for item in item_table}
     location_name_to_id = {location.name: location.location_id for location in location_table}
@@ -79,10 +81,13 @@ class FlipwitchWorld(World):
         FlipwitchRules(self).set_flipwitch_rules()
 
     def create_items(self):
+        chaos_count = 0
+        if self.options.shuffle_chaos_pieces == self.options.shuffle_chaos_pieces.option_false:
+            chaos_count += 6
         locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player)if location.item is None])
+                               for location in self.multiworld.get_locations(self.player)if location.item is None]) - chaos_count
         excluded_items = self.multiworld.precollected_items[self.player]
-        potential_pool = create_items(self.create_item, locations_count, excluded_items)
+        potential_pool = create_items(self.create_item, locations_count, excluded_items, self.options)
         self.multiworld.itempool += potential_pool
 
     def create_regions(self):
@@ -105,12 +110,23 @@ class FlipwitchWorld(World):
         self.multiworld.regions.extend(world_regions.values())
 
         ending_region = world.get_region(FlipwitchRegion.witch_woods, player)
-        victory = Location(player, "Obtain Gender Changing Powers", None, ending_region)
+        victory = Location(player, "Defeat the Chaos Queen", None, ending_region)
         victory.place_locked_item(self.create_event("Victory"))
         ending_region.locations.append(victory)
-        set_rule(victory, lambda state: FlipwitchRules(self).can_complete_quest(state))
+        set_rule(victory, lambda state: state.has(Goal.chaos_piece, self.player, 6) and state.has(Power.slime_form, self.player) and
+                                        state.has(Upgrade.angel_feathers, self.player) and state.has(Key.chaos_sanctum, self.player))
 
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
+
+    def pre_fill(self) -> None:
+        state = self.multiworld.get_all_state(False)
+        chaos_pieces = [chaos_piece for chaos_piece in [Item(Goal.chaos_piece, ItemClassification.progression | ItemClassification.useful,
+                                                             self.item_name_to_id[Goal.chaos_piece], self.player)]*6]
+        if self.options.shuffle_chaos_pieces == self.options.shuffle_chaos_pieces.option_false:
+            boss_location_names = [WitchyWoods.goblin_queen_chaos, GhostCastle.ghost_chaos, ClubDemon.demon_boss_chaos,
+                                   AngelicHallway.angelica_chaos, SlimeCitadel.slimy_princess_chaos, UmiUmi.frog_boss_chaos]
+            boss_locations = [location for location in self.multiworld.get_locations(self.player) if location.name in boss_location_names]
+            fill_restrictive(self.multiworld, state, boss_locations, chaos_pieces, single_player_placement=True, lock=True, allow_excluded=True)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
