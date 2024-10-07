@@ -1,34 +1,150 @@
-class Stat:
-    health = "Health Upgrade" #10 of these
-    mana = "Mana Upgrade" #10 of these
-    wand = "Wand Upgrade"
-
 
 class QuestItem:
     fairy_bubble = "Fairy Bubble"
     cowbell = "Belle's Cowbell"
+    goblin_headshot = "Goblin Headshot"
+    business_card = "Business Card"
+    gobliana_luggage = "Gobliana's Luggage"
+    summon_stone = "Summon Stone"
+    delicious_milk = "Delicious Milk"
+    belle_milkshake = "Belle's Milkshake"
+    cherry_key = "Cherry Apartment Key"
+    mono_password = "Momo Server Admin Password"
+    clothes = "Bundle of Clothes"
+    heavenly_daikon = "Heavenly Daikon"
+    hellish_dango = "Hellish Dango"
+    soul_fragment = "Soul Fragment"
+    legendary_halo = "Legendary Halo"
+    demonic_letter = "Demonic Letter"
+    angelic_letter = "Angelic Letter"
+    silky_slime = "Silky Slime"
+    red_wine = "Red Wine"
+    blue_jelly_mushroom = "Blue Jelly Mushroom"
+    maid_contract = "Maid Contract"
+    deed = "Deed to Fungal Forest"
+    mimic_chest = "Mimic Chest Key"
+    fungal = "Fungal Key"
+    goblin_apartment = "Goblin Apartment Key"
+
+
+class Power:
+    bomb = "Goblin Bomb"
+    frilly_panties = "Frilly Panties"
+    disarming_bell = "Disarming Bell"
+    ghost_form = "Ghost Form"
+    slime_form = "Slime Form"
+    harpy_feather = "Harpy Feather"
+    magical_mushroom = "Magical Mushroom"
+    slime_sentry = "Slime Sentry"
+    ring_of_the_moon = "Ring Of The Moon"
+    ring_of_the_sun = "Ring Of The Sun"
+    haunted_scythe = "Haunted Scythe"
+    demonic_cuff = "Demonic Cuff"
+    toxic_slime_vial = "Toxic Slime Vial"
+
+
+class Accessory:
+    fortune_cat = "Fortune Cat"
+    heart_necklace = "Heart Necklace"
+    star_bracelet = "Star Bracelet"
+    magnetic_hairpin = "Magnetic Hairpin"
+    yellow_frog_talisman = "Yellow Frog Talisman"
+    blue_frog_talisman = "Blue Frog Talisman"
+    sacrificial_dagger = "Sacrificial Dagger"
+    mind_mushroom = "Mind Mushroom"
+    flutterknife_garter = "Flutterknife Garter"
+    cursed_talisman = "Cursed Talisman"
 
 
 class Upgrade:
-    peachy_peach = "Peachy Peach"
+    health = "Health Upgrade" #10 of these
+    mana = "Mana Upgrade" #10 of these
+    wand = "Wand Upgrade"
+    peachy_peach = "Peachy Peach Upgrade"
     bewitched_bubble = "Bewitched Bubble"
+    progressive_crystal = "Goblin Crystal"
+    portable_portal = "Portable Portal"
+    demon_wings = "Demon Wings"
+    angel_feathers = "Angel Feathers"
+    mermaid_scale = "Mermaid Scale"
 
 
 class Coin:
     lucky_coin = "Lucky Coin"
+    loose_change = "Loose Change"
+
+
+class Warp:
+    sensei = "Sensei's Hut Teleport"
+    witchy = "Witchy Woods Teleport"
+    goblin = "Goblin Caves Teleport"
+    spirit = "Spirit City Teleport"
+    shady = "Shady Alley Teleport"
+    ghost_entrance = "Ghost Castle Entrance Teleport"
+    ghost_castle = "Ghost Castle Teleport"
+    jigoku = "Jigoku Teleport"
+    club_demon = "Club Demon Teleport"
+    tengoku = "Tengoku Teleport"
+    angelic_hallway = "Angelic Hallway Teleport"
+    fungal_forest = "Fungal Forest Teleport"
+    slime_citadel = "Slime Citadel Teleport"
+    slimy_depths = "Slimy Depths Teleport"
+    umi_umi = "Umi Umi Teleport"
+    chaos_castle = "Chaos Castle Teleport"
 
 
 class Gacha:
-    special_promotion = "Special Promotion #1"
+    special_promotion = "Special Promotion Figure #1"
+    animal_girl_1 = "Animal Girl Figure #1"
+    animal_girl_2 = "Animal Girl Figure #2"
+    animal_girl_3 = "Animal Girl Figure #3"
+    animal_girl_4 = "Animal Girl Figure #4"
+    animal_girl_5 = "Animal Girl Figure #5"
+    animal_girl_6 = "Animal Girl Figure #6"
+    animal_girl_7 = "Animal Girl Figure #7"
+    animal_girl_8 = "Animal Girl Figure #8"
+    animal_girl_9 = "Animal Girl Figure #9"
+    animal_girl_10 = "Animal Girl Figure #10"
+    bunny_girl_1 = "Bunny Girl Figure #1"
+    bunny_girl_2 = "Bunny Girl Figure #2"
+    bunny_girl_3 = "Bunny Girl Figure #3"
+    bunny_girl_4 = "Bunny Girl Figure #4"
+    bunny_girl_5 = "Bunny Girl Figure #5"
+    bunny_girl_6 = "Bunny Girl Figure #6"
+    bunny_girl_7 = "Bunny Girl Figure #7"
+    bunny_girl_8 = "Bunny Girl Figure #8"
+    bunny_girl_9 = "Bunny Girl Figure #9"
+    bunny_girl_10 = "Bunny Girl Figure #10"
+    angel_demon_1 = "Angels & Demons Figure #1"
+    angel_demon_2 = "Angels & Demons Figure #2"
+    angel_demon_3 = "Angels & Demons Figure #3"
+    angel_demon_4 = "Angels & Demons Figure #4"
+    angel_demon_5 = "Angels & Demons Figure #5"
+    angel_demon_6 = "Angels & Demons Figure #6"
+    angel_demon_7 = "Angels & Demons Figure #7"
+    angel_demon_8 = "Angels & Demons Figure #8"
+    angel_demon_9 = "Angels & Demons Figure #9"
+    angel_demon_10 = "Angels & Demons Figure #10"
+    monster_girl_1 = "Monster Girls Figure #1"
+    monster_girl_2 = "Monster Girls Figure #2"
+    monster_girl_3 = "Monster Girls Figure #3"
+    monster_girl_4 = "Monster Girls Figure #4"
+    monster_girl_5 = "Monster Girls Figure #5"
+    monster_girl_6 = "Monster Girls Figure #6"
+    monster_girl_7 = "Monster Girls Figure #7"
+    monster_girl_8 = "Monster Girls Figure #8"
+    monster_girl_9 = "Monster Girls Figure #9"
+    monster_girl_10 = "Monster Girls Figure #10"
 
 
 class Unlock:
-    crystal_block = "Crystal Blockade Removal"
+    crystal_block = "Woods Crystal Blockade Removal"
+    goblin_crystal_block = "City Crystal Blockade Removal"
 
 
 class Costume:
     navy = "Navy Witch Costume"
-    black_witch = "Black Witch Costume"
+    # black_witch = "Black Witch Costume"
     red_wizard = "Red Wizard Costume"
     nun = "Nun Costume"
     priest = "Priest Costume"
@@ -47,9 +163,11 @@ class Costume:
     fairy = "Fairy Costume"
     alchemist = "Alchemist Costume"
 
+    female_costumes = [navy, nun, miko, cat, maid, bunny, nurse, dominating, fairy]
+    male_costumes = [red_wizard, priest, farmer, goblin, pigman, rat, angler, postman, alchemist]
+
 
 class Key:
-    mimic_chest = "Mimic Chest Key"
     rundown_house = "Rundown House Key"
     ghostly_castle = "Ghostly Castle Key"
     beast = "The Beast's Key"
@@ -65,126 +183,9 @@ class Key:
     abandoned_apartment = "Abandoned Apartment Key"
     secret_garden = "Secret Garden Key"
     demon_club = "Demon Club Door Key"
-    forgotten_fungal = "Forgotten Fungal Door Key"
     slime_boss = "Slime Boss Key"
+    forgotten_fungal = "Forgotten Fungal Door Key"
 
-item_table = {
-    "Ghost Form":2,
-    "Fortune Cat":4,
-    "Ending":5,
-    "Sacrificial Dagger":6,
-    "Toxic Slime Vial":7,
-    "Haunted Scythe":8,
-    "Magical Mushroom":9,
-    "Goblin Bomb":10,
-    "Ring Of The Moon":11,
-    "Harpy Feather":12,
-    "Disarming Bell":13,
-    "Slime Form":14,
-    "Slime Sentry":15,
-    "Frilly Panties":16,
-    "Demonic Cuff":17,
-    "Magnetic Hairpin":18,
-    "Cursed Talisman":19,
-    "Portable Portal":20,
-    "Ring Of The Sun":21,
-    "Star Bracelet":22,
-    "Yellow Frog Talisman":23,
-    "Mind Mushroom":24,
-    "Heart Necklace":25,
-    "Flutterknife Garter":26,
-    "Blue Frog Talisman":27,
-    "Chaos Key Piece":28,
-    "Bewitched Bubble":34,
-    "Goblin Crystal":35,
-    "Demon Wings":36,
-    "Angel Feathers":37,
-    "Mermaid Scale":38,
-    "Peachy Peach":73, #11 or 12 upgrades?
-    "Gacha Coin":74, #44 of these
-    "Gold Coins":75, #Money
-    "Progressive Belle Item":76,
-    "Momo Server Admin Password":78,
-    "Bundle of Clothes":79,
-    "Progressive Gobliana Item":80,
-    "Progressive Kyoni Item":82,
-    "Soul Fragment":84,
-    "Legendary Halo":87,
-    "Progressive Letter":88,
-    "Silky Slime":90,
-    "Red Wine":92,
-    "Blue Jelly Mushroom":93,
-    "Maid Contract":94,
-    "Progressive Tatil Item":95,
-    "Summon Stone":96,
-    "Fairy Bubble":102,
-    "Progressive Animal Girl Gacha":110,
-    "Progressive Bunny Girl Gacha":120,
-    "Progressive Angels & Demons Gacha":130,
-    "Progressive Monster Girl Gacha":140,
-    "Special Promo Gacha":143,
-    "Peachy Peach Upgrade":144,
-    "Deed to Fungal Forest":145,
 
-    #junk items
-    #"AG Figure 1":201,
-    #"AG Figure 2":202,
-    #"AG Figure 3":203,
-    #"AG Figure 4":204,
-    #"AG Figure 5":205,
-    #"AG Figure 6":206,
-    #"AG Figure 7":207,
-    #"AG Figure 8":208,
-    #"AG Figure 9":209,
-    #"AG Figure 10":210,
-    #"BG Figure 1":211,
-    #"BG Figure 2":212,
-    #"BG Figure 3":213,
-    #"BG Figure 4":214,
-    #"BG Figure 5":215,
-    #"BG Figure 6":216,
-    #"BG Figure 7":217,
-    #"BG Figure 8":218,
-    #"BG Figure 9":219,
-    #"BG Figure 10":220,
-    #"AD Figure 1":221,
-    #"AD Figure 2":222,
-    #"AD Figure 3":223,
-    #"AD Figure 4":224,
-    #"AD Figure 5":225,
-    #"AD Figure 6":226,
-    #"AD Figure 7":227,
-    #"AD Figure 8":228,
-    #"AD Figure 9":229,
-    #"AD Figure 10":230,
-    #"MG Figure 1":231,
-    #"MG Figure 2":232,
-    #"MG Figure 3":233,
-    #"MG Figure 4":234,
-    #"MG Figure 5":235,
-    #"MG Figure 6":236,
-    #"MG Figure 7":237,
-    #"MG Figure 8":238,
-    #"MG Figure 9":239,
-    #"MG Figure 10":240,
-    #"SP Figure":241,
-#}
-#
-#quest_table = {
-    "Completed Quests":3001,
-    "Belle 1":3002,
-    "Belle 2":3003,
-    "Belle 3":3004,
-    "Goblin 1":3005,
-    "Goblin 2":3006,
-    "Rover 1":3007,
-    "Rover 2":3008,
-    "Rover 3":3009,
-    "Merchant 1":3010,
-    "Milk & Cream 1":3011,
-    "Milk & Cream 2":3012,
-    "Milk & Cream 3":3013,
-    "Janic 1":3014,
-    "Janic 2":3015,
-    "Kyoni 1":3016,
-}
+class Goal:
+    chaos_piece = "Chaos Key Piece"
