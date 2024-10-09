@@ -87,7 +87,7 @@ class FlipwitchWorld(World):
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)if location.item is None]) - chaos_count
         excluded_items = self.multiworld.precollected_items[self.player]
-        potential_pool = create_items(self.create_item, locations_count, excluded_items, self.options)
+        potential_pool = create_items(self.create_item, locations_count, excluded_items, self.options, self.random)
         self.multiworld.itempool += potential_pool
 
     def create_regions(self):
