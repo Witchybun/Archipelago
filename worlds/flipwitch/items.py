@@ -67,6 +67,8 @@ def create_base_items (item_factory: FlipwitchItemFactory, options: FlipwitchOpt
             items.extend([item_factory(soul) for soul in [QuestItem.soul_fragment]*3])
         elif item.name == Coin.lucky_coin:
             items.extend(item_factory(lucky) for lucky in [Coin.lucky_coin]*44)
+        elif item.name == Upgrade.barrier:
+            items.extend(item_factory(barrier) for barrier in [Upgrade.barrier]*2)
         else:
             items.append(item_factory(item.name))
     return items
