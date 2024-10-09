@@ -15,8 +15,8 @@ class QuestItem:
     hellish_dango = "Hellish Dango"
     soul_fragment = "Soul Fragment"
     legendary_halo = "Legendary Halo"
-    demonic_letter = "Demonic Letter"
-    angelic_letter = "Angelic Letter"
+    demonic_letter = "Demon Letter"
+    angelic_letter = "Angel Letter"
     silky_slime = "Silky Slime"
     red_wine = "Red Wine"
     blue_jelly_mushroom = "Blue Jelly Mushroom"
@@ -25,6 +25,7 @@ class QuestItem:
     mimic_chest = "Mimic Chest Key"
     fungal = "Fungal Key"
     goblin_apartment = "Goblin Apartment Key"
+    vip_key = "VIP Key"
 
 
 class Power:
@@ -60,6 +61,7 @@ class Upgrade:
     health = "Health Upgrade" #10 of these
     mana = "Mana Upgrade" #10 of these
     wand = "Wand Upgrade"
+    barrier = "Protective Barrier Upgrade"
     peachy_peach = "Peachy Peach Upgrade"
     bewitched_bubble = "Bewitched Bubble"
     progressive_crystal = "Goblin Crystal"
@@ -95,26 +97,26 @@ class Warp:
 
 class Gacha:
     special_promotion = "Special Promotion Figure #1"
-    animal_girl_1 = "Animal Girl Figure #1"
-    animal_girl_2 = "Animal Girl Figure #2"
-    animal_girl_3 = "Animal Girl Figure #3"
-    animal_girl_4 = "Animal Girl Figure #4"
-    animal_girl_5 = "Animal Girl Figure #5"
-    animal_girl_6 = "Animal Girl Figure #6"
-    animal_girl_7 = "Animal Girl Figure #7"
-    animal_girl_8 = "Animal Girl Figure #8"
-    animal_girl_9 = "Animal Girl Figure #9"
-    animal_girl_10 = "Animal Girl Figure #10"
-    bunny_girl_1 = "Bunny Girl Figure #1"
-    bunny_girl_2 = "Bunny Girl Figure #2"
-    bunny_girl_3 = "Bunny Girl Figure #3"
-    bunny_girl_4 = "Bunny Girl Figure #4"
-    bunny_girl_5 = "Bunny Girl Figure #5"
-    bunny_girl_6 = "Bunny Girl Figure #6"
-    bunny_girl_7 = "Bunny Girl Figure #7"
-    bunny_girl_8 = "Bunny Girl Figure #8"
-    bunny_girl_9 = "Bunny Girl Figure #9"
-    bunny_girl_10 = "Bunny Girl Figure #10"
+    animal_girl_1 = "Animal Girls Figure #1"
+    animal_girl_2 = "Animal Girls Figure #2"
+    animal_girl_3 = "Animal Girls Figure #3"
+    animal_girl_4 = "Animal Girls Figure #4"
+    animal_girl_5 = "Animal Girls Figure #5"
+    animal_girl_6 = "Animal Girls Figure #6"
+    animal_girl_7 = "Animal Girls Figure #7"
+    animal_girl_8 = "Animal Girls Figure #8"
+    animal_girl_9 = "Animal Girls Figure #9"
+    animal_girl_10 = "Animal Girls Figure #10"
+    bunny_girl_1 = "Bunny Girls Figure #1"
+    bunny_girl_2 = "Bunny Girls Figure #2"
+    bunny_girl_3 = "Bunny Girls Figure #3"
+    bunny_girl_4 = "Bunny Girls Figure #4"
+    bunny_girl_5 = "Bunny Girls Figure #5"
+    bunny_girl_6 = "Bunny Girls Figure #6"
+    bunny_girl_7 = "Bunny Girls Figure #7"
+    bunny_girl_8 = "Bunny Girls Figure #8"
+    bunny_girl_9 = "Bunny Girls Figure #9"
+    bunny_girl_10 = "Bunny Girls Figure #10"
     angel_demon_1 = "Angels & Demons Figure #1"
     angel_demon_2 = "Angels & Demons Figure #2"
     angel_demon_3 = "Angels & Demons Figure #3"
@@ -140,6 +142,13 @@ class Gacha:
 class Unlock:
     crystal_block = "Woods Crystal Blockade Removal"
     goblin_crystal_block = "City Crystal Blockade Removal"
+
+
+class Custom:
+    hp_heal = "Healing Surge"
+    mp_heal = "Mana Surge"
+    peach_recharge = "Peachy Peach Recharge"
+    sexual_thoughts = "Sexual Thoughts"
 
 
 class Costume:
