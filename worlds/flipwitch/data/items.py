@@ -187,22 +187,22 @@ gacha_items = [
 
 warp_item_id = 200
 warp_items = [
-    create_item(ITEM_CODE_START + base_start_id + 1, Warp.sensei, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 2, Warp.witchy, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 3, Warp.goblin, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 4, Warp.spirit, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 5, Warp.shady, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 6, Warp.ghost_entrance, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 7, Warp.ghost_castle, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 8, Warp.jigoku, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 9, Warp.club_demon, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 10, Warp.tengoku, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 11, Warp.angelic_hallway, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 12, Warp.fungal_forest, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 13, Warp.slime_citadel, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 14, Warp.slimy_depths, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 15, Warp.umi_umi, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 16, Warp.chaos_castle, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 1, Warp.sensei, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 2, Warp.witchy, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 3, Warp.goblin, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 4, Warp.spirit, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 5, Warp.shady, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 6, Warp.ghost_entrance, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 7, Warp.ghost_castle, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 8, Warp.jigoku, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 9, Warp.club_demon, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 10, Warp.tengoku, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 11, Warp.angelic_hallway, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 12, Warp.fungal_forest, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 13, Warp.slime_citadel, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 14, Warp.slimy_depths, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 15, Warp.umi_umi, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + warp_item_id + 16, Warp.chaos_castle, ItemClassification.progression | ItemClassification.useful),
 ]
 
 filler_items = [item for item in all_items if item.classification == ItemClassification.filler]
