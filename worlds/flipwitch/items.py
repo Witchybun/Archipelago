@@ -5,7 +5,7 @@ from BaseClasses import ItemClassification, Item
 from typing import Dict, List, Union, Protocol
 
 from worlds.flipwitch import FlipwitchOptions
-from worlds.flipwitch.data.items import FlipwitchItemData, all_items, base_items, gacha_items
+from worlds.flipwitch.data.items import FlipwitchItemData, all_items, base_items, gacha_items, filler_items
 from worlds.flipwitch.strings.items import Coin, Upgrade, Goal, QuestItem
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ item_table = initialize_items_by_name()
 complete_items_by_name = {item.name: item for item in item_table}
 
 
-def create_items(item_factory: FlipwitchItemFactory, locations_count: int, items_to_exclude: List[Item], options: FlipwitchOptions) -> List[Item]:
+def create_items(item_factory: FlipwitchItemFactory, locations_count: int, items_to_exclude: List[Item], options: FlipwitchOptions, random: Random) -> List[Item]:
     items = []
     flipwitch_items = create_flipwitch_items(item_factory, options)
     for item in items_to_exclude:
@@ -38,7 +38,7 @@ def create_items(item_factory: FlipwitchItemFactory, locations_count: int, items
     items += flipwitch_items
     logger.debug(f"Created {len(flipwitch_items)} unique items")
     filler_slots = locations_count - len(items)
-    create_filler(item_factory, filler_slots, items)
+    create_filler(item_factory, random, filler_slots, items)
 
     return items
 
@@ -80,10 +80,11 @@ def create_gacha_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpt
     return items
 
 
-def create_filler(item_factory: FlipwitchItemFactory, filler_slots: int, items: List[Item]):
+def create_filler(item_factory: FlipwitchItemFactory, random: Random, filler_slots: int, items: List[Item]):
     if filler_slots == 0:
         return items
-    items.extend([item_factory(filler) for filler in [Coin.loose_change]*filler_slots])
+    filler_list = [item.name for item in filler_items]
+    items.extend([item_factory(filler) for filler in random.choices(filler_list, k=filler_slots)])
     return items
 
 

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 from BaseClasses import ItemClassification
 
-from ..strings.items import QuestItem, Upgrade, Coin, Gacha, Unlock, Key, Costume, Power, Warp, Goal, Accessory
+from ..strings.items import QuestItem, Upgrade, Coin, Gacha, Unlock, Key, Costume, Power, Warp, Goal, Accessory, Custom
 
 
 @dataclass(frozen=True)
@@ -128,10 +128,16 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 93, Key.secret_garden, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 94, Key.demon_club, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 95, Key.slime_boss, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 95, Key.forgotten_fungal, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 96, Goal.chaos_piece, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 97, QuestItem.goblin_headshot, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 98, QuestItem.business_card, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 96, Key.forgotten_fungal, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 97, Goal.chaos_piece, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 98, QuestItem.goblin_headshot, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 99, QuestItem.business_card, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 100, QuestItem.vip_key, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 101, Custom.hp_heal, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 102, Custom.mp_heal, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 103, Custom.peach_recharge, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 104, Custom.sexual_thoughts, ItemClassification.trap),
+    create_item(ITEM_CODE_START + base_start_id + 105, Upgrade.barrier, ItemClassification.useful),
 ]
 
 gacha_item_id = 150
@@ -198,3 +204,6 @@ warp_items = [
     create_item(ITEM_CODE_START + base_start_id + 15, Warp.umi_umi, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 16, Warp.chaos_castle, ItemClassification.progression | ItemClassification.useful),
 ]
+
+filler_items = [item for item in all_items if item.classification == ItemClassification.filler]
+
