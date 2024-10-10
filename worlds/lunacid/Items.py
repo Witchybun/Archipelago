@@ -10,9 +10,10 @@ from .data.item_data import all_items, LunacidItemData, base_unique_items, start
     base_special_item_counts, shop_unique_items, shop_item_count, all_item_data_by_name, quench_starting_weapons
 from .data.weapon_info import all_weapons, ranged_weapons, all_weapon_info_by_name
 from .data.spell_info import all_spells, ranged_spells, all_spell_info_by_name
-from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap, CustomItem, Upgrade
+from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap, CustomItem, Upgrade, SpookyItem
 from .strings.properties import Elements, Types
-from .strings.spells import Spell, MobSpell
+from .strings.spells import Spell, MobSpell, CrimpusSpell, SpookySpell
+from .strings.weapons import SpookyWeapon
 
 logger = logging.getLogger(__name__)
 
@@ -60,10 +61,10 @@ def determine_weapon_elements(options: LunacidOptions, random: Random) -> Dict[s
     return elements
 
 
-def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], weapon_elements: Dict[str, str], is_christmas: bool,
+def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item], weapon_elements: Dict[str, str], month: int,
                  options: LunacidOptions, random: Random) -> (List[Item], Item):
     items = []
-    lunacid_items = create_lunacid_items(item_factory, weapon_elements, is_christmas, options)
+    lunacid_items = create_lunacid_items(item_factory, weapon_elements, month, options)
     for item in items_to_exclude:
         if item in lunacid_items:
             lunacid_items.remove(item)
@@ -83,18 +84,19 @@ def create_items(item_factory: LunacidItemFactory, locations_count: int, items_t
             break
     logger.debug(f"Created {len(lunacid_items)} unique items")
     filler_slots = locations_count - len(items)
-    create_filler(item_factory, options, random, filler_slots, is_christmas, items)
+    create_filler(item_factory, options, random, filler_slots, month, items)
 
     return items, starting_weapon_choice
 
 
-def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict[str, str], is_christmas: bool, options: LunacidOptions) -> List[Item]:
+def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict[str, str], month: int, options: LunacidOptions) -> List[Item]:
     items = []
     create_weapons(item_factory, weapon_elements, options, items)
-    create_spells(item_factory, weapon_elements, is_christmas, options, items)
+    create_spells(item_factory, weapon_elements, options, items)
     create_special_items(item_factory, options, items)
     create_switch_items(item_factory, options, items)
     create_door_items(item_factory, options, items)
+    create_hallo_items(item_factory, month, weapon_elements, options, items)
     return items
 
 
@@ -127,11 +129,9 @@ def append_item_with_progression_determined_by_element_and_range(item_factory: L
         items.append(item_factory(item))
 
 
-def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[str, str], is_christmas: bool, options: LunacidOptions, items: List[Item]) -> List[Item]:
+def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[str, str], options: LunacidOptions, items: List[Item]) -> List[Item]:
     force_progressive = (options.ending == options.ending.option_ending_e)
     for item in Spell.base_spells:
-        if not is_christmas and item == Spell.jingle_bells:
-            continue
         if all_spell_info_by_name[item].style == Types.support:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
         elif [item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
@@ -233,12 +233,37 @@ def create_door_items(item_factory: LunacidItemFactory, options: LunacidOptions,
     return items
 
 
-def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random, filler_slots: int, is_christmas: bool, items: List[Item]) -> List[Item]:
+def create_hallo_items(item_factory: LunacidItemFactory, month: int, equipment_by_elements: Dict[str, str], options: LunacidOptions, items: List[Item]) -> List[Item]:
+    if month != 10:
+        return items
+    if equipment_by_elements[SpookySpell.pumpkin_pop] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison]:
+        items.append(item_factory(SpookySpell.pumpkin_pop, ItemClassification.progression))
+    else:
+        items.append(item_factory(SpookySpell.pumpkin_pop))
+    items.extend(item_factory(candy) for candy in [SpookyItem.soul_candy]*35)
+    if options.dropsanity != options.dropsanity.option_off:
+        if equipment_by_elements[SpookyWeapon.cavalry_saber] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
+            items.append(item_factory(SpookyWeapon.cavalry_saber, ItemClassification.progression))
+        else:
+            items.append(item_factory(SpookyWeapon.cavalry_saber))
+    return items
+
+
+def create_crimpus_items(item_factory: LunacidItemFactory, month: int, equipment_by_elements: Dict[str, str], options: LunacidOptions, items: List[Item]) -> List[Item]:
+    if month != 12:
+        return items
+    if equipment_by_elements[CrimpusSpell.jingle_bells] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light, Elements.poison, Elements.ice_and_poison]:
+        items.append(item_factory(CrimpusSpell.jingle_bells, ItemClassification.progression))
+    else:
+        items.append(item_factory(CrimpusSpell.jingle_bells))
+
+
+def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random, filler_slots: int, month: int, items: List[Item]) -> List[Item]:
     if filler_slots == 0:
         return items
     filler_list = [Coins.silver, CustomItem.experience] + list(options.filler.value)
     trap_list = list(options.traps.value)
-    if not is_christmas:
+    if month != 12:
         trap_list = [trap for trap in trap_list if trap != Trap.coal or trap != Trap.eggnog]
     trap_percent = options.trap_percent.value / 100
     if not trap_list:

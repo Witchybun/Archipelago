@@ -7,7 +7,6 @@ class BaseLocation:
     wings_rest_clives_gift = "WR: Clive's Gift"
     wings_rest_demi_gift = "WR: Demi's Introduction Gift"
     wings_rest_demi_orb = "WR: Demi's Victory Gift"
-    wings_rest_present = "WR: Christmas Present"
 
     hollow_basin_starting_sword = "HB: Starting Weapon"
     hollow_basin_right_water_right = "HB: Rightmost Water Room (Right)"
@@ -92,7 +91,6 @@ class BaseLocation:
     yosei_room_defended_by_blood_plant = "YF: Room Defended by Blood Plant"
     yosei_patchouli_key = "YF: Patchouli's Canopy Offer"
     yosei_patchouli_quest = "YF: Patchouli's Reward"
-    yosei_patchouli_eggnog = "YF: Patchouli's Yuletide Offering"
 
     canopy_branch_edge = "FC: Branch Lower Edge"
     branch_cave = "FC: Branch Cave"
@@ -263,8 +261,6 @@ class BaseLocation:
     coin_locations = [sea_kill_jotunn, mausoleum_kill_death, temple_blood_altar]
     daedalus_locations = [archives_daedalus_third, archives_daedalus_one, archives_daedalus_two]
 
-    christmas_locations = [yosei_patchouli_eggnog, wings_rest_present]
-
 
 class ShopLocation:
     buy_enchanted_key = "Buy Enchanted Key"
@@ -369,7 +365,7 @@ class DropLocation:
     mare_onyx = other_drop("Mare: Onyx Drop")
     painting_fire_opal = other_drop("Cursed Painting: Fire Opal Drop")
     painting_10c = other_drop("Cursed Painting: Medium Silver Drop")
-    painting_mana_vial = other_drop("Cursed Painting: Mana Vial Pickup")
+    painting_mana_vial = other_drop("Cursed Painting: Mana Vial Drop")
     painting_20c = other_drop("Cursed Painting: Large Silver Drop")
     #  Castle Le Fanu
     phantom = unique_drop("Phantom: Cursed Blade Drop")
@@ -528,3 +524,25 @@ class AlchemyLocation:
 
     all_alchemy_locations = [explosives, health, mana, warp, antidote, knife, poison_knife, moonlight, fairy_moss, spectral, wisp,
                              limbo, banner, holy, poison_urn, staff_of_osiris]
+
+
+class SpookyLocation:
+    rest = "Demi's Spooky Treats"
+    jellisha = "Jellisha's Jelly Treats"
+    patchouli = "Patchouli's Poisoned Treats"
+    le_fanu = "Crilall's Bloody Treats"
+    daedalus = "Daedalus' Blackened Treats"
+    lobos = "Lobos' Late Treats"
+    lava = "Shery's Delectable Treats"
+    spooky_spell = "Demi's Reward for All Soul Candies"
+    headless_horseman = "Headless Horseman: Cavalry Saber Drop"
+
+    candy_locations = [rest, jellisha, patchouli, le_fanu, daedalus, lobos, lava, spooky_spell]
+
+
+class CrimpusLocation:
+    wings_rest_present = "Christmas Present"
+    yosei_patchouli_eggnog = "Patchouli's Yuletide Offering"
+
+    christmas_locations = [yosei_patchouli_eggnog, wings_rest_present]
+
