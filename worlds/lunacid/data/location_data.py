@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, List
 
-from ..strings.locations import BaseLocation, ShopLocation, DropLocation, Quench, AlchemyLocation
+from ..strings.locations import BaseLocation, ShopLocation, DropLocation, Quench, AlchemyLocation, SpookyLocation, CrimpusLocation
 from ..strings.regions_entrances import LunacidRegion
 
 
@@ -32,7 +32,6 @@ wings_rest = [
     create_location(LOCATION_CODE_START + base_location_start + 3, BaseLocation.wings_rest_clives_gift, LunacidRegion.wings_rest),
     create_location(LOCATION_CODE_START + base_location_start + 4, BaseLocation.wings_rest_demi_orb, LunacidRegion.wings_rest),
     create_location(LOCATION_CODE_START + base_location_start + 5, BaseLocation.wings_rest_demi_gift, LunacidRegion.wings_rest),
-    create_location(LOCATION_CODE_START + base_location_start + 6, BaseLocation.wings_rest_present, LunacidRegion.wings_rest),
 ]
 
 hollow_basin = [
@@ -126,7 +125,6 @@ yosei_forest = [
     create_location(LOCATION_CODE_START + base_location_start + 101, BaseLocation.yosei_room_defended_by_blood_plant, LunacidRegion.yosei_lower),
     create_location(LOCATION_CODE_START + base_location_start + 102, BaseLocation.yosei_patchouli_key, LunacidRegion.yosei_lower),
     create_location(LOCATION_CODE_START + base_location_start + 103, BaseLocation.yosei_patchouli_quest, LunacidRegion.yosei_lower),
-    create_location(LOCATION_CODE_START + base_location_start + 104, BaseLocation.yosei_patchouli_eggnog, LunacidRegion.yosei_lower),
 ]
 
 forest_canopy = [
@@ -540,4 +538,23 @@ alchemy_locations = [
     create_location(LOCATION_CODE_START + alchemy_location_start + 14, AlchemyLocation.mana, LunacidRegion.wings_rest),
     create_location(LOCATION_CODE_START + alchemy_location_start + 15, AlchemyLocation.warp, LunacidRegion.wings_rest),
     create_location(LOCATION_CODE_START + alchemy_location_start + 16, AlchemyLocation.wisp, LunacidRegion.wings_rest),
+]
+
+spooky_location_start = 700
+spooky_locations = [
+    create_location(LOCATION_CODE_START + spooky_location_start + 1, SpookyLocation.rest, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + spooky_location_start + 2, SpookyLocation.jellisha, LunacidRegion.fetid_mire_secret),
+    create_location(LOCATION_CODE_START + spooky_location_start + 3, SpookyLocation.patchouli, LunacidRegion.yosei_lower),
+    create_location(LOCATION_CODE_START + spooky_location_start + 4, SpookyLocation.le_fanu, LunacidRegion.castle_le_fanu_white),
+    create_location(LOCATION_CODE_START + spooky_location_start + 5, SpookyLocation.daedalus, LunacidRegion.forbidden_archives_1b),
+    create_location(LOCATION_CODE_START + spooky_location_start + 6, SpookyLocation.lava, LunacidRegion.boiling_grotto),
+    create_location(LOCATION_CODE_START + spooky_location_start + 7, SpookyLocation.lobos, LunacidRegion.terminus_prison_upstairs),
+    create_location(LOCATION_CODE_START + spooky_location_start + 8, SpookyLocation.spooky_spell, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + spooky_location_start + 9, SpookyLocation.headless_horseman, LunacidRegion.fetid_mire),
+]
+
+crimpus_location_start = 750
+crimpus_locations = [
+    create_location(LOCATION_CODE_START + crimpus_location_start + 1, CrimpusLocation.wings_rest_present, LunacidRegion.wings_rest),
+    create_location(LOCATION_CODE_START + crimpus_location_start + 2, CrimpusLocation.yosei_patchouli_eggnog, LunacidRegion.yosei_lower)
 ]

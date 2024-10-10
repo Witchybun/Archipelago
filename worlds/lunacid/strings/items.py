@@ -186,3 +186,7 @@ class Voucher:
     patchouli_simp_discount = "Patchouli's Drink Voucher"
 
     vouchers = [sheryl_dreamer_voucher, sheryl_initial_voucher, sheryl_golden_voucher, patchouli_simp_discount]
+
+
+class SpookyItem:
+    soul_candy = "Soul Candy"

@@ -3,9 +3,9 @@ from typing import List
 from BaseClasses import ItemClassification
 
 from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives, RareDrops, \
-    Voucher, Trap, Switch, Door, CustomItem, Upgrade
-from ..strings.weapons import Weapon
-from ..strings.spells import Spell, MobSpell
+    Voucher, Trap, Switch, Door, CustomItem, Upgrade, SpookyItem
+from ..strings.weapons import Weapon, SpookyWeapon
+from ..strings.spells import Spell, MobSpell, SpookySpell, CrimpusSpell
 
 
 @dataclass(frozen=True)
@@ -106,6 +106,8 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 71, CustomItem.experience, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 72, Upgrade.drop_chance, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 73, CustomItem.bestial_mastery, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 74, Weapon.thorn, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 75, Weapon.ghost_sword, ItemClassification.useful),
     ]
 
 trap_start_id = 100
@@ -119,8 +121,6 @@ trap_items = [
     create_item(ITEM_CODE_START + trap_start_id + 6, Trap.xp_drain_trap, ItemClassification.trap),
     create_item(ITEM_CODE_START + trap_start_id + 7, Trap.curse_trap, ItemClassification.trap),
     create_item(ITEM_CODE_START + trap_start_id + 8, Trap.bleed_trap, ItemClassification.trap),
-    create_item(ITEM_CODE_START + trap_start_id + 9, Trap.eggnog, ItemClassification.trap),
-    create_item(ITEM_CODE_START + trap_start_id + 10, Trap.coal, ItemClassification.trap)
 ]
 
 all_traps = {trap.name: trap for trap in trap_items}
@@ -240,7 +240,6 @@ base_spells = [
     create_item(ITEM_CODE_START + spell_start_id + 29, Spell.summon_ice_sword, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 30, Spell.wind_dash, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 31, Spell.wind_slicer, ItemClassification.useful),
-    create_item(ITEM_CODE_START + spell_start_id + 32, Spell.jingle_bells, ItemClassification.useful)
 ]
 
 drop_spells = [
@@ -293,6 +292,16 @@ doors = [
     create_item(ITEM_CODE_START + door_start_id + 19, Door.ballroom_rooms_key, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + door_start_id + 20, Door.tower_key, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + door_start_id + 21, Door.musical_key, ItemClassification.progression | ItemClassification.useful),
+]
+
+holiday_start_id = 400
+holiday = [
+    create_item(ITEM_CODE_START + holiday_start_id + 1, SpookyItem.soul_candy, ItemClassification.progression),
+    create_item(ITEM_CODE_START + holiday_start_id + 2, SpookySpell.pumpkin_pop, ItemClassification.useful),
+    create_item(ITEM_CODE_START + holiday_start_id + 3, SpookyWeapon.cavalry_saber, ItemClassification.useful),
+    create_item(ITEM_CODE_START + holiday_start_id + 4, CrimpusSpell.jingle_bells, ItemClassification.useful),
+    create_item(ITEM_CODE_START + holiday_start_id + 5, Trap.eggnog, ItemClassification.trap),
+    create_item(ITEM_CODE_START + holiday_start_id + 6, Trap.coal, ItemClassification.trap)
 ]
 
 # Item Groups

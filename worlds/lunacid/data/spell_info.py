@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List, Dict
 
 from ..strings.properties import Types, Elements
-from ..strings.spells import Spell, MobSpell
+from ..strings.spells import Spell, MobSpell, SpookySpell, CrimpusSpell
 
 
 @dataclass(frozen=True)
@@ -35,7 +35,7 @@ base_spells = [
     spell_information(Spell.earth_strike, Elements.normal, Types.ranged),
     spell_information(Spell.earth_thorn, Elements.normal, Types.melee),
     spell_information(Spell.fire_worm, Elements.fire, Types.melee),
-    spell_information(Spell.flame_flare, Elements.fire, Types.support),
+    spell_information(Spell.flame_flare, Elements.fire, Types.melee),
     spell_information(Spell.flame_spear, Elements.fire, Types.ranged),
     spell_information(Spell.ghost_light, Elements.light, Types.support),
     spell_information(Spell.holy_warmth, Elements.light, Types.support),
@@ -56,7 +56,6 @@ base_spells = [
     spell_information(Spell.summon_ice_sword, Elements.ice, Types.support),
     spell_information(Spell.wind_dash, Elements.normal, Types.support),
     spell_information(Spell.wind_slicer, Elements.normal, Types.ranged),
-    spell_information(Spell.jingle_bells, Elements.fire, Types.melee),
 ]
 
 drop_spells = [
@@ -65,6 +64,14 @@ drop_spells = [
     spell_information(MobSpell.summon_kodama, Elements.light, Types.support),
     spell_information(MobSpell.tornado, Elements.normal, Types.melee),
     spell_information(MobSpell.quick_stride, Elements.normal, Types.support),
+]
+
+spooky_spells = [
+    spell_information(SpookySpell.pumpkin_pop, Elements.dark, Types.ranged)
+]
+
+crimpus_spells = [
+    spell_information(CrimpusSpell.jingle_bells, Elements.fire, Types.ranged)
 ]
 
 ranged_spells = [spell.name for spell in all_spells if spell.style == Types.ranged]
