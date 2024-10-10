@@ -86,7 +86,7 @@ class LunacidWorld(World):
     options_dataclass = LunacidOptions
     option_groups = lunacid_option_groups
     options: LunacidOptions
-    is_christmas = (strftime('%B') == "December")
+    rolled_month = int(strftime('%m'))
     starting_weapon: LunacidItem
     weapon_elements: Dict[str, str]
     randomized_entrances: Dict[str, str]
@@ -142,7 +142,7 @@ class LunacidWorld(World):
             locations_count -= 80
         excluded_items = self.multiworld.precollected_items[self.player]
         self.weapon_elements = determine_weapon_elements(self.options, self.multiworld.random)
-        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.is_christmas,
+        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.rolled_month,
                                                                 self.options, self.multiworld.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
@@ -162,7 +162,7 @@ class LunacidWorld(World):
             return lunacid_region
 
         world_regions, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
-        locations = create_locations(self.options, self.is_christmas)
+        locations = create_locations(self.options, self.rolled_month)
         for location in locations:
             name = location.name
             location_id = location.location_id
@@ -319,7 +319,7 @@ class LunacidWorld(World):
             for alchemy_item in Alchemy.necessary_alchemy_items:
                 alchemy_items.append(Item(alchemy_item, ItemClassification.progression | ItemClassification.useful, self.item_name_to_id[alchemy_item], self.player))
             alchemy_items *= 5  # make sure there's enough of them to go around
-            repeat_locations = [location for location in self.multiworld.get_locations() if location.name in all_drops]
+            repeat_locations = [location for location in self.multiworld.get_locations(self.player) if location.name in all_drops]
             self.random.shuffle(repeat_locations)
             fill_restrictive(self.multiworld, state, repeat_locations, alchemy_items,
                              single_player_placement=True, lock=True, allow_excluded=True)
@@ -366,8 +366,8 @@ class LunacidWorld(World):
         item_spots = self.important_item_locations()
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.8.2",
-            "is_christmas": self.is_christmas,
+            "client_version": "0.8.3",
+            "rolled_month": self.rolled_month,
             "elements": self.weapon_elements,
             "created_class_name": self.custom_class_name,
             "created_class_description": self.custom_class_description,
