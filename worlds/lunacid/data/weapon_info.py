@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from ..strings.properties import Elements, Types
-from ..strings.weapons import Weapon
+from ..strings.weapons import Weapon, SpookyWeapon
 
 
 @dataclass(frozen=True)
@@ -58,6 +58,8 @@ base_weapons = [
     weapon_information(Weapon.steel_needle, Elements.normal, Types.melee),
     weapon_information(Weapon.lucid_blade, Elements.light, Types.both),
     weapon_information(Weapon.hammer_of_cruelty, Elements.dark_and_light, Types.melee),
+    weapon_information(Weapon.thorn, Elements.normal, Types.melee),
+    weapon_information(Weapon.ghost_sword, Elements.light, Types.melee),
 ]
 
 shop_weapons = [
@@ -103,6 +105,10 @@ forge_weapons = [
 
 alchemy_weapons = [
     weapon_information(Weapon.limbo, Elements.dark_and_light, Types.melee)
+]
+
+spooky_weapons = [
+    weapon_information(SpookyWeapon.cavalry_saber, Elements.dark, Types.melee)
 ]
 
 ranged_weapons = [weapon.name for weapon in all_weapons if weapon.style == Types.ranged or weapon.style == Types.both]

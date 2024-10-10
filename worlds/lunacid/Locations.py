@@ -2,27 +2,27 @@ from typing import List
 
 from . import LunacidOptions
 from .data.location_data import (all_locations, base_locations, shop_locations, unique_drop_locations, other_drop_locations, quench_locations, alchemy_locations,
-                                 LunacidLocation)
-from .strings.locations import BaseLocation
+                                 LunacidLocation, spooky_locations, crimpus_locations)
+from .strings.locations import SpookyLocation
 
 location_table = all_locations
 locations_by_name = {location.name: location for location in location_table}
 
 
-def create_locations(options: LunacidOptions, is_christmas: bool) -> List[LunacidLocation]:
+def create_locations(options: LunacidOptions, month: int) -> List[LunacidLocation]:
     locations = []
-    create_base_locations(is_christmas, locations)
+    create_base_locations(locations)
     create_shop_locations(options, locations)
     create_drop_locations(options, locations)
     create_quench_locations(options, locations)
     create_alchemy_locations(options, locations)
+    create_spooky_locations(options, month, locations)
+    create_crimpus_locations(month, locations)
     return locations
 
 
-def create_base_locations(is_christmas: bool, locations: List[LunacidLocation]) -> List[LunacidLocation]:
+def create_base_locations(locations: List[LunacidLocation]) -> List[LunacidLocation]:
     for location in base_locations:
-        if location.name in BaseLocation.christmas_locations and not is_christmas:
-            continue
         locations.append(location)
     return locations
 
@@ -60,3 +60,22 @@ def create_alchemy_locations(options: LunacidOptions, locations: List[LunacidLoc
     for location in alchemy_locations:
         locations.append(location)
     return locations
+
+
+def create_spooky_locations(options: LunacidOptions, month: int, locations: List[LunacidLocation]) -> List[LunacidLocation]:
+    if month != 10:
+        return locations
+    for location in spooky_locations:
+        if location.name == SpookyLocation.headless_horseman and options.dropsanity == options.dropsanity.option_off:
+            continue
+        locations.append(location)
+    return locations
+
+
+def create_crimpus_locations(month: int, locations: List[LunacidLocation]) -> List[LunacidLocation]:
+    if month != 12:
+        return locations
+    for location in crimpus_locations:
+        locations.append(location)
+    return locations
+

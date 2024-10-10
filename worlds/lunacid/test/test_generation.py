@@ -59,7 +59,7 @@ class TestGeneric(LunacidTestBase):
             self.assertIn(location, base_locations)
         for location in chamber_of_fate:
             self.assertIn(location, base_locations)
-        self.assertTrue(230 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
+        self.assertTrue(228 == len(base_locations), f"Location count mismatch, got {len(base_locations)}.")
 
     def test_no_duplicate_ids(self):
         constructed_item_table = {}

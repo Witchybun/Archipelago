@@ -30,7 +30,6 @@ class Spell:
     summon_ice_sword = "Summon Ice Sword"
     wind_dash = "Wind Dash"
     wind_slicer = "Wind Slicer"
-    jingle_bells = "Jingle Bells"
 
     base_spells = [ghost_light, flame_spear, lithomancy, flame_flare, blood_strike, ice_spear, barrier,
                    slime_orb, wind_dash, summon_fairy, coffin, lightning, blood_drain, holy_warmth,
@@ -48,3 +47,11 @@ class MobSpell:
     quick_stride = "Quick Stride"
 
     drop_spells = [summon_snail, summon_kodama, quick_stride, dark_skull, tornado]
+
+
+class SpookySpell:
+    pumpkin_pop = "Pumpkin Pop"
+
+
+class CrimpusSpell:
+    jingle_bells = "Jingle Bells"
