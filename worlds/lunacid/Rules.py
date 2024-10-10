@@ -14,8 +14,8 @@ from .data.plant_data import all_alchemy_plant_data
 from .Options import LunacidOptions
 from .strings.regions_entrances import LunacidEntrance, LunacidRegion
 from .strings.spells import Spell, MobSpell
-from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door, Coins, Voucher
-from .strings.locations import BaseLocation, ShopLocation, all_drops_by_enemy, DropLocation, Quench, AlchemyLocation
+from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door, Coins, Voucher, SpookyItem
+from .strings.locations import BaseLocation, ShopLocation, all_drops_by_enemy, DropLocation, Quench, AlchemyLocation, SpookyLocation
 from .strings.weapons import Weapon
 
 if TYPE_CHECKING:
@@ -447,6 +447,8 @@ class LunacidRules:
             AlchemyLocation.wisp: lambda state: self.can_obtain_all_alchemy_items([Alchemy.snowflake_obsidian, Alchemy.ectoplasm, Alchemy.moon_petal], state,
                                                                                   self.world.options),
             AlchemyLocation.limbo: lambda state: state.has_all([Alchemy.broken_sword, Alchemy.fractured_life, Alchemy.fractured_death], self.player),
+
+            SpookyLocation.spooky_spell: lambda state: state.has(SpookyItem.soul_candy, self.player, 35),
         }
 
     def is_vampire(self, options: LunacidOptions):

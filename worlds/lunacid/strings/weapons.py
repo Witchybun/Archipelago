@@ -71,6 +71,9 @@ class Weapon:
 
     limbo = "Limbo"
 
+    thorn = "Thorn"
+    ghost_sword = "Ghost Sword"
+
     base_weapons = [replica_sword, torch, ritual_dagger, wooden_shield, stone_club, steel_spear, battle_axe,
                     broken_hilt, corrupted_dagger, dark_rapier, halberd, blade_of_jusztina,
                     twisted_staff, vampire_hunter_sword, elfen_bow, elfen_sword, wolfram_greatsword,
@@ -94,3 +97,7 @@ class Weapon:
                           lyrian_longsword, iron_club, steel_claw, rapier, crossbow, rusted_sword,
                           shining_blade,
                           ]
+
+
+class SpookyWeapon:
+    cavalry_saber = "Cavalry Saber"
