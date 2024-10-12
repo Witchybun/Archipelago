@@ -68,7 +68,6 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 33, Power.ring_of_the_sun, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 34, Power.haunted_scythe, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 35, Power.demonic_cuff, ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 36, Power.toxic_slime_vial, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 37, Accessory.fortune_cat, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 38, Accessory.heart_necklace, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 39, Accessory.star_bracelet, ItemClassification.useful),
@@ -89,12 +88,11 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 54, Upgrade.demon_wings, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 55, Upgrade.angel_feathers, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 56, Upgrade.mermaid_scale, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 57, Coin.lucky_coin, ItemClassification.progression),
+    create_item(ITEM_CODE_START + base_start_id + 57, Coin.lucky_coin, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 58, Coin.loose_change, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 59, Unlock.crystal_block, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 60, Unlock.goblin_crystal_block, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 61, Costume.navy, ItemClassification.useful),
-    # create_item(ITEM_CODE_START + base_start_id + 62, Costume.black_witch, ),
     create_item(ITEM_CODE_START + base_start_id + 63, Costume.red_wizard, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 64, Costume.nun, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 65, Costume.priest, ItemClassification.progression | ItemClassification.useful),
@@ -138,6 +136,7 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 103, Custom.peach_recharge, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 104, Custom.sexual_thoughts, ItemClassification.trap),
     create_item(ITEM_CODE_START + base_start_id + 105, Upgrade.barrier, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 106, Upgrade.peachy_upgrade, ItemClassification.useful),
 ]
 
 gacha_item_id = 150
