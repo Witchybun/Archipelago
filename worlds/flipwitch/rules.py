@@ -83,8 +83,6 @@ class FlipwitchRules:
                                                             self.has_fucked_enough(state, 36) and state.has(Upgrade.bewitched_bubble, self.player),
             WitchyWoods.sexual_experience_14: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
                                                             self.has_fucked_enough(state, 40) and state.has(Upgrade.bewitched_bubble, self.player),
-            WitchyWoods.sexual_experience_15: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                            self.has_fucked_enough(state, 40) and state.has(Upgrade.bewitched_bubble, self.player),
             WitchyWoods.goblin_apartment: lambda state: state.has(QuestItem.goblin_apartment, self.player) and
                                                         self.can_complete_quest(state, Quest.model_goblin),
             WitchyWoods.fairy_chest: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
@@ -98,6 +96,7 @@ class FlipwitchRules:
             WitchyWoods.goblin_queen_mp: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.goblin_queen_chaos: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.goblin_queen_crystal: lambda state: state.has(Key.goblin_queen, self.player),
+            WitchyWoods.post_fight: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.fairy_reward: lambda state: state.has(Goal.chaos_piece, self.player),
 
             SpiritTown.city_hp: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
@@ -110,10 +109,10 @@ class FlipwitchRules:
             SpiritTown.apartment_key: lambda state: self.can_complete_quest(state, Quest.model_goblin),
             SpiritTown.alley: lambda state: state.has(Power.slime_form, self.player),
             SpiritTown.chaos: lambda state: state.has(Key.abandoned_apartment, self.player),
-            SpiritTown.home_2: lambda state: state.has(Upgrade.angel_feathers, self.player) or state.has(Upgrade.demon_wings, self.player),
-            SpiritTown.home_1: lambda state: state.has(Power.ghost_form, self.player),
-            SpiritTown.home_6: lambda state: state.has(Upgrade.mermaid_scale, self.player),
-            SpiritTown.green_house: lambda state: state.has(Power.ghost_form, self.player),
+            SpiritTown.home_2: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and (state.has(Upgrade.angel_feathers, self.player) or state.has(Upgrade.demon_wings, self.player)),
+            SpiritTown.home_1: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and state.has(Power.ghost_form, self.player),
+            SpiritTown.home_6: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and state.has(Upgrade.mermaid_scale, self.player),
+            SpiritTown.green_house: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and state.has(Power.ghost_form, self.player),
             SpiritTown.fungal_key: lambda state: self.can_wear_costume(state, self.world.options, Costume.pigman),
             SpiritTown.maid_contract: lambda state: self.can_wear_costume(state, self.world.options, Costume.maid),
             SpiritTown.lone_house: lambda state: state.has(Upgrade.angel_feathers, self.player) and self.can_reach_mansion_door(self.world.options, state),
@@ -148,16 +147,12 @@ class FlipwitchRules:
             Jigoku.hidden_flip_chest: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or
                                                     (self.can_present_gender(state, self.world.options, "Male") and state.has(Upgrade.angel_feathers, self.player) and
                                                      state.has(Upgrade.demon_wings, self.player)),
-            Jigoku.demon_wings: lambda state: state.has(Key.collapsed_temple, self.player) or (self.can_present_gender(state, self.world.options, "Male") and
-                                                                                               state.has(Upgrade.angel_feathers, self.player)),
+            Jigoku.demon_wings: lambda state: state.has(Key.collapsed_temple, self.player) or self.can_move_horizontally_enough(state),
             Jigoku.demon_tutorial: lambda state: state.has(Upgrade.demon_wings, self.player),
             Jigoku.northern_cat_shrine: lambda state: self.can_wear_costume(state, self.world.options, Costume.miko) and
-                                                      (state.has(Key.collapsed_temple, self.player) or (self.can_present_gender(state, self.world.options, "Male") and
-                                                                                                       state.has(Upgrade.angel_feathers, self.player))),
-            Jigoku.cat_coin: lambda state: state.has(Key.collapsed_temple, self.player) or (self.can_present_gender(state, self.world.options, "Male") and
-                                                                                               state.has(Upgrade.angel_feathers, self.player)),
-            Jigoku.cat_chest: lambda state: state.has(Key.collapsed_temple, self.player) or (self.can_present_gender(state, self.world.options, "Male") and
-                                                                                               state.has(Upgrade.angel_feathers, self.player)),
+                                                      (state.has(Key.collapsed_temple, self.player) or self.can_move_horizontally_enough(state)),
+            Jigoku.cat_coin: lambda state: state.has(Key.collapsed_temple, self.player) or self.can_move_horizontally_enough(state),
+            Jigoku.cat_chest: lambda state: state.has(Key.collapsed_temple, self.player) or self.can_move_horizontally_enough(state),
 
             ClubDemon.demon_letter: lambda state: state.has(QuestItem.angelic_letter, self.player) and self.can_wear_costume(state, self.world.options, Costume.postman),
             ClubDemon.door: lambda state: state.has(Upgrade.bewitched_bubble, self.player) and state.has(Key.demon_club, self.player),
@@ -256,7 +251,7 @@ class FlipwitchRules:
             Quest.stop_democracy: lambda state: self.can_wear_costume(state, self.world.options, Costume.dominating),
             Quest.bunny_club: lambda state: self.can_wear_costume(state, self.world.options, Costume.bunny),
             Quest.silky_slime: lambda state: state.has(QuestItem.silky_slime, self.player),
-            Quest.emotional_baggage: lambda state: state.has(QuestItem.gobliana_luggage, self.player),
+            Quest.emotional_baggage: lambda state: state.has(QuestItem.gobliana_luggage, self.player) and self.can_complete_quest(state, Quest.model_goblin),
             Quest.dirty_debut: lambda state: self.can_complete_quest(state, Quest.emotional_baggage) and state.can_reach_location(AngelicHallway.elf_1, self.player),
             Quest.belles_milkshake: lambda state: state.can_reach_region(FlipwitchRegion.cabaret_cafe, self.player) and
                                                   state.has(QuestItem.belle_milkshake, self.player) and state.has(QuestItem.delicious_milk, self.player),
@@ -347,8 +342,8 @@ class FlipwitchRules:
 
     def can_reach_mansion_door(self, options: FlipwitchOptions, state: CollectionState):
         if options.starting_gender == options.starting_gender.option_female:
-            return state.has(Upgrade.angel_feathers, self.player) or state.has(Upgrade.bewitched_bubble, self.player)
-        return state.has(Upgrade.bewitched_bubble, self.player)
+            return state.has(Unlock.goblin_crystal_block, self.player) and (state.has(Upgrade.angel_feathers, self.player) or state.has(Upgrade.bewitched_bubble, self.player))
+        return state.has(Unlock.goblin_crystal_block, self.player) and state.has(Upgrade.bewitched_bubble, self.player)
 
     def can_convince_mansion_guard(self, state: CollectionState):
         return self.can_wear_costume(state, self.world.options, Costume.maid) or self.can_wear_costume(state, self.world.options, Costume.pigman)
