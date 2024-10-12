@@ -100,7 +100,7 @@ class FlipwitchWorld(World):
             return flipwitch_region
 
         world_regions = create_regions(create_region)
-        final_locations = create_locations()
+        final_locations = create_locations(self.options)
         for location in final_locations:
             name = location.name
             location_id = location.location_id
