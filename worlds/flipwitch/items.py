@@ -50,7 +50,7 @@ def create_flipwitch_items(item_factory: FlipwitchItemFactory, options: Flipwitc
     return items
 
 
-def create_base_items (item_factory: FlipwitchItemFactory, options: FlipwitchOptions, items: List[Item]):
+def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOptions, items: List[Item]):
     for item in base_items:
         if item.name == Upgrade.health or item.name == Upgrade.mana:
             upgrade_name = item.name
@@ -59,18 +59,26 @@ def create_base_items (item_factory: FlipwitchItemFactory, options: FlipwitchOpt
             items.extend([item_factory(peach) for peach in [Upgrade.peachy_peach]*11])
         elif item.name == Upgrade.wand:
             items.extend([item_factory(weapon) for weapon in [Upgrade.wand]*3])
-        elif item.name == Goal.chaos_piece and options.shuffle_chaos_pieces == options.shuffle_chaos_pieces.option_true:
-            items.extend([item_factory(piece) for piece in [Goal.chaos_piece]*6])
+        elif item.name == Goal.chaos_piece:
+            if options.shuffle_chaos_pieces == options.shuffle_chaos_pieces.option_false:
+                continue
+            items.extend([item_factory(piece) for piece in [Goal.chaos_piece] * 6])
         elif item.name == QuestItem.summon_stone:
             items.extend([item_factory(stone) for stone in [QuestItem.summon_stone]*3])
         elif item.name == QuestItem.soul_fragment:
             items.extend([item_factory(soul) for soul in [QuestItem.soul_fragment]*3])
         elif item.name == Coin.lucky_coin:
-            items.extend(item_factory(lucky) for lucky in [Coin.lucky_coin]*44)
+            if options.gachapon == options.gachapon.option_true:
+                items.extend(item_factory(lucky, ItemClassification.progression) for lucky in [Coin.lucky_coin]*44)
+            else:
+                items.extend(item_factory(lucky) for lucky in [Coin.lucky_coin] * 44)
         elif item.name == Upgrade.barrier:
             items.extend(item_factory(barrier) for barrier in [Upgrade.barrier]*2)
+        elif item.name == Upgrade.peachy_upgrade:
+            items.extend(item_factory(upgrade) for upgrade in [Upgrade.peachy_upgrade]*2)
         else:
             items.append(item_factory(item.name))
+    chaos_check = [item.name for item in items if item.name == Goal.chaos_piece]
     return items
 
 
