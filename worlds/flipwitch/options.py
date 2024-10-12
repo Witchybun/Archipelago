@@ -22,6 +22,15 @@ class ShuffleChaosPieces(Toggle):
     display_name = "Shuffle Chaos Pieces"
 
 
+class ShopPrices(Range):
+    """Sets, as a percentage, the price of all goods in the game."""
+    internal_name = "shop_prices"
+    display_name = "Shop Prices"
+    range_start = 0
+    range_end = 200
+    default = 100
+
+
 class Gachapon(Toggle):
     """Shuffles the rewards of the gachapon rewards."""
     internal_name = "gachapon"
@@ -35,15 +44,16 @@ class CrystalTeleports(Toggle):
     display_name = "Crystal Teleports"
 
 
-class DeathLink(Toggle):
-    """If on: Whenever another player on death link dies, you will be returned to the starting room."""
-    display_name = "Death Link"
+class FuckLink(Toggle):
+    """When you get fucked, everyone gets fucked (or dies, I suppose). Of course the reverse is true too."""
+    display_name = "FuckLink"
 
 
 @dataclass
 class FlipwitchOptions(PerGameCommonOptions):
     starting_gender: StartingGender
     shuffle_chaos_pieces: ShuffleChaosPieces
+    shop_prices: ShopPrices
     gachapon: Gachapon
     crystal_teleports: CrystalTeleports
-    death_link: DeathLink
+    death_link: FuckLink
