@@ -41,7 +41,6 @@ class Power:
     ring_of_the_sun = "Ring Of The Sun"
     haunted_scythe = "Haunted Scythe"
     demonic_cuff = "Demonic Cuff"
-    toxic_slime_vial = "Toxic Slime Vial"
 
 
 class Accessory:
@@ -62,7 +61,8 @@ class Upgrade:
     mana = "Mana Upgrade" #10 of these
     wand = "Wand Upgrade"
     barrier = "Protective Barrier Upgrade"
-    peachy_peach = "Peachy Peach Upgrade"
+    peachy_peach = "Peachy Peach Charge"
+    peachy_upgrade = "Peachy Peach Upgrade"
     bewitched_bubble = "Bewitched Bubble"
     progressive_crystal = "Goblin Crystal"
     portable_portal = "Portable Portal"
