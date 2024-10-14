@@ -88,7 +88,7 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 54, Upgrade.demon_wings, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 55, Upgrade.angel_feathers, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 56, Upgrade.mermaid_scale, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 57, Coin.lucky_coin, ItemClassification.filler),
+    create_item(ITEM_CODE_START + base_start_id + 57, Coin.lucky_coin, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 58, Coin.loose_change, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 59, Unlock.crystal_block, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 60, Unlock.goblin_crystal_block, ItemClassification.progression | ItemClassification.useful),
