@@ -83,6 +83,7 @@ class SpiritTown:
     lone_house = "ST: Lone House Chest"
     fungal_key = "ST: Pig Mansion Fungal Key"
     maid_contract = "ST: Pig Mansion Maid Contract"
+    special_milkshake = "ST: Special Milkshake"
 
 
 class ShadySewers:
