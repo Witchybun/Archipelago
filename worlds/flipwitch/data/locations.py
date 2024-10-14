@@ -113,6 +113,7 @@ spirit_town_locations = [
     create_location(LOCATION_CODE_START + spirit_town_location_start + 28, SpiritTown.lone_house, FlipwitchRegion.spirit_town),
     create_location(LOCATION_CODE_START + spirit_town_location_start + 29, SpiritTown.fungal_key, FlipwitchRegion.pig_mansion),
     create_location(LOCATION_CODE_START + spirit_town_location_start + 30, SpiritTown.maid_contract, FlipwitchRegion.pig_mansion),
+    create_location(LOCATION_CODE_START + spirit_town_location_start + 31, SpiritTown.special_milkshake, FlipwitchRegion.spirit_town),
 
 ]
 
