@@ -228,7 +228,7 @@ def create_switch_items(item_factory: LunacidItemFactory, options: LunacidOption
 def create_door_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]) -> List[Item]:
     if options.door_locks == options.door_locks.option_false:
         return items
-    for key in Door.doors_no_tower:
+    for key in Door.all_door_keys:
         items.append(item_factory(key))
     return items
 
