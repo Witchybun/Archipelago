@@ -116,6 +116,7 @@ class FlipwitchRules:
             SpiritTown.fungal_key: lambda state: self.can_wear_costume(state, self.world.options, Costume.pigman),
             SpiritTown.maid_contract: lambda state: self.can_wear_costume(state, self.world.options, Costume.maid),
             SpiritTown.lone_house: lambda state: state.has(Upgrade.angel_feathers, self.player) and self.can_reach_mansion_door(self.world.options, state),
+            SpiritTown.special_milkshake: lambda state: state.can_reach_region(FlipwitchRegion.cabaret_cafe, self.player) and state.has(QuestItem.delicious_milk, self.player),
 
             ShadySewers.side_chest: lambda state: state.has(Upgrade.angel_feathers, self.player),
             ShadySewers.shady_chest: lambda state: state.has(Upgrade.angel_feathers, self.player) and state.has(Upgrade.bewitched_bubble, self.player),
