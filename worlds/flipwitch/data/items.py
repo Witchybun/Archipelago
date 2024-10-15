@@ -137,6 +137,11 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 104, Custom.sexual_thoughts, ItemClassification.trap),
     create_item(ITEM_CODE_START + base_start_id + 105, Upgrade.barrier, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 106, Upgrade.peachy_upgrade, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 107, Coin.animal_coin, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 108, Coin.bunny_coin, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 109, Coin.angel_demon_coin, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 110, Coin.monster_coin, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 111, Coin.promotional_coin, ItemClassification.useful),
 ]
 
 gacha_item_id = 150

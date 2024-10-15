@@ -68,10 +68,18 @@ def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
         elif item.name == QuestItem.soul_fragment:
             items.extend([item_factory(soul) for soul in [QuestItem.soul_fragment]*3])
         elif item.name == Coin.lucky_coin:
+            continue
+        elif item.name in Coin.lucky_coins:
+            if item.name == Coin.promotional_coin:
+                if options.gachapon == options.gachapon.option_true:
+                    items.append(item_factory(item.name, ItemClassification.progression))
+                else:
+                    items.append(item_factory(item.name))
+                continue
             if options.gachapon == options.gachapon.option_true:
-                items.extend(item_factory(lucky, ItemClassification.progression) for lucky in [Coin.lucky_coin]*44)
+                items.extend(item_factory(lucky, ItemClassification.progression) for lucky in [item.name]*10)
             else:
-                items.extend(item_factory(lucky) for lucky in [Coin.lucky_coin] * 44)
+                items.extend(item_factory(lucky) for lucky in [item.name] * 10)
         elif item.name == Upgrade.barrier:
             items.extend(item_factory(barrier) for barrier in [Upgrade.barrier]*2)
         elif item.name == Upgrade.peachy_upgrade:

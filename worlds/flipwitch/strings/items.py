@@ -73,7 +73,14 @@ class Upgrade:
 
 class Coin:
     lucky_coin = "Lucky Coin"
+    animal_coin = "Animal Coin"
+    bunny_coin = "Bunny Coin"
+    angel_demon_coin = "Angel & Demon Coin"
+    monster_coin = "Monster Coin"
+    promotional_coin = "Promotional Coin"
     loose_change = "Loose Change"
+
+    lucky_coins = [animal_coin, bunny_coin, angel_demon_coin, monster_coin, promotional_coin]
 
 
 class Warp:

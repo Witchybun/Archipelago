@@ -1,3 +1,4 @@
+from random import Random
 from time import strftime
 from typing import Dict, Any, Iterable, TextIO
 import logging
@@ -10,6 +11,7 @@ from .data.items import FlipwitchItemData
 from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi
 from .strings.regions_entrances import FlipwitchRegion
 from .strings.items import Goal, Power, Upgrade, Key
+from .strings.locations import Gacha
 from .items import item_table, complete_items_by_name, create_items
 from .locations import create_locations, location_table
 from .regions import link_flipwitch_areas, create_regions
@@ -59,6 +61,10 @@ class FlipwitchWorld(World):
     options: FlipwitchOptions
     web = FlipwitchWeb()
     logger = logging.getLogger()
+    animal_order = []
+    bunny_order = []
+    monster_order = []
+    angel_order = []
 
     def __init__(self, multiworld, player):
         super(FlipwitchWorld, self).__init__(multiworld, player)
@@ -78,7 +84,8 @@ class FlipwitchWorld(World):
         return self.random.choice(["Nothing"])
 
     def set_rules(self):
-        FlipwitchRules(self).set_flipwitch_rules()
+        self.determine_gacha_order(self.random)
+        FlipwitchRules(self).set_flipwitch_rules(self.animal_order, self.bunny_order, self.monster_order, self.angel_order)
 
     def create_items(self):
         chaos_count = 0
@@ -128,10 +135,28 @@ class FlipwitchWorld(World):
             boss_locations = [location for location in self.multiworld.get_locations(self.player) if location.name in boss_location_names]
             fill_restrictive(self.multiworld, state, boss_locations, chaos_pieces, single_player_placement=True, lock=True, allow_excluded=True)
 
+    def determine_gacha_order(self, random: Random):
+        bunny_order = Gacha.bunny_gacha.copy()
+        random.shuffle(bunny_order)
+        self.bunny_order = bunny_order
+        animal_order = Gacha.animal_gacha.copy()
+        random.shuffle(animal_order)
+        self.animal_order = animal_order
+        monster_order = Gacha.monster_gacha.copy()
+        random.shuffle(monster_order)
+        self.monster_order = monster_order
+        angel_order = Gacha.angel_demon_gacha.copy()
+        random.shuffle(angel_order)
+        self.angel_order = angel_order
+
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "client_version": "0.1.5",
+            "animal_order": self.animal_order,
+            "bunny_order": self.bunny_order,
+            "monster_order": self.monster_order,
+            "angel_order": self.angel_order,
             **self.options.as_dict("starting_gender", "shop_prices", "gachapon", "death_link"),
         }
         return slot_data
