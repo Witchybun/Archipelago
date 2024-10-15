@@ -19,6 +19,11 @@ class FlipwitchRules:
     region_rules: Dict[str, CollectionRule]
     entrance_rules: Dict[str, CollectionRule]
     location_rules: Dict[str, CollectionRule]
+    animal_order: List[str]
+    bunny_order: List[str]
+    monster_order: List[str]
+    angel_order: List[str]
+
 
     def __init__(self, world: "FlipwitchWorld") -> None:
         self.player = world.player
@@ -277,47 +282,47 @@ class FlipwitchRules:
 
 
 
-            Gacha.gacha_sp1: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad1: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad2: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad3: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad4: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad5: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad6: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad7: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad8: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad9: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ad0: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg1: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg2: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg3: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg4: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg5: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg6: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg7: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg8: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg9: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_mg0: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg1: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg2: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg3: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg4: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg5: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg6: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg7: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg8: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg9: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_bg0: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag1: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag2: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag3: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag4: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag5: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag6: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag7: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag8: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag9: lambda state: state.has(Coin.lucky_coin, self.player, 41),
-            Gacha.gacha_ag0: lambda state: state.has(Coin.lucky_coin, self.player, 41),
+            Gacha.gacha_sp1: lambda state: state.has(Coin.promotional_coin, self.player),
+            Gacha.gacha_ad1: lambda state: self.has_enough_coins(Gacha.gacha_ad1, state),
+            Gacha.gacha_ad2: lambda state: self.has_enough_coins(Gacha.gacha_ad2, state),
+            Gacha.gacha_ad3: lambda state: self.has_enough_coins(Gacha.gacha_ad3, state),
+            Gacha.gacha_ad4: lambda state: self.has_enough_coins(Gacha.gacha_ad4, state),
+            Gacha.gacha_ad5: lambda state: self.has_enough_coins(Gacha.gacha_ad5, state),
+            Gacha.gacha_ad6: lambda state: self.has_enough_coins(Gacha.gacha_ad6, state),
+            Gacha.gacha_ad7: lambda state: self.has_enough_coins(Gacha.gacha_ad7, state),
+            Gacha.gacha_ad8: lambda state: self.has_enough_coins(Gacha.gacha_ad8, state),
+            Gacha.gacha_ad9: lambda state: self.has_enough_coins(Gacha.gacha_ad9, state),
+            Gacha.gacha_ad0: lambda state: self.has_enough_coins(Gacha.gacha_ad0, state),
+            Gacha.gacha_mg1: lambda state: self.has_enough_coins(Gacha.gacha_mg1, state),
+            Gacha.gacha_mg2: lambda state: self.has_enough_coins(Gacha.gacha_mg2, state),
+            Gacha.gacha_mg3: lambda state: self.has_enough_coins(Gacha.gacha_mg3, state),
+            Gacha.gacha_mg4: lambda state: self.has_enough_coins(Gacha.gacha_mg4, state),
+            Gacha.gacha_mg5: lambda state: self.has_enough_coins(Gacha.gacha_mg5, state),
+            Gacha.gacha_mg6: lambda state: self.has_enough_coins(Gacha.gacha_mg6, state),
+            Gacha.gacha_mg7: lambda state: self.has_enough_coins(Gacha.gacha_mg7, state),
+            Gacha.gacha_mg8: lambda state: self.has_enough_coins(Gacha.gacha_mg8, state),
+            Gacha.gacha_mg9: lambda state: self.has_enough_coins(Gacha.gacha_mg9, state),
+            Gacha.gacha_mg0: lambda state: self.has_enough_coins(Gacha.gacha_mg0, state),
+            Gacha.gacha_bg1: lambda state: self.has_enough_coins(Gacha.gacha_bg1, state),
+            Gacha.gacha_bg2: lambda state: self.has_enough_coins(Gacha.gacha_bg2, state),
+            Gacha.gacha_bg3: lambda state: self.has_enough_coins(Gacha.gacha_bg3, state),
+            Gacha.gacha_bg4: lambda state: self.has_enough_coins(Gacha.gacha_bg4, state),
+            Gacha.gacha_bg5: lambda state: self.has_enough_coins(Gacha.gacha_bg5, state),
+            Gacha.gacha_bg6: lambda state: self.has_enough_coins(Gacha.gacha_bg6, state),
+            Gacha.gacha_bg7: lambda state: self.has_enough_coins(Gacha.gacha_bg7, state),
+            Gacha.gacha_bg8: lambda state: self.has_enough_coins(Gacha.gacha_bg8, state),
+            Gacha.gacha_bg9: lambda state: self.has_enough_coins(Gacha.gacha_bg9, state),
+            Gacha.gacha_bg0: lambda state: self.has_enough_coins(Gacha.gacha_bg0, state),
+            Gacha.gacha_ag1: lambda state: self.has_enough_coins(Gacha.gacha_ag1, state),
+            Gacha.gacha_ag2: lambda state: self.has_enough_coins(Gacha.gacha_ag2, state),
+            Gacha.gacha_ag3: lambda state: self.has_enough_coins(Gacha.gacha_ag3, state),
+            Gacha.gacha_ag4: lambda state: self.has_enough_coins(Gacha.gacha_ag4, state),
+            Gacha.gacha_ag5: lambda state: self.has_enough_coins(Gacha.gacha_ag5, state),
+            Gacha.gacha_ag6: lambda state: self.has_enough_coins(Gacha.gacha_ag6, state),
+            Gacha.gacha_ag7: lambda state: self.has_enough_coins(Gacha.gacha_ag7, state),
+            Gacha.gacha_ag8: lambda state: self.has_enough_coins(Gacha.gacha_ag8, state),
+            Gacha.gacha_ag9: lambda state: self.has_enough_coins(Gacha.gacha_ag9, state),
+            Gacha.gacha_ag0: lambda state: self.has_enough_coins(Gacha.gacha_ag0, state),
         }
 
     def has_fucked_enough(self, state: CollectionState, amount: int):
@@ -363,7 +368,26 @@ class FlipwitchRules:
         return (state.has(Upgrade.bewitched_bubble, self.player) and state.has(Key.rose_garden, self.player)) or (state.has(Power.ghost_form, self.player) and
                 state.has(Key.secret_garden, self.player) and (state.has(Upgrade.angel_feathers, self.player) or state.has(Upgrade.demon_wings, self.player)))
 
-    def set_flipwitch_rules(self) -> None:
+    def has_enough_coins(self, gacha: str, state: CollectionState):
+        if "Animal" in gacha:
+            amount = self.animal_order.index(gacha)
+            return state.has(Coin.animal_coin, self.player, amount)
+        if "Bunny" in gacha:
+            amount = self.bunny_order.index(gacha)
+            return state.has(Coin.bunny_coin, self.player, amount)
+        if "Monster" in gacha:
+            amount = self.monster_order.index(gacha)
+            return state.has(Coin.monster_coin, self.player, amount)
+        if "Angel" in gacha:
+            amount = self.angel_order.index(gacha)
+            return state.has(Coin.angel_demon_coin, self.player, amount)
+        return False
+
+    def set_flipwitch_rules(self, animal_order: List[str], bunny_order: List[str], monster_order: List[str], angel_order: List[str]) -> None:
+        self.angel_order = angel_order
+        self.bunny_order = bunny_order
+        self.monster_order = monster_order
+        self.animal_order = animal_order
         multiworld = self.world.multiworld
         for region in multiworld.get_regions(self.player):
             if region.name in self.region_rules:

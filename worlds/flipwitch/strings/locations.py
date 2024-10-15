@@ -337,6 +337,11 @@ class Gacha:
     gacha_mg9 = "Gacha: Monster Girls #9"
     gacha_mg0 = "Gacha: Monster Girls #10"
 
+    animal_gacha = [gacha_ag0, gacha_ag1, gacha_ag2, gacha_ag3, gacha_ag4, gacha_ag5, gacha_ag6, gacha_ag7, gacha_ag8, gacha_ag9]
+    monster_gacha = [gacha_mg1, gacha_mg2, gacha_mg3, gacha_mg4, gacha_mg5, gacha_mg6, gacha_mg7, gacha_mg8, gacha_mg9, gacha_mg0]
+    angel_demon_gacha = [gacha_ad1, gacha_ad2, gacha_ad3, gacha_ad4, gacha_ad5, gacha_ad6, gacha_ad7, gacha_ad8, gacha_ad9, gacha_ad0]
+    bunny_gacha = [gacha_bg0, gacha_bg1, gacha_bg2, gacha_bg3, gacha_bg4, gacha_bg5, gacha_bg6, gacha_bg7, gacha_bg8, gacha_bg9]
+
 
 class CrystalPanel:
     sensei = "Sensei's Hut Crystal Panel"
