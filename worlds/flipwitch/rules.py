@@ -259,9 +259,7 @@ class FlipwitchRules:
             Quest.silky_slime: lambda state: state.has(QuestItem.silky_slime, self.player),
             Quest.emotional_baggage: lambda state: state.has(QuestItem.gobliana_luggage, self.player) and self.can_complete_quest(state, Quest.model_goblin),
             Quest.dirty_debut: lambda state: self.can_complete_quest(state, Quest.emotional_baggage) and state.can_reach_location(AngelicHallway.elf_1, self.player),
-            Quest.belles_milkshake: lambda state: state.can_reach_region(FlipwitchRegion.cabaret_cafe, self.player) and
-                                                  state.has(QuestItem.belle_milkshake, self.player) and state.has(QuestItem.delicious_milk, self.player),
-            Quest.devilicious: lambda state: self.can_complete_quest(state, Quest.belles_milkshake) and state.has(QuestItem.hellish_dango, self.player),
+            Quest.devilicious: lambda state: self.can_complete_quest(state, Quest.deluxe_milkshake) and state.has(QuestItem.hellish_dango, self.player),
             Quest.daikon: lambda state: self.can_complete_quest(state, Quest.devilicious) and state.has(QuestItem.heavenly_daikon, self.player),
             Quest.out_of_service: lambda state: state.has(QuestItem.mono_password, self.player),
             Quest.whorus: lambda state: self.can_wear_costume(state, self.world.options, Costume.nun),
@@ -331,6 +329,8 @@ class FlipwitchRules:
             if self.can_complete_quest(state, quest):
                 total_sex_experience += Quest.fuck_points[quest]
         if total_sex_experience > 7:
+            total_sex_experience += 1
+        if total_sex_experience > 23:
             total_sex_experience += 1
         return total_sex_experience >= amount
 
