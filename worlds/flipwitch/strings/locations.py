@@ -396,7 +396,6 @@ class Quest:
     signing_bonus = "Pig Mansion: Signing Bonus"
     emotional_baggage = "Leg's Office: Emotional Baggage"
     dirty_debut = "Leg's Office: Dirty Debut"
-    belles_milkshake = "Kyoni's Shop: Belle's Milkshake"
     devilicious = "Kyoni's Shop: Devilicious"
     daikon = "Kyoni's Shop: What's a Daikon?"
     alley_cat = "Dusty: Alley Cat"
@@ -437,7 +436,6 @@ class Quest:
         signing_bonus: 1,
         emotional_baggage: 1,
         dirty_debut: 1,
-        belles_milkshake: 1,
         devilicious: 1,
         daikon: 1,
         alley_cat: 1,

@@ -369,7 +369,6 @@ quest_locations = [
     create_location(LOCATION_CODE_START + quest_location_start + 30, Quest.signing_bonus, FlipwitchRegion.pig_mansion),
     create_location(LOCATION_CODE_START + quest_location_start + 31, Quest.emotional_baggage, FlipwitchRegion.spirit_town),
     create_location(LOCATION_CODE_START + quest_location_start + 32, Quest.dirty_debut, FlipwitchRegion.spirit_town),
-    create_location(LOCATION_CODE_START + quest_location_start + 33, Quest.belles_milkshake, FlipwitchRegion.spirit_town),
     create_location(LOCATION_CODE_START + quest_location_start + 34, Quest.devilicious, FlipwitchRegion.spirit_town),
     create_location(LOCATION_CODE_START + quest_location_start + 35, Quest.daikon, FlipwitchRegion.spirit_town),
     create_location(LOCATION_CODE_START + quest_location_start + 36, Quest.alley_cat, FlipwitchRegion.spirit_town),
