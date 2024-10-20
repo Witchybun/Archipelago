@@ -58,7 +58,7 @@ def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
         elif item.name == Upgrade.peachy_peach:
             items.extend([item_factory(peach) for peach in [Upgrade.peachy_peach]*11])
         elif item.name == Upgrade.wand:
-            items.extend([item_factory(weapon) for weapon in [Upgrade.wand]*3])
+            items.extend([item_factory(weapon) for weapon in [Upgrade.wand]*2])
         elif item.name == Goal.chaos_piece:
             if options.shuffle_chaos_pieces == options.shuffle_chaos_pieces.option_false:
                 continue
