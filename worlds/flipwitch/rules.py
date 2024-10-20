@@ -24,7 +24,6 @@ class FlipwitchRules:
     monster_order: List[str]
     angel_order: List[str]
 
-
     def __init__(self, world: "FlipwitchWorld") -> None:
         self.player = world.player
         self.world = world
@@ -52,7 +51,7 @@ class FlipwitchRules:
             FlipwitchEntrance.tengoku_to_tengoku_upper: lambda state: self.can_present_gender(state, self.world.options, "Male") or state.has(Upgrade.angel_feathers, self.player),
             FlipwitchEntrance.angelic_to_angelic_upper: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or state.has(Upgrade.angel_feathers, self.player),
             FlipwitchEntrance.fungal_to_deep_fungal: lambda state: state.has(Upgrade.angel_feathers, self.player),
-            FlipwitchEntrance.deep_fungal_to_slime_citadel: lambda state: state.has(Power.slime_form, self.player),
+            FlipwitchEntrance.deep_fungal_to_slime_citadel: lambda state: state.has(Power.slime_form, self.player) and state.has(Key.slime_citadel, self.player),
             FlipwitchEntrance.fungal_to_umi_umi: lambda state: state.has(Upgrade.mermaid_scale, self.player),
             FlipwitchEntrance.umi_umi_to_umi_umi_depths: lambda state: state.has(Upgrade.angel_feathers, self.player) or self.can_present_gender(state, self.world.options, "Male"),
             FlipwitchEntrance.spirit_to_outside_chaos_castle: lambda state: state.has(Goal.chaos_piece, self.player, 6),
@@ -101,7 +100,7 @@ class FlipwitchRules:
             WitchyWoods.goblin_queen_mp: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.goblin_queen_chaos: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.goblin_queen_crystal: lambda state: state.has(Key.goblin_queen, self.player),
-            WitchyWoods.post_fight: lambda state: state.has(Key.goblin_queen, self.player),
+            WitchyWoods.post_fight: lambda state: state.has(Key.goblin_queen, self.player) and state.has(Power.slime_form, self.player),
             WitchyWoods.fairy_reward: lambda state: state.has(Goal.chaos_piece, self.player),
 
             SpiritTown.city_hp: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
@@ -117,13 +116,14 @@ class FlipwitchRules:
             SpiritTown.home_2: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and (state.has(Upgrade.angel_feathers, self.player) or state.has(Upgrade.demon_wings, self.player)),
             SpiritTown.home_1: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and state.has(Power.ghost_form, self.player),
             SpiritTown.home_6: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and state.has(Upgrade.mermaid_scale, self.player),
-            SpiritTown.green_house: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and state.has(Power.ghost_form, self.player),
+            SpiritTown.green_house: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and state.has(Power.slime_form, self.player),
             SpiritTown.fungal_key: lambda state: self.can_wear_costume(state, self.world.options, Costume.pigman),
             SpiritTown.maid_contract: lambda state: self.can_wear_costume(state, self.world.options, Costume.maid),
             SpiritTown.lone_house: lambda state: state.has(Upgrade.angel_feathers, self.player) and self.can_reach_mansion_door(self.world.options, state),
             SpiritTown.special_milkshake: lambda state: state.can_reach_region(FlipwitchRegion.cabaret_cafe, self.player) and state.has(QuestItem.delicious_milk, self.player),
 
             ShadySewers.side_chest: lambda state: state.has(Upgrade.angel_feathers, self.player),
+            ShadySewers.shady_hp: lambda state: state.has(Upgrade.angel_feathers, self.player) and state.has(Upgrade.bewitched_bubble, self.player),
             ShadySewers.shady_chest: lambda state: state.has(Upgrade.angel_feathers, self.player) and state.has(Upgrade.bewitched_bubble, self.player),
             ShadySewers.ratchel_coin: lambda state: self.can_present_gender(state, self.world.options, "Male") or state.has(Upgrade.angel_feathers, self.player),
             ShadySewers.dwd_tutorial: lambda state: state.has(Upgrade.mermaid_scale, self.player),
@@ -196,6 +196,8 @@ class FlipwitchRules:
                                                            (self.can_present_gender(state, self.world.options, "Female") or
                                                             state.has(Upgrade.demon_wings, self.player)),
 
+            FungalForest.fungal_deal: lambda state: state.has(QuestItem.fungal, self.player),
+            FungalForest.fungella: lambda state: state.has(QuestItem.fungal, self.player),
             FungalForest.flip_magic: lambda state: state.has(Upgrade.demon_wings, self.player) or state.has(Upgrade.bewitched_bubble, self.player),
             FungalForest.heavenly_daikon: lambda state: state.has(Upgrade.angel_feathers, self.player) and
                                                         (state.has(Upgrade.bewitched_bubble, self.player) or
@@ -206,6 +208,7 @@ class FlipwitchRules:
             FungalForest.slime_form: lambda state: self.can_present_gender(state, self.world.options, "Male") and state.has(Key.forgotten_fungal, self.player),
             FungalForest.slime_tutorial: lambda state: state.has(Power.slime_form, self.player) and
                                                        self.can_present_gender(state, self.world.options, "Male") and state.has(Key.forgotten_fungal, self.player),
+            FungalForest.slime_citadel_key: lambda state: state.has(Power.slime_form, self.player),
 
             SlimeCitadel.secret_spring_stone: lambda state: self.can_wear_costume(state, self.world.options, Costume.alchemist),
             SlimeCitadel.silky_slime_stone: lambda state: self.can_wear_costume(state, self.world.options, Costume.alchemist),
@@ -370,16 +373,16 @@ class FlipwitchRules:
 
     def has_enough_coins(self, gacha: str, state: CollectionState):
         if "Animal" in gacha:
-            amount = self.animal_order.index(gacha)
+            amount = self.animal_order.index(gacha) + 1
             return state.has(Coin.animal_coin, self.player, amount)
         if "Bunny" in gacha:
-            amount = self.bunny_order.index(gacha)
+            amount = self.bunny_order.index(gacha) + 1
             return state.has(Coin.bunny_coin, self.player, amount)
         if "Monster" in gacha:
-            amount = self.monster_order.index(gacha)
+            amount = self.monster_order.index(gacha) + 1
             return state.has(Coin.monster_coin, self.player, amount)
         if "Angel" in gacha:
-            amount = self.angel_order.index(gacha)
+            amount = self.angel_order.index(gacha) + 1
             return state.has(Coin.angel_demon_coin, self.player, amount)
         return False
 
