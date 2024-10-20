@@ -318,7 +318,7 @@ umi_umi_locations = [
 
 chaos_castle_location_start = 550
 chaos_castle_locations = [
-    create_location(LOCATION_CODE_START + chaos_castle_location_start + 1, ChaosCastle.outside_coin, FlipwitchRegion.chaos_castle),
+    create_location(LOCATION_CODE_START + chaos_castle_location_start + 1, ChaosCastle.outside_coin, FlipwitchRegion.outside_chaos),
     create_location(LOCATION_CODE_START + chaos_castle_location_start + 2, ChaosCastle.early_chest, FlipwitchRegion.chaos_castle),
     create_location(LOCATION_CODE_START + chaos_castle_location_start + 3, ChaosCastle.goblin_coin, FlipwitchRegion.chaos_castle),
     create_location(LOCATION_CODE_START + chaos_castle_location_start + 4, ChaosCastle.ghost_coin, FlipwitchRegion.chaos_castle),
