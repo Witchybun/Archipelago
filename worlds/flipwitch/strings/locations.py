@@ -373,7 +373,7 @@ class Quest:
     bunny_club = "Bunny Club: The Bunny Club"
     silky_slime = "Bunny Club: Find the Silky Slime"
     panty_raid = "Milk & Cream: Panty Raid"
-    unlucky_cat = "Unlucky Cat Statue: Unlucky Cat"
+    unlucky_cat = "Unlucky Cat Statue: Unlucky Cat Statue"
     harvest_season = "Annahell: Harvest Season"
     long_distance = "Gabrielle: Long Distance Relationship"
     summoning_stones = "Natasha: Summoning Stones"
