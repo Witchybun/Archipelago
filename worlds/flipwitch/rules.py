@@ -273,12 +273,13 @@ class FlipwitchRules:
             Quest.signing_bonus: lambda state: state.has(QuestItem.maid_contract, self.player) and self.can_wear_costume(state, self.world.options, Costume.maid),
             Quest.cardio_day: lambda state: self.can_wear_costume(state, self.world.options, Costume.rat),
             Quest.panty_raid: lambda state: state.has(QuestItem.clothes, self.player) and self.can_present_gender(state, self.world.options, "Male"),
-            Quest.unlucky_cat: lambda state: self.can_wear_costume(state, self.world.options, Costume.miko) and state.has(QuestItem.soul_fragment, self.player, 3),
+            Quest.unlucky_cat: lambda state: self.can_wear_costume(state, self.world.options, Costume.miko) and state.has(QuestItem.soul_fragment, self.player, 3) and
+                                             self.can_move_horizontally_enough(state),
             Quest.harvest_season: lambda state: self.can_wear_costume(state, self.world.options, Costume.farmer),
             Quest.long_distance: lambda state: self.can_wear_costume(state, self.world.options, Costume.postman) and state.has(QuestItem.demonic_letter, self.player) and
                                                state.has(QuestItem.angelic_letter, self.player) and state.can_reach_region(FlipwitchRegion.club_demon, self.player),
             Quest.summoning_stones: lambda state: self.can_wear_costume(state, self.world.options, Costume.alchemist) and
-                                                  state.has(QuestItem.summon_stone, self.player, 3),
+                                                  state.has(QuestItem.summon_stone, self.player, 3) and state.has(Key.slimy_sub_boss, self.player),
             Quest.semen_with_a: lambda state: self.can_wear_costume(state, self.world.options, Costume.angler) and state.has(Key.frog_boss, self.player),
 
 
