@@ -101,7 +101,7 @@ def create_gacha_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpt
 def create_filler(item_factory: FlipwitchItemFactory, random: Random, filler_slots: int, items: List[Item]):
     if filler_slots == 0:
         return items
-    filler_list = [item.name for item in filler_items]
+    filler_list = [item.name for item in filler_items if item.name != "Nothing"]
     items.extend([item_factory(filler) for filler in random.choices(filler_list, k=filler_slots)])
     return items
 
