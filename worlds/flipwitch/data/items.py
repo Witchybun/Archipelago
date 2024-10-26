@@ -142,7 +142,7 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 109, Coin.angel_demon_coin, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 110, Coin.monster_coin, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 111, Coin.promotional_coin, ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 112, "Nothing", ItemClassification.filler)  # Literally only for item links
+    create_item(ITEM_CODE_START + base_start_id + 112, "Nothing", ItemClassification.trap)  # Literally only for item links
 ]
 
 gacha_item_id = 150
