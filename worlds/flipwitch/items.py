@@ -39,7 +39,6 @@ def create_items(item_factory: FlipwitchItemFactory, locations_count: int, items
     logger.debug(f"Created {len(flipwitch_items)} unique items")
     filler_slots = locations_count - len(items)
     create_filler(item_factory, random, filler_slots, items)
-
     return items
 
 
@@ -52,6 +51,8 @@ def create_flipwitch_items(item_factory: FlipwitchItemFactory, options: Flipwitc
 
 def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOptions, items: List[Item]):
     for item in base_items:
+        if item.classification == ItemClassification.filler or item.classification == ItemClassification.trap:
+            continue
         if item.name == Upgrade.health or item.name == Upgrade.mana:
             upgrade_name = item.name
             items.extend([item_factory(stat) for stat in [upgrade_name]*10])
@@ -86,7 +87,6 @@ def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
             items.extend(item_factory(upgrade) for upgrade in [Upgrade.peachy_upgrade]*2)
         else:
             items.append(item_factory(item.name))
-    chaos_check = [item.name for item in items if item.name == Goal.chaos_piece]
     return items
 
 
@@ -101,7 +101,7 @@ def create_gacha_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpt
 def create_filler(item_factory: FlipwitchItemFactory, random: Random, filler_slots: int, items: List[Item]):
     if filler_slots == 0:
         return items
-    filler_list = [item.name for item in filler_items if item.name != "Nothing"]
+    filler_list = [item.name for item in filler_items]
     items.extend([item_factory(filler) for filler in random.choices(filler_list, k=filler_slots)])
     return items
 
