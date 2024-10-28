@@ -64,7 +64,7 @@ class Upgrade:
     peachy_peach = "Peachy Peach Charge"
     peachy_upgrade = "Peachy Peach Upgrade"
     bewitched_bubble = "Bewitched Bubble"
-    progressive_crystal = "Goblin Crystal"
+    goblin_crystal = "Goblin Crystal"
     portable_portal = "Portable Portal"
     demon_wings = "Demon Wings"
     angel_feathers = "Angel Feathers"
@@ -102,7 +102,7 @@ class Warp:
     chaos_castle = "Chaos Castle Teleport"
 
 
-class Gacha:
+class GachaItem:
     special_promotion = "Special Promotion Figure #1"
     animal_girl_1 = "Animal Girls Figure #1"
     animal_girl_2 = "Animal Girls Figure #2"
@@ -152,10 +152,10 @@ class Unlock:
 
 
 class Custom:
+    sex_experience = "Sexual Experience"
     hp_heal = "Healing Surge"
     mp_heal = "Mana Surge"
     peach_recharge = "Peachy Peach Recharge"
-    sexual_thoughts = "Sexual Thoughts"
 
 
 class Costume:
@@ -205,3 +205,13 @@ class Key:
 
 class Goal:
     chaos_piece = "Chaos Key Piece"
+
+
+class Trap:
+    nothing = "Nothing"
+    sexual_thoughts = "Sexual Thoughts"
+
+
+hint_base_items = [Power.ghost_form, Power.slime_form, Upgrade.demon_wings, Upgrade.angel_feathers, Upgrade.mermaid_scale, Key.ghostly_castle, Key.secret_garden,
+                   Unlock.goblin_crystal_block, Unlock.crystal_block]
+
