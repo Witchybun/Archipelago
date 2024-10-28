@@ -187,7 +187,7 @@ class FlipwitchWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.1.14",
+            "client_version": "0.2.0pre1",
             "animal_order": self.animal_order,
             "bunny_order": self.bunny_order,
             "monster_order": self.monster_order,
