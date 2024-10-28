@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from enum import IntFlag
-from random import Random
-from typing import List, Tuple, Dict, Optional, Protocol, Iterable, Set
+from typing import List, Dict, Optional, Protocol, Iterable
 
 from BaseClasses import MultiWorld, Region, Entrance
 
@@ -78,7 +77,8 @@ flipwitch_regions = [
                                                FlipwitchEntrance.fungal_to_deep_fungal]),
     RegionData(FlipwitchRegion.tengoku, [FlipwitchEntrance.tengoku_to_tengoku_upper]),
     RegionData(FlipwitchRegion.tengoku_upper, [FlipwitchEntrance.tengoku_upper_to_angelic_hallway]),
-    RegionData(FlipwitchRegion.angelic_hallway, [FlipwitchEntrance.angelic_to_angelic_upper]),
+    RegionData(FlipwitchRegion.angelic_hallway, [FlipwitchEntrance.angelic_to_angelic_mid]),
+    RegionData(FlipwitchRegion.angelic_bewitched, [FlipwitchEntrance.angelic_mid_to_angelic_upper]),
     RegionData(FlipwitchRegion.angelic_upper),
     RegionData(FlipwitchRegion.deep_fungal, [FlipwitchEntrance.deep_fungal_to_slime_citadel]),
     RegionData(FlipwitchRegion.slime_citadel),
@@ -105,7 +105,8 @@ flipwitch_entrances = [
     ConnectionData(FlipwitchEntrance.fungal_forest_to_tengoku, FlipwitchRegion.tengoku),
     ConnectionData(FlipwitchEntrance.tengoku_to_tengoku_upper, FlipwitchRegion.tengoku_upper),
     ConnectionData(FlipwitchEntrance.tengoku_upper_to_angelic_hallway, FlipwitchRegion.angelic_hallway),
-    ConnectionData(FlipwitchEntrance.angelic_to_angelic_upper, FlipwitchRegion.angelic_upper),
+    ConnectionData(FlipwitchEntrance.angelic_to_angelic_mid, FlipwitchRegion.angelic_bewitched),
+    ConnectionData(FlipwitchEntrance.angelic_mid_to_angelic_upper, FlipwitchRegion.angelic_upper),
     ConnectionData(FlipwitchEntrance.fungal_to_deep_fungal, FlipwitchRegion.deep_fungal),
     ConnectionData(FlipwitchEntrance.deep_fungal_to_slime_citadel, FlipwitchRegion.slime_citadel),
     ConnectionData(FlipwitchEntrance.fungal_to_umi_umi, FlipwitchRegion.umi_umi),

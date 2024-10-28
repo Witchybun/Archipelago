@@ -1,19 +1,20 @@
 from random import Random
-from time import strftime
-from typing import Dict, Any, Iterable, TextIO
+from typing import Dict, Any, Iterable
 import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
-from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from . import options
+from .data.locations import all_locations
 from .options import FlipwitchOptions
 from .data.items import FlipwitchItemData
-from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi
+from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi, witchy_woods_locations, spirit_town_locations, \
+    shady_sewer_locations, ghostly_castle_locations, jigoku_locations, tengoku_locations, fungal_forest_locations, slime_citadel_locations, umi_umi_locations, \
+    chaos_castle_locations
 from .strings.regions_entrances import FlipwitchRegion
 from .strings.items import Goal, Power, Upgrade, Key
 from .strings.locations import Gacha
 from .items import item_table, complete_items_by_name, create_items
-from .locations import create_locations, location_table
+from .locations import construct_forced_local_items, force_location_table, location_table, get_forced_location_count
 from .regions import link_flipwitch_areas, create_regions
 from .rules import FlipwitchRules
 from worlds.generic.Rules import set_rule
@@ -53,6 +54,16 @@ class FlipwitchWorld(World):
     }
 
     location_name_groups = {
+        "Witchy Woods": witchy_woods_locations,
+        "Spirit City": spirit_town_locations,
+        "Shady Sewers": shady_sewer_locations,
+        "Ghostly Castle": ghostly_castle_locations,
+        "Jigoku": jigoku_locations,
+        "Tengoku": tengoku_locations,
+        "Fungal Forest": fungal_forest_locations,
+        "Slime Citadel": slime_citadel_locations,
+        "Umi Umi": umi_umi_locations,
+        "Chaos Castle": chaos_castle_locations,
     }
 
     required_client_version = (0, 5, 0)
@@ -65,6 +76,9 @@ class FlipwitchWorld(World):
     bunny_order = []
     monster_order = []
     angel_order = []
+    item_lookup = {}
+    hint_lookup = {}
+    packaged_hints = {}
 
     def __init__(self, multiworld, player):
         super(FlipwitchWorld, self).__init__(multiworld, player)
@@ -88,13 +102,10 @@ class FlipwitchWorld(World):
         FlipwitchRules(self).set_flipwitch_rules(self.animal_order, self.bunny_order, self.monster_order, self.angel_order)
 
     def create_items(self):
-        chaos_count = 0
-        if self.options.shuffle_chaos_pieces == self.options.shuffle_chaos_pieces.option_false:
-            chaos_count += 6
-        locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player)if location.item is None]) - chaos_count
+        self.item_lookup = force_location_table(self.multiworld, self.player)
+        locations_count = len(location_table) - get_forced_location_count(self.item_lookup, self.options)
         excluded_items = self.multiworld.precollected_items[self.player]
-        potential_pool = create_items(self.create_item, locations_count, excluded_items, self.options, self.random)
+        potential_pool, self.hint_lookup = create_items(self.create_item, locations_count, excluded_items, self.options, self.random)
         self.multiworld.itempool += potential_pool
 
     def create_regions(self):
@@ -107,7 +118,7 @@ class FlipwitchWorld(World):
             return flipwitch_region
 
         world_regions = create_regions(create_region)
-        final_locations = create_locations(self.options)
+        final_locations = all_locations
         for location in final_locations:
             name = location.name
             location_id = location.location_id
@@ -126,14 +137,38 @@ class FlipwitchWorld(World):
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
 
     def pre_fill(self) -> None:
-        state = self.multiworld.get_all_state(False)
-        chaos_pieces = [chaos_piece for chaos_piece in [Item(Goal.chaos_piece, ItemClassification.progression | ItemClassification.useful,
-                                                             self.item_name_to_id[Goal.chaos_piece], self.player)]*6]
-        if self.options.shuffle_chaos_pieces == self.options.shuffle_chaos_pieces.option_false:
-            boss_location_names = [WitchyWoods.goblin_queen_chaos, GhostCastle.ghost_chaos, ClubDemon.demon_boss_chaos,
-                                   AngelicHallway.angelica_chaos, SlimeCitadel.slimy_princess_chaos, UmiUmi.frog_boss_chaos]
-            boss_locations = [location for location in self.multiworld.get_locations(self.player) if location.name in boss_location_names]
-            fill_restrictive(self.multiworld, state, boss_locations, chaos_pieces, single_player_placement=True, lock=True, allow_excluded=True)
+        construct_forced_local_items(self.item_lookup, self.player, self.item_name_to_id, self.options, self.random)
+
+    def post_fill(self) -> None:
+        self.package_hints()
+
+    def package_hints(self):
+        packaged_hints: Dict[str, str] = {}
+        for item in self.hint_lookup:
+            spot_location = self.hint_lookup[item].location
+            player = self.multiworld.player_name[spot_location.player]
+            player_game = self.multiworld.worlds[spot_location.player]
+            possible_spots = [group for group in player_game.location_name_groups if spot_location.name in player_game.location_name_groups[group] and group != "Everywhere"]
+            if len(possible_spots) > 0:
+                area = self.random.choice(possible_spots)
+            else:
+                area = self.hint_lookup[item].location.parent_region.name
+                if area == "Menu":
+                    area = "some area"
+            if self.player == self.hint_lookup[item].location.player:
+                packaged_hints[item] = area + " in this world"
+            else:
+                while len(area) > 25:
+                    area_array = area.split(" ")
+                    area_array = area_array[:-1]
+                    if area_array.count == 0:
+                        break
+                    area = " ".join(area_array)
+                if len(area) > 25:
+                    area = area[:25]
+                modified_player = player.replace("[", "(").replace("]", ")")
+                packaged_hints[item] = area + " in " + modified_player + "'s world"
+        self.packaged_hints = packaged_hints
 
     def determine_gacha_order(self, random: Random):
         bunny_order = Gacha.bunny_gacha.copy()
@@ -152,11 +187,12 @@ class FlipwitchWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.1.13",
+            "client_version": "0.1.14",
             "animal_order": self.animal_order,
             "bunny_order": self.bunny_order,
             "monster_order": self.monster_order,
             "angel_order": self.angel_order,
-            **self.options.as_dict("starting_gender", "shop_prices", "gachapon", "death_link"),
+            "hints": self.packaged_hints,
+            **self.options.as_dict("starting_gender", "shop_prices", "quest_for_sex", "crystal_teleports", "death_link"),
         }
         return slot_data
