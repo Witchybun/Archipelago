@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 
 from ..strings.items import QuestItem, Upgrade, Accessory, Power, Costume, Coin, GachaItem, Key, Trap
 from ..strings.locations import WitchyWoods, SpiritTown, Quest, ShadySewers, GhostCastle, Gacha, FungalForest, SlimeCitadel, AngelicHallway, Tengoku, ClubDemon, Jigoku, \
@@ -15,7 +15,7 @@ class FlipwitchLocation:
     forced_off_item: Optional[str] = None
 
 
-all_locations = []
+all_locations: List[FlipwitchLocation] = []
 base_locations = []
 
 
@@ -58,9 +58,9 @@ spirit_town_locations = [
     create_location(LOCATION_CODE_START + spirit_town_location_start + 2, SpiritTown.ancient_chest, FlipwitchRegion.spirit_town),
     create_location(LOCATION_CODE_START + spirit_town_location_start + 3, SpiritTown.ghost_key, FlipwitchRegion.spirit_town),
     create_location(LOCATION_CODE_START + spirit_town_location_start + 4, SpiritTown.cemetery, FlipwitchRegion.spirit_town),
-    create_location(LOCATION_CODE_START + spirit_town_location_start + 6, SpiritTown.banana, FlipwitchRegion.spirit_town),
-    create_location(LOCATION_CODE_START + spirit_town_location_start + 7, SpiritTown.green_house, FlipwitchRegion.spirit_town),
-    create_location(LOCATION_CODE_START + spirit_town_location_start + 8, SpiritTown.lone_house, FlipwitchRegion.spirit_town),
+    create_location(LOCATION_CODE_START + spirit_town_location_start + 5, SpiritTown.banana, FlipwitchRegion.spirit_town),
+    create_location(LOCATION_CODE_START + spirit_town_location_start + 6, SpiritTown.green_house, FlipwitchRegion.spirit_town),
+    create_location(LOCATION_CODE_START + spirit_town_location_start + 7, SpiritTown.lone_house, FlipwitchRegion.spirit_town),
 ]
 
 shady_sewers_location_start = 60
@@ -286,43 +286,43 @@ quest_locations = [
     create_location(LOCATION_CODE_START + quest_location_start + 30, Quest.signing_bonus, FlipwitchRegion.pig_mansion, Trap.nothing),
     create_location(LOCATION_CODE_START + quest_location_start + 31, Quest.emotional_baggage, FlipwitchRegion.spirit_town, Trap.nothing),
     create_location(LOCATION_CODE_START + quest_location_start + 32, Quest.dirty_debut, FlipwitchRegion.spirit_town, Trap.nothing),
-    create_location(LOCATION_CODE_START + quest_location_start + 34, Quest.devilicious, FlipwitchRegion.spirit_town, Trap.nothing),
-    create_location(LOCATION_CODE_START + quest_location_start + 35, Quest.daikon, FlipwitchRegion.spirit_town, Trap.nothing),
-    create_location(LOCATION_CODE_START + quest_location_start + 36, Quest.alley_cat, FlipwitchRegion.spirit_town, Trap.nothing),
-    create_location(LOCATION_CODE_START + quest_location_start + 37, Quest.whorus, FlipwitchRegion.spirit_town, Trap.nothing),
-    create_location(LOCATION_CODE_START + quest_location_start + 38, Quest.priest, FlipwitchRegion.spirit_town, Trap.nothing),
-    create_location(LOCATION_CODE_START + quest_location_start + 39, Quest.goblin_stud, FlipwitchRegion.witch_woods_lower, Trap.nothing),
-    create_location(LOCATION_CODE_START + quest_location_start + 40, WitchyWoods.rundown_outside_chest, FlipwitchRegion.witch_woods, QuestItem.cowbell),
-    create_location(LOCATION_CODE_START + quest_location_start + 41, WitchyWoods.red_wine, FlipwitchRegion.witch_woods, QuestItem.red_wine),
-    create_location(LOCATION_CODE_START + quest_location_start + 42, WitchyWoods.goblin_apartment, FlipwitchRegion.witch_woods, QuestItem.gobliana_luggage),
-    create_location(LOCATION_CODE_START + quest_location_start + 43, WitchyWoods.man_cave, FlipwitchRegion.witch_woods_lower, QuestItem.business_card),
-    create_location(LOCATION_CODE_START + quest_location_start + 44, WitchyWoods.goblin_headshot, FlipwitchRegion.witch_woods_lower, QuestItem.goblin_headshot),
-    create_location(LOCATION_CODE_START + quest_location_start + 45, SpiritTown.cabaret_girl_chest, FlipwitchRegion.cabaret_cafe, Coin.loose_change),
-    create_location(LOCATION_CODE_START + quest_location_start + 46, SpiritTown.cabaret_delicious_milk, FlipwitchRegion.cabaret_cafe, QuestItem.delicious_milk),
-    create_location(LOCATION_CODE_START + quest_location_start + 47, SpiritTown.cabaret_cherry_key, FlipwitchRegion.cabaret_cafe, QuestItem.cherry_key),
-    create_location(LOCATION_CODE_START + quest_location_start + 48, SpiritTown.cabaret_vip_chest, FlipwitchRegion.cabaret_cafe, Costume.bunny),
-    create_location(LOCATION_CODE_START + quest_location_start + 49, SpiritTown.apartment_key, FlipwitchRegion.spirit_town, QuestItem.goblin_apartment),
-    create_location(LOCATION_CODE_START + quest_location_start + 50, SpiritTown.password, FlipwitchRegion.spirit_town, QuestItem.mono_password),
-    create_location(LOCATION_CODE_START + quest_location_start + 51, SpiritTown.fungal_key, FlipwitchRegion.pig_mansion, QuestItem.fungal),
-    create_location(LOCATION_CODE_START + quest_location_start + 52, SpiritTown.maid_contract, FlipwitchRegion.pig_mansion, QuestItem.maid_contract),
-    create_location(LOCATION_CODE_START + quest_location_start + 53, SpiritTown.special_milkshake, FlipwitchRegion.spirit_town, QuestItem.belle_milkshake),
-    create_location(LOCATION_CODE_START + quest_location_start + 54, GhostCastle.willow, FlipwitchRegion.upper_ghost, QuestItem.clothes),
-    create_location(LOCATION_CODE_START + quest_location_start + 55, Jigoku.cat_shrine, FlipwitchRegion.jigoku, QuestItem.soul_fragment),
-    create_location(LOCATION_CODE_START + quest_location_start + 56, Jigoku.northern_cat_shrine, FlipwitchRegion.jigoku, QuestItem.soul_fragment),
-    create_location(LOCATION_CODE_START + quest_location_start + 57, ClubDemon.cat_shrine, FlipwitchRegion.club_demon, QuestItem.soul_fragment),
-    create_location(LOCATION_CODE_START + quest_location_start + 58, ClubDemon.demon_letter, FlipwitchRegion.club_demon, QuestItem.demonic_letter),
-    create_location(LOCATION_CODE_START + quest_location_start + 59, AngelicHallway.cloudia, FlipwitchRegion.angelic_hallway, QuestItem.legendary_halo),
-    create_location(LOCATION_CODE_START + quest_location_start + 60, AngelicHallway.angel_letter, FlipwitchRegion.angelic_bewitched, QuestItem.angelic_letter),
-    create_location(LOCATION_CODE_START + quest_location_start + 61, FungalForest.heavenly_daikon, FlipwitchRegion.fungal_forest, QuestItem.heavenly_daikon),
-    create_location(LOCATION_CODE_START + quest_location_start + 62, FungalForest.blue_jelly, FlipwitchRegion.deep_fungal, QuestItem.blue_jelly_mushroom),
-    create_location(LOCATION_CODE_START + quest_location_start + 63, FungalForest.fungal_deal, FlipwitchRegion.deep_fungal, QuestItem.deed),
-    create_location(LOCATION_CODE_START + quest_location_start + 64, SlimeCitadel.silky_slime_chest, FlipwitchRegion.slime_citadel, QuestItem.silky_slime),
-    create_location(LOCATION_CODE_START + quest_location_start + 65, SlimeCitadel.silky_slime_stone, FlipwitchRegion.slime_citadel, QuestItem.summon_stone),
-    create_location(LOCATION_CODE_START + quest_location_start + 66, SlimeCitadel.secret_spring_stone, FlipwitchRegion.slime_citadel, QuestItem.summon_stone),
-    create_location(LOCATION_CODE_START + quest_location_start + 67, SlimeCitadel.slurp_stone, FlipwitchRegion.slime_citadel, QuestItem.summon_stone),
-    create_location(LOCATION_CODE_START + quest_location_start + 68, WitchyWoods.waterfall_chest_2, FlipwitchRegion.witch_woods, QuestItem.mimic_chest),
-    create_location(LOCATION_CODE_START + quest_location_start + 69, SpiritTown.home_2, FlipwitchRegion.spirit_town, Key.abandoned_apartment),
-    create_location(LOCATION_CODE_START + quest_location_start + 70, SpiritTown.chaos, FlipwitchRegion.spirit_town, QuestItem.hellish_dango),
+    create_location(LOCATION_CODE_START + quest_location_start + 33, Quest.devilicious, FlipwitchRegion.spirit_town, Trap.nothing),
+    create_location(LOCATION_CODE_START + quest_location_start + 34, Quest.daikon, FlipwitchRegion.spirit_town, Trap.nothing),
+    create_location(LOCATION_CODE_START + quest_location_start + 35, Quest.alley_cat, FlipwitchRegion.spirit_town, Trap.nothing),
+    create_location(LOCATION_CODE_START + quest_location_start + 36, Quest.whorus, FlipwitchRegion.spirit_town, Trap.nothing),
+    create_location(LOCATION_CODE_START + quest_location_start + 37, Quest.priest, FlipwitchRegion.spirit_town, Trap.nothing),
+    create_location(LOCATION_CODE_START + quest_location_start + 38, Quest.goblin_stud, FlipwitchRegion.witch_woods_lower, Trap.nothing),
+    create_location(LOCATION_CODE_START + quest_location_start + 39, WitchyWoods.rundown_outside_chest, FlipwitchRegion.witch_woods, QuestItem.cowbell),
+    create_location(LOCATION_CODE_START + quest_location_start + 40, WitchyWoods.red_wine, FlipwitchRegion.witch_woods, QuestItem.red_wine),
+    create_location(LOCATION_CODE_START + quest_location_start + 41, WitchyWoods.goblin_apartment, FlipwitchRegion.witch_woods, QuestItem.gobliana_luggage),
+    create_location(LOCATION_CODE_START + quest_location_start + 42, WitchyWoods.man_cave, FlipwitchRegion.witch_woods_lower, QuestItem.business_card),
+    create_location(LOCATION_CODE_START + quest_location_start + 43, WitchyWoods.goblin_headshot, FlipwitchRegion.witch_woods_lower, QuestItem.goblin_headshot),
+    create_location(LOCATION_CODE_START + quest_location_start + 44, SpiritTown.cabaret_girl_chest, FlipwitchRegion.cabaret_cafe, Coin.loose_change),
+    create_location(LOCATION_CODE_START + quest_location_start + 45, SpiritTown.cabaret_delicious_milk, FlipwitchRegion.cabaret_cafe, QuestItem.delicious_milk),
+    create_location(LOCATION_CODE_START + quest_location_start + 46, SpiritTown.cabaret_cherry_key, FlipwitchRegion.cabaret_cafe, QuestItem.cherry_key),
+    create_location(LOCATION_CODE_START + quest_location_start + 47, SpiritTown.cabaret_vip_chest, FlipwitchRegion.cabaret_cafe, Costume.bunny),
+    create_location(LOCATION_CODE_START + quest_location_start + 48, SpiritTown.apartment_key, FlipwitchRegion.spirit_town, QuestItem.goblin_apartment),
+    create_location(LOCATION_CODE_START + quest_location_start + 49, SpiritTown.password, FlipwitchRegion.spirit_town, QuestItem.mono_password),
+    create_location(LOCATION_CODE_START + quest_location_start + 50, SpiritTown.fungal_key, FlipwitchRegion.pig_mansion, QuestItem.fungal),
+    create_location(LOCATION_CODE_START + quest_location_start + 51, SpiritTown.maid_contract, FlipwitchRegion.pig_mansion, QuestItem.maid_contract),
+    create_location(LOCATION_CODE_START + quest_location_start + 52, SpiritTown.special_milkshake, FlipwitchRegion.spirit_town, QuestItem.belle_milkshake),
+    create_location(LOCATION_CODE_START + quest_location_start + 53, GhostCastle.willow, FlipwitchRegion.upper_ghost, QuestItem.clothes),
+    create_location(LOCATION_CODE_START + quest_location_start + 54, Jigoku.cat_shrine, FlipwitchRegion.jigoku, QuestItem.soul_fragment),
+    create_location(LOCATION_CODE_START + quest_location_start + 55, Jigoku.northern_cat_shrine, FlipwitchRegion.jigoku, QuestItem.soul_fragment),
+    create_location(LOCATION_CODE_START + quest_location_start + 56, ClubDemon.cat_shrine, FlipwitchRegion.club_demon, QuestItem.soul_fragment),
+    create_location(LOCATION_CODE_START + quest_location_start + 57, ClubDemon.demon_letter, FlipwitchRegion.club_demon, QuestItem.demonic_letter),
+    create_location(LOCATION_CODE_START + quest_location_start + 58, AngelicHallway.cloudia, FlipwitchRegion.angelic_hallway, QuestItem.legendary_halo),
+    create_location(LOCATION_CODE_START + quest_location_start + 59, AngelicHallway.angel_letter, FlipwitchRegion.angelic_bewitched, QuestItem.angelic_letter),
+    create_location(LOCATION_CODE_START + quest_location_start + 60, FungalForest.heavenly_daikon, FlipwitchRegion.fungal_forest, QuestItem.heavenly_daikon),
+    create_location(LOCATION_CODE_START + quest_location_start + 61, FungalForest.blue_jelly, FlipwitchRegion.deep_fungal, QuestItem.blue_jelly_mushroom),
+    create_location(LOCATION_CODE_START + quest_location_start + 62, FungalForest.fungal_deal, FlipwitchRegion.deep_fungal, QuestItem.deed),
+    create_location(LOCATION_CODE_START + quest_location_start + 63, SlimeCitadel.silky_slime_chest, FlipwitchRegion.slime_citadel, QuestItem.silky_slime),
+    create_location(LOCATION_CODE_START + quest_location_start + 64, SlimeCitadel.silky_slime_stone, FlipwitchRegion.slime_citadel, QuestItem.summon_stone),
+    create_location(LOCATION_CODE_START + quest_location_start + 65, SlimeCitadel.secret_spring_stone, FlipwitchRegion.slime_citadel, QuestItem.summon_stone),
+    create_location(LOCATION_CODE_START + quest_location_start + 66, SlimeCitadel.slurp_stone, FlipwitchRegion.slime_citadel, QuestItem.summon_stone),
+    create_location(LOCATION_CODE_START + quest_location_start + 67, WitchyWoods.waterfall_chest_2, FlipwitchRegion.witch_woods, QuestItem.mimic_chest),
+    create_location(LOCATION_CODE_START + quest_location_start + 68, SpiritTown.home_2, FlipwitchRegion.spirit_town, Key.abandoned_apartment),
+    create_location(LOCATION_CODE_START + quest_location_start + 69, SpiritTown.chaos, FlipwitchRegion.spirit_town, QuestItem.hellish_dango),
 ]
 
 sex_experience_location_start = 550
