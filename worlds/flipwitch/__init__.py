@@ -158,11 +158,12 @@ class FlipwitchWorld(World):
             if self.player == self.hint_lookup[item].location.player:
                 packaged_hints[item] = area + " in this world"
             else:
+                area.replace("REGION_", "")  # I try I guess.
                 while len(area) > 25:
+                    if " " not in area:
+                        break
                     area_array = area.split(" ")
                     area_array = area_array[:-1]
-                    if area_array.count == 0:
-                        break
                     area = " ".join(area_array)
                 if len(area) > 25:
                     area = area[:25]
@@ -187,12 +188,13 @@ class FlipwitchWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.2.0pre1",
+            "client_version": "0.2.0pre2",
             "animal_order": self.animal_order,
             "bunny_order": self.bunny_order,
             "monster_order": self.monster_order,
             "angel_order": self.angel_order,
             "hints": self.packaged_hints,
-            **self.options.as_dict("starting_gender", "shop_prices", "quest_for_sex", "crystal_teleports", "death_link"),
+            **self.options.as_dict("starting_gender", "shopsanity", "shop_prices", "stat_shuffle",
+                                   "gachapon_shuffle", "quest_for_sex", "crystal_teleports", "death_link"),
         }
         return slot_data
