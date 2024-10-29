@@ -96,7 +96,6 @@ class WitchyWoods:
     rundown_chest = add_witchy_woods_location("WW: Rundown House Chest")
     lucky_rundown = add_witchy_woods_location("WW: Above Rundown House")
     before_fairy = add_witchy_woods_location("WW: Before Great Fairy")
-    fairy = add_witchy_woods_location("WW: Rescue Great Fairy")
     man_cave = add_witchy_woods_location("WW: Legs' Business Offer")
     past_man_cave = add_witchy_woods_location("WW: Past Man Cave Chest")
     bomb = add_witchy_woods_location("WW: Gerry G. Atric's Chest")
@@ -108,7 +107,6 @@ class WitchyWoods:
     boss_key_hp = add_witchy_woods_location("WW: Boss Key Room HP Upgrade")
     goblin_queen_mp = add_witchy_woods_location("WW: Goblin Queen MP Upgrade")
     goblin_queen_chaos = add_witchy_woods_location("WW: Goblin Queen Chaos Piece")
-    goblin_queen_crystal = add_witchy_woods_location("WW: Goblin Queen")
     goblin_headshot = add_witchy_woods_location("WW: Gobliana's Headshot")
     post_fight = add_witchy_woods_location("WW: Post Fight Coin")
     fairy_chest = add_witchy_woods_location("WW: Flying Fairy Chest")
@@ -371,7 +369,6 @@ class ChaosCastle:
     jump_chest = add_chaos_castle_location("CC: Big Jump Chest")
     pandora_key = add_chaos_castle_location("CC: Pandora Chaos Sanctum Key")
     pandora_mp = add_chaos_castle_location("CC: Pandora MP Upgrade")
-    chaos = add_chaos_castle_location("CC: Chaos Queen")
 
 
 class Gacha:
