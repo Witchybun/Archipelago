@@ -100,7 +100,6 @@ class FlipwitchRules:
             WitchyWoods.man_cave: lambda state: state.has(QuestItem.goblin_headshot, self.player),
             WitchyWoods.goblin_queen_mp: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.goblin_queen_chaos: lambda state: state.has(Key.goblin_queen, self.player),
-            WitchyWoods.goblin_queen_crystal: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.post_fight: lambda state: state.has(Key.goblin_queen, self.player) and state.has(Power.slime_form, self.player),
             WitchyWoods.fairy_reward: lambda state: state.has(Goal.chaos_piece, self.player),
 
@@ -241,8 +240,7 @@ class FlipwitchRules:
             Quest.help_wanted: lambda state: self.can_complete_quest(state, Quest.booze_bunny) and
                                              self.can_complete_quest(state, Quest.legendary_chewtoy) and
                                              self.can_complete_quest(state, Quest.rat_problem) and
-                                             self.can_complete_quest(state, Quest.haunted_bedroom) and
-                                             self.can_complete_quest(state, Quest.jelly_mushroom),
+                                             self.can_complete_quest(state, Quest.haunted_bedroom),
             Quest.medical_emergency: lambda state: self.can_wear_costume(state, self.world.options, Costume.nurse),
             Quest.let_the_dog_out: lambda state: state.has(Power.ghost_form, self.player) and self.can_present_gender(state, self.world.options, "Female"),
             Quest.stop_democracy: lambda state: self.can_wear_costume(state, self.world.options, Costume.dominating),
