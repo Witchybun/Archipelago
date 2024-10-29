@@ -1,6 +1,11 @@
 from dataclasses import dataclass
+from typing import Protocol, ClassVar
 
 from Options import Toggle, Choice, Range, PerGameCommonOptions
+
+
+class FlipwitchOption(Protocol):
+    internal_name: ClassVar[str]
 
 
 class StartingGender(Choice):
@@ -76,7 +81,8 @@ class QuestForSex(Choice):
 
 class CrystalTeleports(Toggle):
     """Shuffles the crystal teleports other than the starting warp.  Item is obtained by interacting with a teleport panel.
-    Chaos Castle cannot be warped to unless you have six chaos key pieces."""
+    Chaos Castle cannot be warped to unless you have six chaos key pieces.
+    Not Implemented Currently"""
     internal_name = "crystal_teleports"
     display_name = "Crystal Teleports"
 
