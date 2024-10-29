@@ -5,7 +5,7 @@ from BaseClasses import ItemClassification, Item
 from typing import Dict, List, Union, Protocol, Tuple
 
 from worlds.flipwitch import FlipwitchOptions
-from worlds.flipwitch.data.items import FlipwitchItemData, all_items, base_items, gacha_items, filler_items, shop_items, quest_items
+from worlds.flipwitch.data.items import FlipwitchItemData, all_items, base_items, gacha_items, filler_items, shop_items, quest_items, warp_items
 from worlds.flipwitch.strings.items import Coin, Upgrade, Goal, QuestItem, Custom, hint_base_items
 
 logger = logging.getLogger(__name__)
@@ -101,17 +101,18 @@ def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
 def create_gacha_items(item_factory: FlipwitchItemFactory, options: FlipwitchOptions, items: List[Item], random: Random) -> List[Item]:
     if options.gachapon_shuffle == options.gachapon_shuffle.option_off:
         return items
-    fully_randomized = options.gachapon_shuffle == options.gachapon_shuffle.option_all
+    is_fully_randomized = options.gachapon_shuffle == options.gachapon_shuffle.option_all
     lucky_coins_without_promotional = [coin for coin in Coin.lucky_coins if coin != Coin.promotional_coin]
     for item in gacha_items:
         if item.name in lucky_coins_without_promotional:
             items.extend(item_factory(lucky) for lucky in [item.name] * 10)
-        elif fully_randomized:
+        elif item.name == Coin.promotional_coin:
             items.append(item_factory(item.name))
-    if fully_randomized:
-        chosen_additional = random.sample(Coin.lucky_coins, 3)
-        for item in chosen_additional:
-            items.append(item_factory(item))
+        elif is_fully_randomized:
+            items.append(item_factory(item.name))
+    chosen_additional = random.sample(Coin.lucky_coins, 3)
+    for item in chosen_additional:
+        items.append(item_factory(item))
     return items
 
 
@@ -154,6 +155,14 @@ def create_quest_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpt
             misc_item = item_factory(item.name)
             hints_lookup[item.name] = misc_item
             items.append(misc_item)
+    return items
+
+
+def create_warp_items(item_factory: FlipwitchItemFactory, options: FlipwitchOptions, items: List[Item]):
+    if options.crystal_teleports == options.crystal_teleports.option_false:
+        return items
+    for item in warp_items:
+        items.append(item_factory(item.name))
     return items
 
 
