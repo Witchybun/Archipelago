@@ -13,12 +13,12 @@ from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallw
 from .strings.regions_entrances import FlipwitchRegion
 from .strings.items import Goal, Power, Upgrade, Key
 from .strings.locations import Gacha
+from .strings.fake_hints import possible_fakes
 from .items import item_table, complete_items_by_name, create_items
 from .locations import construct_forced_local_items, force_location_table, location_table, get_forced_location_count
 from .regions import link_flipwitch_areas, create_regions
 from .rules import FlipwitchRules
 from worlds.generic.Rules import set_rule
-
 
 logger = logging.getLogger()
 
@@ -78,6 +78,7 @@ class FlipwitchWorld(World):
     angel_order = []
     item_lookup = {}
     hint_lookup = {}
+    necessary_to_do_order: Dict[int, str] = {}
     packaged_hints = {}
 
     def __init__(self, multiworld, player):
@@ -142,13 +143,17 @@ class FlipwitchWorld(World):
     def post_fill(self) -> None:
         self.package_hints()
 
+    def get_groups_for_location(self, location: Location):
+        player_game = self.multiworld.worlds[location.player]
+        return [group for group in player_game.location_name_groups if location.name in player_game.location_name_groups[group] and group != "Everywhere"]
+
     def package_hints(self):
         packaged_hints: Dict[str, str] = {}
         for item in self.hint_lookup:
+            is_junk = self.random.choice(range(101)) < self.options.junk_hint.value
             spot_location = self.hint_lookup[item].location
             player = self.multiworld.player_name[spot_location.player]
-            player_game = self.multiworld.worlds[spot_location.player]
-            possible_spots = [group for group in player_game.location_name_groups if spot_location.name in player_game.location_name_groups[group] and group != "Everywhere"]
+            possible_spots = self.get_groups_for_location(spot_location)
             if len(possible_spots) > 0:
                 area = self.random.choice(possible_spots)
             else:
@@ -156,7 +161,7 @@ class FlipwitchWorld(World):
                 if area == "Menu":
                     area = "some area"
             if self.player == self.hint_lookup[item].location.player:
-                packaged_hints[item] = area + " in this world"
+                self.write_hint(item, area + " in this world", is_junk, packaged_hints)
             else:
                 area.replace("REGION_", "")  # I try I guess.
                 while len(area) > 25:
@@ -168,8 +173,32 @@ class FlipwitchWorld(World):
                 if len(area) > 25:
                     area = area[:25]
                 modified_player = player.replace("[", "(").replace("]", ")")
-                packaged_hints[item] = area + " in " + modified_player + "'s world"
+                self.write_hint(item, area + " in " + modified_player + "'s world", is_junk, packaged_hints)
         self.packaged_hints = packaged_hints
+
+        for sphere in self.multiworld.get_spheres():
+            for location in sphere:
+                if location.player != self.player or not location.item.advancement:
+                    continue
+                if location.name == "Defeat the Chaos Queen":
+                    self.necessary_to_do_order[-100] = "I see the Chaos Queen's face.  It is time to face her and be victorious!"
+                    break
+                else:
+                    possible_groups = self.get_groups_for_location(location)
+                    chosen_candidate = self.random.choice(possible_groups)
+                    player_id = location.item.player
+                    if self.player == player_id:
+                        player = "yourself"
+                    else:
+                        player = "one named " + self.multiworld.player_name[player_id]
+                    self.necessary_to_do_order[location.address] = "I sense something within [COLOR:YELLOW]" + chosen_candidate + "[COLOR:WHITE], an item for " + player + ".  What it is, I cannot make out, but it seems vital."
+
+    def write_hint(self, item: str, message, is_junk: bool, hint_package: Dict[str, str]):
+        if is_junk:
+            hint_package[item] = self.random.choice(possible_fakes)
+        else:
+            hint_package[item] = message
+        return hint_package
 
     def determine_gacha_order(self, random: Random):
         bunny_order = Gacha.bunny_gacha.copy()
@@ -188,12 +217,13 @@ class FlipwitchWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.2.0pre2",
+            "client_version": "0.2.0pre4",
             "animal_order": self.animal_order,
             "bunny_order": self.bunny_order,
             "monster_order": self.monster_order,
             "angel_order": self.angel_order,
             "hints": self.packaged_hints,
+            "path": self.necessary_to_do_order,
             **self.options.as_dict("starting_gender", "shopsanity", "shop_prices", "stat_shuffle",
                                    "gachapon_shuffle", "quest_for_sex", "crystal_teleports", "death_link"),
         }
