@@ -87,6 +87,15 @@ class CrystalTeleports(Toggle):
     display_name = "Crystal Teleports"
 
 
+class JunkHint(Range):
+    """Percent chance an in-game hint is a junk hint."""
+    internal_name = "junk_hint"
+    display_name = "Junk Hint Percent"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
 class FuckLink(Toggle):
     """When you get fucked, everyone gets fucked (or dies, I suppose). Of course the reverse is true too."""
     display_name = "FuckLink"
@@ -102,4 +111,5 @@ class FlipwitchOptions(PerGameCommonOptions):
     gachapon_shuffle: GachaponShuffle
     quest_for_sex: QuestForSex
     crystal_teleports: CrystalTeleports
+    junk_hint: JunkHint
     death_link: FuckLink
