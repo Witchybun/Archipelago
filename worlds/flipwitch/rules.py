@@ -101,7 +101,7 @@ class FlipwitchRules:
             WitchyWoods.goblin_queen_mp: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.goblin_queen_chaos: lambda state: state.has(Key.goblin_queen, self.player),
             WitchyWoods.post_fight: lambda state: state.has(Key.goblin_queen, self.player) and state.has(Power.slime_form, self.player),
-            WitchyWoods.fairy_reward: lambda state: state.has(Goal.chaos_piece, self.player),
+            WitchyWoods.fairy_reward: lambda state: state.can_reach_location(WitchyWoods.goblin_queen_chaos, self.player),
 
             SpiritTown.city_hp: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
             SpiritTown.city_mp: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
