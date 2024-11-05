@@ -143,7 +143,7 @@ shop_items = [
     create_item(ITEM_CODE_START + shop_item_id + 7, Power.ring_of_the_sun, ItemClassification.useful),
     create_item(ITEM_CODE_START + shop_item_id + 8, Power.slime_sentry, ItemClassification.useful),
     create_item(ITEM_CODE_START + shop_item_id + 9, Power.haunted_scythe, ItemClassification.useful),
-    create_item(ITEM_CODE_START + shop_item_id + 10, Accessory.fortune_cat, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + shop_item_id + 10, Accessory.fortune_cat, ItemClassification.useful),
     create_item(ITEM_CODE_START + shop_item_id + 11, Accessory.heart_necklace, ItemClassification.useful),
     create_item(ITEM_CODE_START + shop_item_id + 12, Accessory.star_bracelet, ItemClassification.useful),
     create_item(ITEM_CODE_START + shop_item_id + 13, Accessory.cursed_talisman, ItemClassification.useful),
