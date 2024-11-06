@@ -59,7 +59,13 @@ def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
             continue
         elif item.name == Upgrade.bewitched_bubble and (options.quest_for_sex == options.quest_for_sex.option_off or options.quest_for_sex == options.quest_for_sex.option_sensei):
             continue
-        elif item.name == Upgrade.health or item.name == Upgrade.mana:
+        elif item.name == Upgrade.health:
+            if options.stat_shuffle == options.stat_shuffle.option_false:
+                continue
+            upgrade_name = item.name
+            items.extend([item_factory(stat, ItemClassification.progression | ItemClassification.useful) for stat in [upgrade_name]*8])
+            items.extend([item_factory(stat) for stat in [upgrade_name]*2])
+        elif item.name == Upgrade.mana:
             if options.stat_shuffle == options.stat_shuffle.option_false:
                 continue
             upgrade_name = item.name
@@ -67,7 +73,8 @@ def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
         elif item.name == Upgrade.peachy_peach:
             if options.quest_for_sex == options.quest_for_sex.option_off:
                 continue
-            items.extend([item_factory(peach) for peach in [Upgrade.peachy_peach]*11])
+            items.extend([item_factory(peach, ItemClassification.progression | ItemClassification.useful) for peach in [Upgrade.peachy_peach]*8])
+            items.extend([item_factory(peach) for peach in [Upgrade.peachy_peach]*3])
         elif item.name == Upgrade.wand:
             if options.quest_for_sex == options.quest_for_sex.option_off:
                 continue

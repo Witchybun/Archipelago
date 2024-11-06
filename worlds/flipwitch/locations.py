@@ -6,7 +6,7 @@ from . import FlipwitchOptions
 from .data.items import item_name_to_item
 from .data.locations import all_locations, gacha_locations, FlipwitchLocation, coin_locations, shop_locations, quest_locations, sex_experience_locations, \
     stat_locations
-from .strings.items import Goal, Coin
+from .strings.items import Goal, Coin, Upgrade
 from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi
 
 location_table = all_locations
@@ -119,16 +119,26 @@ def create_quest_locations(player: int, item_repository: Dict[str, int], lookup_
         location.place_locked_item(created_item)
     if options.quest_for_sex == options.quest_for_sex.option_sensei:
         return
+    count = 0
     for location in lookup_table["Sex Experience Locations"]:
         static_item_name = locations_by_name[location.name].forced_off_item
-        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
+        if count < 8 and static_item_name == Upgrade.peachy_peach:
+            created_item = Item(static_item_name, ItemClassification.progression | ItemClassification.useful, item_repository[static_item_name], player)
+            count += 1
+        else:
+            created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
         location.place_locked_item(created_item)
 
 
 def create_stat_locations(player: int, item_repository: Dict[str, int], lookup_table: Dict[str, List[Location]], options: FlipwitchOptions):
     if options.stat_shuffle == options.stat_shuffle.option_true:
         return
+    count = 0
     for location in lookup_table["Stat Locations"]:
         static_item_name = locations_by_name[location.name].forced_off_item
-        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
+        if count < 8 and static_item_name == Upgrade.health:
+            created_item = Item(static_item_name, ItemClassification.progression | ItemClassification.useful, item_repository[static_item_name], player)
+            count += 1
+        else:
+            created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
         location.place_locked_item(created_item)
