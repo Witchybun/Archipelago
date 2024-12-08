@@ -46,17 +46,18 @@ class LunacidRules:
             LunacidRegion.chamber_of_fate: lambda state: state.has_all({UniqueItem.earth_talisman, UniqueItem.water_talisman}, self.player),
             LunacidRegion.sealed_ballroom_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidRegion.vampire_tomb: lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state),
-            LunacidRegion.mausoleum: lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state),
             LunacidRegion.sand_temple: lambda state: self.has_key_to_switch(state, Switch.grotto_valves_switches, self.world.options),
             LunacidRegion.terminus_prison_dark: lambda state: self.has_light_source(state) and
                                                               (self.has_key_to_switch(state, Switch.prison_shortcut_switch, self.world.options) or
                                                                state.has(Spell.icarian_flight, self.player)),
             LunacidRegion.terminus_prison_upstairs: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             LunacidRegion.throne_chamber: lambda state: self.can_defeat_the_prince(state),
-            LunacidRegion.tower_abyss: lambda state: self.has_door_key(Door.tower_key, state, self.world.options),
         }
 
         self.entrance_rules = {
+
+            LunacidEntrance.tomb_to_mausoleum: lambda state: self.has_element_access([Elements.light, Elements.dark_and_light], state),
+            LunacidEntrance.tower_abyss_to_5: lambda state: self.has_door_key(Door.tower_key, state, self.world.options),
             LunacidEntrance.basin_to_temple: lambda state: self.has_keys_for_basin_door(state, self.world.options) and self.has_light_source(state),
             REVERSE(LunacidEntrance.basin_to_temple): lambda state: self.has_keys_for_basin_door(state, self.world.options),
             LunacidEntrance.temple_entrance_to_temple_interior: lambda state: self.has_key_to_switch(state, Switch.temple_switch, self.world.options),
@@ -183,6 +184,7 @@ class LunacidRules:
             BaseLocation.yosei_hanging_in_trees: lambda state: state.has_any(ranged_weapons, self.player),
             BaseLocation.yosei_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.yosei_room_defended_by_blood_plant: lambda state: self.has_blood_spell_access(state),
+            BaseLocation.sea_kill_jotunn: lambda state: self.can_buy_jotunn(self.world.options, state),
             BaseLocation.yosei_blood_plant_insides: lambda state: self.has_blood_spell_access(state),
             BaseLocation.castle_cell_center: lambda state: self.has_element_access(Elements.fire, state),
             BaseLocation.castle_upper_floor_coffin_double: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3) and
@@ -569,7 +571,7 @@ class LunacidRules:
     def has_coins_for_door(self, options: LunacidOptions, state: CollectionState):
         return state.has(Coins.strange_coin, self.player, options.required_strange_coin.value)
 
-    def has_black_book_count(self, options: LunacidOptions, state: CollectionState, amount: int):
+    def has_black_book_count(self, options: LunacidOptions, state: CollectionState, amount: int) -> bool:
         if options.dropsanity == options.dropsanity.option_off:
             can_reach_battle = state.can_reach_region(LunacidRegion.holy_battleground, self.player)
             if amount == 1:
@@ -614,12 +616,13 @@ class LunacidRules:
             return state.has(weapon, self.player)
         return False
 
-    def can_kill_death(self, state: CollectionState, options: LunacidOptions):
+    def can_kill_death(self, state: CollectionState, options: LunacidOptions) -> bool:
+        death_rule = False
         if options.etnas_pupil == options.etnas_pupil.option_true:
-            return state.has(Weapon.limbo, self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player),
+            return state.has(Weapon.limbo, self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player)
 
         return state.has_all({Alchemy.fractured_life, Alchemy.fractured_death, Alchemy.broken_sword},
-                             self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player),
+                             self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player)
 
     def can_obtain_alchemy_item(self, alchemy_item: str, state: CollectionState, options: LunacidOptions):
         if options.dropsanity == options.dropsanity.option_randomized:
