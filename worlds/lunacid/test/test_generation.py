@@ -5,7 +5,6 @@ from typing import Set
 from BaseClasses import CollectionState, MultiWorld, Item, ItemClassification
 from . import LunacidTestBase, setup_solo_multiworld, LunacidTestCase
 from .. import Endings, Options, Weapon
-from ..Items import item_table
 from ..Locations import location_table
 from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions
 from ..data.enemy_data import all_enemies_by_name
@@ -395,6 +394,10 @@ class DropsanityAllTestsWithKeys(LunacidTestBase):
         self.collect_by_name(Door.basin_broken_steps)
         self.assertTrue(self.can_reach_location(DropLocation.necronomicon_5c))
 
+    def test_tower_locations_need_key(self):
+        self.collect_all_but(Door.tower_key)
+        self.assertFalse(self.can_reach_location(BaseLocation.abyss_floor_5))
+
 
 class QuenchsanityTestBasicQuench(LunacidTestBase):
     options = {"quenchsanity": "true"}
@@ -407,6 +410,21 @@ class QuenchsanityTestBasicQuench(LunacidTestBase):
             print("Found a case where this returned false but the starting weapon was the weapon itself.")
             return
         self.assertTrue(self.can_reach_location(Quench.replica_sword))
+
+    def test_if_cant_quench_death_scythe(self):
+        self.assertFalse(self.can_reach_location(Quench.scythe))
+        self.assertTrue(self.can_reach_region(LunacidRegion.wings_rest))
+        self.assertFalse(self.can_reach_region(LunacidRegion.accursed_tomb))
+        self.collect_by_name(Weapon.torch)
+        self.assertTrue(self.can_reach_region(LunacidRegion.accursed_tomb))
+        self.assertFalse(self.can_reach_region(LunacidRegion.mausoleum))
+        self.collect_by_name(Spell.lightning)
+        self.assertTrue(self.can_reach_region(LunacidRegion.mausoleum))
+        self.assertFalse(self.can_reach_location(Quench.scythe))
+        self.collect_by_name(Alchemy.fractured_death)
+        self.collect_by_name(Alchemy.fractured_life)
+        self.collect_by_name(Alchemy.broken_sword)
+        self.assertTrue(self.can_reach_location(Quench.scythe))
 
 
 class EtnasPupilTestNoDrops(LunacidTestBase):

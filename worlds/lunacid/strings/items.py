@@ -161,12 +161,6 @@ class Door:
     tower_key = "Tower of Abyss Keyring"
     musical_key = "Ashen Doors Keyring"
 
-    doors_no_tower = [basin_temple_sewers, basin_broken_steps, basin_rickety_bridge, chasm_surface_door,
-                      ballroom_rooms_key, sleeper_key, sucsarian_key, ash_key, burning_key, forlorn_key,
-                      prison_key, ballroom_key, throne_key, archives_sealed_door, sea_double_doors,
-                      sea_eastward, sea_westward, forest_patchouli, forest_door_in_trees, musical_key
-                      ]
-
     all_door_keys = [basin_temple_sewers, basin_broken_steps, basin_rickety_bridge, chasm_surface_door,
                      ballroom_rooms_key, sleeper_key, sucsarian_key, ash_key, burning_key, forlorn_key,
                      prison_key, ballroom_key, throne_key, archives_sealed_door, sea_double_doors,
