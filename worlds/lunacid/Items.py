@@ -134,7 +134,7 @@ def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[
     for item in Spell.base_spells:
         if all_spell_info_by_name[item].style == Types.support:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
-        elif [item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
+        elif equipment_by_elements[item] in [Elements.light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire, Elements.dark_and_light]:
             items.append(item_factory(item, ItemClassification.progression))
         elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_spells:
             items.append(item_factory(item, ItemClassification.progression))
