@@ -366,7 +366,7 @@ class LunacidWorld(World):
         item_spots = self.important_item_locations()
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.8.4",
+            "client_version": "0.8.6",
             "rolled_month": self.rolled_month,
             "elements": self.weapon_elements,
             "created_class_name": self.custom_class_name,
