@@ -214,7 +214,26 @@ consistent_entrances = [
 ]
 
 
-def create_regions(region_factory: RegionFactory, random: Random, options) -> Tuple[Dict[str, Region], Dict[str, str]]:
+def reconstruct_connection_list(randomized_data: dict[str, str]):
+    reconstructed_list: Dict[ConnectionData, ConnectionData] = {}
+    for connection in randomized_data:
+        starting_position = find_suitable_connection_data(connection)
+        if starting_position is None:
+            continue
+        final_position = find_suitable_connection_data(randomized_data[connection])
+        reconstructed_list[starting_position] = final_position
+    return reconstructed_list
+
+
+def find_suitable_connection_data(connection_name: str):
+    for connection in consistent_entrances:
+        if connection.name != connection_name:
+            continue
+        return connection
+    return None
+
+
+def create_regions(region_factory: RegionFactory, random: Random, options, established_randomized_data: Dict[str, str] = None) -> Tuple[Dict[str, Region], Dict[str, str]]:
     final_regions = consistent_regions
     regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in
                                   final_regions}
@@ -223,7 +242,11 @@ def create_regions(region_factory: RegionFactory, random: Random, options) -> Tu
                                       for entrance in region.exits}
 
     regions_by_name: Dict[str, RegionData] = {region.name: region for region in final_regions}
-    connections, randomized_data = randomize_connections(random, options, regions_by_name)
+    if established_randomized_data is None:
+        connections, randomized_data = randomize_connections(random, options, regions_by_name)
+    else:
+        connections = collect_connections_to_randomize(options)
+        randomized_data = reconstruct_connection_list(established_randomized_data)
 
     for connection in connections:
         if connection.name in entrances:
@@ -232,13 +255,19 @@ def create_regions(region_factory: RegionFactory, random: Random, options) -> Tu
     return regions, randomized_data
 
 
-def randomize_connections(random: Random, options, regions_by_name) -> Tuple[List[ConnectionData], Dict[str, str]]:
+def collect_connections_to_randomize(options):
     connections_to_randomize = []
     final_connections = consistent_entrances
-    connections_by_name: Dict[str, ConnectionData] = {connection.name: connection for connection in final_connections}
     if options.entrance_randomization == options.entrance_randomization.option_true:
         connections_to_randomize = [connection for connection in final_connections if
                                     RandomizationFlag.RANDOMIZED in connection.flag]
+    return connections_to_randomize
+
+
+def randomize_connections(random: Random, options, regions_by_name) -> Tuple[List[ConnectionData], Dict[str, str]]:
+    final_connections = consistent_entrances
+    connections_by_name: Dict[str, ConnectionData] = {connection.name: connection for connection in final_connections}
+    connections_to_randomize = collect_connections_to_randomize(options)
 
     random.shuffle(connections_to_randomize)
     destination_pool = list(connections_to_randomize)
@@ -248,9 +277,13 @@ def randomize_connections(random: Random, options, regions_by_name) -> Tuple[Lis
     add_non_randomized_connections(final_connections, connections_to_randomize, randomized_connections)
 
     swap_connections_until_valid(regions_by_name, connections_by_name, randomized_connections, connections_to_randomize, random)
+
+    return package_connections(connections_to_randomize, randomized_connections)
+
+
+def package_connections(connections_to_randomize: List[ConnectionData], randomized_connections: Dict[ConnectionData, ConnectionData]):
     randomized_connections_for_generation = create_connections_for_generation(randomized_connections)
     randomized_data_for_mod = create_data_for_mod(randomized_connections, connections_to_randomize)
-
     return randomized_connections_for_generation, randomized_data_for_mod
 
 
