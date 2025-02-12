@@ -124,6 +124,7 @@ class LunacidWorld(World):
 
     def set_rules(self):
         LunacidRules(self).set_lunacid_rules(self.weapon_elements, self.enemy_regions)
+        self.explicit_indirect_conditions = False
 
     def create_items(self):
         locations_count = len([location
