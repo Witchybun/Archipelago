@@ -98,9 +98,12 @@ class LunacidWorld(World):
     custom_class_stats: Dict[str, int] = {}
     web = LunacidWeb()
     logger = logging.getLogger()
-    seed: int
-    rand: Random
     explicit_indirect_conditions = False
+
+    def __init__(self, multiworld, player):
+        super(LunacidWorld, self).__init__(multiworld, player)
+        self.seed = getattr(multiworld, "re_gen_passthrough", {}).get("Lunacid", self.random.getrandbits(64))
+        self.random = Random(self.seed)
 
     def generate_early(self) -> None:
         # Universal tracker stuff, shouldn't do anything in standard gen
@@ -115,10 +118,6 @@ class LunacidWorld(World):
                 self.options.door_locks.value = passthrough["door_locks"]
                 self.options.switch_locks.value = passthrough["switch_locks"]
                 self.options.secret_door_lock.value = passthrough["secret_door_lock"]
-                self.seed = passthrough["seed"]
-        else:
-            self.seed = self.random.randrange(1000000000)
-        self.rand = Random(self.seed)
         self.package_custom_class()
         self.verify_item_colors()
         self.enemy_random_data, self.enemy_regions = self.randomize_enemies()
@@ -135,7 +134,7 @@ class LunacidWorld(World):
         return Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.rand.choice(all_filler_items)
+        return self.random.choice(all_filler_items)
 
     def set_rules(self):
         LunacidRules(self).set_lunacid_rules(self.weapon_elements, self.enemy_regions)
@@ -143,13 +142,13 @@ class LunacidWorld(World):
 
     def create_items(self):
         locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player)if location.item is None]) - 1
+                               for location in self.multiworld.get_locations(self.player) if location.item is None]) - 1
         if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
             locations_count -= 80
         excluded_items = self.multiworld.precollected_items[self.player]
-        self.weapon_elements = determine_weapon_elements(self.options, self.rand)
+        self.weapon_elements = determine_weapon_elements(self.options, self.random)
         (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.rolled_month,
-                                                                self.options, self.rand)
+                                                                self.options, self.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
@@ -167,7 +166,7 @@ class LunacidWorld(World):
             lunacid_region.exits = [Entrance(player, exit_name, lunacid_region) for exit_name in exits]
             return lunacid_region
 
-        world_regions, self.randomized_entrances = create_regions(create_region, self.rand, self.options)
+        world_regions, self.randomized_entrances = create_regions(create_region, self.random, self.options)
         locations = create_locations(self.options, self.rolled_month)
         for location in locations:
             name = location.name
@@ -216,22 +215,22 @@ class LunacidWorld(World):
         def package_custom_class_stat(stat: str, minimum: int, maximum: int) -> None:
             stat_data = min(maximum, self.options.custom_class.get(stat, -1))
             if stat_data == -1:
-                self.custom_class_stats[stat] = self.rand.randrange(minimum, maximum)
+                self.custom_class_stats[stat] = self.random.randrange(minimum, maximum)
             else:
                 self.custom_class_stats[stat] = max(minimum, stat_data)
 
         name = self.options.custom_class.get("Name", "RANDOM")
         description = self.options.custom_class.get("Description", "RANDOM")
         if name == "RANDOM" and description == "RANDOM":
-            chosen_class = self.rand.choice(list(all_classes.keys()))
+            chosen_class = self.random.choice(list(all_classes.keys()))
             self.custom_class_name = chosen_class
             self.custom_class_description = all_classes[chosen_class]
         elif name == "RANDOM":
-            chosen_class = self.rand.choice(list(all_classes.keys()))
+            chosen_class = self.random.choice(list(all_classes.keys()))
             self.custom_class_name = chosen_class
             self.custom_class_description = description
         elif description == "RANDOM":
-            chosen_class = self.rand.choice(list(all_classes.keys()))
+            chosen_class = self.random.choice(list(all_classes.keys()))
             self.custom_class_name = name
             self.custom_class_description = all_classes[chosen_class]
         else:
@@ -283,7 +282,7 @@ class LunacidWorld(World):
         enemy_to_enemy_placement = {}
         if self.options.enemy_randomization == self.options.enemy_randomization.option_true:
             for enemy_data in base_enemy_placement:
-                picked_enemy = self.rand.choice(Enemy.randomizable_enemies)
+                picked_enemy = self.random.choice(Enemy.randomizable_enemies)
                 new_data = EnemyPlacement(enemy_data.scene, enemy_data.group_name, enemy_data.child_id, picked_enemy, enemy_data.region)
                 if picked_enemy not in chosen_enemies:
                     chosen_enemies.append(picked_enemy)
@@ -300,8 +299,8 @@ class LunacidWorld(World):
                 acceptable_enemies = [enemy for enemy in enemy_counts if enemy_counts[enemy] > 1]
                 for checked_enemy in Enemy.randomizable_enemies:
                     if checked_enemy not in chosen_enemies:
-                        random_enemy = self.rand.choice(acceptable_enemies)
-                        random_data = self.rand.choice(enemy_to_enemy_placement[random_enemy])
+                        random_enemy = self.random.choice(acceptable_enemies)
+                        random_data = self.random.choice(enemy_to_enemy_placement[random_enemy])
                         enemy_to_enemy_placement[random_enemy].remove(random_data)
                         randomized_enemy_placement.remove(random_data)
                         enemy_counts[random_enemy] -= 1
@@ -326,7 +325,7 @@ class LunacidWorld(World):
                 alchemy_items.append(Item(alchemy_item, ItemClassification.progression | ItemClassification.useful, self.item_name_to_id[alchemy_item], self.player))
             alchemy_items *= 5  # make sure there's enough of them to go around
             repeat_locations = [location for location in self.multiworld.get_locations(self.player) if location.name in all_drops]
-            self.rand.shuffle(repeat_locations)
+            self.random.shuffle(repeat_locations)
             fill_restrictive(self.multiworld, state, repeat_locations, alchemy_items,
                              single_player_placement=True, lock=True, allow_excluded=True)
 
