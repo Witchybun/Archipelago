@@ -1,7 +1,8 @@
 from typing import List
 
 from . import LunacidOptions
-from .data.location_data import (all_locations, base_locations, shop_locations, unique_drop_locations, other_drop_locations, quench_locations, alchemy_locations,
+from .data.location_data import (all_locations, base_locations, shop_locations, unique_drop_locations,
+                                 other_drop_locations, quench_locations, alchemy_locations,
                                  LunacidLocation, spooky_locations, crimpus_locations)
 from .strings.locations import SpookyLocation
 
@@ -28,7 +29,7 @@ def create_base_locations(locations: List[LunacidLocation]) -> List[LunacidLocat
 
 
 def create_shop_locations(options: LunacidOptions, locations: List[LunacidLocation]) -> List[LunacidLocation]:
-    if options.shopsanity == options.shopsanity.option_false:
+    if not options.shopsanity:
         return locations
     for location in shop_locations:
         locations.append(location)
@@ -36,7 +37,7 @@ def create_shop_locations(options: LunacidOptions, locations: List[LunacidLocati
 
 
 def create_drop_locations(options: LunacidOptions, locations: List[LunacidLocation]) -> List[LunacidLocation]:
-    if options.dropsanity == options.dropsanity.option_off:
+    if not options.dropsanity:
         return locations
     for location in unique_drop_locations:
         locations.append(location)
@@ -47,7 +48,7 @@ def create_drop_locations(options: LunacidOptions, locations: List[LunacidLocati
 
 
 def create_quench_locations(options: LunacidOptions, locations: List[LunacidLocation]) -> List[LunacidLocation]:
-    if options.quenchsanity == options.quenchsanity.option_false:
+    if not options.quenchsanity:
         return locations
     for location in quench_locations:
         locations.append(location)
@@ -55,7 +56,7 @@ def create_quench_locations(options: LunacidOptions, locations: List[LunacidLoca
 
 
 def create_alchemy_locations(options: LunacidOptions, locations: List[LunacidLocation]) -> List[LunacidLocation]:
-    if options.etnas_pupil == options.etnas_pupil.option_false:
+    if not options.etnas_pupil:
         return locations
     for location in alchemy_locations:
         locations.append(location)
@@ -66,7 +67,7 @@ def create_spooky_locations(options: LunacidOptions, month: int, locations: List
     if month != 10:
         return locations
     for location in spooky_locations:
-        if location.name == SpookyLocation.headless_horseman and options.dropsanity == options.dropsanity.option_off:
+        if location.name == SpookyLocation.headless_horseman and not options.dropsanity:
             continue
         locations.append(location)
     return locations
@@ -78,4 +79,3 @@ def create_crimpus_locations(month: int, locations: List[LunacidLocation]) -> Li
     for location in crimpus_locations:
         locations.append(location)
     return locations
-
