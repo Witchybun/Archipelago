@@ -41,7 +41,7 @@ class LunacidWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Albrekka", "Tesseract (Advice/Direction)"]
+        ["Albrekka", "Tesseract (Advice/Direction)", "Scipio (UT Help)"]
     )]
 
 
