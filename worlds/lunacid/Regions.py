@@ -365,7 +365,7 @@ def swap_one_connection(regions_by_name, connections_by_name, randomized_connect
     randomized_connections_already_shuffled = {connection: randomized_connections[connection]
                                                for connection in randomized_connections
                                                if connection != randomized_connections[connection]}
-    unreachable_regions_names_leading_somewhere = tuple([region for region in unreachable_regions
+    unreachable_regions_names_leading_somewhere = tuple([region for region in sorted(unreachable_regions)
                                                          if len(regions_by_name[region].exits) > 0])
     unreachable_regions_leading_somewhere = [regions_by_name[region_name] for region_name in unreachable_regions_names_leading_somewhere]
     unreachable_regions_exits_names = [exit_name for region in unreachable_regions_leading_somewhere for exit_name in region.exits]
