@@ -21,7 +21,7 @@ def link_lunacid_areas(world: MultiWorld, player: int):
         world.get_entrance(entrance, player).connect(world.get_region(region, player))
 
 
-def REVERSE(connection: str):
+def REVERSE(connection: str) -> str:
     connection_array = connection.split(" to ")
     return connection_array[1] + " to " + connection_array[0]
 
@@ -31,7 +31,7 @@ class RegionData:
     name: str
     exits: List[str] = field(default_factory=list)
 
-    def get_merged_with(self, exits: List[str]):
+    def get_merged_with(self, exits: List[str] | None):
         merged_exits = []
         merged_exits.extend(self.exits)
         if exits is not None:
@@ -214,7 +214,7 @@ consistent_entrances = [
 ]
 
 
-def reconstruct_connection_list(randomized_data: dict[str, str]):
+def reconstruct_connection_list(randomized_data: dict[str, str]) -> dict[ConnectionData, ConnectionData]:
     reconstructed_list: Dict[ConnectionData, ConnectionData] = {}
     for connection in randomized_data:
         starting_position = find_suitable_connection_data(connection)
@@ -225,7 +225,7 @@ def reconstruct_connection_list(randomized_data: dict[str, str]):
     return reconstructed_list
 
 
-def find_suitable_connection_data(connection_name: str):
+def find_suitable_connection_data(connection_name: str) -> ConnectionData | None:
     for connection in consistent_entrances:
         if connection.name != connection_name:
             continue
