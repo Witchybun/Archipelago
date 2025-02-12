@@ -451,22 +451,23 @@ class LunacidRules:
             SpookyLocation.spooky_spell: lambda state: state.has(SpookyItem.soul_candy, self.player, 35),
         }
 
-    def is_vampire(self, options: LunacidOptions):
+    @staticmethod
+    def is_vampire(options: LunacidOptions) -> bool:
         return options.starting_class == options.starting_class.option_vampire
 
-    def can_reach_any_region(self, state: CollectionState, spots: List[str]):
+    def can_reach_any_region(self, state: CollectionState, spots: List[str]) -> bool:
         for spot in spots:
             if state.can_reach_region(spot, self.player):
                 return True
         return False
 
-    def can_reach_all_regions(self, state: CollectionState, spots: List[str]):
+    def can_reach_all_regions(self, state: CollectionState, spots: List[str]) -> bool:
         all_rule = True
         for spot in spots:
             all_rule = all_rule and state.can_reach_region(spot, self.player)
         return all_rule
 
-    def can_reach_location(self, state: CollectionState, spot: str):
+    def can_reach_location(self, state: CollectionState, spot: str) -> bool:
         return state.can_reach(spot, "Location", self.player)
 
     def can_jump_given_height(self, state: CollectionState, height: str, options: LunacidOptions) -> bool:
@@ -475,7 +476,7 @@ class LunacidRules:
         elif height == "Medium":
             medium_spells = {Spell.barrier, Spell.icarian_flight, Spell.coffin, Spell.rock_bridge}
             movement_item_rule = True
-            if options.dropsanity != options.dropsanity.option_off:
+            if options.dropsanity:
                 medium_spells.add(MobSpell.summon_snail)
             return state.has_any(medium_spells, self.player) & movement_item_rule
         else:
@@ -483,24 +484,28 @@ class LunacidRules:
             return state.has_any(high_spells, self.player)
 
     def has_door_key(self, key: str, state: CollectionState, options: LunacidOptions) -> bool:
-        return options.door_locks == options.door_locks.option_false or state.has(key, self.player)
+        return not options.door_locks or state.has(key, self.player)
 
     def has_light_source(self, state: CollectionState) -> bool:
         sources = base_light_sources.copy()
         sources.extend(source for source in shop_light_sources)
         return state.has_any(sources, self.player)
 
-    def can_level_reasonably(self, state: CollectionState):
-        can_you = self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_2, LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
-                                                    LunacidRegion.sealed_ballroom, LunacidRegion.fetid_mire, LunacidRegion.forest_canopy,
-                                                    LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_white, LunacidRegion.castle_le_fanu_red,
-                                                    LunacidRegion.sanguine_sea, LunacidRegion.terminus_prison, LunacidRegion.temple_of_silence_secret])
+    def can_level_reasonably(self, state: CollectionState) -> bool:
+        can_you = self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_2,
+                                                    LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
+                                                    LunacidRegion.sealed_ballroom, LunacidRegion.fetid_mire,
+                                                    LunacidRegion.forest_canopy, LunacidRegion.forlorn_arena,
+                                                    LunacidRegion.castle_le_fanu_white,
+                                                    LunacidRegion.castle_le_fanu_red, LunacidRegion.sanguine_sea,
+                                                    LunacidRegion.terminus_prison,
+                                                    LunacidRegion.temple_of_silence_secret])
         return can_you
 
-    def has_spell(self, spell: str, state: CollectionState):
+    def has_spell(self, spell: str, state: CollectionState) -> bool:
         return state.has(spell, self.player)
 
-    def has_all_spells(self, spells: List[str], state: CollectionState):
+    def has_all_spells(self, spells: List[str], state: CollectionState) -> bool:
         return state.has_all(spells, self.player)
 
     def has_every_spell(self, state: CollectionState, options: LunacidOptions, starting_weapon: str = None) -> bool:
@@ -509,9 +514,10 @@ class LunacidRules:
             every_spell.remove(starting_weapon)
         mob_spell_regions = [LunacidRegion.forlorn_arena, LunacidRegion.castle_le_fanu_red, LunacidRegion.castle_le_fanu_white,
                              LunacidRegion.terminus_prison_dark,
-                             LunacidRegion.labyrinth_of_ash, LunacidRegion.boiling_grotto, LunacidRegion.forbidden_archives_3, LunacidRegion.sand_temple,
+                             LunacidRegion.labyrinth_of_ash, LunacidRegion.boiling_grotto,
+                             LunacidRegion.forbidden_archives_3, LunacidRegion.sand_temple,
                              LunacidRegion.temple_of_silence_interior, LunacidRegion.sealed_ballroom]
-        if options.dropsanity == options.dropsanity.option_off:
+        if not options.dropsanity:
             every_spell = Spell.base_spells
             return self.has_all_spells(every_spell, state) and self.can_reach_all_regions(state, mob_spell_regions)
         else:
@@ -526,9 +532,9 @@ class LunacidRules:
         return state.has_any(blood_spells, self.player)
 
     def has_keys_for_basin_door(self, state: CollectionState, options: LunacidOptions) -> bool:
-        if options.shopsanity == options.shopsanity.option_false:
+        if not options.shopsanity:
             return True
-        if options.entrance_randomization == options.entrance_randomization.option_true:
+        if options.entrance_randomization:
             return state.has(UniqueItem.enchanted_key, self.player, 2)
         else:
             return state.has(UniqueItem.enchanted_key, self.player)
@@ -539,7 +545,7 @@ class LunacidRules:
         return state.has(UniqueItem.enchanted_key, self.player, 2)
 
     def has_key_to_switch(self, state: CollectionState, key: str, options: LunacidOptions) -> bool:
-        return options.switch_locks == options.switch_locks.option_false or state.has(key, self.player)
+        return not options.switch_locks or state.has(key, self.player)
 
     def has_all_keys_to_switch(self, state: CollectionState, keys: List[str], options: LunacidOptions) -> bool:
         rule = True
@@ -548,17 +554,17 @@ class LunacidRules:
         return rule
 
     def has_crystal_orb(self, state: CollectionState, options: LunacidOptions) -> bool:
-        if options.secret_door_lock == options.secret_door_lock.option_false:
+        if not options.secret_door_lock:
             return True
         return state.has(UniqueItem.dusty_crystal_orb, self.player)
 
-    def has_element_access(self, element: str | List[str], state: CollectionState):
+    def has_element_access(self, element: str | List[str], state: CollectionState) -> bool:
         if isinstance(element, str):
             element = [element]
         element_options = [item for item in self.elements if self.elements[item] in element]
         return state.has_any(element_options, self.player) or state.has(Weapon.wand_of_power, self.player)
 
-    def has_ranged_element_access(self, element: str | List[str], state: CollectionState):
+    def has_ranged_element_access(self, element: str | List[str], state: CollectionState) -> bool:
         if isinstance(element, str):
             element = [element]
         ranged_options = [item for item in ranged_weapons]
@@ -566,11 +572,11 @@ class LunacidRules:
         element_options = [item for item in self.elements if self.elements[item] in element and item in ranged_options]
         return state.has_any(element_options, self.player)
 
-    def has_coins_for_door(self, options: LunacidOptions, state: CollectionState):
+    def has_coins_for_door(self, options: LunacidOptions, state: CollectionState) -> bool:
         return state.has(Coins.strange_coin, self.player, options.required_strange_coin.value)
 
     def has_black_book_count(self, options: LunacidOptions, state: CollectionState, amount: int) -> bool:
-        if options.dropsanity == options.dropsanity.option_off:
+        if not options.dropsanity:
             can_reach_battle = state.can_reach_region(LunacidRegion.holy_battleground, self.player)
             if amount == 1:
                 return can_reach_battle or state.has(UniqueItem.black_book, self.player)
@@ -582,30 +588,32 @@ class LunacidRules:
         else:
             return state.has(UniqueItem.black_book, self.player, amount)
 
-    def can_buy_jotunn(self, options: LunacidOptions, state: CollectionState):
-        if options.shopsanity == options.shopsanity.option_true:
+    def can_buy_jotunn(self, options: LunacidOptions, state: CollectionState) -> bool:
+        if options.shopsanity:
             return state.has(Weapon.jotunn_slayer, self.player)
-        return self.can_reach_location(state, BaseLocation.fate_lucid_blade) and state.has(Voucher.sheryl_dreamer_voucher, self.player)
+        return (self.can_reach_location(state, BaseLocation.fate_lucid_blade)
+                and state.has(Voucher.sheryl_dreamer_voucher, self.player))
 
-    def can_defeat_the_prince(self, state: CollectionState):
+    def can_defeat_the_prince(self, state: CollectionState) -> bool:
         return (self.has_element_access([Elements.light, Elements.dark_and_light], state) and
-                self.can_reach_any_region(state, [LunacidRegion.castle_le_fanu_white, LunacidRegion.forbidden_archives_2,
-                                                  LunacidRegion.sealed_ballroom, LunacidRegion.boiling_grotto, LunacidRegion.forlorn_arena]))
+                self.can_reach_any_region(state, [LunacidRegion.castle_le_fanu_white,
+                                                  LunacidRegion.forbidden_archives_2, LunacidRegion.sealed_ballroom,
+                                                  LunacidRegion.boiling_grotto, LunacidRegion.forlorn_arena]))
 
-    def can_reach_monster(self, enemy: str, state: CollectionState):
+    def can_reach_monster(self, enemy: str, state: CollectionState) -> bool:
         locations = all_drops_by_enemy[enemy]
         return self.can_reach_any_region(state, locations)
 
-    def can_get_weapon(self, state: CollectionState, weapon: str, options: LunacidOptions):
+    def can_get_weapon(self, state: CollectionState, weapon: str, options: LunacidOptions) -> bool:
         if weapon in Weapon.base_weapons:
             return state.has(weapon, self.player)
         elif weapon in Weapon.shop_weapons:
-            if options.shopsanity == options.shopsanity.option_true:
+            if options.shopsanity:
                 return state.has(weapon, self.player)
             else:
                 return state.has(Voucher.sheryl_initial_voucher, self.player)
         if weapon in Weapon.drop_weapons:
-            if options.dropsanity != options.dropsanity.option_off:
+            if options.dropsanity:
                 return state.has(weapon, self.player)
             for enemy in all_drops_by_enemy:
                 if weapon in all_drops_by_enemy[enemy]:
@@ -615,14 +623,13 @@ class LunacidRules:
         return False
 
     def can_kill_death(self, state: CollectionState, options: LunacidOptions) -> bool:
-        death_rule = False
-        if options.etnas_pupil == options.etnas_pupil.option_true:
+        if options.etnas_pupil:
             return state.has(Weapon.limbo, self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player)
 
         return state.has_all({Alchemy.fractured_life, Alchemy.fractured_death, Alchemy.broken_sword},
                              self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player)
 
-    def can_obtain_alchemy_item(self, alchemy_item: str, state: CollectionState, options: LunacidOptions):
+    def can_obtain_alchemy_item(self, alchemy_item: str, state: CollectionState, options: LunacidOptions) -> bool:
         if options.dropsanity == options.dropsanity.option_randomized:
             return state.has(alchemy_item, self.player)
         acceptable_regions = []
@@ -638,7 +645,7 @@ class LunacidRules:
                         acceptable_regions.append(region)
         return self.can_reach_any_region(state, acceptable_regions)
 
-    def can_obtain_all_alchemy_items(self, alchemy_items: List[str], state: CollectionState, options: LunacidOptions):
+    def can_obtain_all_alchemy_items(self, alchemy_items: List[str], state: CollectionState, options: LunacidOptions) -> bool:
         alchemy_rule = False
         for item in alchemy_items:
             alchemy_rule = alchemy_rule and self.can_obtain_alchemy_item(item, state, options)
@@ -648,7 +655,7 @@ class LunacidRules:
         multiworld = self.world.multiworld
         self.elements = world_elements
         self.enemy_regions = enemy_regions
-        for region in multiworld.get_regions(self.player):
+        for region in self.world.get_regions():
             if region.name in self.region_rules:
                 for entrance in region.entrances:
                     entrance.access_rule = self.region_rules[region.name]
