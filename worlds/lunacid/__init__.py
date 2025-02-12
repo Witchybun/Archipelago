@@ -1,6 +1,6 @@
 from random import Random
 from time import strftime
-from typing import Dict, Any, Iterable, TextIO, List, Tuple, Optional
+from typing import Dict, Any, Iterable, TextIO, List, Tuple
 import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from Fill import fill_restrictive
@@ -25,6 +25,7 @@ from .Locations import create_locations, location_table
 from .Regions import link_lunacid_areas, create_regions
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
+
 
 logger = logging.getLogger()
 
@@ -97,13 +98,27 @@ class LunacidWorld(World):
     custom_class_stats: Dict[str, int] = {}
     web = LunacidWeb()
     logger = logging.getLogger()
-
-    def __init__(self, multiworld, player):
-        super(LunacidWorld, self).__init__(multiworld, player)
-        self.seed = getattr(multiworld, "re_gen_passthrough", {}).get("Lunacid", self.random.getrandbits(64))
-        self.random = Random(self.seed)
+    seed: int
+    rand: Random
+    explicit_indirect_conditions = False
 
     def generate_early(self) -> None:
+        # Universal tracker stuff, shouldn't do anything in standard gen
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "Lunacid" in self.multiworld.re_gen_passthrough:
+                passthrough = self.multiworld.re_gen_passthrough["Lunacid"]
+                self.options.ending.value = passthrough["ending"]
+                self.options.dropsanity.value = passthrough["dropsanity"]
+                self.options.shopsanity.value = passthrough["shopsanity"]
+                self.options.random_elements.value = passthrough["random_elements"]
+                self.options.entrance_randomization.value = passthrough["entrance_randomization"]
+                self.options.door_locks.value = passthrough["door_locks"]
+                self.options.switch_locks.value = passthrough["switch_locks"]
+                self.options.secret_door_lock.value = passthrough["secret_door_lock"]
+                self.seed = passthrough["seed"]
+        else:
+            self.seed = self.random.randrange(1000000000)
+        self.rand = Random(self.seed)
         self.package_custom_class()
         self.verify_item_colors()
         self.enemy_random_data, self.enemy_regions = self.randomize_enemies()
@@ -120,7 +135,7 @@ class LunacidWorld(World):
         return Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(all_filler_items)
+        return self.rand.choice(all_filler_items)
 
     def set_rules(self):
         LunacidRules(self).set_lunacid_rules(self.weapon_elements, self.enemy_regions)
@@ -128,13 +143,13 @@ class LunacidWorld(World):
 
     def create_items(self):
         locations_count = len([location
-                               for location in self.multiworld.get_locations(self.player) if location.item is None]) - 1
+                               for location in self.multiworld.get_locations(self.player)if location.item is None]) - 1
         if self.options.etnas_pupil == self.options.etnas_pupil.option_true and self.options.dropsanity == self.options.dropsanity.option_randomized:
             locations_count -= 80
         excluded_items = self.multiworld.precollected_items[self.player]
-        self.weapon_elements = determine_weapon_elements(self.options, self.random)
+        self.weapon_elements = determine_weapon_elements(self.options, self.rand)
         (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items, self.weapon_elements, self.rolled_month,
-                                                                self.options, self.random)
+                                                                self.options, self.rand)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
@@ -152,7 +167,7 @@ class LunacidWorld(World):
             lunacid_region.exits = [Entrance(player, exit_name, lunacid_region) for exit_name in exits]
             return lunacid_region
 
-        world_regions, self.randomized_entrances = create_regions(create_region, self.random, self.options)
+        world_regions, self.randomized_entrances = create_regions(create_region, self.rand, self.options)
         locations = create_locations(self.options, self.rolled_month)
         for location in locations:
             name = location.name
@@ -201,22 +216,22 @@ class LunacidWorld(World):
         def package_custom_class_stat(stat: str, minimum: int, maximum: int) -> None:
             stat_data = min(maximum, self.options.custom_class.get(stat, -1))
             if stat_data == -1:
-                self.custom_class_stats[stat] = self.random.randrange(minimum, maximum)
+                self.custom_class_stats[stat] = self.rand.randrange(minimum, maximum)
             else:
                 self.custom_class_stats[stat] = max(minimum, stat_data)
 
         name = self.options.custom_class.get("Name", "RANDOM")
         description = self.options.custom_class.get("Description", "RANDOM")
         if name == "RANDOM" and description == "RANDOM":
-            chosen_class = self.random.choice(list(all_classes.keys()))
+            chosen_class = self.rand.choice(list(all_classes.keys()))
             self.custom_class_name = chosen_class
             self.custom_class_description = all_classes[chosen_class]
         elif name == "RANDOM":
-            chosen_class = self.random.choice(list(all_classes.keys()))
+            chosen_class = self.rand.choice(list(all_classes.keys()))
             self.custom_class_name = chosen_class
             self.custom_class_description = description
         elif description == "RANDOM":
-            chosen_class = self.random.choice(list(all_classes.keys()))
+            chosen_class = self.rand.choice(list(all_classes.keys()))
             self.custom_class_name = name
             self.custom_class_description = all_classes[chosen_class]
         else:
@@ -268,7 +283,7 @@ class LunacidWorld(World):
         enemy_to_enemy_placement = {}
         if self.options.enemy_randomization == self.options.enemy_randomization.option_true:
             for enemy_data in base_enemy_placement:
-                picked_enemy = self.random.choice(Enemy.randomizable_enemies)
+                picked_enemy = self.rand.choice(Enemy.randomizable_enemies)
                 new_data = EnemyPlacement(enemy_data.scene, enemy_data.group_name, enemy_data.child_id, picked_enemy, enemy_data.region)
                 if picked_enemy not in chosen_enemies:
                     chosen_enemies.append(picked_enemy)
@@ -285,8 +300,8 @@ class LunacidWorld(World):
                 acceptable_enemies = [enemy for enemy in enemy_counts if enemy_counts[enemy] > 1]
                 for checked_enemy in Enemy.randomizable_enemies:
                     if checked_enemy not in chosen_enemies:
-                        random_enemy = self.random.choice(acceptable_enemies)
-                        random_data = self.random.choice(enemy_to_enemy_placement[random_enemy])
+                        random_enemy = self.rand.choice(acceptable_enemies)
+                        random_data = self.rand.choice(enemy_to_enemy_placement[random_enemy])
                         enemy_to_enemy_placement[random_enemy].remove(random_data)
                         randomized_enemy_placement.remove(random_data)
                         enemy_counts[random_enemy] -= 1
@@ -311,7 +326,7 @@ class LunacidWorld(World):
                 alchemy_items.append(Item(alchemy_item, ItemClassification.progression | ItemClassification.useful, self.item_name_to_id[alchemy_item], self.player))
             alchemy_items *= 5  # make sure there's enough of them to go around
             repeat_locations = [location for location in self.multiworld.get_locations(self.player) if location.name in all_drops]
-            self.random.shuffle(repeat_locations)
+            self.rand.shuffle(repeat_locations)
             fill_restrictive(self.multiworld, state, repeat_locations, alchemy_items,
                              single_player_placement=True, lock=True, allow_excluded=True)
 
@@ -328,8 +343,7 @@ class LunacidWorld(World):
 
     def important_item_locations(self):
         item_spots = {}
-        location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in
-                         self.multiworld.find_item_locations(Progressives.vampiric_symbol, self.player)]
+        location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(Progressives.vampiric_symbol, self.player)]
         item_spots[Progressives.vampiric_symbol] = location_info
         location_info = [self.multiworld.player_name[data.player] + "'s " + data.name for data in self.multiworld.find_item_locations(Weapon.lucid_blade, self.player)]
         item_spots[Weapon.lucid_blade] = location_info
@@ -357,9 +371,8 @@ class LunacidWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         item_spots = self.important_item_locations()
         slot_data = {
-            "ut_seed": self.seed,
-            "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.8.8",
+            "seed": self.seed,  # Seed should be max 9 digits
+            "client_version": "0.8.6",
             "rolled_month": self.rolled_month,
             "elements": self.weapon_elements,
             "created_class_name": self.custom_class_name,
@@ -376,9 +389,7 @@ class LunacidWorld(World):
         return slot_data
 
     # for the universal tracker, doesn't get called in standard gen
-    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Optional[int]:
-        # If the seed is not specified in the slot data, this mean the world was generated before Universal Tracker support.
-        seed = slot_data.get("ut_seed")
-        if seed is None:
-            logger.warning(f"World was generated before Universal Tracker support. Tracker might not be accurate.")
-        return seed
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
+        return slot_data
