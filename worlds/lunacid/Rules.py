@@ -111,10 +111,8 @@ class LunacidRules:
                                                                       self.can_jump_given_height(state, "Medium", self.world.options) and
                                                                       self.has_door_key(Door.archives_sealed_door, state, self.world.options),
             LunacidEntrance.chasm_to_surface: lambda state: self.has_door_key(Door.chasm_surface_door, state, self.world.options),
-            LunacidEntrance.wings_to_surface: lambda state: state.has(Spell.icarian_flight, self.player),
-            LunacidEntrance.basin_to_surface: lambda state: state.has_all({Spell.icarian_flight, Spell.spirit_warp}, self.player) or
-                                                            (state.has(Spell.icarian_flight, self.player) and state.can_reach(
-                                                                LunacidRegion.temple_of_silence_interior, None, self.player)),
+            LunacidEntrance.wings_to_surface: lambda state: self.can_jump_given_height(state, "High", self.world.options),
+            LunacidEntrance.basin_to_surface: lambda state: self.can_jump_given_height(state, "High", self.world.options),
             LunacidEntrance.castle_to_red: lambda state: self.has_blood_spell_access(state) or self.is_vampire(self.world.options) or
                                                          state.can_reach_region(LunacidRegion.castle_le_fanu_blue, self.player),
             LunacidEntrance.red_to_red_deep: lambda state: self.has_blood_spell_access(state) or self.is_vampire(self.world.options),
