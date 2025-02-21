@@ -347,7 +347,7 @@ base_enemy_placement = [
 
     EnemyPlacement("CAVE", "MimicSpawnCave", 0, Enemy.mimic, LunacidRegion.boiling_grotto_secret),
 
-    EnemyPlacement("CAVE", "MummyUpCave", 1, Enemy.anpu, LunacidRegion.boiling_grotto),
+    EnemyPlacement("CAVE", "MummyUpCave", 1, Enemy.anpu, LunacidRegion.sand_temple),
 
     EnemyPlacement("CAVE", "MainCave", 0, Enemy.ikurrilb, LunacidRegion.boiling_grotto),
     EnemyPlacement("CAVE", "MainCave", 1, Enemy.ikurrilb, LunacidRegion.boiling_grotto),
