@@ -81,6 +81,8 @@ def create_items(item_factory: LunacidItemFactory, locations_count: int, items_t
     elif (weapon_elements[chosen_weapon] in [Elements.poison, Elements.ice_and_poison] and chosen_weapon in ranged_weapons
           or chosen_weapon in ranged_spells):
         starting_weapon_choice = item_factory(chosen_weapon, ItemClassification.progression)
+    elif chosen_weapon in quench_starting_weapons:
+        starting_weapon_choice = item_factory(chosen_weapon, ItemClassification.progression)
     else:
         starting_weapon_choice = item_factory(chosen_weapon)
     for item in items:
