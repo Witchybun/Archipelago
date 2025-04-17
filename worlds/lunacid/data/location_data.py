@@ -356,6 +356,7 @@ unique_drop_locations = [
     create_location(LOCATION_CODE_START + unique_drop_location_start + 19, DropLocation.cetea_drop),
     create_location(LOCATION_CODE_START + unique_drop_location_start + 20, DropLocation.sea_demon),
     create_location(LOCATION_CODE_START + unique_drop_location_start + 21, DropLocation.lupine_spell),
+    create_location(LOCATION_CODE_START + unique_drop_location_start + 22, DropLocation.sanguis_book),
 ]
 
 other_drop_location_start = 450
@@ -487,7 +488,6 @@ other_drop_locations = [
     create_location(LOCATION_CODE_START + other_drop_location_start + 125, DropLocation.mummy_knight_onyx),
     create_location(LOCATION_CODE_START + other_drop_location_start + 126, DropLocation.mummy_knight_10c),
     create_location(LOCATION_CODE_START + other_drop_location_start + 127, DropLocation.mummy_knight_5c),
-    create_location(LOCATION_CODE_START + other_drop_location_start + 128, DropLocation.sanguis_book),
     create_location(LOCATION_CODE_START + other_drop_location_start + 129, DropLocation.lupine_10c),
     create_location(LOCATION_CODE_START + other_drop_location_start + 130, DropLocation.lupine_onyx),
     create_location(LOCATION_CODE_START + other_drop_location_start + 131, DropLocation.lupine_bones),
