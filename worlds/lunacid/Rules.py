@@ -182,6 +182,7 @@ class LunacidRules:
             BaseLocation.yosei_hanging_in_trees: lambda state: state.has_any(ranged_weapons, self.player),
             BaseLocation.yosei_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.yosei_room_defended_by_blood_plant: lambda state: self.has_blood_spell_access(state),
+            BaseLocation.yosei_patchouli_quest: lambda state: state.has(UniqueItem.skull_of_josiah, self.player),
             BaseLocation.sea_kill_jotunn: lambda state: self.can_buy_jotunn(self.world.options, state),
             BaseLocation.yosei_blood_plant_insides: lambda state: self.has_blood_spell_access(state),
             BaseLocation.castle_cell_center: lambda state: self.has_element_access(Elements.fire, state),
