@@ -63,7 +63,7 @@ base_weapons = [
 ]
 
 shop_weapons = [
-    weapon_information(Weapon.jotunn_slayer, Types.melee, Types.ranged),
+    weapon_information(Weapon.jotunn_slayer, Elements.dark_and_fire, Types.melee),
     weapon_information(Weapon.rapier, Elements.normal, Types.melee),
     weapon_information(Weapon.privateer_musket, Elements.dark, Types.ranged),
 ]
