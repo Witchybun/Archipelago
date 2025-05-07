@@ -106,8 +106,6 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 71, CustomItem.experience, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 72, Upgrade.drop_chance, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 73, CustomItem.bestial_mastery, ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 74, Weapon.thorn, ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 75, Weapon.ghost_sword, ItemClassification.useful),
     ]
 
 trap_start_id = 100
@@ -160,51 +158,53 @@ base_weapons = [
     create_item(ITEM_CODE_START + weapon_start_id + 31, Weapon.steel_needle, ItemClassification.useful),
     create_item(ITEM_CODE_START + weapon_start_id + 32, Weapon.lucid_blade, ItemClassification.progression),
     create_item(ITEM_CODE_START + weapon_start_id + 33, Weapon.hammer_of_cruelty, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 34, Weapon.thorn, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 35, Weapon.ghost_sword, ItemClassification.useful),
 ]
 
 shop_weapons = [
-    create_item(ITEM_CODE_START + weapon_start_id + 34, Weapon.jotunn_slayer, ItemClassification.progression),
-    create_item(ITEM_CODE_START + weapon_start_id + 35, Weapon.rapier, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 36, Weapon.privateer_musket, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 36, Weapon.jotunn_slayer, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 37, Weapon.rapier, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 38, Weapon.privateer_musket, ItemClassification.progression),
 ]
 
 drop_weapons = [
-    create_item(ITEM_CODE_START + weapon_start_id + 37, Weapon.rusted_sword, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 38, Weapon.ice_sickle, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 39, Weapon.skeleton_axe, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 40, Weapon.cursed_blade, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 41, Weapon.brittle_arming_sword, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 42, Weapon.obsidian_cursebrand, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 43, Weapon.obsidian_poisonguard, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 44, Weapon.golden_kopesh, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 45, Weapon.golden_sickle, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 46, Weapon.jailor_candle, ItemClassification.progression),
-    create_item(ITEM_CODE_START + weapon_start_id + 47, Weapon.sucsarian_dagger, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 48, Weapon.sucsarian_spear, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 49, Weapon.lyrian_longsword, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 39, Weapon.rusted_sword, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 40, Weapon.ice_sickle, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 41, Weapon.skeleton_axe, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 42, Weapon.cursed_blade, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 43, Weapon.brittle_arming_sword, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 44, Weapon.obsidian_cursebrand, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 45, Weapon.obsidian_poisonguard, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 46, Weapon.golden_kopesh, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 47, Weapon.golden_sickle, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 48, Weapon.jailor_candle, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 49, Weapon.sucsarian_dagger, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 50, Weapon.sucsarian_spear, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 51, Weapon.lyrian_longsword, ItemClassification.useful),
 ]
 
 quench_weapons = [
-    create_item(ITEM_CODE_START + weapon_start_id + 50, Weapon.lyrian_greatsword, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 51, Weapon.dark_greatsword, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 52, Weapon.shining_blade, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 53, Weapon.poison_claw, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 54, Weapon.iron_club, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 55, Weapon.iron_torch, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 56, Weapon.fire_sword, ItemClassification.progression),
-    create_item(ITEM_CODE_START + weapon_start_id + 57, Weapon.steel_lance, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 58, Weapon.double_crossbow, ItemClassification.progression),
-    create_item(ITEM_CODE_START + weapon_start_id + 59, Weapon.death_scythe, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 60, Weapon.elfen_longsword, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 61, Weapon.steel_claw, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 62, Weapon.steel_club, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 63, Weapon.saint_ishii, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 64, Weapon.silver_rapier, ItemClassification.useful),
-    create_item(ITEM_CODE_START + weapon_start_id + 65, Weapon.heritage_sword, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 52, Weapon.lyrian_greatsword, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 53, Weapon.dark_greatsword, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 54, Weapon.shining_blade, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 55, Weapon.poison_claw, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 56, Weapon.iron_club, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 57, Weapon.iron_torch, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 58, Weapon.fire_sword, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 59, Weapon.steel_lance, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 60, Weapon.double_crossbow, ItemClassification.progression),
+    create_item(ITEM_CODE_START + weapon_start_id + 61, Weapon.death_scythe, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 62, Weapon.elfen_longsword, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 63, Weapon.steel_claw, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 64, Weapon.steel_club, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 65, Weapon.saint_ishii, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 66, Weapon.silver_rapier, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 67, Weapon.heritage_sword, ItemClassification.useful),
 ]
 
 alchemy_weapons = [
-    create_item(ITEM_CODE_START + weapon_start_id + 66, Weapon.limbo, ItemClassification.useful),
+    create_item(ITEM_CODE_START + weapon_start_id + 68, Weapon.limbo, ItemClassification.useful),
 ]
 
 spell_start_id = 250
