@@ -169,8 +169,19 @@ class Door:
 
 
 class Upgrade:
-    jump_power = "Progressive Jump Power"
+    boots_of_leaping = "Boots of Leaping"
+    earring_of_speed = "Earring of Speed"
+    flippers = "Old Flippers"
     drop_chance = "Text on Great Well Resourcefulness"
+
+
+class Stat:
+    strength = "Strength Point"
+    defense = "Defense Point"
+    speed = "Speed Point"
+    dexterity = "Dexterity Point"
+    intelligence = "Intelligence Point"
+    resistance = "Resistance Point"
 
 
 class Voucher:
@@ -184,3 +195,4 @@ class Voucher:
 
 class SpookyItem:
     soul_candy = "Soul Candy"
+

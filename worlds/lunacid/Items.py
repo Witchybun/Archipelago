@@ -1,3 +1,4 @@
+import math
 from random import Random
 import logging
 
@@ -279,6 +280,56 @@ def create_crimpus_items(item_factory: LunacidItemFactory, month: int, equipment
         items.append(item_factory(CrimpusSpell.jingle_bells, ItemClassification.progression))
     else:
         items.append(item_factory(CrimpusSpell.jingle_bells))
+
+
+def create_stat_items(item_factory: LunacidItemFactory, random: Random, options: LunacidOptions, items: List[Item]):
+    return items
+
+
+def determine_items_per_stat(s: int, d: int, p: int, x: int, t: int, r: int, total_points: int, random: Random):
+
+    initial_points = s + d + p + x + t + r - 6
+    final_points = total_points + initial_points
+    initial_build = (s, d, p, x, t, r)
+    final_build = (initial_build[0], initial_build[1], initial_build[2], initial_build[3], initial_build[4], initial_build[5])
+    while final_build[0] + final_build[1] + final_build[2] + final_build[3] + final_build[4] + final_build[5] - 6 != final_points:
+        chosen_stat = random.choice([0, 1, 2, 3, 4, 5])
+        final_build[chosen_stat] += 1
+    steps = [0, 1, 4, 5]
+    while final_build[2] < 15:
+        if not steps:  # Every point must be in dexterity.  We should cut it down.
+            steps = [3]
+        chosen_stat = random.choice(steps)  # choose a random stat to re-invest
+        # if the chosen random stat is already at the minimum value, we can't go lower than that so it shouldn't be touched.
+        if final_build[chosen_stat] - 1 < initial_build[chosen_stat]:
+            steps.remove(chosen_stat)
+            continue
+        final_build[chosen_stat] -= 1  # re-arrange the stat so speed gets boosted.
+        final_build[2] += 1
+    steps = [0, 1, 4, 5]
+    while final_build[3] < 15:  # Do the same as above but for dexterity, save that its guaranteed that speed does not need to be re-invested.
+        chosen_stat = random.choice(steps)
+        if final_build[chosen_stat] - 1 < 1:
+            steps.remove(chosen_stat)
+            continue
+        final_build[chosen_stat] -= 1
+        final_build[3] += 1
+
+    # TODO: We should add a check for INT, because logic asks the player to cast spells sometimes.  Requires research into INT investment and Ocean Elixirs.
+
+    steps = [1, 5]
+    # The final build should at least have combat stat investment worth half the total stats, so you can actually do damage and the like.
+    while final_build[0] + final_build[3] + final_build[4] < math.floor(0.5*final_points):
+        chosen_stat = random.choice(steps)
+        if final_build[chosen_stat] - 1 < 1:
+            steps.remove(chosen_stat)
+            continue
+        final_build[chosen_stat] -= 1
+        chosen_stat = random.choice([0, 3, 4])
+        final_build[chosen_stat] += 1
+
+    items_per_stat = (final_build[0] - s + 1, final_build[1] - d + 1, final_build[2] - p + 1, final_build[3] - x + 1, final_build[4] - t + 1, final_build[5] - r + 1)
+    return items_per_stat
 
 
 def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random,
