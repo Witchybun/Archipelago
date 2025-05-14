@@ -7,6 +7,12 @@ class DefaultColors:
     cheat = "#00FF00"
 
 
+class JumpHeight:
+    low = "Low"
+    medium = "Medium"
+    high = "High"
+
+
 all_classes = {
     "Corrupted": "One tainted by the influence of the coming end of humanity.  Dark tendrils grasp at their body and soul.",
     "Spellsword": "A master of blade and spell, thought to be lost to the First Age of Magic.  Secretive, testing their craft in secret.",

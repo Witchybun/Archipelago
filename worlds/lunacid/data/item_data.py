@@ -3,7 +3,7 @@ from typing import List
 from BaseClasses import ItemClassification
 
 from ..strings.items import GenericItem, UniqueItem, Alchemy, Coins, Creation, Progressives, RareDrops, \
-    Voucher, Trap, Switch, Door, CustomItem, Upgrade, SpookyItem
+    Voucher, Trap, Switch, Door, CustomItem, Upgrade, SpookyItem, Stat
 from ..strings.weapons import Weapon, SpookyWeapon
 from ..strings.spells import Spell, MobSpell, SpookySpell, CrimpusSpell
 
@@ -238,7 +238,7 @@ base_spells = [
     create_item(ITEM_CODE_START + spell_start_id + 27, Spell.spirit_warp, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 28, Spell.summon_fairy, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 29, Spell.summon_ice_sword, ItemClassification.useful),
-    create_item(ITEM_CODE_START + spell_start_id + 30, Spell.wind_dash, ItemClassification.useful),
+    create_item(ITEM_CODE_START + spell_start_id + 30, Spell.wind_dash, ItemClassification.progression),
     create_item(ITEM_CODE_START + spell_start_id + 31, Spell.wind_slicer, ItemClassification.useful),
 ]
 
@@ -302,6 +302,23 @@ holiday = [
     create_item(ITEM_CODE_START + holiday_start_id + 4, CrimpusSpell.jingle_bells, ItemClassification.useful),
     create_item(ITEM_CODE_START + holiday_start_id + 5, Trap.eggnog, ItemClassification.trap),
     create_item(ITEM_CODE_START + holiday_start_id + 6, Trap.coal, ItemClassification.trap)
+]
+
+extra_start_id = 450
+extras = [
+    create_item(ITEM_CODE_START + extra_start_id + 1, Upgrade.flippers, ItemClassification.progression),
+    create_item(ITEM_CODE_START + extra_start_id + 2, Upgrade.boots_of_leaping, ItemClassification.progression),
+    create_item(ITEM_CODE_START + extra_start_id + 3, Upgrade.earring_of_speed, ItemClassification.progression),
+]
+
+stat_start_id = 500
+stats = [
+    create_item(ITEM_CODE_START + stat_start_id + 1, Stat.strength, ItemClassification.progression),
+    create_item(ITEM_CODE_START + stat_start_id + 2, Stat.defense, ItemClassification.useful),
+    create_item(ITEM_CODE_START + stat_start_id + 3, Stat.speed, ItemClassification.progression),
+    create_item(ITEM_CODE_START + stat_start_id + 4, Stat.dexterity, ItemClassification.progression),
+    create_item(ITEM_CODE_START + stat_start_id + 5, Stat.intelligence, ItemClassification.progression),
+    create_item(ITEM_CODE_START + stat_start_id + 6, Stat.resistance, ItemClassification.useful)
 ]
 
 # Item Groups

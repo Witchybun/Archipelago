@@ -1,10 +1,12 @@
 from collections import Counter
+from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
 from random import Random
 from time import strftime
 from typing import Dict, Any, Iterable, TextIO, List, Tuple, Optional
 import logging
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, EntranceType
 from Fill import fill_restrictive
+from Utils import visualize_regions
 from worlds.AutoWorld import World, WebWorld
 from . import Options
 from .OptionGroups import lunacid_option_groups
@@ -26,7 +28,7 @@ from .Items import (item_table, complete_items_by_name, create_items, determine_
                     determine_weapon_elements, all_filler)
 from .Options import LunacidOptions
 from .Locations import create_locations, location_table
-from .Regions import link_lunacid_areas, create_regions
+from .Regions import create_regions, randomized_entrances
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
 
@@ -95,7 +97,7 @@ class LunacidWorld(World):
     rolled_month = int(strftime('%m'))
     starting_weapon: LunacidItem
     weapon_elements: Dict[str, str]
-    randomized_entrances: Dict[str, str]
+    randomized_entrances: Dict[str, str] = {}
     enemy_random_data: Dict[str, List[str]]
     enemy_regions: Dict[str, List[str]]
     custom_class_name: str
@@ -103,7 +105,7 @@ class LunacidWorld(World):
     custom_class_stats: Dict[str, int]
     web = LunacidWeb()
     logger = logging.getLogger()
-    explicit_indirect_conditions = False
+    explicit_indirect_conditions = True
 
     def __init__(self, multiworld, player):
         super(LunacidWorld, self).__init__(multiworld, player)
@@ -134,7 +136,6 @@ class LunacidWorld(World):
 
     def set_rules(self):
         LunacidRules(self).set_lunacid_rules(self.weapon_elements, self.enemy_regions)
-        self.explicit_indirect_conditions = False
 
     def create_items(self):
         locations_count = len([location
@@ -157,13 +158,15 @@ class LunacidWorld(World):
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
+        starting_area = self.options.starting_area.current_key
+        entrances_randod = self.options.entrance_randomization
 
         def create_region(region_name: str, exits: Iterable[str]) -> Region:
             lunacid_region = Region(region_name, player, multiworld)
             lunacid_region.exits = [Entrance(player, exit_name, lunacid_region) for exit_name in exits]
             return lunacid_region
 
-        world_regions, self.randomized_entrances = create_regions(create_region, self.random, self.options)
+        world_regions = create_regions(starting_area, create_region, multiworld)
         locations = create_locations(self.options, self.rolled_month)
         for location in locations:
             name = location.name
@@ -172,6 +175,14 @@ class LunacidWorld(World):
             region.add_locations({name: location_id})
 
         self.multiworld.regions.extend(world_regions.values())
+
+        if entrances_randod:
+            for entrance in randomized_entrances:
+                disconnect_entrance_for_randomization(entrance, None, entrance.connected_region.name)
+            result = randomize_entrances(self, True, {0: [0]})
+            self.randomized_entrances = dict(result.pairings)
+
+        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
 
         if self.options.ending == self.options.ending.option_ending_b:
             ending_region = self.get_region(LunacidRegion.labyrinth_of_ash)
@@ -262,6 +273,15 @@ class LunacidWorld(World):
             self.options.item_colors.value[name] = default_color
         elif not self.is_hex(self.options.item_colors.value[name]):
             self.options.item_colors.value[name] = default_color
+
+    @staticmethod
+    def total_points_given_starting_level(starting_level: int):
+        if starting_level <= 5:
+            return 310 - 6 * starting_level
+        elif starting_level <= 50:
+            return 300 - 4 * starting_level
+        else:
+            return 200 - 2 * starting_level
 
     @staticmethod
     def is_hex(possible_hex: str) -> bool:

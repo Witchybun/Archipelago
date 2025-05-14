@@ -24,13 +24,13 @@ def create_alchemy_data(drop: str, regions: List[str]):
 
 
 all_alchemy_plant_data = [
-    create_alchemy_data(Alchemy.ashes, [LunacidRegion.hollow_basin, LunacidRegion.accursed_tomb, LunacidRegion.fetid_mire, LunacidRegion.castle_le_fanu_white,
-                                        LunacidRegion.terminus_prison]),
+    create_alchemy_data(Alchemy.ashes, [LunacidRegion.hollow_basin, LunacidRegion.accursed_tomb, LunacidRegion.fetid_mire, LunacidRegion.castle_le_fanu_main_halls,
+                                        LunacidRegion.terminus_prison_3f]),
     create_alchemy_data(Alchemy.lotus_seed_pod, [LunacidRegion.fetid_mire]),
     create_alchemy_data(Alchemy.yellow_morel, [LunacidRegion.yosei_forest]),
     create_alchemy_data(Alchemy.destroying_angel_mushroom, [LunacidRegion.yosei_forest]),
-    create_alchemy_data(Alchemy.moon_petal, [LunacidRegion.castle_le_fanu]),
-    create_alchemy_data(Alchemy.bloodweed, [LunacidRegion.castle_le_fanu_white]),
+    create_alchemy_data(Alchemy.moon_petal, [LunacidRegion.castle_le_fanu_entrance]),
+    create_alchemy_data(Alchemy.bloodweed, [LunacidRegion.castle_le_fanu_main_halls]),
     create_alchemy_data(Alchemy.fire_coral, [LunacidRegion.boiling_grotto]),
     create_alchemy_data(Alchemy.fiddlehead, [LunacidRegion.forlorn_arena])
 ]
