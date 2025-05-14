@@ -6,8 +6,7 @@ from BaseClasses import CollectionState, MultiWorld, Item, ItemClassification
 from . import LunacidTestBase, setup_solo_multiworld, LunacidTestCase
 from .. import Endings, Options, Weapon
 from ..Locations import location_table
-from ..Regions import consistent_entrances, RandomizationFlag, consistent_regions
-from ..data.enemy_data import all_enemies_by_name
+from ..Regions import consistent_entrances, RandomizationFlag, lunacid_regions
 from ..data.location_data import *
 from ..data.spell_info import all_spells
 from ..data.item_data import drop_spell_names, all_items
@@ -267,12 +266,12 @@ class LightTest(LunacidTestBase):
 
 
 connections_by_name = {connection.name for connection in consistent_entrances}
-regions_by_name = {region.name for region in consistent_regions}
+regions_by_name = {region.name for region in lunacid_regions}
 
 
 class TestRegions(unittest.TestCase):
     def test_region_exits_lead_somewhere(self):
-        for region in consistent_regions:
+        for region in lunacid_regions:
             with self.subTest(region=region):
                 for exits in region.exits:
                     self.assertIn(exits, connections_by_name,

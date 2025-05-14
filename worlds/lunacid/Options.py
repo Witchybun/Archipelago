@@ -45,6 +45,24 @@ class Class(Choice):
     option_custom = 9
 
 
+class StartingArea(Choice):
+    """Where the player starts.  You will always land in the starting spot in Hollow Basin but it will be blocked off.
+    Demi will warp you to Wing's Rest, and the crystal will have the given starting area."""
+    internal_name = "starting_area"
+    display_name = "Starting Area"
+    option_basin = 0
+    option_mire = 1
+    option_forest = 2
+    option_archives = 3
+    option_tomb = 4
+    option_castle = 5
+    option_grotto = 6
+    option_prison = 7
+    option_arena = 8
+    option_ash = 9
+    default = 0
+
+
 class EntranceRandomization(Toggle):
     """Shuffles the entrances around.  The only untouched entrances are crystal warps (including spell/item), entrance to Chamber of Fate, entrance to
     Grave of the Sleeper, and the doors of Tower of Abyss."""
@@ -89,6 +107,19 @@ class TotalStrangeCoins(Range):
     default = 30
 
 
+class ExtraEquipment(OptionSet):
+    """Adds new equipment to the game, which change progression in some way.
+    Old Flippers: You cannot swim (more specifically, if you get the WATER effect you die).  These items let you swim.
+    Boots of Leaping: DEX no longer increases your jump height, and your effective DEX is set to 1.  These set your effective DEX to 30 for the sake of jumping.
+    Earring of Speed: SPD no longer increases your movement speed, and your effective SPD is set to 10.  These set your effective SPD to 40 and 80 respectively."""
+    internal_name = "extra_equipment"
+    display_name = "Extra Equipment"
+    valid_keys = frozenset(["Old Flippers", "Boots of Leaping", "Earring of Speed"])
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset()
+
+
 class RandomElements(Toggle):
     """Randomizes the elements of almost all weapons and spells.  Guaranteed Poison ranged option.
     Lucid Blade and Wand of Power are not randomized (either due to limitation, or to guarantee victory)"""
@@ -108,6 +139,17 @@ class Shopsanity(Toggle):
     Adds 9 locations."""
     internal_name = "shopsanity"
     display_name = "Shuffle Shop Items"
+
+
+class VoucherSetting(Choice):
+    """Determines how the vouchers behave.
+    Free-offer: You can buy the shop items at any time - out of logic.  Vouchers put the items in logic and make them free.
+    In-Stock: None of the items are in-stock and cannot be bought.  Vouchers allow the items to be bought at the price given."""
+    internal_name = "voucher_setting"
+    display_name = "Voucher Setting"
+    option_free_offer = 0
+    option_in_stock = 1
+    default = 0
 
 
 class Dropsanity(Choice):
@@ -136,6 +178,25 @@ class EtnasPupil(Toggle):
     If Dropsanity: Randomized is selected, each material is force placed on drops or alchemy spots to ensure repeatability."""
     internal_name = "etnas_pupil"
     display_name = "Etna's Pupil"
+
+
+class Bookworm(Toggle):
+    """Love reading?  Of course you do!  Every lore spot is a check.  Does not include basic signs.  All of this will be on the exam."""
+    internal_name = "bookworm"
+    display_name = "Bookworm"
+
+
+class Statsanity(Choice):
+    """Every stat point acquired from leveling up is an item, up to level 100.  Adds up to 304 locations (depends on chosen class).
+    Off: Stats are not shuffled.
+    Random Build: All stat items are on stat locations, effectively making your final build randomly chosen for you.
+    On: All stat items can be found anywhere."""
+    internal_name = "statsanity"
+    display_name = "Statsanity"
+    option_off = 0
+    option_random_build = 1
+    option_on = 2
+    default = 0
 
 
 class NormalizedDrops(Toggle):
@@ -260,6 +321,7 @@ class CustomClass(OptionDict):
 class LunacidOptions(PerGameCommonOptions):
     ending: Ending
     starting_class: Class
+    starting_area: StartingArea
     entrance_randomization: EntranceRandomization
     experience: Experience
     weapon_experience: WeaponExperience
@@ -267,10 +329,14 @@ class LunacidOptions(PerGameCommonOptions):
     enemy_randomization: EnemyRandomization
     required_strange_coin: RequiredStrangeCoins
     total_strange_coin: TotalStrangeCoins
+    extra_equipment: ExtraEquipment
     shopsanity: Shopsanity
+    voucher_setting: VoucherSetting
     dropsanity: Dropsanity
     quenchsanity: Quenchsanity
     etnas_pupil: EtnasPupil
+    bookworm: Bookworm
+    statsanity: Statsanity
     normalized_drops: NormalizedDrops
     secret_door_lock: SecretDoorLock
     switch_locks: SwitchLocks

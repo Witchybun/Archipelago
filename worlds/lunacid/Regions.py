@@ -1,3 +1,4 @@
+from entrance_rando import EntranceType
 from dataclasses import dataclass, field
 from enum import IntFlag
 from random import Random
@@ -5,25 +6,11 @@ from typing import List, Tuple, Dict, Optional, Protocol, Iterable, Set
 
 from BaseClasses import MultiWorld, Region, Entrance
 
-from worlds.lunacid.strings.regions_entrances import LunacidRegion, LunacidEntrance
-
+from worlds.lunacid.strings.regions_entrances import LunacidRegion, LunacidEntrance, starting_location_to_region
 
 class RegionFactory(Protocol):
     def __call__(self, name: str, regions: Iterable[str]) -> Region:
         raise NotImplementedError
-
-
-connector_keyword = " to "
-
-
-def link_lunacid_areas(world: MultiWorld, player: int):
-    for (entrance, region) in consistent_entrances:
-        world.get_entrance(entrance, player).connect(world.get_region(region, player))
-
-
-def REVERSE(connection: str) -> str:
-    connection_array = connection.split(" to ")
-    return connection_array[1] + " to " + connection_array[0]
 
 
 @dataclass(frozen=True)
@@ -31,359 +18,443 @@ class RegionData:
     name: str
     exits: List[str] = field(default_factory=list)
 
-    def get_merged_with(self, exits: List[str] | None):
-        merged_exits = []
-        merged_exits.extend(self.exits)
-        if exits is not None:
-            merged_exits.extend(exits)
-        merged_exits = list(set(merged_exits))
-        return RegionData(self.name, merged_exits)
-
-    def get_clone(self):
-        return self.get_merged_with(None)
-
-
-class RandomizationFlag(IntFlag):
-    NOT_RANDOMIZED = 0b0
-    RANDOMIZED = 0b1
-
-
 @dataclass(frozen=True)
-class ConnectionData:
-    name: str
-    destination: str
-    origin: Optional[str] = None
-    reverse: Optional[str] = None
-    flag: RandomizationFlag = RandomizationFlag.NOT_RANDOMIZED
-
-    def __post_init__(self):
-        if connector_keyword in self.name:
-            origin, destination = self.name.split(connector_keyword)
-            if self.reverse is None:
-                super().__setattr__("reverse", f"{destination}{connector_keyword}{origin}")
+class EntranceData:
+    entrance_name: str
+    region_exit: Optional[str] = None
+    randomized: bool = False
+    dead_end: bool = False
+    type: EntranceType = EntranceType.ONE_WAY
 
 
-consistent_regions = [
-    RegionData(LunacidRegion.temple_of_silence_secret),
-    RegionData(LunacidRegion.wings_rest, [LunacidEntrance.wings_to_surface, LunacidEntrance.sheryl]),
-    RegionData(LunacidRegion.sheryl_the_crow),
-    RegionData(LunacidRegion.forbidden_archives_1),
-    RegionData(LunacidRegion.forbidden_archives_1b, [LunacidEntrance.archives_to_daedalus]),
+lunacid_regions = [
+    RegionData(LunacidRegion.menu, [LunacidEntrance.menu_to_start]),
+    RegionData(LunacidRegion.starting_area, [LunacidEntrance.start_lobby_to_rest]),
+
+    RegionData(LunacidRegion.hollow_basin, [LunacidEntrance.basin_to_surface, LunacidEntrance.basin_to_temple_path, LunacidEntrance.basin_to_archives_2f]),
+    RegionData(LunacidRegion.temple_path, [LunacidEntrance.temple_path_to_basin, LunacidEntrance.temple_path_to_temple_front]),
+    RegionData(LunacidRegion.temple_front, [LunacidEntrance.temple_front_to_temple_path, LunacidEntrance.temple_front_to_temple_back, LunacidEntrance.temple_front_to_temple_sewers,
+                                 LunacidEntrance.temple_front_to_temple_front_secret]),
+    RegionData(LunacidRegion.temple_front_secret),
+    RegionData(LunacidRegion.temple_sewers, [LunacidEntrance.temple_sewers_to_mire, LunacidEntrance.temple_sewers_to_sewers_secret]),
+    RegionData(LunacidRegion.temple_sewers_secret),
+    RegionData(LunacidRegion.temple_back, [LunacidEntrance.temple_back_to_temple_lower, LunacidEntrance.temple_back_to_temple_secret]),
+    RegionData(LunacidRegion.temple_secret, [LunacidEntrance.temple_secret_to_temple_front]),
+    RegionData(LunacidRegion.temple_lower, [LunacidEntrance.temple_lower_to_temple_back, LunacidEntrance.temple_lower_ladder, LunacidEntrance.temple_lower_to_forest]),
+
+    RegionData(LunacidRegion.wings_rest, [LunacidEntrance.rest_to_sheryl, LunacidEntrance.rest_to_surface, LunacidEntrance.rest_to_start]),
+    RegionData(LunacidRegion.sheryl),
+
+    RegionData(LunacidRegion.forbidden_archives_2f, [LunacidEntrance.archives_2f_to_basin, LunacidEntrance.archives_2f_to_1f_back, LunacidEntrance.archives_2f_to_2f_secret]),
+    RegionData(LunacidRegion.forbidden_archives_2f_secret),
+    RegionData(LunacidRegion.forbidden_archives_1f_back, [LunacidEntrance.archives_1f_back_to_2f, LunacidEntrance.archives_2f_to_3f]),
+    RegionData(LunacidRegion.forbidden_archives_3f, [LunacidEntrance.archives_3f_to_2f, LunacidEntrance.archives_3f_to_vampire, LunacidEntrance.archives_3f_to_1f_front,
+                                                     LunacidEntrance.archives_3f_to_secret]),
+    RegionData(LunacidRegion.forbidden_archives_1f_front, [LunacidEntrance.archives_1f_front_to_3f, LunacidEntrance.archives_1f_to_1f_secret,
+                                                           LunacidEntrance.archives_1f_front_to_daedalus]),
+    RegionData(LunacidRegion.forbidden_archives_3f_secret),
+    RegionData(LunacidRegion.forbidden_archives_1f_front_secret),
     RegionData(LunacidRegion.daedalus),
-    RegionData(LunacidRegion.forest_canopy),
-    RegionData(LunacidRegion.yosei_lower, [LunacidEntrance.yosei_lower_to_tomb_upper_lobby, LunacidEntrance.yosei_lower_to_patchouli]),
-    RegionData(LunacidRegion.accursed_tomb_upper_lobby, [LunacidEntrance.tomb_upper_to_tomb]),
+    RegionData(LunacidRegion.forbidden_archives_vampire, [LunacidEntrance.archives_vampire_to_3f, LunacidEntrance.archives_vampire_to_chasm]),
+
+    RegionData(LunacidRegion.laetus_chasm, [LunacidEntrance.chasm_to_archives_vampire, LunacidEntrance.chasm_to_chasm_upper]),
+    RegionData(LunacidRegion.laetus_chasm_upper, [LunacidEntrance.chasm_upper_to_lower, LunacidEntrance.chasm_upper_to_surface, LunacidEntrance.chasm_upper_to_secret]),
+    RegionData(LunacidRegion.laetus_chasm_secret),
+
+    RegionData(LunacidRegion.great_well_surface, [LunacidEntrance.surface_to_chasm_upper, LunacidEntrance.surface_to_basin]),
+
+    RegionData(LunacidRegion.fetid_mire, [LunacidEntrance.mire_to_temple_sewers, LunacidEntrance.mire_to_mire_lower_secrets, LunacidEntrance.mire_to_mire_upper_secret,
+                                          LunacidEntrance.mire_to_sea]),
+    RegionData(LunacidRegion.fetid_mire_lower_secrets),
+    RegionData(LunacidRegion.fetid_mire_high_secrets),
+
+    RegionData(LunacidRegion.yosei_forest, [LunacidEntrance.forest_to_lower_forest, LunacidEntrance.forest_to_temple_lower, LunacidEntrance.forest_to_canopy_path]),
+    RegionData(LunacidRegion.yosei_lower, [LunacidEntrance.lower_forest_to_forest, LunacidEntrance.lower_forest_secret, LunacidEntrance.lower_forest_to_tomb,
+                                           LunacidEntrance.lower_to_patchouli]),
+    RegionData(LunacidRegion.yosei_lower_secret),
     RegionData(LunacidRegion.patchouli),
-    RegionData(LunacidRegion.great_well_surface),
-    RegionData(LunacidRegion.sanguine_sea, [LunacidEntrance.sea_to_castle, LunacidEntrance.sea_to_tomb_lobby]),
-    RegionData(LunacidRegion.accursed_tomb_lobby, [LunacidEntrance.tomb_lobby_to_tomb]),
-    RegionData(LunacidRegion.accursed_tomb, [LunacidEntrance.tomb_to_vampire, LunacidEntrance.tomb_to_mausoleum, LunacidEntrance.tomb_to_tomb_platform]),
-    RegionData(LunacidRegion.vampire_tomb),
+    RegionData(LunacidRegion.yosei_canopy_path, [LunacidEntrance.canopy_path_to_canopy, LunacidEntrance.canopy_path_to_forest]),
+    RegionData(LunacidRegion.yosei_tomb, [LunacidEntrance.tomb_to_lower_forest, LunacidEntrance.forest_tomb_to_accursed_tomb]),
+
+    RegionData(LunacidRegion.forest_canopy, [LunacidEntrance.canopy_to_canopy_path]),
+
+    RegionData(LunacidRegion.sanguine_sea, [LunacidEntrance.sea_to_mire, LunacidEntrance.sea_to_castle_entrance, LunacidEntrance.sea_to_accursed_tomb]),
+
+    RegionData(LunacidRegion.accursed_tomb, [LunacidEntrance.accursed_tomb_to_sea, LunacidEntrance.accursed_to_accursed_well, LunacidEntrance.accursed_to_vampire,
+                                             LunacidEntrance.accursed_to_mausoleum, LunacidEntrance.accursed_tomb_to_platform, LunacidEntrance.accursed_tomb_to_secrets]),
     RegionData(LunacidRegion.accursed_tomb_platform),
-    RegionData(LunacidRegion.mausoleum),
-    RegionData(LunacidRegion.holy_battleground),
-    RegionData(LunacidRegion.sealed_ballroom, [LunacidEntrance.ballroom_to_doors, LunacidEntrance.ballroom_to_secret]),
-    RegionData(LunacidRegion.sealed_ballroom_doors),
-    RegionData(LunacidRegion.sealed_ballroom_secret),
-    RegionData(LunacidRegion.tower_abyss, [LunacidEntrance.tower_abyss_to_5]),
-    RegionData(LunacidRegion.tower_abyss_5, [LunacidEntrance.tower_abyss_5_to_10]),
-    RegionData(LunacidRegion.tower_abyss_10, [LunacidEntrance.tower_abyss_10_to_15]),
-    RegionData(LunacidRegion.tower_abyss_15, [LunacidEntrance.tower_abyss_15_to_20]),
-    RegionData(LunacidRegion.tower_abyss_20, [LunacidEntrance.tower_abyss_20_to_25]),
-    RegionData(LunacidRegion.tower_abyss_25, [LunacidEntrance.tower_abyss_25_to_30]),
-    RegionData(LunacidRegion.tower_abyss_30, [LunacidEntrance.tower_abyss_30_to_35]),
-    RegionData(LunacidRegion.tower_abyss_35, [LunacidEntrance.tower_abyss_35_to_40]),
-    RegionData(LunacidRegion.tower_abyss_40, [LunacidEntrance.tower_abyss_40_to_45]),
-    RegionData(LunacidRegion.tower_abyss_45, [LunacidEntrance.tower_abyss_45_to_50]),
-    RegionData(LunacidRegion.tower_abyss_50, [LunacidEntrance.tower_abyss_50_to_top]),
-    RegionData(LunacidRegion.tower_abyss_top),
-    RegionData(LunacidRegion.sand_temple, [LunacidEntrance.sand_to_deep_snake, LunacidEntrance.sand_to_secret_snake, LunacidEntrance.sand_to_sand_secret]),
-    RegionData(LunacidRegion.sand_temple_secret),
-    RegionData(LunacidRegion.deep_snake_pit),
-    RegionData(LunacidRegion.secret_snake_pit),
-    RegionData(LunacidRegion.terminus_prison_upstairs),
-    RegionData(LunacidRegion.terminus_prison_dark, [LunacidEntrance.prison_to_ash_entrance, LunacidEntrance.prison_to_arena]),
-    RegionData(LunacidRegion.labyrinth_of_ash_entrance, [LunacidEntrance.ash_entrance_to_ash]),
-    RegionData(LunacidRegion.labyrinth_of_ash, [LunacidEntrance.labyrinth_of_ash_to_holy_seat_of_gold]),
-    RegionData(LunacidRegion.holy_seat_of_gold),
-    RegionData(LunacidRegion.forlorn_arena, [LunacidEntrance.arena_to_fate, LunacidEntrance.arena_to_earth_secret, LunacidEntrance.arena_to_water]),
-    RegionData(LunacidRegion.water_temple, [LunacidEntrance.water_to_deep]),
-    RegionData(LunacidRegion.water_temple_lower, [LunacidEntrance.water_to_secret]),
-    RegionData(LunacidRegion.water_temple_secret),
-    RegionData(LunacidRegion.chamber_of_fate, [LunacidEntrance.fate_to_sleeper]),
-    RegionData(LunacidRegion.grave_of_the_sleeper),
+    RegionData(LunacidRegion.mausoleum, [LunacidEntrance.mausoleum_to_secret]),
+    RegionData(LunacidRegion.mausoleum_secret),
+    RegionData(LunacidRegion.vampire_tomb, [LunacidEntrance.vampire_tomb_to_secret]),
+    RegionData(LunacidRegion.vampire_tomb_tape_room),
+    RegionData(LunacidRegion.accursed_tomb_secrets),
+    RegionData(LunacidRegion.accursed_well, [LunacidEntrance.accursed_well_to_accursed, LunacidEntrance.accursed_tomb_to_forest_tomb]),
 
-    RegionData(LunacidRegion.menu, [LunacidEntrance.menu_to_basin]),
-    RegionData(LunacidRegion.hollow_basin, [LunacidEntrance.basin_to_wings_rest, LunacidEntrance.basin_to_archives, LunacidEntrance.basin_to_surface,
-                                            LunacidEntrance.basin_to_temple]),
-    RegionData(LunacidRegion.temple_of_silence_entrance, [LunacidEntrance.temple_entrance_to_temple_interior]),
-    RegionData(LunacidRegion.temple_of_silence_interior, [LunacidEntrance.temple_to_mire, LunacidEntrance.temple_to_forest,
-                                                          LunacidEntrance.temple_interior_to_temple_secret]),
-    RegionData(LunacidRegion.fetid_mire, [LunacidEntrance.mire_to_sea, LunacidEntrance.mire_to_secret]),
-    RegionData(LunacidRegion.fetid_mire_secret),
-    RegionData(LunacidRegion.forbidden_archives_2, [LunacidEntrance.archives_2_to_archives_1, LunacidEntrance.archives_2_to_archives_3]),
-    RegionData(LunacidRegion.forbidden_archives_3, [LunacidEntrance.archives_3_to_archives_1b, LunacidEntrance.archives_to_chasm]),
-    RegionData(LunacidRegion.laetus_chasm, [LunacidEntrance.chasm_to_surface]),
-    RegionData(LunacidRegion.yosei_forest, [LunacidEntrance.yosei_to_yosei_lower, LunacidEntrance.yosei_to_canopy]),
+    RegionData(LunacidRegion.castle_le_fanu_entrance, [LunacidEntrance.castle_entrance_to_sea, LunacidEntrance.castle_entrance_to_battlefield,
+                                                       LunacidEntrance.castle_entrance_to_main_halls, LunacidEntrance.castle_to_cattle]),
+    RegionData(LunacidRegion.castle_le_fanu_cattle_prison, [LunacidEntrance.cattle_to_castle, LunacidEntrance.cattle_to_deeper]),
+    RegionData(LunacidRegion.castle_le_fanu_cattle_prison_deep, [LunacidEntrance.cattle_to_secret]),
+    RegionData(LunacidRegion.castle_le_fanu_cattle_prison_secret),
+    RegionData(LunacidRegion.castle_le_fanu_main_halls, [LunacidEntrance.castle_main_halls_to_entrance, LunacidEntrance.castle_main_halls_to_upstairs,
+                                                         LunacidEntrance.castle_main_halls_to_queen_path]),
+    RegionData(LunacidRegion.castle_le_fanu_upstairs_area, [LunacidEntrance.castle_upstairs_to_main_halls, LunacidEntrance.castle_upstairs_to_forbidden,
+                                                            LunacidEntrance.castle_upstairs_to_cattle_back, LunacidEntrance.castle_upstairs_to_queen_rest,
+                                                            LunacidEntrance.castle_upstairs_to_tape_room]),
+    RegionData(LunacidRegion.castle_le_fanu_upstairs_tape_room),
+    RegionData(LunacidRegion.castle_le_fanu_upstairs_queens_rest),
+    RegionData(LunacidRegion.castle_le_fanu_upstairs_forbidden_entry, [LunacidEntrance.castle_forbidden_to_upstairs, LunacidEntrance.castle_forbidden_to_sealed_ballroom]),
+    RegionData(LunacidRegion.castle_le_fanu_cattle_prison_back, [LunacidEntrance.castle_cattle_back_to_cattle_prison, LunacidEntrance.castle_cattle_back_to_upstairs,
+                                                                 LunacidEntrance.castle_cattle_back_to_boiling_grotto, LunacidEntrance.castle_cattle_back_to_main_halls]),
+    RegionData(LunacidRegion.castle_le_fanu_throne_path, [LunacidEntrance.castle_queen_path_to_throne_room, LunacidEntrance.castle_queen_path_to_main_halls]),
 
-    RegionData(LunacidRegion.castle_le_fanu, [LunacidEntrance.castle_to_red, LunacidEntrance.castle_to_white, LunacidEntrance.castle_to_battleground]),
-    RegionData(LunacidRegion.castle_le_fanu_red, [LunacidEntrance.red_to_red_deep]),
-    RegionData(LunacidRegion.castle_le_fanu_red_deep, [LunacidEntrance.red_deep_to_red_secret]),
-    RegionData(LunacidRegion.castle_le_fanu_red_secret),
-    RegionData(LunacidRegion.castle_le_fanu_white, [LunacidEntrance.white_to_blue, LunacidEntrance.white_to_throne]),
-    RegionData(LunacidRegion.castle_le_fanu_blue, [LunacidEntrance.castle_to_grotto, LunacidEntrance.castle_to_ballroom]),
-    RegionData(LunacidRegion.boiling_grotto, [LunacidEntrance.grotto_to_tower, LunacidEntrance.grotto_to_secret, LunacidEntrance.grotto_to_sand]),
+    RegionData(LunacidRegion.holy_battleground, [LunacidEntrance.holy_battle_to_castle_entrance]),
+
+    RegionData(LunacidRegion.sealed_ballroom, [LunacidEntrance.sealed_ballroom_to_rooms, LunacidEntrance.sealed_ballroom_to_secrets,
+                                               LunacidEntrance.sealed_ballroom_to_forbidden_entry]),
+    RegionData(LunacidRegion.sealed_ballroom_rooms, [LunacidEntrance.sealed_ballroom_rooms_to_cave]),
+    RegionData(LunacidRegion.sealed_ballroom_cave_within_room),
+    RegionData(LunacidRegion.sealed_ballroom_secret_walls, [LunacidEntrance.sealed_ballroom_secret_room]),
+    RegionData(LunacidRegion.sealed_ballroom_room_within_secret),
+
+    RegionData(LunacidRegion.boiling_grotto, [LunacidEntrance.boiling_grotto_to_castle_cattle_back, LunacidEntrance.boiling_grotto_to_secret,
+                                              LunacidEntrance.boiling_grotto_to_coffin_room, LunacidEntrance.boiling_grotto_to_sand_temple]),
+    RegionData(LunacidRegion.boiling_grotto_coffin_chamber, [LunacidEntrance.boiling_grotto_coffin_room_to_boiling_grotto, LunacidEntrance.boiling_grotto_coffin_room_to_tower]),
     RegionData(LunacidRegion.boiling_grotto_secret),
-    RegionData(LunacidRegion.throne_chamber, [LunacidEntrance.throne_to_prison]),
-    RegionData(LunacidRegion.terminus_prison, [LunacidEntrance.prison_to_prison_upstairs, LunacidEntrance.prison_to_prison_dark]),
-    RegionData(LunacidRegion.earth_temple_secret)
+
+    RegionData(LunacidRegion.sand_temple, [LunacidEntrance.sand_temple_to_deep_snake_pit,  LunacidEntrance.sand_temple_to_secret_snake_pit]),
+    RegionData(LunacidRegion.secret_snake_pit, [LunacidEntrance.sand_temple_secret_snake_pit_escape]),
+    RegionData(LunacidRegion.deep_snake_pit),
+
+    RegionData(LunacidRegion.tower_of_abyss, [LunacidEntrance.abyss_to_5f]),
+    RegionData(LunacidRegion.tower_of_abyss_5f, [LunacidEntrance.abyss_5f_to_10f]),
+    RegionData(LunacidRegion.tower_of_abyss_10f, [LunacidEntrance.abyss_10f_to_15f]),
+    RegionData(LunacidRegion.tower_of_abyss_15f, [LunacidEntrance.abyss_15f_to_20f]),
+    RegionData(LunacidRegion.tower_of_abyss_20f, [LunacidEntrance.abyss_20f_to_25f]),
+    RegionData(LunacidRegion.tower_of_abyss_25f, [LunacidEntrance.abyss_25f_to_30f]),
+    RegionData(LunacidRegion.tower_of_abyss_30f, [LunacidEntrance.abyss_30f_to_35f]),
+    RegionData(LunacidRegion.tower_of_abyss_35f, [LunacidEntrance.abyss_35f_to_40f]),
+    RegionData(LunacidRegion.tower_of_abyss_40f, [LunacidEntrance.abyss_40f_to_45f]),
+    RegionData(LunacidRegion.tower_of_abyss_45f, [LunacidEntrance.abyss_45f_to_50f]),
+    RegionData(LunacidRegion.tower_of_abyss_50f, [LunacidEntrance.abyss_50f_to_final]),
+    RegionData(LunacidRegion.tower_of_abyss_finish),
+
+    RegionData(LunacidRegion.throne_chamber, [LunacidEntrance.throne_room_to_castle_queen_path, LunacidEntrance.throne_room_to_prison]),
+
+    RegionData(LunacidRegion.terminus_prison_1f, [LunacidEntrance.terminus_prison_1f_to_2f, LunacidEntrance.terminus_prison_1f_to_3f,
+                                                  LunacidEntrance.terminus_prison_1f_to_basement, LunacidEntrance.terminus_prison_1f_to_arena,
+                                                  LunacidEntrance.terminus_prison_1f_to_secrets]),
+    RegionData(LunacidRegion.terminus_prison_2f, [LunacidEntrance.terminus_prison_2f_to_1f, LunacidEntrance.terminus_prison_2f_to_3f,
+                                                  LunacidEntrance.terminus_prison_2f_doors]),
+    RegionData(LunacidRegion.terminus_prison_3f, [LunacidEntrance.terminus_prison_3f_to_2f, LunacidEntrance.terminus_prison_3f_to_4f,
+                                                  LunacidEntrance.terminus_prison_3f_doors, LunacidEntrance.terminus_prison_3f_to_throne_room]),
+    RegionData(LunacidRegion.terminus_prison_4f, [LunacidEntrance.terminus_prison_4f_secret_walls]),
+    RegionData(LunacidRegion.terminus_prison_basement, [LunacidEntrance.terminus_prison_basement_to_ash, LunacidEntrance.terminus_prison_basement_to_1f]),
+    RegionData(LunacidRegion.terminus_prison_1f_secrets),
+    RegionData(LunacidRegion.terminus_prison_2f_rooms),
+    RegionData(LunacidRegion.terminus_prison_3f_rooms),
+    RegionData(LunacidRegion.terminus_prison_4f_secrets),
+
+    RegionData(LunacidRegion.labyrinth_of_ash, [LunacidEntrance.labyrinth_of_ash_to_terminus_prison, LunacidEntrance.labyrinth_of_ash_to_interior,
+                                                LunacidEntrance.labyrinth_of_ash_to_holy_seat]),
+    RegionData(LunacidRegion.labyrinth_interior, [LunacidEntrance.labyrinth_interior_to_secret]),
+    RegionData(LunacidRegion.labyrinth_secret),
+    RegionData(LunacidRegion.holy_seat_of_gold, [LunacidEntrance.holy_seat_to_secret]),
+    RegionData(LunacidRegion.holy_seat_of_secret),
+
+    RegionData(LunacidRegion.forlorn_arena, [LunacidEntrance.forlorn_arena_to_path_to_sucsarius, LunacidEntrance.forlorn_arena_to_temple_of_earth,
+                                             LunacidEntrance.forlorn_arena_to_water_temple, LunacidEntrance.forlorn_arena_to_terminus_prison]),
+    RegionData(LunacidRegion.temple_of_earth, [LunacidEntrance.temple_of_earth_to_secrets]),
+    RegionData(LunacidRegion.temple_of_earth_secret),
+    RegionData(LunacidRegion.temple_of_water, [LunacidEntrance.temple_of_water_to_lower]),
+    RegionData(LunacidRegion.temple_of_water_lower, [LunacidEntrance.temple_of_water_lower_to_secrets]),
+    RegionData(LunacidRegion.temple_of_water_lower_secrets),
+    RegionData(LunacidRegion.forlorn_path_to_sucsarius, [LunacidEntrance.forlorn_path_to_chamber]),
+
+    RegionData(LunacidRegion.chamber_of_fate, [LunacidEntrance.chamber_to_forlorn_path, LunacidEntrance.chamber_to_grave]),
+
+    RegionData(LunacidRegion.grave_of_the_sleeper, [LunacidEntrance.grave_to_chamber]),
+
 ]
 
-consistent_entrances = [
-    ConnectionData(LunacidEntrance.basin_to_wings_rest, LunacidRegion.wings_rest),
-    ConnectionData(LunacidEntrance.sheryl, LunacidRegion.sheryl_the_crow),
-    ConnectionData(LunacidEntrance.temple_interior_to_temple_secret, LunacidRegion.temple_of_silence_secret),
-    ConnectionData(LunacidEntrance.mire_to_secret, LunacidRegion.fetid_mire_secret),
-    ConnectionData(LunacidEntrance.prison_to_arena, LunacidRegion.forlorn_arena, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.prison_to_ash_entrance, LunacidRegion.labyrinth_of_ash_entrance, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.ash_entrance_to_ash, LunacidRegion.labyrinth_of_ash),
-    ConnectionData(LunacidEntrance.sea_to_tomb_lobby, LunacidRegion.accursed_tomb_lobby, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.tomb_lobby_to_tomb, LunacidRegion.accursed_tomb),
-    ConnectionData(LunacidEntrance.chasm_to_surface, LunacidRegion.great_well_surface, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.yosei_to_canopy, LunacidRegion.forest_canopy, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.yosei_to_yosei_lower, LunacidRegion.yosei_lower),
-    ConnectionData(LunacidEntrance.yosei_lower_to_tomb_upper_lobby, LunacidRegion.accursed_tomb_upper_lobby, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.tomb_upper_to_tomb, LunacidRegion.accursed_tomb),
-    ConnectionData(LunacidEntrance.tomb_to_tomb_platform, LunacidRegion.accursed_tomb_platform),
-    ConnectionData(LunacidEntrance.tomb_to_vampire, LunacidRegion.vampire_tomb),
-    ConnectionData(LunacidEntrance.tomb_to_mausoleum, LunacidRegion.mausoleum),
-    ConnectionData(LunacidEntrance.arena_to_fate, LunacidRegion.chamber_of_fate),
-    ConnectionData(LunacidEntrance.fate_to_sleeper, LunacidRegion.grave_of_the_sleeper),
-    ConnectionData(LunacidEntrance.archives_to_daedalus, LunacidRegion.daedalus),
-    ConnectionData(LunacidEntrance.grotto_to_tower, LunacidRegion.tower_abyss, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.tower_abyss_to_5, LunacidRegion.tower_abyss_5),
-    ConnectionData(LunacidEntrance.tower_abyss_5_to_10, LunacidRegion.tower_abyss_10),
-    ConnectionData(LunacidEntrance.tower_abyss_10_to_15, LunacidRegion.tower_abyss_15),
-    ConnectionData(LunacidEntrance.tower_abyss_15_to_20, LunacidRegion.tower_abyss_20),
-    ConnectionData(LunacidEntrance.tower_abyss_20_to_25, LunacidRegion.tower_abyss_25),
-    ConnectionData(LunacidEntrance.tower_abyss_25_to_30, LunacidRegion.tower_abyss_30),
-    ConnectionData(LunacidEntrance.tower_abyss_30_to_35, LunacidRegion.tower_abyss_35),
-    ConnectionData(LunacidEntrance.tower_abyss_35_to_40, LunacidRegion.tower_abyss_40),
-    ConnectionData(LunacidEntrance.tower_abyss_40_to_45, LunacidRegion.tower_abyss_45),
-    ConnectionData(LunacidEntrance.tower_abyss_45_to_50, LunacidRegion.tower_abyss_50),
-    ConnectionData(LunacidEntrance.tower_abyss_50_to_top, LunacidRegion.tower_abyss_top),
-    ConnectionData(LunacidEntrance.grotto_to_sand, LunacidRegion.sand_temple),
-    ConnectionData(LunacidEntrance.prison_to_prison_dark, LunacidRegion.terminus_prison_dark),
-    ConnectionData(LunacidEntrance.yosei_lower_to_patchouli, LunacidRegion.patchouli),
-    ConnectionData(LunacidEntrance.wings_to_surface, LunacidRegion.great_well_surface),
-    ConnectionData(LunacidEntrance.prison_to_prison_upstairs, LunacidRegion.terminus_prison_upstairs),
-    ConnectionData(LunacidEntrance.menu_to_basin, LunacidRegion.hollow_basin),
-    ConnectionData(LunacidEntrance.basin_to_archives, LunacidRegion.forbidden_archives_2, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.basin_to_surface, LunacidRegion.great_well_surface, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.basin_to_temple, LunacidRegion.temple_of_silence_entrance),
-    ConnectionData(LunacidEntrance.temple_entrance_to_temple_interior, LunacidRegion.temple_of_silence_interior),
-    ConnectionData(LunacidEntrance.temple_to_mire, LunacidRegion.fetid_mire, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.temple_to_forest, LunacidRegion.yosei_forest, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.mire_to_sea, LunacidRegion.sanguine_sea, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.archives_2_to_archives_1, LunacidRegion.forbidden_archives_1),
-    ConnectionData(LunacidEntrance.archives_2_to_archives_3, LunacidRegion.forbidden_archives_3),
-    ConnectionData(LunacidEntrance.archives_3_to_archives_1b, LunacidRegion.forbidden_archives_1b),
-    ConnectionData(LunacidEntrance.archives_to_chasm, LunacidRegion.laetus_chasm, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.sea_to_castle, LunacidRegion.castle_le_fanu, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.castle_to_red, LunacidRegion.castle_le_fanu_red),
-    ConnectionData(LunacidEntrance.red_to_red_deep, LunacidRegion.castle_le_fanu_red_deep),
-    ConnectionData(LunacidEntrance.red_deep_to_red_secret, LunacidRegion.castle_le_fanu_red_secret),
-    ConnectionData(LunacidEntrance.castle_to_white, LunacidRegion.castle_le_fanu_white),
-    ConnectionData(LunacidEntrance.castle_to_battleground, LunacidRegion.holy_battleground, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.ballroom_to_doors, LunacidRegion.sealed_ballroom_doors),
-    ConnectionData(LunacidEntrance.ballroom_to_secret, LunacidRegion.sealed_ballroom_secret),
-    ConnectionData(LunacidEntrance.white_to_throne, LunacidRegion.throne_chamber, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.white_to_blue, LunacidRegion.castle_le_fanu_blue),
-    ConnectionData(LunacidEntrance.castle_to_ballroom, LunacidRegion.sealed_ballroom, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.castle_to_grotto, LunacidRegion.boiling_grotto, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.throne_to_prison, LunacidRegion.terminus_prison, flag=RandomizationFlag.RANDOMIZED),
-    ConnectionData(LunacidEntrance.labyrinth_of_ash_to_holy_seat_of_gold, LunacidRegion.holy_seat_of_gold),
-    ConnectionData(LunacidEntrance.grotto_to_secret, LunacidRegion.boiling_grotto_secret),
-    ConnectionData(LunacidEntrance.arena_to_earth_secret, LunacidRegion.earth_temple_secret),
-    ConnectionData(LunacidEntrance.arena_to_water, LunacidRegion.water_temple),
-    ConnectionData(LunacidEntrance.water_to_deep, LunacidRegion.water_temple_lower),
-    ConnectionData(LunacidEntrance.water_to_secret, LunacidRegion.water_temple_secret),
-    ConnectionData(LunacidEntrance.sand_to_secret_snake, LunacidRegion.secret_snake_pit),
-    ConnectionData(LunacidEntrance.sand_to_deep_snake, LunacidRegion.deep_snake_pit),
-    ConnectionData(LunacidEntrance.sand_to_sand_secret, LunacidRegion.sand_temple_secret)
+lunacid_entrances = [
+    # Menu moving to the main starting spot.  Hollow Basin is not guaranteed.
+    EntranceData(LunacidEntrance.menu_to_start, LunacidRegion.starting_area),
+    EntranceData(LunacidEntrance.start_lobby_to_rest, LunacidRegion.wings_rest),
+
+    # Main basin area
+    EntranceData(LunacidEntrance.basin_to_surface, LunacidRegion.great_well_surface, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.basin_to_temple_path, LunacidRegion.temple_path),
+    EntranceData(LunacidEntrance.basin_to_archives_2f, LunacidRegion.forbidden_archives_2f, True, type = EntranceType.TWO_WAY),
+
+    # Path to temple of silence
+    EntranceData(LunacidEntrance.temple_path_to_basin, LunacidRegion.hollow_basin),
+    EntranceData(LunacidEntrance.temple_path_to_temple_front, LunacidRegion.temple_front),
+
+    # temple entrance
+    EntranceData(LunacidEntrance.temple_front_to_temple_path, LunacidRegion.temple_path),
+    EntranceData(LunacidEntrance.temple_front_to_temple_back, LunacidRegion.temple_back),
+    EntranceData(LunacidEntrance.temple_front_to_temple_sewers, LunacidRegion.temple_sewers),
+    EntranceData(LunacidEntrance.temple_front_to_temple_front_secret, LunacidRegion.temple_front_secret),
+
+    # temple sewers
+    EntranceData(LunacidEntrance.temple_sewers_to_sewers_secret, LunacidRegion.temple_sewers_secret),
+    EntranceData(LunacidEntrance.temple_sewers_to_mire, LunacidRegion.fetid_mire, True, type = EntranceType.TWO_WAY),
+
+    # temple backend
+    EntranceData(LunacidEntrance.temple_back_to_temple_lower, LunacidRegion.temple_lower),
+    EntranceData(LunacidEntrance.temple_back_to_temple_secret, LunacidRegion.temple_secret),
+
+    # temple secret.  This is a one-way since one can theoretically always return to menu, and thus wherever you came from to get to secret.
+    EntranceData(LunacidEntrance.temple_secret_to_temple_front, LunacidRegion.temple_front),
+
+    # temple lower.  The ladder is one way since it'd require to reach lower anyway.
+    EntranceData(LunacidEntrance.temple_lower_to_temple_back, LunacidRegion.temple_back),
+    EntranceData(LunacidEntrance.temple_lower_ladder, LunacidRegion.hollow_basin),
+    EntranceData(LunacidEntrance.temple_lower_to_forest, LunacidRegion.yosei_forest, True, type = EntranceType.TWO_WAY),
+
+    # wings rest
+    EntranceData(LunacidEntrance.rest_to_sheryl, LunacidRegion.sheryl),
+    EntranceData(LunacidEntrance.rest_to_surface, LunacidRegion.great_well_surface, True, type = EntranceType.ONE_WAY),
+    EntranceData(LunacidEntrance.rest_to_start),  # The ending region will be picked before entrances are randomized and placed then.
+
+    # Forbidden Archives 2f
+    EntranceData(LunacidEntrance.archives_2f_to_basin, LunacidRegion.hollow_basin, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.archives_2f_to_1f_back, LunacidRegion.forbidden_archives_1f_back),
+    EntranceData(LunacidEntrance.archives_2f_to_2f_secret, LunacidRegion.forbidden_archives_2f_secret),
+
+    #Forbidden Archives 1f.  Note that the 2f to 3f entrance to save me some general anguish.
+    EntranceData(LunacidEntrance.archives_1f_back_to_2f, LunacidRegion.forbidden_archives_2f),
+    EntranceData(LunacidEntrance.archives_2f_to_3f, LunacidRegion.forbidden_archives_3f),
+    EntranceData(LunacidEntrance.archives_1f_front_to_3f, LunacidRegion.forbidden_archives_3f),
+    EntranceData(LunacidEntrance.archives_1f_to_1f_secret, LunacidRegion.forbidden_archives_1f_front_secret),
+    EntranceData(LunacidEntrance.archives_1f_front_to_daedalus, LunacidRegion.daedalus),
+
+    # forbidden archives 3f
+    EntranceData(LunacidEntrance.archives_3f_to_1f_front, LunacidRegion.forbidden_archives_1f_front),
+    EntranceData(LunacidEntrance.archives_3f_to_2f, LunacidRegion.forbidden_archives_1f_back),
+    EntranceData(LunacidEntrance.archives_3f_to_secret, LunacidRegion.forbidden_archives_3f_secret),
+    EntranceData(LunacidEntrance.archives_3f_to_vampire, LunacidRegion.forbidden_archives_vampire),
+
+    # forbidden archives vampire.  Its just the tiny hallway between the main area and chasm.
+    EntranceData(LunacidEntrance.archives_vampire_to_3f, LunacidRegion.forbidden_archives_3f),
+    EntranceData(LunacidEntrance.archives_vampire_to_chasm, LunacidRegion.laetus_chasm, True, type = EntranceType.TWO_WAY),
+
+    # laetus chasm.  Split up this region since going backwards requires a nasty jump.
+    EntranceData(LunacidEntrance.chasm_to_archives_vampire, LunacidRegion.forbidden_archives_vampire, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.chasm_to_chasm_upper, LunacidRegion.laetus_chasm_upper),
+    EntranceData(LunacidEntrance.chasm_upper_to_secret, LunacidRegion.laetus_chasm_secret),
+    EntranceData(LunacidEntrance.chasm_upper_to_lower, LunacidRegion.laetus_chasm),
+    EntranceData(LunacidEntrance.chasm_upper_to_surface, LunacidRegion.great_well_surface, True, type = EntranceType.TWO_WAY),
+
+    # great well surface
+    EntranceData(LunacidEntrance.surface_to_basin, LunacidRegion.hollow_basin, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.surface_to_chasm_upper, LunacidRegion.hollow_basin, True, type = EntranceType.TWO_WAY),
+
+    # the fetid mire
+    EntranceData(LunacidEntrance.mire_to_temple_sewers, LunacidRegion.temple_sewers, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.mire_to_mire_upper_secret, LunacidRegion.fetid_mire_high_secrets),
+    EntranceData(LunacidEntrance.mire_to_mire_lower_secrets, LunacidRegion.fetid_mire_lower_secrets),
+    EntranceData(LunacidEntrance.mire_to_sea, LunacidRegion.sanguine_sea, True, type = EntranceType.TWO_WAY),
+
+    # yosei forest main
+    EntranceData(LunacidEntrance.forest_to_temple_lower, LunacidRegion.temple_lower, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.forest_to_canopy_path, LunacidRegion.yosei_canopy_path),
+    EntranceData(LunacidEntrance.forest_to_lower_forest, LunacidRegion.yosei_lower),
+
+    # yosei lower
+    EntranceData(LunacidEntrance.lower_forest_to_forest, LunacidRegion.yosei_forest),
+    EntranceData(LunacidEntrance.lower_forest_secret, LunacidRegion.yosei_lower_secret),
+    EntranceData(LunacidEntrance.lower_forest_to_tomb, LunacidRegion.yosei_tomb),
+    EntranceData(LunacidEntrance.lower_to_patchouli, LunacidRegion.patchouli),
+
+    # this is just the path between the enchanted door and the actual door
+    EntranceData(LunacidEntrance.canopy_path_to_forest, LunacidRegion.yosei_forest),
+    EntranceData(LunacidEntrance.canopy_path_to_canopy, LunacidRegion.forest_canopy, True, type = EntranceType.TWO_WAY),
+
+    # the drop down area that gets you into accursed tomb.  We need a rule for jumping out if you walk out this way.
+    EntranceData(LunacidEntrance.tomb_to_lower_forest, LunacidRegion.yosei_lower),
+    EntranceData(LunacidEntrance.forest_tomb_to_accursed_tomb, LunacidRegion.accursed_tomb, True, type = EntranceType.TWO_WAY),
+
+    # the entirety of forest canopy.  Shrimple.
+    EntranceData(LunacidEntrance.canopy_to_canopy_path, LunacidRegion.yosei_canopy_path, True, type = EntranceType.TWO_WAY),
+
+    # sanguine sea
+    EntranceData(LunacidEntrance.sea_to_mire, LunacidRegion.fetid_mire, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.sea_to_castle_entrance, LunacidRegion.castle_le_fanu_entrance, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.sea_to_accursed_tomb, LunacidRegion.accursed_tomb, True, type = EntranceType.TWO_WAY),
+
+    # accursed tomb
+    EntranceData(LunacidEntrance.accursed_tomb_to_sea, LunacidRegion.sanguine_sea, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.accursed_to_vampire, LunacidRegion.vampire_tomb),
+    EntranceData(LunacidEntrance.accursed_to_mausoleum, LunacidRegion.mausoleum),
+    EntranceData(LunacidEntrance.accursed_tomb_to_secrets, LunacidRegion.accursed_tomb_secrets),
+    EntranceData(LunacidEntrance.vampire_tomb_to_secret, LunacidRegion.vampire_tomb_tape_room),
+    EntranceData(LunacidEntrance.accursed_to_accursed_well, LunacidRegion.accursed_well),
+    EntranceData(LunacidEntrance.accursed_tomb_to_platform, LunacidRegion.accursed_tomb_platform),
+    EntranceData(LunacidEntrance.mausoleum_to_secret, LunacidRegion.mausoleum_secret),
+
+    # accursed well; its the top part of accursed tomb where you drop down a well.
+    EntranceData(LunacidEntrance.accursed_well_to_accursed, LunacidRegion.accursed_tomb),
+    EntranceData(LunacidEntrance.accursed_tomb_to_forest_tomb, LunacidRegion.yosei_tomb, True, type = EntranceType.TWO_WAY),
+
+    # castle le fanu entrance
+    EntranceData(LunacidEntrance.castle_entrance_to_sea, LunacidRegion.sanguine_sea, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.castle_entrance_to_battlefield, LunacidRegion.holy_battleground, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.castle_to_cattle, LunacidRegion.castle_le_fanu_cattle_prison),
+    EntranceData(LunacidEntrance.castle_entrance_to_main_halls, LunacidRegion.castle_le_fanu_main_halls),
+
+    # castle le fanu cattle prison.  We split off the deeper area since it also requires a symbol possibly.
+    EntranceData(LunacidEntrance.cattle_to_castle, LunacidRegion.castle_le_fanu_entrance),
+    EntranceData(LunacidEntrance.cattle_to_deeper, LunacidRegion.castle_le_fanu_cattle_prison_deep),
+    EntranceData(LunacidEntrance.cattle_to_secret, LunacidRegion.castle_le_fanu_cattle_prison_secret),
+
+    # castle le fanu main halls
+    EntranceData(LunacidEntrance.castle_main_halls_to_entrance, LunacidRegion.castle_le_fanu_entrance),
+    EntranceData(LunacidEntrance.castle_main_halls_to_upstairs, LunacidRegion.castle_le_fanu_upstairs_area),
+    EntranceData(LunacidEntrance.castle_main_halls_to_queen_path, LunacidRegion.castle_le_fanu_throne_path),
+
+    # castle le fanu upstairs area
+    EntranceData(LunacidEntrance.castle_upstairs_to_main_halls, LunacidRegion.castle_le_fanu_main_halls),
+    EntranceData(LunacidEntrance.castle_upstairs_to_forbidden, LunacidRegion.castle_le_fanu_upstairs_forbidden_entry),
+    EntranceData(LunacidEntrance.castle_upstairs_to_queen_rest, LunacidRegion.castle_le_fanu_upstairs_queens_rest),
+    EntranceData(LunacidEntrance.castle_upstairs_to_cattle_back, LunacidRegion.castle_le_fanu_cattle_prison_back),
+    EntranceData(LunacidEntrance.castle_upstairs_to_tape_room, LunacidRegion.castle_le_fanu_upstairs_tape_room),
+
+    # castle le fanu forbidden entry.  This is the very tiny spot between the wall you open with magic hitting the window and ballroom.
+    EntranceData(LunacidEntrance.castle_forbidden_to_upstairs, LunacidRegion.castle_le_fanu_upstairs_area),
+    EntranceData(LunacidEntrance.castle_forbidden_to_sealed_ballroom, LunacidRegion.sealed_ballroom, True, type = EntranceType.TWO_WAY),
+
+    # castle le fanu cattle back.  The back area where the final symbol is.
+    EntranceData(LunacidEntrance.castle_cattle_back_to_main_halls, LunacidRegion.castle_le_fanu_main_halls),
+    EntranceData(LunacidEntrance.castle_cattle_back_to_upstairs, LunacidRegion.castle_le_fanu_upstairs_area),
+    EntranceData(LunacidEntrance.castle_cattle_back_to_cattle_prison, LunacidRegion.castle_le_fanu_cattle_prison),
+    EntranceData(LunacidEntrance.castle_cattle_back_to_boiling_grotto, LunacidRegion.boiling_grotto, True, type = EntranceType.TWO_WAY),
+
+    #castle le fanu throne path.  This is the long hallway between the green door and the door to throne chamber.
+    EntranceData(LunacidEntrance.castle_queen_path_to_throne_room, LunacidRegion.throne_chamber, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.castle_queen_path_to_main_halls, LunacidRegion.castle_le_fanu_main_halls),
+
+    # holy battlefield
+    EntranceData(LunacidEntrance.holy_battle_to_castle_entrance, LunacidRegion.castle_le_fanu_entrance, True, type = EntranceType.TWO_WAY),
+
+    # sealed ballroom.  Includes the secrets and rooms together since its small enough.
+    EntranceData(LunacidEntrance.sealed_ballroom_to_forbidden_entry, LunacidRegion.castle_le_fanu_upstairs_forbidden_entry, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.sealed_ballroom_to_rooms, LunacidRegion.sealed_ballroom_rooms),
+    EntranceData(LunacidEntrance.sealed_ballroom_to_secrets, LunacidRegion.sealed_ballroom_secret_walls),
+    EntranceData(LunacidEntrance.sealed_ballroom_secret_room, LunacidRegion.sealed_ballroom_room_within_secret),
+    EntranceData(LunacidEntrance.sealed_ballroom_rooms_to_cave, LunacidRegion.sealed_ballroom_cave_within_room),
+
+    # boiling grotto
+    EntranceData(LunacidEntrance.boiling_grotto_to_castle_cattle_back, LunacidRegion.castle_le_fanu_cattle_prison_back, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.boiling_grotto_to_secret, LunacidRegion.boiling_grotto_secret),
+    EntranceData(LunacidEntrance.boiling_grotto_to_coffin_room, LunacidRegion.boiling_grotto_coffin_chamber),
+    EntranceData(LunacidEntrance.boiling_grotto_to_sand_temple, LunacidRegion.sand_temple),
+
+    # boiling grotto coffin chamber.  Its the secret wall room where you get in the coffin.  A one way.
+    EntranceData(LunacidEntrance.boiling_grotto_coffin_room_to_tower, LunacidRegion.tower_of_abyss, True),
+    EntranceData(LunacidEntrance.boiling_grotto_coffin_room_to_boiling_grotto, LunacidRegion.boiling_grotto),
+
+    # sand temple
+    EntranceData(LunacidEntrance.sand_temple_to_secret_snake_pit, LunacidRegion.secret_snake_pit),
+    EntranceData(LunacidEntrance.sand_temple_to_deep_snake_pit, LunacidRegion.deep_snake_pit),
+    EntranceData(LunacidEntrance.sand_temple_secret_snake_pit_escape, LunacidRegion.sand_temple),
+
+    # tower of abyss
+    EntranceData(LunacidEntrance.abyss_to_5f, LunacidRegion.tower_of_abyss_5f),
+    EntranceData(LunacidEntrance.abyss_5f_to_10f, LunacidRegion.tower_of_abyss_10f),
+    EntranceData(LunacidEntrance.abyss_10f_to_15f, LunacidRegion.tower_of_abyss_15f),
+    EntranceData(LunacidEntrance.abyss_15f_to_20f, LunacidRegion.tower_of_abyss_20f),
+    EntranceData(LunacidEntrance.abyss_20f_to_25f, LunacidRegion.tower_of_abyss_25f),
+    EntranceData(LunacidEntrance.abyss_25f_to_30f, LunacidRegion.tower_of_abyss_30f),
+    EntranceData(LunacidEntrance.abyss_30f_to_35f, LunacidRegion.tower_of_abyss_35f),
+    EntranceData(LunacidEntrance.abyss_35f_to_40f, LunacidRegion.tower_of_abyss_40f),
+    EntranceData(LunacidEntrance.abyss_40f_to_45f, LunacidRegion.tower_of_abyss_45f),
+    EntranceData(LunacidEntrance.abyss_45f_to_50f, LunacidRegion.tower_of_abyss_50f),
+    EntranceData(LunacidEntrance.abyss_50f_to_final, LunacidRegion.tower_of_abyss_finish),
+
+    # throne chamber
+    EntranceData(LunacidEntrance.throne_room_to_castle_queen_path, LunacidRegion.castle_le_fanu_throne_path, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.throne_room_to_prison, LunacidRegion.terminus_prison_3f, True, type = EntranceType.TWO_WAY),
+
+    # terminus prison 1f
+    EntranceData(LunacidEntrance.terminus_prison_1f_to_secrets, LunacidRegion.terminus_prison_1f_secrets),
+    EntranceData(LunacidEntrance.terminus_prison_1f_to_arena, LunacidRegion.forlorn_arena, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.terminus_prison_1f_to_basement, LunacidRegion.terminus_prison_basement),
+    EntranceData(LunacidEntrance.terminus_prison_1f_to_2f, LunacidRegion.terminus_prison_2f),
+    EntranceData(LunacidEntrance.terminus_prison_1f_to_3f, LunacidRegion.terminus_prison_3f),
+
+    # terminus prison 2f
+    EntranceData(LunacidEntrance.terminus_prison_2f_doors, LunacidRegion.terminus_prison_2f_rooms),
+    EntranceData(LunacidEntrance.terminus_prison_2f_to_1f, LunacidRegion.terminus_prison_1f),
+    EntranceData(LunacidEntrance.terminus_prison_2f_to_3f, LunacidRegion.terminus_prison_3f),
+
+    # terminus prison 3f
+    EntranceData(LunacidEntrance.terminus_prison_3f_to_throne_room, LunacidRegion.throne_chamber, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.terminus_prison_3f_to_2f, LunacidRegion.terminus_prison_2f),
+    EntranceData(LunacidEntrance.terminus_prison_3f_doors, LunacidRegion.terminus_prison_3f_rooms),
+    EntranceData(LunacidEntrance.terminus_prison_3f_to_4f, LunacidRegion.terminus_prison_4f),
+
+    # terminus prison 4f
+    EntranceData(LunacidEntrance.terminus_prison_4f_secret_walls, LunacidRegion.terminus_prison_4f_secrets),
+
+    # terminus prison basement
+    EntranceData(LunacidEntrance.terminus_prison_basement_to_1f, LunacidRegion.terminus_prison_1f),
+    EntranceData(LunacidEntrance.terminus_prison_basement_to_ash, LunacidRegion.labyrinth_of_ash, True, type = EntranceType.TWO_WAY),
+
+    # labyrinth of ash
+    EntranceData(LunacidEntrance.labyrinth_of_ash_to_terminus_prison, LunacidRegion.terminus_prison_basement, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.labyrinth_of_ash_to_interior, LunacidRegion.labyrinth_interior),
+    EntranceData(LunacidEntrance.labyrinth_of_ash_to_holy_seat, LunacidRegion.holy_seat_of_gold),
+
+    # labyrinth of ash interior
+    EntranceData(LunacidEntrance.labyrinth_interior_to_secret, LunacidRegion.labyrinth_secret),
+
+    # holy seat of gold
+    EntranceData(LunacidEntrance.holy_seat_to_secret, LunacidRegion.holy_seat_of_secret),
+
+    # forlorn arena
+    EntranceData(LunacidEntrance.forlorn_arena_to_terminus_prison, LunacidRegion.terminus_prison_1f, True, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.forlorn_arena_to_temple_of_earth, LunacidRegion.temple_of_earth),
+    EntranceData(LunacidEntrance.forlorn_arena_to_water_temple, LunacidRegion.temple_of_water),
+    EntranceData(LunacidEntrance.forlorn_arena_to_path_to_sucsarius, LunacidRegion.forlorn_path_to_sucsarius),
+
+    # forlorn temples.  Not much so put them together.
+    EntranceData(LunacidEntrance.temple_of_earth_to_secrets, LunacidRegion.temple_of_earth_secret),
+    EntranceData(LunacidEntrance.temple_of_water_to_lower, LunacidRegion.temple_of_water_lower),
+    EntranceData(LunacidEntrance.temple_of_water_lower_to_secrets, LunacidRegion.temple_of_water_lower_secrets),
+
+    # chamber of fate
+    EntranceData(LunacidEntrance.forlorn_path_to_chamber, LunacidRegion.chamber_of_fate, False, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.chamber_to_forlorn_path, LunacidRegion.forlorn_path_to_sucsarius, False, type = EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.chamber_to_grave, LunacidRegion.grave_of_the_sleeper, False, type = EntranceType.TWO_WAY),
+
+    # grave of the sleeper
+    EntranceData(LunacidEntrance.grave_to_chamber, LunacidRegion.chamber_of_fate, False, type = EntranceType.TWO_WAY),
 ]
 
-
-def reconstruct_connection_list(randomized_data: dict[str, str]) -> dict[ConnectionData, ConnectionData]:
-    reconstructed_list: Dict[ConnectionData, ConnectionData] = {}
-    for connection in randomized_data:
-        starting_position = find_suitable_connection_data(connection)
-        if starting_position is None:
-            continue
-        final_position = find_suitable_connection_data(randomized_data[connection])
-        reconstructed_list[starting_position] = final_position
-    return reconstructed_list
+randomized_entrance_names = [entrance.entrance_name for entrance in lunacid_entrances if entrance.randomized]
+randomized_entrances = []
 
 
-def find_suitable_connection_data(connection_name: str) -> ConnectionData | None:
-    for connection in consistent_entrances:
-        if connection.name != connection_name:
-            continue
-        return connection
-    return None
-
-
-def create_regions(region_factory: RegionFactory, random: Random, options, established_randomized_data: Dict[str, str] = None) -> Tuple[Dict[str, Region], Dict[str, str]]:
-    final_regions = consistent_regions
+def create_regions(starting_area: str, region_factory: RegionFactory, multiworld: MultiWorld) -> Dict[str, Region]:
+    final_regions = lunacid_regions.copy()
     regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in
                                   final_regions}
-    entrances: Dict[str: Entrance] = {entrance.name: entrance
-                                      for region in regions.values()
-                                      for entrance in region.exits}
+    entrances: Dict[str: Entrance] = {}
+    for region in regions.values():
+        for entrance in region.exits:
+            multiworld.register_indirect_condition(region, entrance)
+            entrances[entrance.name] = entrance
+            if entrance.name in randomized_entrance_names:
+                randomized_entrances.append(entrance)
 
-    regions_by_name: Dict[str, RegionData] = {region.name: region for region in final_regions}
-    if established_randomized_data is None:
-        connections, randomized_data = randomize_connections(random, options, regions_by_name)
-    else:
-        connections = collect_connections_to_randomize(options)
-        randomized_data = reconstruct_connection_list(established_randomized_data)
+    for connection in lunacid_entrances:
+        if connection.entrance_name in entrances:
+            entrances[connection.entrance_name].randomization_type = connection.type
+            if connection.entrance_name == LunacidEntrance.rest_to_start:
+                start_region = starting_location_to_region[starting_area]
+                entrances[connection.entrance_name].connect(regions[start_region])
+                continue
+            entrances[connection.entrance_name].connect(regions[connection.region_exit])
 
-    for connection in connections:
-        if connection.name in entrances:
-            entrances[connection.name].connect(regions[connection.destination])
-
-    return regions, randomized_data
-
-
-def collect_connections_to_randomize(options):
-    connections_to_randomize = []
-    final_connections = consistent_entrances
-    if options.entrance_randomization == options.entrance_randomization.option_true:
-        connections_to_randomize = [connection for connection in final_connections if
-                                    RandomizationFlag.RANDOMIZED in connection.flag]
-    return connections_to_randomize
-
-
-def randomize_connections(random: Random, options, regions_by_name) -> Tuple[List[ConnectionData], Dict[str, str]]:
-    final_connections = consistent_entrances
-    connections_by_name: Dict[str, ConnectionData] = {connection.name: connection for connection in final_connections}
-    connections_to_randomize = collect_connections_to_randomize(options)
-
-    random.shuffle(connections_to_randomize)
-    destination_pool = list(connections_to_randomize)
-    random.shuffle(destination_pool)
-
-    randomized_connections = randomize_chosen_connections(connections_to_randomize, destination_pool)
-    add_non_randomized_connections(final_connections, connections_to_randomize, randomized_connections)
-
-    swap_connections_until_valid(regions_by_name, connections_by_name, randomized_connections, connections_to_randomize, random)
-
-    return package_connections(connections_to_randomize, randomized_connections)
-
-
-def package_connections(connections_to_randomize: List[ConnectionData], randomized_connections: Dict[ConnectionData, ConnectionData]):
-    randomized_connections_for_generation = create_connections_for_generation(randomized_connections)
-    randomized_data_for_mod = create_data_for_mod(randomized_connections, connections_to_randomize)
-    return randomized_connections_for_generation, randomized_data_for_mod
-
-
-def randomize_chosen_connections(connections_to_randomize: List[ConnectionData],
-                                 destination_pool: List[ConnectionData]) -> Dict[ConnectionData, ConnectionData]:
-    randomized_connections = {}
-    for connection in connections_to_randomize:
-        destination = destination_pool.pop()
-        randomized_connections[connection] = destination
-    return randomized_connections
-
-
-def create_connections_for_generation(randomized_connections: Dict[ConnectionData, ConnectionData]) -> List[ConnectionData]:
-    connections = []
-    for connection in randomized_connections:
-        destination = randomized_connections[connection]
-        connections.append(ConnectionData(connection.name, destination.destination, destination.reverse))
-    return connections
-
-
-def create_data_for_mod(randomized_connections: Dict[ConnectionData, ConnectionData],
-                        connections_to_randomize: List[ConnectionData]) -> Dict[str, str]:
-    randomized_data_for_mod = {}
-    for connection in randomized_connections:
-        if connection not in connections_to_randomize:
-            continue
-        destination = randomized_connections[connection]
-        add_to_mod_data(connection, destination, randomized_data_for_mod)
-    return randomized_data_for_mod
-
-
-def add_to_mod_data(connection: ConnectionData, destination: ConnectionData, randomized_data_for_mod: Dict[str, str]):
-    randomized_data_for_mod[connection.name] = destination.name
-    randomized_data_for_mod[destination.reverse] = connection.reverse
-
-
-def add_non_randomized_connections(connections, connections_to_randomize: List[ConnectionData],
-                                   randomized_connections: Dict[ConnectionData, ConnectionData]):
-    for connection in connections:
-        if connection in connections_to_randomize:
-            continue
-        randomized_connections[connection] = connection
-
-
-def swap_connections_until_valid(regions_by_name, connections_by_name, randomized_connections: Dict[ConnectionData, ConnectionData],
-                                 connections_to_randomize: List[ConnectionData], random: Random):
-    while True:
-        reachable_regions, unreachable_regions = find_reachable_regions(regions_by_name, connections_by_name, randomized_connections)
-        if not unreachable_regions:
-            return randomized_connections
-        swap_one_connection(regions_by_name, connections_by_name, randomized_connections, reachable_regions,
-                            unreachable_regions, connections_to_randomize, random)
-
-
-def find_reachable_regions(regions_by_name, connections_by_name,
-                           randomized_connections: Dict[ConnectionData, ConnectionData]):
-    reachable_regions = {LunacidRegion.menu}
-    unreachable_regions = {region for region in regions_by_name.keys()}
-    unreachable_regions.remove(LunacidRegion.menu)
-    exits_to_explore = list(regions_by_name[LunacidRegion.menu].exits)
-    while exits_to_explore:
-        exit_name = exits_to_explore.pop()
-        exit_connection = connections_by_name[exit_name]
-        replaced_connection = randomized_connections[exit_connection]
-        target_region_name = replaced_connection.destination
-        if target_region_name in reachable_regions:
-            continue
-
-        target_region = regions_by_name[target_region_name]
-        reachable_regions.add(target_region_name)
-        unreachable_regions.remove(target_region_name)
-        exits_to_explore.extend(target_region.exits)
-    return reachable_regions, unreachable_regions
-
-
-def swap_one_connection(regions_by_name, connections_by_name, randomized_connections: Dict[ConnectionData, ConnectionData],
-                        reachable_regions: Set[str], unreachable_regions: Set[str],
-                        connections_to_randomize: List[ConnectionData], random: Random):
-    randomized_connections_already_shuffled = {connection: randomized_connections[connection]
-                                               for connection in randomized_connections
-                                               if connection != randomized_connections[connection]}
-    unreachable_regions_names_leading_somewhere = tuple([region for region in sorted(unreachable_regions)
-                                                         if len(regions_by_name[region].exits) > 0])
-    unreachable_regions_leading_somewhere = [regions_by_name[region_name] for region_name in unreachable_regions_names_leading_somewhere]
-    unreachable_regions_exits_names = [exit_name for region in unreachable_regions_leading_somewhere for exit_name in region.exits]
-    unreachable_connections = [connections_by_name[exit_name] for exit_name in unreachable_regions_exits_names]
-    unreachable_connections_that_can_be_randomized = [connection for connection in unreachable_connections if connection in connections_to_randomize]
-
-    chosen_unreachable_entrance = random.choice(unreachable_connections_that_can_be_randomized)
-
-    chosen_reachable_entrance = None
-    while chosen_reachable_entrance is None or chosen_reachable_entrance not in randomized_connections_already_shuffled:
-        chosen_reachable_region_name = random.choice(sorted(reachable_regions))
-        chosen_reachable_region = regions_by_name[chosen_reachable_region_name]
-        if not any(chosen_reachable_region.exits):
-            continue
-        chosen_reachable_entrance_name = random.choice(chosen_reachable_region.exits)
-        chosen_reachable_entrance = connections_by_name[chosen_reachable_entrance_name]
-
-    reachable_destination = randomized_connections[chosen_reachable_entrance]
-    unreachable_destination = randomized_connections[chosen_unreachable_entrance]
-    randomized_connections[chosen_reachable_entrance] = unreachable_destination
-    randomized_connections[chosen_unreachable_entrance] = reachable_destination
+    return regions
