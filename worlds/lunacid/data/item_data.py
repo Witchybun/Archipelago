@@ -235,7 +235,7 @@ base_spells = [
     create_item(ITEM_CODE_START + spell_start_id + 24, Spell.poison_mist, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 25, Spell.rock_bridge, ItemClassification.progression),
     create_item(ITEM_CODE_START + spell_start_id + 26, Spell.slime_orb, ItemClassification.useful),
-    create_item(ITEM_CODE_START + spell_start_id + 27, Spell.spirit_warp, ItemClassification.progression | ItemClassification.useful),
+    # create_item(ITEM_CODE_START + spell_start_id + 27, Spell.spirit_warp, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 28, Spell.summon_fairy, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 29, Spell.summon_ice_sword, ItemClassification.useful),
     create_item(ITEM_CODE_START + spell_start_id + 30, Spell.wind_dash, ItemClassification.progression),
@@ -309,16 +309,6 @@ extras = [
     create_item(ITEM_CODE_START + extra_start_id + 1, Upgrade.flippers, ItemClassification.progression),
     create_item(ITEM_CODE_START + extra_start_id + 2, Upgrade.boots_of_leaping, ItemClassification.progression),
     create_item(ITEM_CODE_START + extra_start_id + 3, Upgrade.earring_of_speed, ItemClassification.progression),
-]
-
-stat_start_id = 500
-stats = [
-    create_item(ITEM_CODE_START + stat_start_id + 1, Stat.strength, ItemClassification.progression),
-    create_item(ITEM_CODE_START + stat_start_id + 2, Stat.defense, ItemClassification.useful),
-    create_item(ITEM_CODE_START + stat_start_id + 3, Stat.speed, ItemClassification.progression),
-    create_item(ITEM_CODE_START + stat_start_id + 4, Stat.dexterity, ItemClassification.progression),
-    create_item(ITEM_CODE_START + stat_start_id + 5, Stat.intelligence, ItemClassification.progression),
-    create_item(ITEM_CODE_START + stat_start_id + 6, Stat.resistance, ItemClassification.useful)
 ]
 
 # Item Groups
