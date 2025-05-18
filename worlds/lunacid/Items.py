@@ -1,4 +1,3 @@
-import math
 from random import Random
 import logging
 
@@ -64,10 +63,10 @@ def determine_weapon_elements(options: LunacidOptions, random: Random) -> Dict[s
 
 
 def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item],
-                 weapon_elements: Dict[str, str], month: int, options: LunacidOptions,
+                 weapon_elements: Dict[str, str], month: int, level: int, options: LunacidOptions,
                  random: Random) -> (List[Item], Item):
     items = []
-    lunacid_items = create_lunacid_items(item_factory, weapon_elements, month, options)
+    lunacid_items = create_lunacid_items(item_factory, weapon_elements, month, level, options)
     for item in items_to_exclude:
         if item in lunacid_items:
             lunacid_items.remove(item)
@@ -97,7 +96,7 @@ def create_items(item_factory: LunacidItemFactory, locations_count: int, items_t
     return items, starting_weapon_choice
 
 
-def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict[str, str], month: int,
+def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict[str, str], month: int, level: int,
                          options: LunacidOptions) -> List[Item]:
     items = []
     create_weapons(item_factory, weapon_elements, options, items)
@@ -106,6 +105,7 @@ def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict
     create_switch_items(item_factory, options, items)
     create_door_items(item_factory, options, items)
     create_hallo_items(item_factory, month, weapon_elements, options, items)
+    create_stat_items(item_factory, level, options, items)
     return items
 
 
@@ -198,6 +198,8 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
             items.append(item_factory(item, ItemClassification.progression))
             continue
         items.append(item_factory(item))
+    for item in Voucher.vouchers:
+        items.append(item_factory(item, ItemClassification.progression))
     for item in base_special_item_counts:
         items.extend(item_factory(special_item) for special_item in [item] * base_special_item_counts[item])
     if options.shopsanity:
@@ -205,15 +207,11 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
             items.append(item_factory(item))
         for item in shop_item_count:
             items.extend([item_factory(filler) for filler in [item] * shop_item_count[item]])
-        for item in Voucher.vouchers:
-            items.append(item_factory(item, ItemClassification.progression))
     else:
         for item in Voucher.vouchers:
             items.append(item_factory(item))
     if options.dropsanity:
         items.extend(item_factory(item) for item in [Upgrade.drop_chance]*3)
-    #  if options.movement_items == options.movement_items.option_true:
-    #    items.extend(item_factory(jump_item) for jump_item in [Upgrade.jump_power] * 4)
     create_strange_coins(item_factory, options, items)
     items.append(item_factory(CustomItem.bestial_mastery))
     return items
@@ -282,54 +280,11 @@ def create_crimpus_items(item_factory: LunacidItemFactory, month: int, equipment
         items.append(item_factory(CrimpusSpell.jingle_bells))
 
 
-def create_stat_items(item_factory: LunacidItemFactory, random: Random, options: LunacidOptions, items: List[Item]):
+def create_stat_items(item_factory: LunacidItemFactory, level: int, options: LunacidOptions, items: List[Item]):
+    if not options.levelsanity:
+        return items
+    items.extend([item_factory(item, ItemClassification.progression) for item in [CustomItem.experience]*(100 - level)])
     return items
-
-
-def determine_items_per_stat(s: int, d: int, p: int, x: int, t: int, r: int, total_points: int, random: Random):
-
-    initial_points = s + d + p + x + t + r - 6
-    final_points = total_points + initial_points
-    initial_build = (s, d, p, x, t, r)
-    final_build = (initial_build[0], initial_build[1], initial_build[2], initial_build[3], initial_build[4], initial_build[5])
-    while final_build[0] + final_build[1] + final_build[2] + final_build[3] + final_build[4] + final_build[5] - 6 != final_points:
-        chosen_stat = random.choice([0, 1, 2, 3, 4, 5])
-        final_build[chosen_stat] += 1
-    steps = [0, 1, 4, 5]
-    while final_build[2] < 15:
-        if not steps:  # Every point must be in dexterity.  We should cut it down.
-            steps = [3]
-        chosen_stat = random.choice(steps)  # choose a random stat to re-invest
-        # if the chosen random stat is already at the minimum value, we can't go lower than that so it shouldn't be touched.
-        if final_build[chosen_stat] - 1 < initial_build[chosen_stat]:
-            steps.remove(chosen_stat)
-            continue
-        final_build[chosen_stat] -= 1  # re-arrange the stat so speed gets boosted.
-        final_build[2] += 1
-    steps = [0, 1, 4, 5]
-    while final_build[3] < 15:  # Do the same as above but for dexterity, save that its guaranteed that speed does not need to be re-invested.
-        chosen_stat = random.choice(steps)
-        if final_build[chosen_stat] - 1 < 1:
-            steps.remove(chosen_stat)
-            continue
-        final_build[chosen_stat] -= 1
-        final_build[3] += 1
-
-    # TODO: We should add a check for INT, because logic asks the player to cast spells sometimes.  Requires research into INT investment and Ocean Elixirs.
-
-    steps = [1, 5]
-    # The final build should at least have combat stat investment worth half the total stats, so you can actually do damage and the like.
-    while final_build[0] + final_build[3] + final_build[4] < math.floor(0.5*final_points):
-        chosen_stat = random.choice(steps)
-        if final_build[chosen_stat] - 1 < 1:
-            steps.remove(chosen_stat)
-            continue
-        final_build[chosen_stat] -= 1
-        chosen_stat = random.choice([0, 3, 4])
-        final_build[chosen_stat] += 1
-
-    items_per_stat = (final_build[0] - s + 1, final_build[1] - d + 1, final_build[2] - p + 1, final_build[3] - x + 1, final_build[4] - t + 1, final_build[5] - r + 1)
-    return items_per_stat
 
 
 def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random,
