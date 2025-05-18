@@ -155,7 +155,6 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, LunacidOption],
 
 
 def parse_class_option_keys(test_options: dict) -> dict:
-    """ Now the option class is allowed as key. """
     parsed_options = {}
 
     if test_options:
