@@ -319,7 +319,8 @@ class LunacidEntrance:
 starting_location_to_region = {
     "basin": LunacidRegion.hollow_basin,
     "mire": LunacidRegion.fetid_mire,
-    "forest": LunacidRegion.forbidden_archives_2f,
+    "archives": LunacidRegion.forbidden_archives_2f,
+    "forest": LunacidRegion.yosei_forest,
     "tomb": LunacidRegion.accursed_tomb,
     "castle": LunacidRegion.castle_le_fanu_entrance,
     "grotto": LunacidRegion.boiling_grotto,

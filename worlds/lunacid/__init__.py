@@ -28,7 +28,7 @@ from .Items import (item_table, complete_items_by_name, create_items, determine_
                     determine_weapon_elements, all_filler)
 from .Options import LunacidOptions
 from .Locations import create_locations, location_table
-from .Regions import create_regions, randomized_entrances
+from .Regions import create_regions, randomized_entrance_names
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
 
@@ -96,6 +96,7 @@ class LunacidWorld(World):
     options: LunacidOptions
     rolled_month = int(strftime('%m'))
     starting_weapon: LunacidItem
+    level = 0
     weapon_elements: Dict[str, str]
     randomized_entrances: Dict[str, str] = {}
     enemy_random_data: Dict[str, List[str]]
@@ -117,6 +118,7 @@ class LunacidWorld(World):
 
     def generate_early(self) -> None:
         self.package_custom_class()
+        self.level = self.determine_starting_level()
         self.verify_item_colors()
         self.enemy_random_data, self.enemy_regions = self.randomize_enemies()
 
@@ -145,15 +147,27 @@ class LunacidWorld(World):
         excluded_items = self.multiworld.precollected_items[self.player]
         self.weapon_elements = determine_weapon_elements(self.options, self.random)
         (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items,
-                                                                self.weapon_elements, self.rolled_month, self.options,
+                                                                self.weapon_elements, self.rolled_month, self.level, self.options,
                                                                 self.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
         self.multiworld.itempool += potential_pool
 
-        starting_location = self.get_location(BaseLocation.hollow_basin_starting_sword)
+        starting_location = self.get_location(BaseLocation.wings_rest_crystal_shard)
         starting_location.place_locked_item(self.starting_weapon)
+
+        if self.options.filler_local_percent == 0:
+            return
+        filler = [item for item in potential_pool if item.classification == ItemClassification.filler]
+        required_local_count = len(filler) * (self.options.filler_local_percent / 100)
+        chosen_filler = []
+        while required_local_count > 0:
+            random_filler = self.random.choice(potential_pool)
+            chosen_filler.append(random_filler)
+        state = self.multiworld.get_all_state(False)
+        fill_restrictive(self.multiworld, state, list(self.get_locations()), chosen_filler,
+                         single_player_placement=True, lock=True, allow_excluded=True)
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -166,8 +180,8 @@ class LunacidWorld(World):
             lunacid_region.exits = [Entrance(player, exit_name, lunacid_region) for exit_name in exits]
             return lunacid_region
 
-        world_regions = create_regions(starting_area, create_region, multiworld)
-        locations = create_locations(self.options, self.rolled_month)
+        world_regions, world_entrances = create_regions(starting_area, create_region, multiworld)
+        locations = create_locations(self.options, self.rolled_month, self.level)
         for location in locations:
             name = location.name
             location_id = location.location_id
@@ -177,12 +191,13 @@ class LunacidWorld(World):
         self.multiworld.regions.extend(world_regions.values())
 
         if entrances_randod:
+            randomized_entrances = [world_entrances[entrance] for entrance in world_entrances if world_entrances[entrance].name in randomized_entrance_names]
             for entrance in randomized_entrances:
                 disconnect_entrance_for_randomization(entrance, None, entrance.connected_region.name)
             result = randomize_entrances(self, True, {0: [0]})
             self.randomized_entrances = dict(result.pairings)
 
-        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
+        # visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
 
         if self.options.ending == self.options.ending.option_ending_b:
             ending_region = self.get_region(LunacidRegion.labyrinth_of_ash)
@@ -191,10 +206,11 @@ class LunacidWorld(World):
         else:
             ending_region = self.get_region(LunacidRegion.forlorn_arena)
         throne_region = self.get_region(LunacidRegion.throne_chamber)
+        grotto_region = self.get_region(LunacidRegion.boiling_grotto)
+
         crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
         crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
         throne_region.locations.append(crilall)
-        grotto_region = self.get_region(LunacidRegion.boiling_grotto)
         hicket = Location(player, "Free Sir Hicket", None, grotto_region)
         hicket.place_locked_item(self.create_event("Sir Hicket's Freedom from Armor"))
         if self.options.ending == self.options.ending.option_ending_cd:
@@ -259,6 +275,32 @@ class LunacidWorld(World):
         package_custom_class_stat("Poison Res", 0, 300)
         package_custom_class_stat("Light Res", 0, 300)
         package_custom_class_stat("Dark Res", 0, 300)
+
+    def determine_starting_level(self) -> int:
+        options = self.options
+        if not options.levelsanity:
+            return -1
+        if options.starting_class == 0:
+            return 5
+        elif options.starting_class == 1:
+            return 10
+        elif options.starting_class == 2:
+            return 7
+        elif options.starting_class == 3:
+            return 9
+        elif options.starting_class == 4:
+            return 8
+        elif options.starting_class == 5:
+            return 6
+        elif options.starting_class == 6:
+            return 8
+        elif options.starting_class == 7:
+            return 9
+        elif options.starting_class == 8:
+            return 1
+        elif options.starting_class == 9:
+            return self.custom_class_stats["Level"]
+        return -1
 
     def verify_item_colors(self) -> None:
         self.fix_colors("Progression", DefaultColors.progression)
@@ -398,7 +440,7 @@ class LunacidWorld(World):
         slot_data = {
             "ut_seed": self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.8.14",
+            "client_version": "0.9.0",
             "rolled_month": self.rolled_month,
             "elements": self.weapon_elements,
             "created_class_name": self.custom_class_name,
@@ -410,7 +452,8 @@ class LunacidWorld(World):
                                    "required_strange_coin", "enemy_randomization", "shopsanity", "dropsanity",
                                    "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
                                    "secret_door_lock", "death_link", "starting_class", "normalized_drops",
-                                   "item_colors", "custom_music"),
+                                   "item_colors", "custom_music", "starting_area", "levelsanity", "bookworm",
+                                   "grasssanity", "breakables"),
             "entrances": self.randomized_entrances
         }
 

@@ -181,22 +181,29 @@ class EtnasPupil(Toggle):
 
 
 class Bookworm(Toggle):
-    """Love reading?  Of course you do!  Every lore spot is a check.  Does not include basic signs.  All of this will be on the exam."""
+    """Love reading?  Of course you do!  Every lore spot is a check.  Does not include basic signs.  All of this will be on the exam.
+    Adds 67 locations."""
     internal_name = "bookworm"
     display_name = "Bookworm"
 
 
-class Statsanity(Choice):
-    """Every stat point acquired from leveling up is an item, up to level 100.  Adds up to 304 locations (depends on chosen class).
-    Off: Stats are not shuffled.
-    Random Build: All stat items are on stat locations, effectively making your final build randomly chosen for you.
-    On: All stat items can be found anywhere."""
-    internal_name = "statsanity"
-    display_name = "Statsanity"
-    option_off = 0
-    option_random_build = 1
-    option_on = 2
-    default = 0
+class Levelsanity(Toggle):
+    """The experience you would gain instead gives you checks for every level.  Levels in the form of Deep Knowledge items are given to compensate which do give a level.
+    Adds up to 100 locations (amount depends on starting class)."""
+    internal_name = "levelsanity"
+    display_name = "Levelsanity"
+
+
+class Grasssanity(Toggle):
+    """Every foliage object that normally drops something is a check.  The original drops do drop as normal for now.  Adds 505 locations."""
+    internal_name = "grasssanity"
+    display_name = "Grasssanity"
+
+
+class Breakables(Toggle):
+    """Every non-foliage breakable object that normally drops something is a check.  The original drops do drop as normal for now.  Adds 320 locations."""
+    internal_name = "breakables"
+    display_name = "Breakables"
 
 
 class NormalizedDrops(Toggle):
@@ -242,6 +249,16 @@ class Filler(OptionSet):
     preset_none = frozenset()
     preset_all = valid_keys
     default = frozenset([item for item in all_filler_items if item != Coins.silver])
+
+
+class FillerLocalPercent(Range):
+    """How much of filler is forced local?  Helpful when you don't want to fill the multiworld with your own junk but its fine if some of it bleeds out.
+    Note that 0% just means none of it is *forced* to be local, not that it is all non-local."""
+    internal_name = "filler_local_percent"
+    display_name = "Filler Local Percent"
+    range_start = 0
+    range_end = 100
+    default = 0
 
 
 class Traps(OptionSet):
@@ -329,19 +346,21 @@ class LunacidOptions(PerGameCommonOptions):
     enemy_randomization: EnemyRandomization
     required_strange_coin: RequiredStrangeCoins
     total_strange_coin: TotalStrangeCoins
-    extra_equipment: ExtraEquipment
     shopsanity: Shopsanity
     voucher_setting: VoucherSetting
     dropsanity: Dropsanity
     quenchsanity: Quenchsanity
     etnas_pupil: EtnasPupil
     bookworm: Bookworm
-    statsanity: Statsanity
+    levelsanity: Levelsanity
+    grasssanity: Grasssanity
+    breakables: Breakables
     normalized_drops: NormalizedDrops
     secret_door_lock: SecretDoorLock
     switch_locks: SwitchLocks
     door_locks: DoorLocks
     filler: Filler
+    filler_local_percent: FillerLocalPercent
     traps: Traps
     trap_percent: TrapPercent
     custom_music: CustomMusic
