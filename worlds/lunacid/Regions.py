@@ -144,7 +144,9 @@ lunacid_regions = [
     RegionData(LunacidRegion.tower_of_abyss_50f, [LunacidEntrance.abyss_50f_to_final]),
     RegionData(LunacidRegion.tower_of_abyss_finish),
 
-    RegionData(LunacidRegion.throne_chamber, [LunacidEntrance.throne_room_to_castle_queen_path, LunacidEntrance.throne_room_to_prison]),
+    RegionData(LunacidRegion.throne_chamber_front_path, [LunacidEntrance.throne_room_to_castle_queen_path, LunacidEntrance.throne_from_front_to_main]),
+    RegionData(LunacidRegion.throne_chamber, [LunacidEntrance.throne_from_main_to_back, LunacidEntrance.throne_from_main_to_front]),
+    RegionData(LunacidRegion.throne_chamber_back_path, [LunacidEntrance.throne_room_to_prison, LunacidEntrance.throne_from_back_to_main]),
 
     RegionData(LunacidRegion.terminus_prison_1f, [LunacidEntrance.terminus_prison_1f_to_2f, LunacidEntrance.terminus_prison_1f_to_3f,
                                                   LunacidEntrance.terminus_prison_1f_to_basement, LunacidEntrance.terminus_prison_1f_to_arena,
@@ -336,8 +338,8 @@ lunacid_entrances = [
     EntranceData(LunacidEntrance.castle_cattle_back_to_cattle_prison, LunacidRegion.castle_le_fanu_cattle_prison),
     EntranceData(LunacidEntrance.castle_cattle_back_to_boiling_grotto, LunacidRegion.boiling_grotto, True, type=EntranceType.TWO_WAY),
 
-    #castle le fanu throne path.  This is the long hallway between the green door and the door to throne chamber.
-    EntranceData(LunacidEntrance.castle_queen_path_to_throne_room, LunacidRegion.throne_chamber, True, type=EntranceType.TWO_WAY),
+    # castle le fanu throne path.  This is the long hallway between the green door and the door to throne chamber.
+    EntranceData(LunacidEntrance.castle_queen_path_to_throne_room, LunacidRegion.throne_chamber_front_path, True, type=EntranceType.TWO_WAY),
     EntranceData(LunacidEntrance.castle_queen_path_to_main_halls, LunacidRegion.castle_le_fanu_main_halls),
 
     # holy battlefield
@@ -381,6 +383,10 @@ lunacid_entrances = [
     # throne chamber
     EntranceData(LunacidEntrance.throne_room_to_castle_queen_path, LunacidRegion.castle_le_fanu_throne_path, True, type=EntranceType.TWO_WAY),
     EntranceData(LunacidEntrance.throne_room_to_prison, LunacidRegion.terminus_prison_3f, True, type=EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.throne_from_main_to_front, LunacidRegion.throne_chamber_front_path),
+    EntranceData(LunacidEntrance.throne_from_front_to_main, LunacidRegion.throne_chamber),
+    EntranceData(LunacidEntrance.throne_from_back_to_main, LunacidRegion.throne_chamber),
+    EntranceData(LunacidEntrance.throne_from_main_to_back, LunacidRegion.throne_chamber_back_path),
 
     # terminus prison 1f
     EntranceData(LunacidEntrance.terminus_prison_1f_to_secrets, LunacidRegion.terminus_prison_1f_secrets),
@@ -395,7 +401,7 @@ lunacid_entrances = [
     EntranceData(LunacidEntrance.terminus_prison_2f_to_3f, LunacidRegion.terminus_prison_3f),
 
     # terminus prison 3f
-    EntranceData(LunacidEntrance.terminus_prison_3f_to_throne_room, LunacidRegion.throne_chamber, True, type=EntranceType.TWO_WAY),
+    EntranceData(LunacidEntrance.terminus_prison_3f_to_throne_room, LunacidRegion.throne_chamber_back_path, True, type=EntranceType.TWO_WAY),
     EntranceData(LunacidEntrance.terminus_prison_3f_to_2f, LunacidRegion.terminus_prison_2f),
     EntranceData(LunacidEntrance.terminus_prison_3f_doors, LunacidRegion.terminus_prison_3f_rooms),
     EntranceData(LunacidEntrance.terminus_prison_3f_to_4f, LunacidRegion.terminus_prison_4f),

@@ -141,17 +141,6 @@ class Shopsanity(Toggle):
     display_name = "Shuffle Shop Items"
 
 
-class VoucherSetting(Choice):
-    """Determines how the vouchers behave.
-    Free-offer: You can buy the shop items at any time - out of logic.  Vouchers put the items in logic and make them free.
-    In-Stock: None of the items are in-stock and cannot be bought.  Vouchers allow the items to be bought at the price given."""
-    internal_name = "voucher_setting"
-    display_name = "Voucher Setting"
-    option_free_offer = 0
-    option_in_stock = 1
-    default = 0
-
-
 class Dropsanity(Choice):
     """Choose whether the items monsters drop are locations.
     Off: All drops are vanilla.
@@ -195,13 +184,13 @@ class Levelsanity(Toggle):
 
 
 class Grasssanity(Toggle):
-    """Every foliage object that normally drops something is a check.  The original drops do drop as normal for now.  Adds 505 locations."""
+    """Every foliage object that normally drops something is a check.  The original drops do drop as normal for now.  Adds 502 locations."""
     internal_name = "grasssanity"
     display_name = "Grasssanity"
 
 
 class Breakables(Toggle):
-    """Every non-foliage breakable object that normally drops something is a check.  The original drops do drop as normal for now.  Adds 320 locations."""
+    """Every non-foliage breakable object that normally drops something is a check.  The original drops do drop as normal for now.  Adds 318 locations."""
     internal_name = "breakables"
     display_name = "Breakables"
 
@@ -257,7 +246,7 @@ class FillerLocalPercent(Range):
     internal_name = "filler_local_percent"
     display_name = "Filler Local Percent"
     range_start = 0
-    range_end = 100
+    range_end = 20
     default = 0
 
 
@@ -347,7 +336,6 @@ class LunacidOptions(PerGameCommonOptions):
     required_strange_coin: RequiredStrangeCoins
     total_strange_coin: TotalStrangeCoins
     shopsanity: Shopsanity
-    voucher_setting: VoucherSetting
     dropsanity: Dropsanity
     quenchsanity: Quenchsanity
     etnas_pupil: EtnasPupil
@@ -360,7 +348,7 @@ class LunacidOptions(PerGameCommonOptions):
     switch_locks: SwitchLocks
     door_locks: DoorLocks
     filler: Filler
-    filler_local_percent: FillerLocalPercent
+    #filler_local_percent: FillerLocalPercent
     traps: Traps
     trap_percent: TrapPercent
     custom_music: CustomMusic
