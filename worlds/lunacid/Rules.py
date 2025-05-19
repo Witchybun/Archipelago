@@ -12,10 +12,11 @@ from .data.item_data import base_light_sources, shop_light_sources, blood_spells
 from .data.plant_data import all_alchemy_plant_data
 from .Options import LunacidOptions
 from .strings.custom_features import JumpHeight
-from .strings.regions_entrances import LunacidEntrance, LunacidRegion
+from .strings.regions_entrances import LunacidEntrance, LunacidRegion, region_to_level_value
 from .strings.spells import Spell, MobSpell
 from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door, Coins, Voucher, SpookyItem, CustomItem
-from .strings.locations import BaseLocation, ShopLocation, all_drops_by_enemy, DropLocation, Quench, AlchemyLocation, SpookyLocation, LevelLocation, LoreLocation
+from .strings.locations import BaseLocation, ShopLocation, all_drops_by_enemy, DropLocation, Quench, AlchemyLocation, SpookyLocation, LevelLocation, LoreLocation, \
+    GrassLocation, BreakLocation
 from .strings.weapons import Weapon
 
 if TYPE_CHECKING:
@@ -36,6 +37,7 @@ class LunacidRules:
         self.world = world
         self.world.options = world.options
         self.level = world.level
+        self.enemy_regions = self.world.enemy_regions
 
         self.region_rules = {
             LunacidRegion.accursed_tomb: lambda state: self.has_light_source(state),
@@ -78,7 +80,7 @@ class LunacidRules:
             LunacidEntrance.archives_1f_front_to_3f: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options) or
                                                                    self.has_switch_key(Switch.archives_elevator_switches, state, self.world.options),
             LunacidEntrance.archives_1f_back_to_2f: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options) or
-                                                                   self.has_switch_key(Switch.archives_elevator_switches, state, self.world.options),
+                                                                  self.has_switch_key(Switch.archives_elevator_switches, state, self.world.options),
 
             LunacidEntrance.archives_3f_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.archives_3f_to_vampire: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2),
@@ -130,7 +132,6 @@ class LunacidRules:
             LunacidEntrance.castle_to_cattle: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
             LunacidEntrance.castle_entrance_to_main_halls: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
 
-            LunacidEntrance.cattle_to_castle: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
             LunacidEntrance.cattle_to_deeper: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
             LunacidEntrance.cattle_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
 
@@ -141,12 +142,12 @@ class LunacidRules:
             LunacidEntrance.castle_upstairs_to_main_halls: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2),
             LunacidEntrance.castle_upstairs_to_tape_room: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.castle_upstairs_to_forbidden: lambda state: state.can_reach_region(LunacidRegion.castle_le_fanu_entrance, self.player) and (
-                                                                      self.has_ranged_element_access(
-                                                                          [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
-                                                                           Elements.ice_and_poison], state) or
-                                                                      (self.has_element_access(
-                                                                          [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
-                                                                           Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
+                    self.has_ranged_element_access(
+                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
+                         Elements.ice_and_poison], state) or
+                    (self.has_element_access(
+                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
+                         Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
             LunacidEntrance.castle_upstairs_to_queen_rest: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3),
 
             LunacidEntrance.castle_cattle_back_to_boiling_grotto: lambda state: self.has_door_key(Door.burning_key, state, self.world.options),
@@ -155,12 +156,12 @@ class LunacidRules:
             LunacidEntrance.castle_queen_path_to_throne_room: lambda state: self.has_door_key(Door.throne_key, state, self.world.options),
 
             LunacidEntrance.castle_forbidden_to_upstairs: lambda state: state.can_reach_region(LunacidRegion.castle_le_fanu_entrance, self.player) and (
-                                                                      self.has_ranged_element_access(
-                                                                          [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
-                                                                           Elements.ice_and_poison], state) or
-                                                                      (self.has_element_access(
-                                                                          [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
-                                                                           Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
+                    self.has_ranged_element_access(
+                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
+                         Elements.ice_and_poison], state) or
+                    (self.has_element_access(
+                        [Elements.dark, Elements.dark_and_fire, Elements.dark_and_light, Elements.poison,
+                         Elements.ice_and_poison], state) and state.has(Spell.rock_bridge, self.player))),
             LunacidEntrance.castle_forbidden_to_sealed_ballroom: lambda state: self.has_door_key(Door.ballroom_key, state, self.world.options),
 
             LunacidEntrance.sealed_ballroom_to_forbidden_entry: lambda state: self.has_door_key(Door.ballroom_key, state, self.world.options),
@@ -224,7 +225,8 @@ class LunacidRules:
             "Throne of Prince Crilall Fanu": lambda state: self.can_defeat_the_prince(state, self.world.options),
             BaseLocation.wings_rest_demi_orb: lambda state: state.can_reach_region(LunacidRegion.grave_of_the_sleeper, self.player),
             BaseLocation.wings_rest_ocean_elixir: lambda state: self.can_jump_given_height(JumpHeight.low, state, self.world.options),
-            BaseLocation.temple_small_pillar: lambda state: self.can_jump_given_height(JumpHeight.low, state, self.world.options) or state.has(Spell.wind_dash, self.player),
+            BaseLocation.temple_small_pillar: lambda state: self.can_jump_given_height(JumpHeight.low, state, self.world.options) or state.has(Spell.wind_dash,
+                                                                                                                                               self.player),
             BaseLocation.temple_blood_altar: self.has_blood_spell_access,
             BaseLocation.temple_sewer_puzzle: lambda state: state.has(UniqueItem.vhs_tape, self.player) and
                                                             state.can_reach_region(LunacidRegion.vampire_tomb_tape_room, self.player),
@@ -503,108 +505,128 @@ class LunacidRules:
 
             SpookyLocation.spooky_spell: lambda state: state.has(SpookyItem.soul_candy, self.player, 35),
 
-            LevelLocation.level_2: lambda state: state.has(CustomItem.experience, self.player, max(2 - self.level, 0)),
-            LevelLocation.level_3: lambda state: state.has(CustomItem.experience, self.player, max(3 - self.level, 0)),
-            LevelLocation.level_4: lambda state: state.has(CustomItem.experience, self.player, max(4 - self.level, 0)),
-            LevelLocation.level_5: lambda state: state.has(CustomItem.experience, self.player, max(5 - self.level, 0)),
-            LevelLocation.level_6: lambda state: state.has(CustomItem.experience, self.player, max(6 - self.level, 0)),
-            LevelLocation.level_7: lambda state: state.has(CustomItem.experience, self.player, max(7 - self.level, 0)),
-            LevelLocation.level_8: lambda state: state.has(CustomItem.experience, self.player, max(8 - self.level, 0)),
-            LevelLocation.level_9: lambda state: state.has(CustomItem.experience, self.player, max(9 - self.level, 0)),
-            LevelLocation.level_10: lambda state: state.has(CustomItem.experience, self.player, max(10 - self.level, 0)),
-            LevelLocation.level_11: lambda state: state.has(CustomItem.experience, self.player, max(11 - self.level, 0)),
-            LevelLocation.level_12: lambda state: state.has(CustomItem.experience, self.player, max(12 - self.level, 0)),
-            LevelLocation.level_13: lambda state: state.has(CustomItem.experience, self.player, max(13 - self.level, 0)),
-            LevelLocation.level_14: lambda state: state.has(CustomItem.experience, self.player, max(14 - self.level, 0)),
-            LevelLocation.level_15: lambda state: state.has(CustomItem.experience, self.player, max(15 - self.level, 0)),
-            LevelLocation.level_16: lambda state: state.has(CustomItem.experience, self.player, max(16 - self.level, 0)),
-            LevelLocation.level_17: lambda state: state.has(CustomItem.experience, self.player, max(17 - self.level, 0)),
-            LevelLocation.level_18: lambda state: state.has(CustomItem.experience, self.player, max(18 - self.level, 0)),
-            LevelLocation.level_19: lambda state: state.has(CustomItem.experience, self.player, max(19 - self.level, 0)),
-            LevelLocation.level_20: lambda state: state.has(CustomItem.experience, self.player, max(20 - self.level, 0)),
-            LevelLocation.level_21: lambda state: state.has(CustomItem.experience, self.player, max(21 - self.level, 0)),
-            LevelLocation.level_22: lambda state: state.has(CustomItem.experience, self.player, max(22 - self.level, 0)),
-            LevelLocation.level_23: lambda state: state.has(CustomItem.experience, self.player, max(23 - self.level, 0)),
-            LevelLocation.level_24: lambda state: state.has(CustomItem.experience, self.player, max(24 - self.level, 0)),
-            LevelLocation.level_25: lambda state: state.has(CustomItem.experience, self.player, max(25 - self.level, 0)),
-            LevelLocation.level_26: lambda state: state.has(CustomItem.experience, self.player, max(26 - self.level, 0)),
-            LevelLocation.level_27: lambda state: state.has(CustomItem.experience, self.player, max(27 - self.level, 0)),
-            LevelLocation.level_28: lambda state: state.has(CustomItem.experience, self.player, max(28 - self.level, 0)),
-            LevelLocation.level_29: lambda state: state.has(CustomItem.experience, self.player, max(29 - self.level, 0)),
-            LevelLocation.level_30: lambda state: state.has(CustomItem.experience, self.player, max(30 - self.level, 0)),
-            LevelLocation.level_31: lambda state: state.has(CustomItem.experience, self.player, max(31 - self.level, 0)),
-            LevelLocation.level_32: lambda state: state.has(CustomItem.experience, self.player, max(32 - self.level, 0)),
-            LevelLocation.level_33: lambda state: state.has(CustomItem.experience, self.player, max(33 - self.level, 0)),
-            LevelLocation.level_34: lambda state: state.has(CustomItem.experience, self.player, max(34 - self.level, 0)),
-            LevelLocation.level_35: lambda state: state.has(CustomItem.experience, self.player, max(35 - self.level, 0)),
-            LevelLocation.level_36: lambda state: state.has(CustomItem.experience, self.player, max(36 - self.level, 0)),
-            LevelLocation.level_37: lambda state: state.has(CustomItem.experience, self.player, max(37 - self.level, 0)),
-            LevelLocation.level_38: lambda state: state.has(CustomItem.experience, self.player, max(38 - self.level, 0)),
-            LevelLocation.level_39: lambda state: state.has(CustomItem.experience, self.player, max(39 - self.level, 0)),
-            LevelLocation.level_40: lambda state: state.has(CustomItem.experience, self.player, max(40 - self.level, 0)),
-            LevelLocation.level_41: lambda state: state.has(CustomItem.experience, self.player, max(41 - self.level, 0)),
-            LevelLocation.level_42: lambda state: state.has(CustomItem.experience, self.player, max(42 - self.level, 0)),
-            LevelLocation.level_43: lambda state: state.has(CustomItem.experience, self.player, max(43 - self.level, 0)),
-            LevelLocation.level_44: lambda state: state.has(CustomItem.experience, self.player, max(44 - self.level, 0)),
-            LevelLocation.level_45: lambda state: state.has(CustomItem.experience, self.player, max(45 - self.level, 0)),
-            LevelLocation.level_46: lambda state: state.has(CustomItem.experience, self.player, max(46 - self.level, 0)),
-            LevelLocation.level_47: lambda state: state.has(CustomItem.experience, self.player, max(47 - self.level, 0)),
-            LevelLocation.level_48: lambda state: state.has(CustomItem.experience, self.player, max(48 - self.level, 0)),
-            LevelLocation.level_49: lambda state: state.has(CustomItem.experience, self.player, max(49 - self.level, 0)),
-            LevelLocation.level_50: lambda state: state.has(CustomItem.experience, self.player, max(50 - self.level, 0)),
-            LevelLocation.level_51: lambda state: state.has(CustomItem.experience, self.player, max(51 - self.level, 0)),
-            LevelLocation.level_52: lambda state: state.has(CustomItem.experience, self.player, max(52 - self.level, 0)),
-            LevelLocation.level_53: lambda state: state.has(CustomItem.experience, self.player, max(53 - self.level, 0)),
-            LevelLocation.level_54: lambda state: state.has(CustomItem.experience, self.player, max(54 - self.level, 0)),
-            LevelLocation.level_55: lambda state: state.has(CustomItem.experience, self.player, max(55 - self.level, 0)),
-            LevelLocation.level_56: lambda state: state.has(CustomItem.experience, self.player, max(56 - self.level, 0)),
-            LevelLocation.level_57: lambda state: state.has(CustomItem.experience, self.player, max(57 - self.level, 0)),
-            LevelLocation.level_58: lambda state: state.has(CustomItem.experience, self.player, max(58 - self.level, 0)),
-            LevelLocation.level_59: lambda state: state.has(CustomItem.experience, self.player, max(59 - self.level, 0)),
-            LevelLocation.level_60: lambda state: state.has(CustomItem.experience, self.player, max(60 - self.level, 0)),
-            LevelLocation.level_61: lambda state: state.has(CustomItem.experience, self.player, max(61 - self.level, 0)),
-            LevelLocation.level_62: lambda state: state.has(CustomItem.experience, self.player, max(62 - self.level, 0)),
-            LevelLocation.level_63: lambda state: state.has(CustomItem.experience, self.player, max(63 - self.level, 0)),
-            LevelLocation.level_64: lambda state: state.has(CustomItem.experience, self.player, max(64 - self.level, 0)),
-            LevelLocation.level_65: lambda state: state.has(CustomItem.experience, self.player, max(65 - self.level, 0)),
-            LevelLocation.level_66: lambda state: state.has(CustomItem.experience, self.player, max(66 - self.level, 0)),
-            LevelLocation.level_67: lambda state: state.has(CustomItem.experience, self.player, max(67 - self.level, 0)),
-            LevelLocation.level_68: lambda state: state.has(CustomItem.experience, self.player, max(68 - self.level, 0)),
-            LevelLocation.level_69: lambda state: state.has(CustomItem.experience, self.player, max(69 - self.level, 0)),
-            LevelLocation.level_70: lambda state: state.has(CustomItem.experience, self.player, max(70 - self.level, 0)),
-            LevelLocation.level_71: lambda state: state.has(CustomItem.experience, self.player, max(71 - self.level, 0)),
-            LevelLocation.level_72: lambda state: state.has(CustomItem.experience, self.player, max(72 - self.level, 0)),
-            LevelLocation.level_73: lambda state: state.has(CustomItem.experience, self.player, max(73 - self.level, 0)),
-            LevelLocation.level_74: lambda state: state.has(CustomItem.experience, self.player, max(74 - self.level, 0)),
-            LevelLocation.level_75: lambda state: state.has(CustomItem.experience, self.player, max(75 - self.level, 0)),
-            LevelLocation.level_76: lambda state: state.has(CustomItem.experience, self.player, max(76 - self.level, 0)),
-            LevelLocation.level_77: lambda state: state.has(CustomItem.experience, self.player, max(77 - self.level, 0)),
-            LevelLocation.level_78: lambda state: state.has(CustomItem.experience, self.player, max(78 - self.level, 0)),
-            LevelLocation.level_79: lambda state: state.has(CustomItem.experience, self.player, max(79 - self.level, 0)),
-            LevelLocation.level_80: lambda state: state.has(CustomItem.experience, self.player, max(80 - self.level, 0)),
-            LevelLocation.level_81: lambda state: state.has(CustomItem.experience, self.player, max(81 - self.level, 0)),
-            LevelLocation.level_82: lambda state: state.has(CustomItem.experience, self.player, max(82 - self.level, 0)),
-            LevelLocation.level_83: lambda state: state.has(CustomItem.experience, self.player, max(83 - self.level, 0)),
-            LevelLocation.level_84: lambda state: state.has(CustomItem.experience, self.player, max(84 - self.level, 0)),
-            LevelLocation.level_85: lambda state: state.has(CustomItem.experience, self.player, max(85 - self.level, 0)),
-            LevelLocation.level_86: lambda state: state.has(CustomItem.experience, self.player, max(86 - self.level, 0)),
-            LevelLocation.level_87: lambda state: state.has(CustomItem.experience, self.player, max(87 - self.level, 0)),
-            LevelLocation.level_88: lambda state: state.has(CustomItem.experience, self.player, max(88 - self.level, 0)),
-            LevelLocation.level_89: lambda state: state.has(CustomItem.experience, self.player, max(89 - self.level, 0)),
-            LevelLocation.level_90: lambda state: state.has(CustomItem.experience, self.player, max(90 - self.level, 0)),
-            LevelLocation.level_91: lambda state: state.has(CustomItem.experience, self.player, max(91 - self.level, 0)),
-            LevelLocation.level_92: lambda state: state.has(CustomItem.experience, self.player, max(92 - self.level, 0)),
-            LevelLocation.level_93: lambda state: state.has(CustomItem.experience, self.player, max(93 - self.level, 0)),
-            LevelLocation.level_94: lambda state: state.has(CustomItem.experience, self.player, max(94 - self.level, 0)),
-            LevelLocation.level_95: lambda state: state.has(CustomItem.experience, self.player, max(95 - self.level, 0)),
-            LevelLocation.level_96: lambda state: state.has(CustomItem.experience, self.player, max(96 - self.level, 0)),
-            LevelLocation.level_97: lambda state: state.has(CustomItem.experience, self.player, max(97 - self.level, 0)),
-            LevelLocation.level_98: lambda state: state.has(CustomItem.experience, self.player, max(98 - self.level, 0)),
-            LevelLocation.level_99: lambda state: state.has(CustomItem.experience, self.player, max(99 - self.level, 0)),
-            LevelLocation.level_100: lambda state: state.has(CustomItem.experience, self.player, max(100 - self.level, 0)),
+            LevelLocation.level_2: lambda state: self.can_reach_level_in_levelsanity(2, state),
+            LevelLocation.level_3: lambda state: self.can_reach_level_in_levelsanity(3, state),
+            LevelLocation.level_4: lambda state: self.can_reach_level_in_levelsanity(4, state),
+            LevelLocation.level_5: lambda state: self.can_reach_level_in_levelsanity(5, state),
+            LevelLocation.level_6: lambda state: self.can_reach_level_in_levelsanity(6, state),
+            LevelLocation.level_7: lambda state: self.can_reach_level_in_levelsanity(7, state),
+            LevelLocation.level_8: lambda state: self.can_reach_level_in_levelsanity(8, state),
+            LevelLocation.level_9: lambda state: self.can_reach_level_in_levelsanity(9, state),
+            LevelLocation.level_10: lambda state: self.can_reach_level_in_levelsanity(10, state),
+            LevelLocation.level_11: lambda state: self.can_reach_level_in_levelsanity(11, state),
+            LevelLocation.level_12: lambda state: self.can_reach_level_in_levelsanity(12, state),
+            LevelLocation.level_13: lambda state: self.can_reach_level_in_levelsanity(13, state),
+            LevelLocation.level_14: lambda state: self.can_reach_level_in_levelsanity(14, state),
+            LevelLocation.level_15: lambda state: self.can_reach_level_in_levelsanity(15, state),
+            LevelLocation.level_16: lambda state: self.can_reach_level_in_levelsanity(16, state),
+            LevelLocation.level_17: lambda state: self.can_reach_level_in_levelsanity(17, state),
+            LevelLocation.level_18: lambda state: self.can_reach_level_in_levelsanity(18, state),
+            LevelLocation.level_19: lambda state: self.can_reach_level_in_levelsanity(19, state),
+            LevelLocation.level_20: lambda state: self.can_reach_level_in_levelsanity(20, state),
+            LevelLocation.level_21: lambda state: self.can_reach_level_in_levelsanity(21, state),
+            LevelLocation.level_22: lambda state: self.can_reach_level_in_levelsanity(22, state),
+            LevelLocation.level_23: lambda state: self.can_reach_level_in_levelsanity(23, state),
+            LevelLocation.level_24: lambda state: self.can_reach_level_in_levelsanity(24, state),
+            LevelLocation.level_25: lambda state: self.can_reach_level_in_levelsanity(25, state),
+            LevelLocation.level_26: lambda state: self.can_reach_level_in_levelsanity(26, state),
+            LevelLocation.level_27: lambda state: self.can_reach_level_in_levelsanity(27, state),
+            LevelLocation.level_28: lambda state: self.can_reach_level_in_levelsanity(28, state),
+            LevelLocation.level_29: lambda state: self.can_reach_level_in_levelsanity(29, state),
+            LevelLocation.level_30: lambda state: self.can_reach_level_in_levelsanity(30, state),
+            LevelLocation.level_31: lambda state: self.can_reach_level_in_levelsanity(31, state),
+            LevelLocation.level_32: lambda state: self.can_reach_level_in_levelsanity(32, state),
+            LevelLocation.level_33: lambda state: self.can_reach_level_in_levelsanity(33, state),
+            LevelLocation.level_34: lambda state: self.can_reach_level_in_levelsanity(34, state),
+            LevelLocation.level_35: lambda state: self.can_reach_level_in_levelsanity(35, state),
+            LevelLocation.level_36: lambda state: self.can_reach_level_in_levelsanity(36, state),
+            LevelLocation.level_37: lambda state: self.can_reach_level_in_levelsanity(37, state),
+            LevelLocation.level_38: lambda state: self.can_reach_level_in_levelsanity(38, state),
+            LevelLocation.level_39: lambda state: self.can_reach_level_in_levelsanity(39, state),
+            LevelLocation.level_40: lambda state: self.can_reach_level_in_levelsanity(40, state),
+            LevelLocation.level_41: lambda state: self.can_reach_level_in_levelsanity(41, state),
+            LevelLocation.level_42: lambda state: self.can_reach_level_in_levelsanity(42, state),
+            LevelLocation.level_43: lambda state: self.can_reach_level_in_levelsanity(43, state),
+            LevelLocation.level_44: lambda state: self.can_reach_level_in_levelsanity(44, state),
+            LevelLocation.level_45: lambda state: self.can_reach_level_in_levelsanity(45, state),
+            LevelLocation.level_46: lambda state: self.can_reach_level_in_levelsanity(46, state),
+            LevelLocation.level_47: lambda state: self.can_reach_level_in_levelsanity(47, state),
+            LevelLocation.level_48: lambda state: self.can_reach_level_in_levelsanity(48, state),
+            LevelLocation.level_49: lambda state: self.can_reach_level_in_levelsanity(49, state),
+            LevelLocation.level_50: lambda state: self.can_reach_level_in_levelsanity(50, state),
+            LevelLocation.level_51: lambda state: self.can_reach_level_in_levelsanity(51, state),
+            LevelLocation.level_52: lambda state: self.can_reach_level_in_levelsanity(52, state),
+            LevelLocation.level_53: lambda state: self.can_reach_level_in_levelsanity(53, state),
+            LevelLocation.level_54: lambda state: self.can_reach_level_in_levelsanity(54, state),
+            LevelLocation.level_55: lambda state: self.can_reach_level_in_levelsanity(55, state),
+            LevelLocation.level_56: lambda state: self.can_reach_level_in_levelsanity(56, state),
+            LevelLocation.level_57: lambda state: self.can_reach_level_in_levelsanity(57, state),
+            LevelLocation.level_58: lambda state: self.can_reach_level_in_levelsanity(58, state),
+            LevelLocation.level_59: lambda state: self.can_reach_level_in_levelsanity(59, state),
+            LevelLocation.level_60: lambda state: self.can_reach_level_in_levelsanity(60, state),
+            LevelLocation.level_61: lambda state: self.can_reach_level_in_levelsanity(61, state),
+            LevelLocation.level_62: lambda state: self.can_reach_level_in_levelsanity(62, state),
+            LevelLocation.level_63: lambda state: self.can_reach_level_in_levelsanity(63, state),
+            LevelLocation.level_64: lambda state: self.can_reach_level_in_levelsanity(64, state),
+            LevelLocation.level_65: lambda state: self.can_reach_level_in_levelsanity(65, state),
+            LevelLocation.level_66: lambda state: self.can_reach_level_in_levelsanity(66, state),
+            LevelLocation.level_67: lambda state: self.can_reach_level_in_levelsanity(67, state),
+            LevelLocation.level_68: lambda state: self.can_reach_level_in_levelsanity(68, state),
+            LevelLocation.level_69: lambda state: self.can_reach_level_in_levelsanity(69, state),
+            LevelLocation.level_70: lambda state: self.can_reach_level_in_levelsanity(70, state),
+            LevelLocation.level_71: lambda state: self.can_reach_level_in_levelsanity(71, state),
+            LevelLocation.level_72: lambda state: self.can_reach_level_in_levelsanity(72, state),
+            LevelLocation.level_73: lambda state: self.can_reach_level_in_levelsanity(73, state),
+            LevelLocation.level_74: lambda state: self.can_reach_level_in_levelsanity(74, state),
+            LevelLocation.level_75: lambda state: self.can_reach_level_in_levelsanity(75, state),
+            LevelLocation.level_76: lambda state: self.can_reach_level_in_levelsanity(76, state),
+            LevelLocation.level_77: lambda state: self.can_reach_level_in_levelsanity(77, state),
+            LevelLocation.level_78: lambda state: self.can_reach_level_in_levelsanity(78, state),
+            LevelLocation.level_79: lambda state: self.can_reach_level_in_levelsanity(79, state),
+            LevelLocation.level_80: lambda state: self.can_reach_level_in_levelsanity(80, state),
+            LevelLocation.level_81: lambda state: self.can_reach_level_in_levelsanity(81, state),
+            LevelLocation.level_82: lambda state: self.can_reach_level_in_levelsanity(82, state),
+            LevelLocation.level_83: lambda state: self.can_reach_level_in_levelsanity(83, state),
+            LevelLocation.level_84: lambda state: self.can_reach_level_in_levelsanity(84, state),
+            LevelLocation.level_85: lambda state: self.can_reach_level_in_levelsanity(85, state),
+            LevelLocation.level_86: lambda state: self.can_reach_level_in_levelsanity(86, state),
+            LevelLocation.level_87: lambda state: self.can_reach_level_in_levelsanity(87, state),
+            LevelLocation.level_88: lambda state: self.can_reach_level_in_levelsanity(88, state),
+            LevelLocation.level_89: lambda state: self.can_reach_level_in_levelsanity(89, state),
+            LevelLocation.level_90: lambda state: self.can_reach_level_in_levelsanity(90, state),
+            LevelLocation.level_91: lambda state: self.can_reach_level_in_levelsanity(91, state),
+            LevelLocation.level_92: lambda state: self.can_reach_level_in_levelsanity(92, state),
+            LevelLocation.level_93: lambda state: self.can_reach_level_in_levelsanity(93, state),
+            LevelLocation.level_94: lambda state: self.can_reach_level_in_levelsanity(94, state),
+            LevelLocation.level_95: lambda state: self.can_reach_level_in_levelsanity(95, state),
+            LevelLocation.level_96: lambda state: self.can_reach_level_in_levelsanity(96, state),
+            LevelLocation.level_97: lambda state: self.can_reach_level_in_levelsanity(97, state),
+            LevelLocation.level_98: lambda state: self.can_reach_level_in_levelsanity(98, state),
+            LevelLocation.level_99: lambda state: self.can_reach_level_in_levelsanity(99, state),
+            LevelLocation.level_100: lambda state: self.can_reach_level_in_levelsanity(100, state),
 
             LoreLocation.golden_plea: lambda state: self.has_element_access(Elements.fire_options, state),
+
+            GrassLocation.yf_mushroom_48: lambda state: self.has_blood_spell_access(state),
+            GrassLocation.yf_mushroom_34: lambda state:  self.has_blood_spell_access(state),
+            BreakLocation.hb_vase_105: lambda state: self.can_jump_given_height(JumpHeight.low, state, self.world.options),
+            BreakLocation.hb_vase_39: lambda state: self.can_jump_given_height(JumpHeight.low, state, self.world.options),
+            BreakLocation.hb_vase_65: lambda state: self.can_jump_given_height(JumpHeight.low, state, self.world.options),
+            GrassLocation.fla_fiddlehead_14: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
+            GrassLocation.fla_fiddlehead_27: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
+            GrassLocation.fla_fiddlehead_11: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
+            GrassLocation.fla_fiddlehead_22: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
+            GrassLocation.fla_lotus_15: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
+            GrassLocation.fla_lotus_18: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
         }
+
+    def has_aoe_spell(self, state: CollectionState, options: LunacidOptions):
+        level_rule = True
+        if options.levelsanity:
+            level_rule = self.can_reach_level_in_levelsanity(30, state)
+        aoe_spells = [Spell.ice_tear, Spell.moon_beam, Spell.blue_flame_arc, Spell.lava_chasm]
+
+        return state.has_any(aoe_spells, self.player) and level_rule
 
     @staticmethod
     def is_vampire(options: LunacidOptions) -> bool:
@@ -646,6 +668,22 @@ class LunacidRules:
         sources.extend(source for source in shop_light_sources)
         return state.has_any(sources, self.player)
 
+    def can_reach_level_in_levelsanity(self, level: int, state: CollectionState):
+        can_you_hit_something = self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_3f,
+                                                                  LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
+                                                                  LunacidRegion.fetid_mire, LunacidRegion.forlorn_arena,
+                                                                  LunacidRegion.terminus_prison_3f, LunacidRegion.hollow_basin, LunacidRegion.labyrinth_of_ash,
+                                                                  LunacidRegion.accursed_tomb])
+        has_bangle = True
+        level_cap = 0
+        for region in region_to_level_value:
+            if state.can_reach_region(region, self.player):
+                level_cap += region_to_level_value[region]
+        level_cap *= 10
+        if level >= 50:
+            has_bangle = state.has(CustomItem.lucky_bangle, self.player)
+        return state.has(CustomItem.experience, self.player, max(level - self.level, 0)) and can_you_hit_something and has_bangle and level_cap >= level
+
     def can_level_reasonably(self, state: CollectionState, options: LunacidOptions) -> bool:
         if options.levelsanity:
             return state.has(CustomItem.experience, self.player, 40)
@@ -663,22 +701,29 @@ class LunacidRules:
         return state.has(spell, self.player)
 
     def has_all_spells(self, spells: List[str], state: CollectionState) -> bool:
-        return state.has_all(spells, self.player)
+        has_spells = True
+        for spell in spells:
+            has_spell = state.has(spell, self.player)
+            has_spells = has_spells and has_spell
+        return has_spells
 
     def has_every_spell(self, state: CollectionState, options: LunacidOptions, starting_weapon: str = None) -> bool:
-        every_spell = list(set.union(set(Spell.base_spells), set(MobSpell.drop_spells)))
-        if starting_weapon is not None and starting_weapon in every_spell:
+        every_spell = []
+        if options.dropsanity == options.dropsanity.option_off:
+            every_spell = Spell.base_spells.copy()
+        else:
+            every_spell = list(set.union(set(Spell.base_spells), set(MobSpell.drop_spells)))
+        if starting_weapon in every_spell:
             every_spell.remove(starting_weapon)
-        if not options.dropsanity:
-            every_spell = Spell.base_spells
-            return self.has_all_spells(Spell.base_spells, state) and self.can_reach_every_necessary_mob_for_spells(state)
+        if options.dropsanity == options.dropsanity.option_off:
+            return self.has_all_spells(every_spell, state) and self.can_reach_every_necessary_mob_for_spells(state)
         else:
             return self.has_all_spells(every_spell, state)
 
     def can_reach_every_necessary_mob_for_spells(self, state: CollectionState):
         return (self.can_reach_monster(Enemy.chimera, state) and self.can_reach_monster(Enemy.kodama, state) and self.can_reach_monster(Enemy.skeleton, state) and
-                self.can_reach_monster(Enemy.skeleton_weapon, state) and self.can_reach_monster(Enemy.lupine_skeleton, state) and
-                self.can_reach_monster(Enemy.giant_skeleton, state) and self.can_reach_monster(Enemy.cetea, state) and self.can_reach_monster(Enemy.snail, state))
+                self.can_reach_monster(Enemy.skeleton_weapon, state) and (self.can_reach_monster(Enemy.lupine_skeleton, state) or
+                self.can_reach_monster(Enemy.giant_skeleton, state)) and self.can_reach_monster(Enemy.cetea, state) and self.can_reach_monster(Enemy.snail, state))
 
     def can_purchase_item(self, state: CollectionState, options: LunacidOptions) -> bool:
         if options.shopsanity == options.shopsanity.option_false:
@@ -738,14 +783,15 @@ class LunacidRules:
                 and state.has(Voucher.sheryl_dreamer_voucher, self.player))
 
     def can_defeat_the_prince(self, state: CollectionState, options: LunacidOptions) -> bool:
-        return (self.has_element_access([Elements.light, Elements.dark_and_light, Elements.fire, Elements.dark_and_fire, Elements.normal_and_fire], state)
-                and self.can_level_reasonably(state, options))
+        return self.has_element_access(Elements.light_options, state) and self.can_level_reasonably(state, options)
 
     def can_reach_monster(self, enemy: str, state: CollectionState) -> bool:
-        locations = all_drops_by_enemy[enemy]
+        locations = self.enemy_regions[enemy]
         return self.can_reach_any_region(state, locations)
 
     def can_get_weapon(self, state: CollectionState, weapon: str, options: LunacidOptions) -> bool:
+        if self.world.starting_weapon.name == weapon:
+            return True
         if weapon in Weapon.base_weapons:
             return state.has(weapon, self.player)
         elif weapon in Weapon.shop_weapons:
@@ -770,7 +816,7 @@ class LunacidRules:
                              self.player) and state.can_reach_region(LunacidRegion.mausoleum, self.player)
 
     def can_obtain_alchemy_item(self, alchemy_item: str, state: CollectionState, options: LunacidOptions) -> bool:
-        if options.dropsanity == options.dropsanity.option_randomized:
+        if options.etnas_pupil and options.dropsanity == options.dropsanity.option_randomized:
             return state.has(alchemy_item, self.player)
         acceptable_regions = []
         for enemy in all_drops_by_enemy:
@@ -783,10 +829,11 @@ class LunacidRules:
                 for region in plant.regions:
                     if region not in acceptable_regions:
                         acceptable_regions.append(region)
-        return self.can_reach_any_region(state, acceptable_regions)
+        region_rule = self.can_reach_any_region(state, acceptable_regions)
+        return region_rule
 
     def can_obtain_all_alchemy_items(self, alchemy_items: List[str], state: CollectionState, options: LunacidOptions) -> bool:
-        alchemy_rule = False
+        alchemy_rule = True
         for item in alchemy_items:
             alchemy_rule = alchemy_rule and self.can_obtain_alchemy_item(item, state, options)
         return alchemy_rule

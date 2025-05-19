@@ -93,6 +93,7 @@ class Coins:
 class CustomItem:
     experience = "Deep Knowledge"
     bestial_mastery = "Bestial Mastery"
+    lucky_bangle = "Lucky Bangle"
 
 
 class Trap:

@@ -309,6 +309,7 @@ extras = [
     create_item(ITEM_CODE_START + extra_start_id + 1, Upgrade.flippers, ItemClassification.progression),
     create_item(ITEM_CODE_START + extra_start_id + 2, Upgrade.boots_of_leaping, ItemClassification.progression),
     create_item(ITEM_CODE_START + extra_start_id + 3, Upgrade.earring_of_speed, ItemClassification.progression),
+    create_item(ITEM_CODE_START + extra_start_id + 4, CustomItem.lucky_bangle, ItemClassification.progression | ItemClassification.useful)
 ]
 
 # Item Groups

@@ -1,6 +1,4 @@
-
 class LunacidRegion:
-
     menu = "Menu"
     starting_area = "Starting Lobby"
 
@@ -97,7 +95,9 @@ class LunacidRegion:
     tower_of_abyss_50f = "Tower of Abyss 50th Floor"
     tower_of_abyss_finish = "Tower of Abyss Finish Room"
 
+    throne_chamber_back_path = "Throne Chamber Back Path"
     throne_chamber = "Throne Chamber"
+    throne_chamber_front_path = "Throne Chamber Front Path"
 
     terminus_prison_1f = "Terminus Prison 1st Floor"
     terminus_prison_1f_secrets = "Terminus Prison 1st Floor Secrets"
@@ -129,7 +129,6 @@ class LunacidRegion:
 
 
 class LunacidEntrance:
-
     menu_to_start = "Finish Character Creation"
 
     start_lobby_to_rest = "Demi's Teleport"
@@ -269,6 +268,10 @@ class LunacidEntrance:
     abyss_50f_to_final = "Door to Abyss Prize"
 
     throne_room_to_castle_queen_path = "Queen's Throne Door (Throne Chamber Side)"
+    throne_from_front_to_main = "Walk Past Garrat in Throne Chamber"
+    throne_from_main_to_front = "Leave Throne Chamber to Front After Victory"
+    throne_from_back_to_main = "Walk Up Stairs in Throne Chamber"
+    throne_from_main_to_back = "Leave Throne Chamber to Back After Victory"
     throne_room_to_prison = "Prison Main Door (Throne Chamber Side)"
 
     terminus_prison_1f_to_2f = "Terminus Prison Jump From 1F to 2F"
@@ -328,3 +331,15 @@ starting_location_to_region = {
     "arena": LunacidRegion.forlorn_arena,
     "ash": LunacidRegion.labyrinth_of_ash,
 }
+
+region_to_level_value = {LunacidRegion.hollow_basin: 1,
+                         LunacidRegion.fetid_mire: 1,
+                         LunacidRegion.forbidden_archives_2f: 2,
+                         LunacidRegion.yosei_forest: 1,
+                         LunacidRegion.accursed_tomb: 2,
+                         LunacidRegion.castle_le_fanu_entrance: 2,
+                         LunacidRegion.boiling_grotto: 2,
+                         LunacidRegion.terminus_prison_3f: 2,
+                         LunacidRegion.forlorn_arena: 3,
+                         LunacidRegion.labyrinth_of_ash: 2
+                         }
