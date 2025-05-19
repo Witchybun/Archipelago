@@ -1,4 +1,6 @@
 from collections import Counter
+from math import floor
+
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
 from random import Random
 from time import strftime
@@ -23,7 +25,7 @@ from .strings.items import Creation, Coins, UniqueItem, Progressives, Switch, Do
 from .strings.options import Endings, Victory, Settings
 from .strings.regions_entrances import LunacidRegion
 from .strings.locations import (BaseLocation, ShopLocation, unique_drop_locations, other_drop_locations,
-                                AlchemyLocation, all_drops, Quench)
+                                AlchemyLocation, all_drops, Quench, all_drops_by_enemy)
 from .Items import (item_table, complete_items_by_name, create_items, determine_starting_weapon,
                     determine_weapon_elements, all_filler)
 from .Options import LunacidOptions
@@ -31,6 +33,7 @@ from .Locations import create_locations, location_table
 from .Regions import create_regions, randomized_entrance_names
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
+from .data.plant_data import all_alchemy_plant_data
 
 
 logger = logging.getLogger()
@@ -152,22 +155,30 @@ class LunacidWorld(World):
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
+        """chosen_filler_for_local = []
+        if self.options.filler_local_percent > 0:
+            filler = [item for item in potential_pool if item.classification == 0]
+            required_local_count = floor(len(filler) * (self.options.filler_local_percent / 100)) + 1
+            if len(filler) > 0:
+                while required_local_count > 0:
+                    random_filler: Item = self.random.choice(filler)
+                    chosen_filler_for_local.append(random_filler)
+                    potential_pool.remove(random_filler)
+                    filler.remove(random_filler)
+                    required_local_count -= 1
+                potential_pool.append(self.create_item(Creation.health_vial))"""
+
         self.multiworld.itempool += potential_pool
 
         starting_location = self.get_location(BaseLocation.wings_rest_crystal_shard)
         starting_location.place_locked_item(self.starting_weapon)
 
-        if self.options.filler_local_percent == 0:
-            return
-        filler = [item for item in potential_pool if item.classification == ItemClassification.filler]
-        required_local_count = len(filler) * (self.options.filler_local_percent / 100)
-        chosen_filler = []
-        while required_local_count > 0:
-            random_filler = self.random.choice(potential_pool)
-            chosen_filler.append(random_filler)
-        state = self.multiworld.get_all_state(False)
-        fill_restrictive(self.multiworld, state, list(self.get_locations()), chosen_filler,
-                         single_player_placement=True, lock=True, allow_excluded=True)
+        """if len(chosen_filler_for_local) > 0:
+            state = self.multiworld.get_all_state(False)
+            fill_restrictive(self.multiworld, state, list(self.get_locations()), chosen_filler_for_local,
+                             single_player_placement=True, lock=False, allow_excluded=True)"""
+
+
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -197,20 +208,16 @@ class LunacidWorld(World):
             result = randomize_entrances(self, True, {0: [0]})
             self.randomized_entrances = dict(result.pairings)
 
-        # visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
+        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
 
         if self.options.ending == self.options.ending.option_ending_b:
             ending_region = self.get_region(LunacidRegion.labyrinth_of_ash)
         elif self.options.ending != self.options.ending.option_any_ending:
             ending_region = self.get_region(LunacidRegion.grave_of_the_sleeper)
         else:
-            ending_region = self.get_region(LunacidRegion.forlorn_arena)
-        throne_region = self.get_region(LunacidRegion.throne_chamber)
+            ending_region = self.get_region(LunacidRegion.grave_of_the_sleeper)
         grotto_region = self.get_region(LunacidRegion.boiling_grotto)
 
-        crilall = Location(player, "Throne of Prince Crilall Fanu", None, throne_region)
-        crilall.place_locked_item(self.create_event("Defeat Prince Crilall Fanu"))
-        throne_region.locations.append(crilall)
         hicket = Location(player, "Free Sir Hicket", None, grotto_region)
         hicket.place_locked_item(self.create_event("Sir Hicket's Freedom from Armor"))
         if self.options.ending == self.options.ending.option_ending_cd:
@@ -228,7 +235,7 @@ class LunacidWorld(World):
         if self.options.ending == self.options.ending.option_ending_b:
             set_rule(victory, lambda state: LunacidRules(self).has_coins_for_door(self.options, state))
         elif self.options.ending == self.options.ending.option_ending_e:
-            set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state, self.options)
+            set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state, self.options, self.starting_weapon.name)
                      and state.has(UniqueItem.white_tape, self.player))
         elif self.options.ending == self.options.ending.option_any_ending:
             set_rule(victory, lambda state: state.can_reach_region(LunacidRegion.grave_of_the_sleeper, self.player)
@@ -388,6 +395,8 @@ class LunacidWorld(World):
             alchemy_items *= 5  # make sure there's enough of them to go around
             repeat_locations = [location for location in self.get_locations() if location.name in all_drops]
             self.random.shuffle(repeat_locations)
+            repeat_locations = repeat_locations[0:80]
+
             fill_restrictive(self.multiworld, state, repeat_locations, alchemy_items,
                              single_player_placement=True, lock=True, allow_excluded=True)
 
