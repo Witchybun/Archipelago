@@ -4,6 +4,7 @@ from . import LunacidOptions
 from .data.location_data import (all_locations, base_locations, shop_locations, unique_drop_locations,
                                  other_drop_locations, quench_locations, alchemy_locations,
                                  LunacidLocation, spooky_locations, crimpus_locations, level_locations, lore_locations, grass_locations, break_locations)
+from .data.plant_data import all_alchemy_plant_data
 from .strings.locations import SpookyLocation
 
 location_table = all_locations
@@ -105,4 +106,3 @@ def create_break_locations(options: LunacidOptions, locations: List[LunacidLocat
         return locations
     locations.extend(break_locations)
     return locations
-

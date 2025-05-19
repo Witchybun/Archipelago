@@ -142,6 +142,8 @@ def append_item_with_progression_determined_by_element_and_range(item_factory: L
         items.append(item_factory(item, ItemClassification.progression))
     elif options.quenchsanity and item in Weapon.quenchable_weapons:
         items.append(item_factory(item, ItemClassification.progression))
+    elif item == Weapon.limbo:
+        items.append(item_factory(item, ItemClassification.progression))
     else:
         items.append(item_factory(item))
 
@@ -157,9 +159,11 @@ def create_spells(item_factory: LunacidItemFactory, equipment_by_elements: Dict[
             items.append(item_factory(item, ItemClassification.progression))
         elif equipment_by_elements[item] in [Elements.poison, Elements.ice_and_poison] and item in ranged_spells:
             items.append(item_factory(item, ItemClassification.progression))
+        elif options.breakables and item in [Spell.blue_flame_arc, Spell.moon_beam, Spell.ice_tear, Spell.lava_chasm]:
+            items.append(item_factory(item, ItemClassification.progression))
         else:
             items.append(item_factory(item, determine_item_classification(item, force_progressive)))
-    if options.dropsanity:
+    if options.dropsanity != options.dropsanity.option_off:
         for item in MobSpell.drop_spells:
             if all_spell_info_by_name[item].style == Types.support:
                 items.append(item_factory(item, determine_item_classification(item, force_progressive)))
@@ -212,6 +216,8 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
             items.append(item_factory(item))
     if options.dropsanity:
         items.extend(item_factory(item) for item in [Upgrade.drop_chance]*3)
+    if options.levelsanity:
+        items.append(item_factory(CustomItem.lucky_bangle))
     create_strange_coins(item_factory, options, items)
     items.append(item_factory(CustomItem.bestial_mastery))
     return items

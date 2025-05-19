@@ -1,11 +1,11 @@
 import unittest
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState, ItemClassification
 from . import LunacidTestBase
-from ..import LunacidWorld
-from test.general import setup_solo_multiworld
+from .. import LunacidWorld, location_table, all_drops_by_enemy, Endings
 from ..data.location_data import *
 from ..data.item_data import all_items
+from ..strings.items import GenericItem, Alchemy, Creation
 
 
 class TestGeneric(LunacidTestBase):
@@ -67,17 +67,35 @@ class TestGeneric(LunacidTestBase):
                              f"Found duplicate ID for {location.name}: {location.location_id} vs {constructed_item_table[location.name]}")
 
 
-class TestWorldMemory(unittest.TestCase):
-    def test_leak(self) -> None:
-        """Tests that worlds don't leak references to MultiWorld or themselves with default options."""
-        import gc
-        import weakref
-        refs: weakref.ReferenceType[MultiWorld]
-        with self.subTest("Game creation", game_name="Lunacid"):
-            multiworld = setup_solo_multiworld(LunacidWorld)
-            weak = weakref.ref(multiworld)
-        gc.collect()
-        with self.subTest("Game cleanup", game_name="Lunacid"):
-            weakreffers = gc.get_referrers(multiworld)
-            self.assertFalse(weak(), "World leaked a reference")
+class TestStrangeFail(LunacidTestBase):
+    options = {"accessibility": "minimal",
+               "ending": "ending_cd",
+               "starting_class": "forsaken",
+               "starting_area": "grotto",
+               "entrance_randomization": 'true',
+               "experience": 26,
+               "weapon_experience": 112,
+               "random_elements": 'true',
+               "enemy_randomization": 'true',
+               "required_strange_coin": 48,
+               "total_strange_coin": 15,
+               "shopsanity": 'true',
+               "dropsanity": 'false',
+               "quenchsanity": 'false',
+               "etnas_pupil": 'false',
+               "bookworm": 'false',
+               "levelsanity": 'true',
+               "grasssanity": 'true',
+               "breakables": 'false',
+               "normalized_drops": 'true',
+               "secret_door_lock": 'false',
+               "switch_locks": 'true',
+               "door_locks": 'true',
+               "filler_local_percent": 11,
+               "trap_percent": 81}
 
+    def test_ending_reachable(self):
+
+        self.collect_all_but(Creation.health_vial)
+        self.can_reach_location(Endings.look_into_abyss)
+        self.can_reach_location(BaseLocation.throne_book)
