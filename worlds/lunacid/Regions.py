@@ -37,7 +37,8 @@ lunacid_regions = [
     RegionData(LunacidRegion.temple_path, [LunacidEntrance.temple_path_to_basin, LunacidEntrance.temple_path_to_temple_front]),
     RegionData(LunacidRegion.temple_front,
                [LunacidEntrance.temple_front_to_temple_path, LunacidEntrance.temple_front_to_temple_back, LunacidEntrance.temple_front_to_temple_sewers,
-                LunacidEntrance.temple_front_to_temple_front_secret]),
+                LunacidEntrance.temple_front_to_temple_front_secret, LunacidEntrance.temple_front_to_locked_spot]),
+    RegionData(LunacidRegion.temple_locked),
     RegionData(LunacidRegion.temple_front_secret),
     RegionData(LunacidRegion.temple_sewers, [LunacidEntrance.temple_sewers_to_mire, LunacidEntrance.temple_sewers_to_sewers_secret]),
     RegionData(LunacidRegion.temple_sewers_secret),
@@ -203,6 +204,7 @@ lunacid_entrances = [
     EntranceData(LunacidEntrance.temple_front_to_temple_back, LunacidRegion.temple_back),
     EntranceData(LunacidEntrance.temple_front_to_temple_sewers, LunacidRegion.temple_sewers),
     EntranceData(LunacidEntrance.temple_front_to_temple_front_secret, LunacidRegion.temple_front_secret),
+    EntranceData(LunacidEntrance.temple_front_to_locked_spot, LunacidRegion.temple_locked),
 
     # temple sewers
     EntranceData(LunacidEntrance.temple_sewers_to_sewers_secret, LunacidRegion.temple_sewers_secret),
