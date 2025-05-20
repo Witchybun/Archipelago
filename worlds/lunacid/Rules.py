@@ -40,9 +40,9 @@ class LunacidRules:
         self.enemy_regions = self.world.enemy_regions
 
         self.region_rules = {
-            LunacidRegion.accursed_tomb: lambda state: self.has_light_source(state),
+            LunacidRegion.accursed_tomb: lambda state: self.has_light_source(state, self.world.options),
             LunacidRegion.chamber_of_fate: lambda state: state.has_all({UniqueItem.earth_talisman, UniqueItem.water_talisman}, self.player),
-            LunacidRegion.terminus_prison_1f: lambda state: self.has_light_source(state),
+            LunacidRegion.terminus_prison_1f: lambda state: self.has_light_source(state, self.world.options),
             LunacidRegion.terminus_prison_4f: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             LunacidRegion.throne_chamber: lambda state: self.can_defeat_the_prince(state, self.world.options),
         }
@@ -54,19 +54,21 @@ class LunacidRules:
             LunacidEntrance.basin_to_surface: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
 
             LunacidEntrance.temple_path_to_basin: lambda state: self.has_keys_for_basin_or_canopy(state, self.world.options),
-            LunacidEntrance.temple_path_to_temple_front: lambda state: self.has_light_source(state),
+            LunacidEntrance.temple_path_to_temple_front: lambda state: self.has_light_source(state, self.world.options),
 
             LunacidEntrance.temple_front_to_temple_back: lambda state: self.has_switch_key(Switch.temple_switch, state, self.world.options),
             LunacidEntrance.temple_front_to_temple_sewers: lambda state: self.has_switch_key(Switch.temple_switch, state, self.world.options),
             LunacidEntrance.temple_front_to_temple_front_secret: lambda state: self.has_crystal_orb(state, self.world.options) and
                                                                                self.can_jump_given_height(JumpHeight.high, state, self.world.options),
+            LunacidEntrance.temple_front_to_locked_spot: lambda state: self.has_switch_key(Switch.temple_switch, state, self.world.options),
 
             LunacidEntrance.temple_sewers_to_mire: lambda state: self.has_door_key(Door.basin_temple_sewers, state, self.world.options),
             LunacidEntrance.temple_sewers_to_sewers_secret: lambda state: self.has_crystal_orb(state, self.world.options),
 
+
             LunacidEntrance.temple_back_to_temple_secret: lambda state: self.has_crystal_orb(state, self.world.options),
 
-            LunacidEntrance.temple_lower_to_temple_back: lambda state: self.has_light_source(state),
+            LunacidEntrance.temple_lower_to_temple_back: lambda state: self.has_light_source(state, self.world.options),
 
             LunacidEntrance.temple_lower_to_forest: lambda state: self.has_door_key(Door.basin_rickety_bridge, state, self.world.options),
 
@@ -121,7 +123,7 @@ class LunacidRules:
             LunacidEntrance.accursed_tomb_to_forest_tomb: lambda state: self.has_door_key(Door.forest_patchouli, state, self.world.options),
 
             LunacidEntrance.accursed_tomb_to_platform: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
-            LunacidEntrance.accursed_well_to_accursed: lambda state: self.has_light_source(state),
+            LunacidEntrance.accursed_well_to_accursed: lambda state: self.has_light_source(state, self.world.options),
             LunacidEntrance.accursed_to_vampire: lambda state: self.has_element_access(Elements.light_options, state) or state.has(Weapon.wand_of_power, self.player),
             LunacidEntrance.accursed_to_mausoleum: lambda state: self.has_element_access(Elements.light_options, state) or state.has(Weapon.wand_of_power, self.player),
             LunacidEntrance.accursed_tomb_to_sea: lambda state: self.has_door_key(Door.sea_eastward, state, self.world.options),
@@ -129,7 +131,7 @@ class LunacidRules:
             LunacidEntrance.vampire_tomb_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
 
             LunacidEntrance.castle_entrance_to_sea: lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
-            LunacidEntrance.castle_to_cattle: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
+            LunacidEntrance.castle_to_cattle: lambda state: self.is_vampire(self.world.options) or self.has_blood_spell_access(state),
             LunacidEntrance.castle_entrance_to_main_halls: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
 
             LunacidEntrance.cattle_to_deeper: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
@@ -154,6 +156,9 @@ class LunacidRules:
 
             LunacidEntrance.castle_queen_path_to_main_halls: lambda state: state.has(Progressives.vampiric_symbol, self.player, 3),
             LunacidEntrance.castle_queen_path_to_throne_room: lambda state: self.has_door_key(Door.throne_key, state, self.world.options),
+
+            LunacidEntrance.throne_room_to_prison: lambda state: self.has_door_key(Door.prison_key, state, self.world.options),
+            LunacidEntrance.throne_room_to_castle_queen_path: lambda state: self.has_door_key(Door.throne_key, state, self.world.options),
 
             LunacidEntrance.castle_forbidden_to_upstairs: lambda state: state.can_reach_region(LunacidRegion.castle_le_fanu_entrance, self.player) and (
                     self.has_ranged_element_access(
@@ -185,7 +190,7 @@ class LunacidRules:
 
             LunacidEntrance.abyss_to_5f: lambda state: self.has_door_key(Door.tower_key, state, self.world.options),
             LunacidEntrance.abyss_5f_to_10f: lambda state: self.has_ranged_element_access(Elements.all_elements, state) or state.has_any(ranged_weapons, self.player),
-            LunacidEntrance.abyss_15f_to_20f: lambda state: self.has_light_source(state) and self.can_level_reasonably(state, self.world.options),
+            LunacidEntrance.abyss_15f_to_20f: lambda state: self.has_light_source(state, self.world.options) and self.can_level_reasonably(state, self.world.options),
 
             LunacidEntrance.terminus_prison_1f_to_arena: lambda state: state.can_reach_region(LunacidRegion.terminus_prison_4f, self.player) and
                                                                        self.has_switch_key(Switch.prison_arena_switch, state, self.world.options) and
@@ -195,7 +200,7 @@ class LunacidRules:
             LunacidEntrance.terminus_prison_1f_to_3f: lambda state: self.has_switch_key(Switch.prison_shortcut_switch, state, self.world.options),
             LunacidEntrance.terminus_prison_2f_doors: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             LunacidEntrance.terminus_prison_2f_to_3f: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
-            LunacidEntrance.terminus_prison_2f_to_1f: lambda state: self.has_light_source(state),
+            LunacidEntrance.terminus_prison_2f_to_1f: lambda state: self.has_light_source(state, self.world.options),
             LunacidEntrance.terminus_prison_3f_doors: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             LunacidEntrance.terminus_prison_3f_to_4f: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
             LunacidEntrance.terminus_prison_3f_to_throne_room: lambda state: self.has_door_key(Door.prison_key, state, self.world.options),
@@ -663,7 +668,9 @@ class LunacidRules:
     def has_door_key(self, key: str, state: CollectionState, options: LunacidOptions) -> bool:
         return not options.door_locks or state.has(key, self.player)
 
-    def has_light_source(self, state: CollectionState) -> bool:
+    def has_light_source(self, state: CollectionState, options: LunacidOptions) -> bool:
+        if options.starting_area == options.starting_area.option_tomb:
+            return True
         sources = base_light_sources.copy()
         sources.extend(source for source in shop_light_sources)
         return state.has_any(sources, self.player)
@@ -674,6 +681,9 @@ class LunacidRules:
                                                                   LunacidRegion.fetid_mire, LunacidRegion.forlorn_arena,
                                                                   LunacidRegion.terminus_prison_3f, LunacidRegion.hollow_basin, LunacidRegion.labyrinth_of_ash,
                                                                   LunacidRegion.accursed_tomb])
+
+        if level <= 10:
+            return can_you_hit_something
         has_bangle = True
         level_cap = 0
         for region in region_to_level_value:

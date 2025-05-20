@@ -1251,6 +1251,8 @@ grass_locations = [
     create_location(LOCATION_CODE_START + grass_location_start + 502, GrassLocation.tp_bloodweed_77, LunacidRegion.terminus_prison_1f),
 ]
 
+grass_location_names = [location.name for location in grass_locations]
+
 break_location_start = 1700
 break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 1, BreakLocation.fm_coffin_1, LunacidRegion.fetid_mire),
@@ -1309,7 +1311,7 @@ break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 59, BreakLocation.hb_vase_12, LunacidRegion.temple_back),
     create_location(LOCATION_CODE_START + break_location_start + 60, BreakLocation.hb_vase_13, LunacidRegion.temple_back),
     create_location(LOCATION_CODE_START + break_location_start + 61, BreakLocation.hb_vase_14, LunacidRegion.temple_front),
-    create_location(LOCATION_CODE_START + break_location_start + 62, BreakLocation.hb_vase_15, LunacidRegion.temple_back),
+    create_location(LOCATION_CODE_START + break_location_start + 62, BreakLocation.hb_vase_15, LunacidRegion.temple_locked),
     create_location(LOCATION_CODE_START + break_location_start + 63, BreakLocation.hb_vase_16, LunacidRegion.temple_back),
     create_location(LOCATION_CODE_START + break_location_start + 64, BreakLocation.hb_vase_17, LunacidRegion.temple_front),
     create_location(LOCATION_CODE_START + break_location_start + 65, BreakLocation.hb_vase_18, LunacidRegion.temple_front),
@@ -1366,11 +1368,11 @@ break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 116, BreakLocation.hb_vase_68, LunacidRegion.temple_front),
     create_location(LOCATION_CODE_START + break_location_start + 117, BreakLocation.hb_vase_69, LunacidRegion.temple_front),
     create_location(LOCATION_CODE_START + break_location_start + 118, BreakLocation.hb_vase_70, LunacidRegion.temple_front),
-    create_location(LOCATION_CODE_START + break_location_start + 119, BreakLocation.hb_vase_71, LunacidRegion.temple_back),
+    create_location(LOCATION_CODE_START + break_location_start + 119, BreakLocation.hb_vase_71, LunacidRegion.temple_locked),
     create_location(LOCATION_CODE_START + break_location_start + 120, BreakLocation.hb_vase_72, LunacidRegion.temple_front),
     create_location(LOCATION_CODE_START + break_location_start + 121, BreakLocation.hb_vase_73, LunacidRegion.temple_front),
     create_location(LOCATION_CODE_START + break_location_start + 122, BreakLocation.hb_vase_74, LunacidRegion.temple_front),
-    create_location(LOCATION_CODE_START + break_location_start + 123, BreakLocation.hb_vase_75, LunacidRegion.temple_back),
+    create_location(LOCATION_CODE_START + break_location_start + 123, BreakLocation.hb_vase_75, LunacidRegion.temple_locked),
     create_location(LOCATION_CODE_START + break_location_start + 124, BreakLocation.hb_vase_76, LunacidRegion.temple_front),
     create_location(LOCATION_CODE_START + break_location_start + 125, BreakLocation.hb_crate_2, LunacidRegion.temple_sewers),
     create_location(LOCATION_CODE_START + break_location_start + 126, BreakLocation.hb_vase_77, LunacidRegion.hollow_basin),
@@ -1403,7 +1405,7 @@ break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 153, BreakLocation.hb_vase_104, LunacidRegion.temple_front),
     create_location(LOCATION_CODE_START + break_location_start + 154, BreakLocation.hb_vase_105, LunacidRegion.hollow_basin),
     create_location(LOCATION_CODE_START + break_location_start + 155, BreakLocation.hb_vase_106, LunacidRegion.temple_front),
-    create_location(LOCATION_CODE_START + break_location_start + 156, BreakLocation.hb_vase_107, LunacidRegion.temple_back),
+    create_location(LOCATION_CODE_START + break_location_start + 156, BreakLocation.hb_vase_107, LunacidRegion.temple_locked),
     create_location(LOCATION_CODE_START + break_location_start + 157, BreakLocation.hb_vase_108, LunacidRegion.temple_back),
 
     create_location(LOCATION_CODE_START + break_location_start + 158, BreakLocation.sb_crate_1, LunacidRegion.sealed_ballroom_room_within_secret),
@@ -1581,3 +1583,5 @@ break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 324, BreakLocation.at_coffin_43, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 325, BreakLocation.at_coffin_44, LunacidRegion.accursed_tomb),
 ]
+
+breakable_location_names = [location.name for location in break_locations]
