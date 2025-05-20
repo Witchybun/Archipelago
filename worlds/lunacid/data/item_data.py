@@ -376,3 +376,4 @@ drop_spell_names = [drop.name for drop in drop_spells]
 
 all_item_data_by_name = {item.name: item for item in all_items}
 all_filler_items = [item.name for item in all_items if item.classification == ItemClassification.filler]
+all_basic_materials = [item.name for item in all_items if item.name in Alchemy.all_basic_items]
