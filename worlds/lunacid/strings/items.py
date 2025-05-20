@@ -30,6 +30,8 @@ class Alchemy:
     bones = "Bones"
     vampiric_ashes = "Vampiric Ashes"
 
+    all_basic_items = [fire_coral, fiddlehead, ectoplasm, snowflake_obsidian, moon_petal, fire_opal, ashes, opal, yellow_morel, lotus_seed_pod, obsidian,
+                 onyx, ocean_bone_shard, ocean_bone_shell, bloodweed, ikurrilb_root, destroying_angel_mushroom, bones, ashes]
     necessary_alchemy_items = [ashes, fire_opal, opal, yellow_morel, lotus_seed_pod, snowflake_obsidian, onyx, obsidian, destroying_angel_mushroom, ocean_bone_shard,
                                ocean_bone_shell, moon_petal, bloodweed, ectoplasm, bones, ikurrilb_root]
 

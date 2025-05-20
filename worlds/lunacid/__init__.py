@@ -14,12 +14,13 @@ from . import Options
 from .OptionGroups import lunacid_option_groups
 from .data.enemy_positions import (base_enemy_placement, EnemyPlacement, construct_flag_data_for_mod,
                                    construct_enemy_dictionary)
+from .data.location_data import grass_location_names, breakable_location_names
 from .strings.custom_features import all_classes, DefaultColors
 from .strings.enemies import Enemy
 from .strings.spells import Spell, MobSpell
 from .strings.weapons import Weapon
 from .data.item_data import (all_item_data_by_name, all_filler_items, starting_weapon, drop_starting_weapons,
-                             shop_starting_weapons, LunacidItemData)
+                             shop_starting_weapons, LunacidItemData, all_basic_materials)
 from .data.weapon_info import weapons_by_element
 from .strings.items import Creation, Coins, UniqueItem, Progressives, Switch, Door, Trap, Alchemy
 from .strings.options import Endings, Victory, Settings
@@ -77,6 +78,7 @@ class LunacidWorld(World):
         "VHS Tapes": [UniqueItem.vhs_tape, UniqueItem.white_tape],
         "Talismans": [UniqueItem.earth_talisman, UniqueItem.water_talisman],
         "Traps": Trap.all_traps,
+        "Materials": all_basic_materials,
         "Junk": all_filler_items
     }
 
@@ -86,6 +88,8 @@ class LunacidWorld(World):
         "Tower of Abyss": BaseLocation.abyss_locations,
         "Coins": BaseLocation.coin_locations,
         "Shops": ShopLocation.shop_locations,
+        "Grass": grass_location_names,
+        "Breakables": breakable_location_names,
         "Unique Drops": unique_drop_locations,
         "Non-unique Drops": other_drop_locations,
         "Quench": Quench.all_quenches,
@@ -101,6 +105,7 @@ class LunacidWorld(World):
     starting_weapon: LunacidItem
     level = 0
     weapon_elements: Dict[str, str]
+    world_entrances = dict[str, Entrance]
     randomized_entrances: Dict[str, str] = {}
     enemy_random_data: Dict[str, List[str]]
     enemy_regions: Dict[str, List[str]]
@@ -172,19 +177,20 @@ class LunacidWorld(World):
 
         starting_location = self.get_location(BaseLocation.wings_rest_crystal_shard)
         starting_location.place_locked_item(self.starting_weapon)
+        if self.options.starting_area == self.options.starting_area.option_tomb:
+            lamp = self.create_item(UniqueItem.oil_lantern, ItemClassification.progression | ItemClassification.useful)
+            bony_friend = self.get_location(BaseLocation.wings_rest_clives_gift)
+            bony_friend.place_locked_item(lamp)
 
         """if len(chosen_filler_for_local) > 0:
             state = self.multiworld.get_all_state(False)
             fill_restrictive(self.multiworld, state, list(self.get_locations()), chosen_filler_for_local,
                              single_player_placement=True, lock=False, allow_excluded=True)"""
 
-
-
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
         starting_area = self.options.starting_area.current_key
-        entrances_randod = self.options.entrance_randomization
 
         def create_region(region_name: str, exits: Iterable[str]) -> Region:
             lunacid_region = Region(region_name, player, multiworld)
@@ -192,6 +198,7 @@ class LunacidWorld(World):
             return lunacid_region
 
         world_regions, world_entrances = create_regions(starting_area, create_region, multiworld)
+        self.world_entrances = world_entrances
         locations = create_locations(self.options, self.rolled_month, self.level)
         for location in locations:
             name = location.name
@@ -200,15 +207,6 @@ class LunacidWorld(World):
             region.add_locations({name: location_id})
 
         self.multiworld.regions.extend(world_regions.values())
-
-        if entrances_randod:
-            randomized_entrances = [world_entrances[entrance] for entrance in world_entrances if world_entrances[entrance].name in randomized_entrance_names]
-            for entrance in randomized_entrances:
-                disconnect_entrance_for_randomization(entrance, None, entrance.connected_region.name)
-            result = randomize_entrances(self, True, {0: [0]})
-            self.randomized_entrances = dict(result.pairings)
-
-        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
 
         if self.options.ending == self.options.ending.option_ending_b:
             ending_region = self.get_region(LunacidRegion.labyrinth_of_ash)
@@ -243,6 +241,23 @@ class LunacidWorld(World):
                          and state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player)))
 
         multiworld.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
+
+    def connect_entrances(self) -> None:
+        world_entrances = self.world_entrances
+        entrances_randod = self.options.entrance_randomization
+        if entrances_randod:
+            randomized_entrances = [world_entrances[entrance] for entrance in world_entrances if world_entrances[entrance].name in randomized_entrance_names]
+            for entrance in randomized_entrances:
+                disconnect_entrance_for_randomization(entrance, None, entrance.connected_region.name)
+            result = randomize_entrances(self, True, {0: [0]})
+            self.randomized_entrances = dict(result.pairings)
+        # self.visualize_regions()
+        # hi = True
+
+    def visualize_regions(self):
+        multiworld = self.multiworld
+        player = self.player
+        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml", show_locations=False)
 
     def package_custom_class(self) -> None:
         def package_custom_class_stat(stat: str, minimum: int, maximum: int) -> None:

@@ -201,6 +201,8 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
         elif item == UniqueItem.dusty_crystal_orb and options.secret_door_lock == options.secret_door_lock.option_true:
             items.append(item_factory(item, ItemClassification.progression))
             continue
+        elif item == UniqueItem.oil_lantern and options.starting_area == options.starting_area.option_tomb:
+            continue  # We will force place it.
         items.append(item_factory(item))
     for item in Voucher.vouchers:
         items.append(item_factory(item, ItemClassification.progression))

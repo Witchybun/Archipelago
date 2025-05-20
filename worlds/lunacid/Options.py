@@ -47,7 +47,8 @@ class Class(Choice):
 
 class StartingArea(Choice):
     """Where the player starts.  You will always land in the starting spot in Hollow Basin but it will be blocked off.
-    Demi will warp you to Wing's Rest, and the crystal will have the given starting area."""
+    Demi will warp you to Wing's Rest, and the crystal will have the given starting area.
+    If starting area is Accursed Tomb, Clive will give you an Oil Lantern."""
     internal_name = "starting_area"
     display_name = "Starting Area"
     option_basin = 0
