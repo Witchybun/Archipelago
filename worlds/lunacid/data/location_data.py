@@ -1490,7 +1490,6 @@ break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 235, BreakLocation.at_coffin_11, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 236, BreakLocation.at_coffin_12, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 237, BreakLocation.at_coffin_13, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 238, BreakLocation.at_coffin_14, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 239, BreakLocation.at_coffin_15, LunacidRegion.vampire_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 240, BreakLocation.at_coffin_16, LunacidRegion.vampire_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 241, BreakLocation.at_coffin_17, LunacidRegion.accursed_tomb),
@@ -1503,7 +1502,6 @@ break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 248, BreakLocation.at_coffin_24, LunacidRegion.vampire_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 249, BreakLocation.at_coffin_25, LunacidRegion.vampire_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 250, BreakLocation.at_coffin_26, LunacidRegion.vampire_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 251, BreakLocation.at_coffin_27, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 252, BreakLocation.at_coffin_28, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 253, BreakLocation.at_coffin_29, LunacidRegion.vampire_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 254, BreakLocation.at_coffin_30, LunacidRegion.accursed_tomb),
@@ -1573,15 +1571,6 @@ break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 316, BreakLocation.la_vase_2, LunacidRegion.holy_seat_of_gold),
     create_location(LOCATION_CODE_START + break_location_start + 317, BreakLocation.la_vase_3, LunacidRegion.holy_seat_of_gold),
     create_location(LOCATION_CODE_START + break_location_start + 318, BreakLocation.la_vase_4, LunacidRegion.holy_seat_of_gold),
-
-    # Some objects didn't get caught.  idk why tho.
-    create_location(LOCATION_CODE_START + break_location_start + 319, BreakLocation.at_coffin_38, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 320, BreakLocation.at_coffin_39, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 321, BreakLocation.at_coffin_40, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 322, BreakLocation.at_coffin_41, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 323, BreakLocation.at_coffin_42, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 324, BreakLocation.at_coffin_43, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 325, BreakLocation.at_coffin_44, LunacidRegion.accursed_tomb),
 ]
 
 breakable_location_names = [location.name for location in break_locations]
