@@ -683,7 +683,7 @@ class LunacidRules:
                                                                   LunacidRegion.accursed_tomb])
 
         if level <= 10:
-            return can_you_hit_something
+            return can_you_hit_something and state.has(CustomItem.experience, self.player, max(level - self.level, 0))
         has_bangle = True
         level_cap = 0
         for region in region_to_level_value:
