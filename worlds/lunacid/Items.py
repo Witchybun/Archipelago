@@ -300,6 +300,8 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
     if filler_slots == 0:
         return items
     filler_list = [Coins.silver, CustomItem.experience] + list(options.filler.value)
+    if options.levelsanity:
+        filler_list.remove(CustomItem.experience)
     trap_list = list(options.traps.value)
     if month != 12:
         trap_list = [trap for trap in trap_list if trap != Trap.coal or trap != Trap.eggnog]
