@@ -326,7 +326,7 @@ class DropLocation:
     slime_skeleton = other_drop("Slime Skeleton: Ashes Drop")
     skeleton_weapon = unique_drop("Skeleton: Skeleton Axe Drop")
     skeleton_spell = unique_drop("Skeleton: Dark Skull Drop")
-    skeleton_10c = other_drop("Skeleton: Medium Silver Drop")
+    skeleton_10c = other_drop("Skeleton: Small Silver Drop")
     skeleton_mana_vial = other_drop("Skeleton: Mana Vial")
     skeleton_onyx = other_drop("Skeleton: Onyx Drop")
     skeleton_bones = other_drop("Skeleton: Bones Drop")
@@ -1398,7 +1398,6 @@ class BreakLocation:
     at_coffin_11 = "AT: Coffin 11 - (Accursed Tomb)"
     at_coffin_12 = "AT: Coffin 12 - (Accursed Tomb)"
     at_coffin_13 = "AT: Coffin 13 - (Accursed Tomb)"
-    at_coffin_14 = "AT: Coffin 14 - (Accursed Tomb)"
     at_coffin_15 = "AT: Coffin 15 - (Vampire Tomb)"
     at_coffin_16 = "AT: Coffin 16 - (Vampire Tomb)"
     at_coffin_17 = "AT: Coffin 17 - (Accursed Tomb)"
@@ -1411,7 +1410,6 @@ class BreakLocation:
     at_coffin_24 = "AT: Coffin 24 - (Vampire Tomb)"
     at_coffin_25 = "AT: Coffin 25 - (Vampire Tomb)"
     at_coffin_26 = "AT: Coffin 26 - (Vampire Tomb)"
-    at_coffin_27 = "AT: Coffin 27 - (Accursed Tomb)"
     at_coffin_28 = "AT: Coffin 28 - (Accursed Tomb)"
     at_coffin_29 = "AT: Coffin 29 - (Vampire Tomb)"
     at_coffin_30 = "AT: Coffin 30 - (Accursed Tomb)"
@@ -1421,13 +1419,6 @@ class BreakLocation:
     at_coffin_34 = "AT: Coffin 34 - (Vampire Tomb)"
     at_coffin_35 = "AT: Coffin 35 - (Vampire Tomb)"
     at_coffin_36 = "AT: Coffin 36 - (Accursed Tomb)"
-    at_coffin_38 = "AT: Coffin 38 - (Accursed Tomb)"
-    at_coffin_39 = "AT: Coffin 39 - (Accursed Tomb)"
-    at_coffin_40 = "AT: Coffin 40 - (Accursed Tomb)"
-    at_coffin_41 = "AT: Coffin 41 - (Accursed Tomb)"
-    at_coffin_42 = "AT: Coffin 42 - (Accursed Tomb)"
-    at_coffin_43 = "AT: Coffin 43 - (Accursed Tomb)"
-    at_coffin_44 = "AT: Coffin 44 - (Accursed Tomb)"
     hb_wood_debris_1 = "HoB: Wood Debris 1 - (Holy Battleground)"
     hb_wood_debris_2 = "HoB: Wood Debris 2 - (Holy Battleground)"
     hb_wood_debris_3 = "HoB: Wood Debris 3 - (Holy Battleground)"
