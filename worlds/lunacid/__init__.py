@@ -117,16 +117,11 @@ class LunacidWorld(World):
     explicit_indirect_conditions = True
 
     using_ut: bool
-    passthrough: Dict[str, Any]
-    ut_can_gen_without_yaml = True
     # tracker_world: ClassVar = tracker.TRACKER_WORLD
 
     def __init__(self, multiworld, player):
         super(LunacidWorld, self).__init__(multiworld, player)
-        slot_data: Dict[str, Any] = getattr(multiworld, "re_gen_passthrough", {}).get("Lunacid")
-        self.seed = self.random.getrandbits(64)
-        if slot_data is not None:
-            self.seed = slot_data.get("seed")
+        self.seed = getattr(multiworld, "re_gen_passthrough", {}).get("Lunacid", self.random.getrandbits(64))
         self.random = Random(self.seed)
         self.custom_class_name = ""
         self.custom_class_description = ""
@@ -137,7 +132,7 @@ class LunacidWorld(World):
         self.level = self.determine_starting_level()
         self.verify_item_colors()
         self.enemy_random_data, self.enemy_regions = self.randomize_enemies()
-        tracker.setup_options_from_slot_data(self)
+        Tracker.setup_options_from_slot_data(self)
 
     def create_item(self, name: str, override_classification: ItemClassification = None) -> "LunacidItem":
         item_id: int = self.item_name_to_id[name]
@@ -492,7 +487,10 @@ class LunacidWorld(World):
 
         return slot_data
 
-    # for the universal tracker, doesn't get called in standard gen
     @staticmethod
-    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
-        return slot_data
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Optional[int]:
+        # If the seed is not specified in the slot data, this mean the world was generated before Universal Tracker support.
+        seed = slot_data.get("ut_seed")
+        if seed is None:
+            logger.warning(f"World was generated before Universal Tracker support. Tracker might not be accurate.")
+        return seed

@@ -7,26 +7,7 @@ if TYPE_CHECKING:
 def setup_options_from_slot_data(world: "LunacidWorld"):
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "Lunacid" in world.multiworld.re_gen_passthrough:
-            world.passthrough = world.multiworld.re_gen_passthrough["Lunacid"]
             world.using_ut = True
-            world.options.ending.value = world.passthrough["ending"]
-            world.options.starting_area.value = world.passthrough["starting_area"]
-            world.options.dropsanity.value = world.passthrough["dropsanity"]
-            world.options.levelsanity.value = world.passthrough["levelsanity"]
-            world.options.entrance_randomization.value = world.passthrough["entrance_randomization"]
-            world.options.enemy_randomization.value = world.passthrough["enemy_randomization"]
-            world.options.shopsanity.value = world.passthrough["shopsanity"]
-            world.options.door_locks.value = world.passthrough["door_locks"]
-            world.options.switch_locks.value = world.passthrough["switch_locks"]
-            world.options.etnas_pupil.value = world.passthrough["etnas_pupil"]
-            world.options.bookworm.value = world.passthrough["bookworm"]
-            world.options.grasssanity.value = world.passthrough["grasssanity"]
-            world.options.breakables.value = world.passthrough["breakables"]
-            world.options.quenchsanity.value = world.passthrough["quenchsanity"]
-            world.options.random_elements.value = world.passthrough["random_elements"]
-            world.options.required_strange_coin.value = world.passthrough["required_strange_coin"]
-            world.options.secret_door_lock.value = world.passthrough["secret_door_lock"]
-            world.options.custom_class.value = world.passthrough.get("custom_class", {})
         else:
             world.using_ut = False
     else:
