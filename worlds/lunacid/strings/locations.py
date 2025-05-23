@@ -1414,7 +1414,6 @@ class BreakLocation:
     at_coffin_29 = "AT: Coffin 29 - (Vampire Tomb)"
     at_coffin_30 = "AT: Coffin 30 - (Accursed Tomb)"
     at_coffin_31 = "AT: Coffin 31 - (Accursed Tomb)"
-    at_coffin_32 = "AT: Coffin 32 - (Accursed Tomb)"
     at_coffin_33 = "AT: Coffin 33 - (Accursed Tomb)"
     at_coffin_34 = "AT: Coffin 34 - (Vampire Tomb)"
     at_coffin_35 = "AT: Coffin 35 - (Vampire Tomb)"

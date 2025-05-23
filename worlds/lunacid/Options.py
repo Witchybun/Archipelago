@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import ClassVar, Protocol
 
 from Options import Choice, Toggle, DeathLink, PerGameCommonOptions, Range, OptionSet, OptionDict
-from worlds.lunacid.data.item_data import all_filler_items
+from worlds.lunacid.data.item_data import all_filler_items, default_filler_weights, default_trap_weights
 from .strings.items import Trap, Coins
 
 
@@ -108,19 +108,6 @@ class TotalStrangeCoins(Range):
     default = 30
 
 
-class ExtraEquipment(OptionSet):
-    """Adds new equipment to the game, which change progression in some way.
-    Old Flippers: You cannot swim (more specifically, if you get the WATER effect you die).  These items let you swim.
-    Boots of Leaping: DEX no longer increases your jump height, and your effective DEX is set to 1.  These set your effective DEX to 30 for the sake of jumping.
-    Earring of Speed: SPD no longer increases your movement speed, and your effective SPD is set to 10.  These set your effective SPD to 40 and 80 respectively."""
-    internal_name = "extra_equipment"
-    display_name = "Extra Equipment"
-    valid_keys = frozenset(["Old Flippers", "Boots of Leaping", "Earring of Speed"])
-    preset_none = frozenset()
-    preset_all = valid_keys
-    default = frozenset()
-
-
 class RandomElements(Toggle):
     """Randomizes the elements of almost all weapons and spells.  Guaranteed Poison ranged option.
     Lucid Blade and Wand of Power are not randomized (either due to limitation, or to guarantee victory)"""
@@ -224,21 +211,13 @@ class SecretDoorLock(Toggle):
     display_name = "Secret Door Lock"
 
 
-class Filler(OptionSet):
-    """Lets you decide which filler are added to the game.  If the set is empty, only silver and exp is included.
-    Amount received in game is a random value between 1~5, favoring 1~2.
-    Acceptable Filler: Blood Wine, Light Urn, Cloth Bandage, Dark Urn, Bomb, Poison Urn, Wisp Heart, Staff of Osiris,
-    Moonlight Vial, Spectral Candle, Health Vial, Mana Vial, Fairy Moss, Crystal Shard, Poison Throwing Knife,
-    Throwing Knife, Holy Water, Antidote, Survey Banner, Pink Shrimp, Angel Feather, Fool's Gold, Ectoplasm,
-    Snowflake Obsidian, Moon Petal, Fire Opal, Ashes, Fiddlehead, Fire Coral, Vampiric Ashes,
-    Opal, Yellow Morel, Lotus Seed Pod, Obsidian, Onyx, Ocean Bone Shard, Bloodweed, Ikurr'ilb Root,
-    Destroying Angel Mushroom, Ocean Bone Shell, Bones."""
+class Filler(OptionDict):
+    """Lets you decide which filler are added to the game and their weights.  If the set is empty or all values are zero,
+    Silver and Deep Knowledge will be forced included with weights of 1. Amount received in game is a random value between 1~5, favoring 1~2."""
     internal_name = "filler"
     display_name = "Filler"
-    valid_keys = frozenset([item for item in all_filler_items if item != Coins.silver])
-    preset_none = frozenset()
-    preset_all = valid_keys
-    default = frozenset([item for item in all_filler_items if item != Coins.silver])
+    valid_keys = [item for item in default_filler_weights]
+    default = default_filler_weights
 
 
 class FillerLocalPercent(Range):
@@ -251,16 +230,14 @@ class FillerLocalPercent(Range):
     default = 0
 
 
-class Traps(OptionSet):
-    """Lets you decide which traps are in your game.  If empty, same as having 0 Trap Percent.
+class Traps(OptionDict):
+    """Lets you decide which traps are in your game and their weights.  If empty or all values are zero, same as having 0 Trap Percent.
     Certain joyous traps are allowed during Christmas, otherwise are ignored.
     Acceptable Traps: "Bleed Trap", "Poison Trap", "Curse Trap", "Slowness Trap", "Blindness Trap", "Mana Drain Trap", "XP Drain Trap", Coal, Eggnog."""
     internal_name = "traps"
     display_name = "Traps"
-    valid_keys = frozenset(Trap.all_traps + Trap.christmas_gifts)
-    preset_none = frozenset()
-    preset_all = valid_keys
-    default = frozenset(Trap.all_traps)
+    valid_keys = [trap for trap in default_trap_weights]
+    default = default_trap_weights
 
 
 class TrapPercent(Range):
@@ -281,16 +258,17 @@ class CustomMusic(Toggle):
 
 class ItemColors(OptionDict):
     """Lets you determine the colors of items in-game using hexadecimal.  This includes Progression, Useful, Trap, Filler, Gifts, and
-    Cheated (!getitem, starting inventory, etc).  If an item has multiple flags, the colors are averaged."""
+    Cheated (!getitem, starting inventory, etc)."""
     internal_name = "item_colors"
-    valid_keys = ["Progression", "Useful", "Trap", "Filler", "Gift", "Cheat"]
+    valid_keys = ["ProgUseful", "Progression", "Useful", "Trap", "Filler", "Gift", "Cheat"]
     display_name = "Item Colors"
     default = {
-        "Progression": "#AF99EF",
-        "Useful": "#6D8BE8",
+        "ProgUseful": "FF8000",
+        "Progression": "#A335EE",
+        "Useful": "#0070DD",
         "Trap": "#FA8072",
-        "Filler": "#00EEEE",
-        "Gift": "#9DAE11",
+        "Filler": "#1EFF00",
+        "Gift": "#FF8DA1",
         "Cheat": "#FF0000",
     }
 

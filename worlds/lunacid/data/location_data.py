@@ -1506,7 +1506,6 @@ break_locations = [
     create_location(LOCATION_CODE_START + break_location_start + 253, BreakLocation.at_coffin_29, LunacidRegion.vampire_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 254, BreakLocation.at_coffin_30, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 255, BreakLocation.at_coffin_31, LunacidRegion.accursed_tomb),
-    create_location(LOCATION_CODE_START + break_location_start + 256, BreakLocation.at_coffin_32, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 257, BreakLocation.at_coffin_33, LunacidRegion.accursed_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 258, BreakLocation.at_coffin_34, LunacidRegion.vampire_tomb),
     create_location(LOCATION_CODE_START + break_location_start + 259, BreakLocation.at_coffin_35, LunacidRegion.vampire_tomb),
