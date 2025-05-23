@@ -1,3 +1,4 @@
+from math import floor
 from random import Random
 import logging
 
@@ -292,10 +293,44 @@ def create_stat_items(item_factory: LunacidItemFactory, level: int, options: Lun
     if not options.levelsanity:
         return items
     items.extend([item_factory(item, ItemClassification.progression) for item in [CustomItem.experience]*(100 - level)])
+    items.extend([item_factory(item, ItemClassification.useful) for item in [CustomItem.experience]*level])
     return items
 
 
 def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random,
+                  filler_slots: int, month: int, items: List[Item]) -> List[Item]:
+    filler_count = filler_slots
+    if filler_count == 0:
+        return items
+    filler_weights = {filler: options.filler.value[filler] for filler in options.filler.value if options.filler.value[filler] != 0}
+    trap_weights = {trap: options.traps.value[trap] for trap in options.traps.value if options.traps.value[trap] != 0}
+    trap_percent = options.trap_percent / 100
+    if len(filler_weights) == 0:
+        filler_weights[Coins.silver] = 1
+        filler_weights[CustomItem.experience] = 1
+    if options.levelsanity:
+        del filler_weights[CustomItem.experience]
+    if month != 12:
+        del trap_weights[Trap.eggnog]
+        del trap_weights[Trap.coal]
+    if len(trap_weights) == 0:
+        trap_percent = 0
+    if trap_percent > 0:
+        trap_count = int(filler_slots * trap_percent)
+        filler_count = filler_slots - trap_count
+        trap_table = random.choices(population=list(trap_weights.keys()), weights=list(trap_weights.values()), k=trap_count)
+        for trap in trap_table:
+            items.append(item_factory(trap))
+    filler_table = random.choices(population=list(filler_weights.keys()), weights=list(filler_weights.values()), k=filler_count)
+    for filler in filler_table:
+        items.append(item_factory(filler))
+    return items
+
+
+
+
+
+"""def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random,
                   filler_slots: int, month: int, items: List[Item]) -> List[Item]:
     if filler_slots == 0:
         return items
@@ -314,7 +349,7 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
         filler_count = filler_slots - trap_count
         items.extend([item_factory(filler) for filler in random.choices(trap_list, k=trap_count)])
     items.extend([item_factory(filler) for filler in random.choices(filler_list, k=filler_count)])
-    return items
+    return items"""
 
 
 all_filler = [item for item in item_table if item.classification is ItemClassification.filler]
