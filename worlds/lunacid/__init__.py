@@ -6,8 +6,8 @@ from random import Random
 from time import strftime
 from typing import Dict, Any, Iterable, TextIO, List, Tuple, Optional, ClassVar
 import logging
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, EntranceType
-from Fill import fill_restrictive
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, EntranceType, CollectionState, MultiWorld
+from Fill import fill_restrictive, fast_fill
 from Utils import visualize_regions
 from worlds.AutoWorld import World, WebWorld
 from . import Options
@@ -106,6 +106,7 @@ class LunacidWorld(World):
     level = 0
     local_alchemy: List[Item] = []
     local_filler: List[Item] = []
+    locations_for_filler: List[Location] = []
     weapon_elements: Dict[str, str]
     world_entrances = dict[str, Entrance]
     randomized_entrances: Dict[str, str] = {}
@@ -119,6 +120,7 @@ class LunacidWorld(World):
     explicit_indirect_conditions = True
 
     using_ut: bool
+
     # tracker_world: ClassVar = tracker.TRACKER_WORLD
 
     def __init__(self, multiworld, player):
@@ -158,14 +160,22 @@ class LunacidWorld(World):
                                for location in self.get_locations() if location.item is None]) - 1
         if self.options.etnas_pupil and self.options.dropsanity == self.options.dropsanity.option_randomized:
             locations_count -= 80
+        if self.options.starting_area == self.options.starting_area.option_tomb:
+            locations_count -= 1
         excluded_items = self.multiworld.precollected_items[self.player]
         self.weapon_elements = determine_weapon_elements(self.options, self.random)
         (potential_pool, self.local_filler, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items,
-                                                                self.weapon_elements, self.rolled_month, self.level, self.options,
-                                                                self.random)
+                                                                                   self.weapon_elements, self.rolled_month, self.level, self.options,
+                                                                                   self.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
+
+        # There's a weird edge case where very rarely there's one more item in the pool than there should be.
+        all_items = potential_pool + self.local_filler + self.local_alchemy + [self.starting_weapon]
+        if len(set(self.get_locations())) < len(all_items):
+            random_filler = [item for item in potential_pool if item.classification == 0]
+            potential_pool.remove(random_filler)
 
         self.multiworld.itempool += potential_pool
 
@@ -184,10 +194,9 @@ class LunacidWorld(World):
             alchemy_items *= 5  # make sure there's enough of them to go around
             self.local_alchemy = alchemy_items
 
-            """for item in local_filler:
-                location = self.random.choice(unfilled_locations)
-                unfilled_locations.remove(location)
-                location.place_locked_item(item)"""
+        if self.multiworld.players == 1:
+            self.multiworld.itempool += self.local_filler
+
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -236,11 +245,11 @@ class LunacidWorld(World):
             set_rule(victory, lambda state: LunacidRules(self).has_coins_for_door(self.options, state))
         elif self.options.ending == self.options.ending.option_ending_e:
             set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state, self.options, self.starting_weapon.name)
-                     and state.has(UniqueItem.white_tape, self.player))
+                                            and state.has(UniqueItem.white_tape, self.player))
         elif self.options.ending == self.options.ending.option_any_ending:
             set_rule(victory, lambda state: state.can_reach_region(LunacidRegion.grave_of_the_sleeper, self.player)
-                     or (LunacidRules(self).has_coins_for_door(self.options, state)
-                         and state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player)))
+                                            or (LunacidRules(self).has_coins_for_door(self.options, state)
+                                                and state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player)))
 
         multiworld.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
 
@@ -366,7 +375,7 @@ class LunacidWorld(World):
 
     def randomize_enemies(self) -> Tuple[Dict[str, List[str]], Dict[str, List[str]]]:
         chosen_enemies = []
-        enemy_counts = Counter()
+        enemy_counts = {enemy: 0 for enemy in Enemy.randomizable_enemies}
         randomized_enemy_placement = []
         enemy_to_enemy_placement = {}
         if self.options.enemy_randomization:
@@ -382,8 +391,9 @@ class LunacidWorld(World):
                 else:
                     enemy_to_enemy_placement[picked_enemy] = [new_data]
                 randomized_enemy_placement.append(new_data)
-            while chosen_enemies.sort() != Enemy.randomizable_enemies.sort():
-                acceptable_enemies = [enemy for enemy in enemy_counts if enemy_counts[enemy] > 1]
+            unused_enemies = [enemy for enemy in enemy_counts if enemy_counts[enemy] == 0]
+            while len(unused_enemies) > 0:
+                acceptable_enemies = [enemy for enemy in enemy_counts if enemy_counts[enemy] > 2]
                 for checked_enemy in Enemy.randomizable_enemies:
                     if checked_enemy not in chosen_enemies:
                         random_enemy = self.random.choice(acceptable_enemies)
@@ -397,8 +407,10 @@ class LunacidWorld(World):
                         enemy_counts[checked_enemy] = 1
                         randomized_enemy_placement.append(new_data)
                         chosen_enemies.append(checked_enemy)
+                unused_enemies = [enemy for enemy in enemy_counts if enemy_counts[enemy] == 0]
         else:
             randomized_enemy_placement = base_enemy_placement
+
         mod_data = construct_flag_data_for_mod(randomized_enemy_placement)
         enemy_dictionary = construct_enemy_dictionary(randomized_enemy_placement)
         return mod_data, enemy_dictionary
@@ -416,10 +428,25 @@ class LunacidWorld(World):
             fill_restrictive(self.multiworld, state, repeat_locations, self.local_alchemy,
                              single_player_placement=True, lock=True, allow_excluded=True)
         if len(self.local_filler) > 0:
-            state = self.multiworld.get_all_state(False)
-            unfilled_locations = [location for location in self.get_locations() if location.item is None]
-            fill_restrictive(self.multiworld, state, unfilled_locations, self.local_filler,
-                             single_player_placement=True, lock=False, allow_excluded=True)
+            sphere_one_locations = [location for location in self.multiworld.get_reachable_locations(CollectionState(self.multiworld), self.player) if
+                                    location.item is None]
+            necessary_locations = set(self.random.sample(sphere_one_locations, 3))
+            good_locations_to_fill = [location for location in self.multiworld.get_unfilled_locations(self.player)
+                                      if location not in necessary_locations and location.name not in self.options.priority_locations]
+            self.locations_for_filler = good_locations_to_fill
+
+    @classmethod
+    def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
+        lunacid_fill_worlds: List[LunacidWorld] = [world for world in multiworld.get_game_worlds("Lunacid")
+                                                   if world.options.filler_local_percent.value > 0]
+        if not lunacid_fill_worlds:
+            return
+        if multiworld.players > 1:
+            for world in lunacid_fill_worlds:
+                if world.options.filler_local_percent > 0:
+                    world.random.shuffle(world.locations_for_filler)
+                    for item in world.local_filler:
+                        world.locations_for_filler.pop().place_locked_item(item)
 
     def get_pre_fill_items(self) -> List["Item"]:
         pre_fill_items = []

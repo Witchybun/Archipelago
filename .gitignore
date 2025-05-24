@@ -203,3 +203,4 @@ minecraft_versions.json
 Thumbs.db
 [Dd]esktop.ini
 /fuzz.py
+/fuzz_temp.yaml
