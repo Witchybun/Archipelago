@@ -65,7 +65,7 @@ def determine_weapon_elements(options: LunacidOptions, random: Random) -> Dict[s
 
 def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item],
                  weapon_elements: Dict[str, str], month: int, level: int, options: LunacidOptions,
-                 random: Random) -> (List[Item], Item):
+                 random: Random) -> (List[Item], List[Item], Item):
     items = []
     lunacid_items = create_lunacid_items(item_factory, weapon_elements, month, level, options)
     for item in items_to_exclude:
@@ -92,9 +92,9 @@ def create_items(item_factory: LunacidItemFactory, locations_count: int, items_t
             break
     logger.debug(f"Created {len(lunacid_items)} unique items")
     filler_slots = locations_count - len(items)
-    create_filler(item_factory, options, random, filler_slots, month, items)
+    _, local_filler = create_filler(item_factory, options, random, filler_slots, month, items)
 
-    return items, starting_weapon_choice
+    return items, local_filler, starting_weapon_choice
 
 
 def create_lunacid_items(item_factory: LunacidItemFactory, weapon_elements: Dict[str, str], month: int, level: int,
@@ -298,7 +298,7 @@ def create_stat_items(item_factory: LunacidItemFactory, level: int, options: Lun
 
 
 def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random,
-                  filler_slots: int, month: int, items: List[Item]) -> List[Item]:
+                  filler_slots: int, month: int, items: List[Item]) -> (List[Item], List[Item]):
     filler_count = filler_slots
     if filler_count == 0:
         return items
@@ -321,35 +321,17 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
         trap_table = random.choices(population=list(trap_weights.keys()), weights=list(trap_weights.values()), k=trap_count)
         for trap in trap_table:
             items.append(item_factory(trap))
+
+    local_filler_count = floor(filler_count * (options.filler_local_percent / 100))
+    local_filler = []
     filler_table = random.choices(population=list(filler_weights.keys()), weights=list(filler_weights.values()), k=filler_count)
     for filler in filler_table:
+        if local_filler_count > 0:
+            local_filler.append(item_factory(filler))
+            local_filler_count -= 1
+            continue
         items.append(item_factory(filler))
-    return items
-
-
-
-
-
-"""def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, random: Random,
-                  filler_slots: int, month: int, items: List[Item]) -> List[Item]:
-    if filler_slots == 0:
-        return items
-    filler_list = [Coins.silver, CustomItem.experience] + list(options.filler.value)
-    if options.levelsanity:
-        filler_list.remove(CustomItem.experience)
-    trap_list = list(options.traps.value)
-    if month != 12:
-        trap_list = [trap for trap in trap_list if trap != Trap.coal or trap != Trap.eggnog]
-    trap_percent = options.trap_percent.value / 100
-    if not trap_list:
-        trap_percent = 0
-    filler_count = filler_slots
-    if trap_percent != 0:
-        trap_count = int(filler_slots * trap_percent)
-        filler_count = filler_slots - trap_count
-        items.extend([item_factory(filler) for filler in random.choices(trap_list, k=trap_count)])
-    items.extend([item_factory(filler) for filler in random.choices(filler_list, k=filler_count)])
-    return items"""
+    return items, local_filler
 
 
 all_filler = [item for item in item_table if item.classification is ItemClassification.filler]
