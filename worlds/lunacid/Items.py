@@ -322,7 +322,7 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
         for trap in trap_table:
             items.append(item_factory(trap))
 
-    local_filler_count = floor(filler_count * (options.filler_local_percent / 100))
+    local_filler_count = int(filler_count * (options.filler_local_percent / 100))
     local_filler = []
     filler_table = random.choices(population=list(filler_weights.keys()), weights=list(filler_weights.values()), k=filler_count)
     for filler in filler_table:
