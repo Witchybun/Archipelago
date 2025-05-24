@@ -1,10 +1,11 @@
 class DefaultColors:
-    progression = "#FFA500"
-    useful = "#0000FF"
-    trap = "#FF1493"
-    filler = "#000000"
-    gift = "#00CED1"
-    cheat = "#00FF00"
+    proguseful = '#FF8000'
+    progression = "#A335EE"
+    useful = "#0070DD"
+    trap = "#FA8072"
+    filler = "#1EFF00"
+    gift = "#FF8DA1"
+    cheat = "#FF0000"
 
 
 class JumpHeight:

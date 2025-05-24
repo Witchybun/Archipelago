@@ -226,7 +226,7 @@ class FillerLocalPercent(Range):
     internal_name = "filler_local_percent"
     display_name = "Filler Local Percent"
     range_start = 0
-    range_end = 20
+    range_end = 98
     default = 0
 
 
@@ -263,7 +263,7 @@ class ItemColors(OptionDict):
     valid_keys = ["ProgUseful", "Progression", "Useful", "Trap", "Filler", "Gift", "Cheat"]
     display_name = "Item Colors"
     default = {
-        "ProgUseful": "FF8000",
+        "ProgUseful": "#FF8000",
         "Progression": "#A335EE",
         "Useful": "#0070DD",
         "Trap": "#FA8072",
@@ -327,7 +327,7 @@ class LunacidOptions(PerGameCommonOptions):
     switch_locks: SwitchLocks
     door_locks: DoorLocks
     filler: Filler
-    #filler_local_percent: FillerLocalPercent
+    filler_local_percent: FillerLocalPercent
     traps: Traps
     trap_percent: TrapPercent
     custom_music: CustomMusic
