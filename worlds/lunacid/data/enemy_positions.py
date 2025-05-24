@@ -588,6 +588,7 @@ base_enemy_placement = [
 immovable_enemies = {
     Enemy.demon: [LunacidRegion.sanguine_sea, LunacidRegion.mausoleum],
     Enemy.slime: [LunacidRegion.fetid_mire, LunacidRegion.fetid_mire_high_secrets],
+    Enemy.umbra: [LunacidRegion.holy_battleground],
 
 }
 

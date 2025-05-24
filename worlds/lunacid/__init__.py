@@ -104,6 +104,8 @@ class LunacidWorld(World):
     rolled_month = int(strftime('%m'))
     starting_weapon: LunacidItem
     level = 0
+    local_alchemy: List[Item] = []
+    local_filler: List[Item] = []
     weapon_elements: Dict[str, str]
     world_entrances = dict[str, Entrance]
     randomized_entrances: Dict[str, str] = {}
@@ -158,24 +160,12 @@ class LunacidWorld(World):
             locations_count -= 80
         excluded_items = self.multiworld.precollected_items[self.player]
         self.weapon_elements = determine_weapon_elements(self.options, self.random)
-        (potential_pool, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items,
+        (potential_pool, self.local_filler, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items,
                                                                 self.weapon_elements, self.rolled_month, self.level, self.options,
                                                                 self.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
             potential_pool.remove(self.starting_weapon)
-        """chosen_filler_for_local = []
-        if self.options.filler_local_percent > 0:
-            filler = [item for item in potential_pool if item.classification == 0]
-            required_local_count = floor(len(filler) * (self.options.filler_local_percent / 100)) + 1
-            if len(filler) > 0:
-                while required_local_count > 0:
-                    random_filler: Item = self.random.choice(filler)
-                    chosen_filler_for_local.append(random_filler)
-                    potential_pool.remove(random_filler)
-                    filler.remove(random_filler)
-                    required_local_count -= 1
-                potential_pool.append(self.create_item(Creation.health_vial))"""
 
         self.multiworld.itempool += potential_pool
 
@@ -186,10 +176,18 @@ class LunacidWorld(World):
             bony_friend = self.get_location(BaseLocation.wings_rest_clives_gift)
             bony_friend.place_locked_item(lamp)
 
-        """if len(chosen_filler_for_local) > 0:
-            state = self.multiworld.get_all_state(False)
-            fill_restrictive(self.multiworld, state, list(self.get_locations()), chosen_filler_for_local,
-                             single_player_placement=True, lock=False, allow_excluded=True)"""
+        if self.options.etnas_pupil and self.options.dropsanity == self.options.dropsanity.option_randomized:
+            alchemy_items = []
+            for alchemy_item in Alchemy.necessary_alchemy_items:
+                alchemy_items.append(Item(alchemy_item, ItemClassification.progression | ItemClassification.useful,
+                                          self.item_name_to_id[alchemy_item], self.player))
+            alchemy_items *= 5  # make sure there's enough of them to go around
+            self.local_alchemy = alchemy_items
+
+            """for item in local_filler:
+                location = self.random.choice(unfilled_locations)
+                unfilled_locations.remove(location)
+                location.place_locked_item(item)"""
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -329,6 +327,7 @@ class LunacidWorld(World):
         return -1
 
     def verify_item_colors(self) -> None:
+        self.fix_colors("ProgUseful", DefaultColors.progression)
         self.fix_colors("Progression", DefaultColors.progression)
         self.fix_colors("Useful", DefaultColors.useful)
         self.fix_colors("Trap", DefaultColors.trap)
@@ -341,6 +340,8 @@ class LunacidWorld(World):
             self.options.item_colors.value[name] = default_color
         elif not self.is_hex(self.options.item_colors.value[name]):
             self.options.item_colors.value[name] = default_color
+        elif "#" not in self.options.item_colors.value[name]:
+            self.options.item_colors.value[name] = "#" + self.options.item_colors.value[name]
 
     @staticmethod
     def total_points_given_starting_level(starting_level: int):
@@ -407,17 +408,24 @@ class LunacidWorld(World):
             state = self.multiworld.get_all_state(False)
             logger.info(f"Randomized Drops and Etna's Pupil found in generation for Player {self.player}.  "
                         f"Adding progressives to dropsanity locations regardless of settings.")
-            alchemy_items = []
-            for alchemy_item in Alchemy.necessary_alchemy_items:
-                alchemy_items.append(Item(alchemy_item, ItemClassification.progression | ItemClassification.useful,
-                                          self.item_name_to_id[alchemy_item], self.player))
-            alchemy_items *= 5  # make sure there's enough of them to go around
+
             repeat_locations = [location for location in self.get_locations() if location.name in all_drops]
             self.random.shuffle(repeat_locations)
             repeat_locations = repeat_locations[0:80]
 
-            fill_restrictive(self.multiworld, state, repeat_locations, alchemy_items,
+            fill_restrictive(self.multiworld, state, repeat_locations, self.local_alchemy,
                              single_player_placement=True, lock=True, allow_excluded=True)
+        if len(self.local_filler) > 0:
+            state = self.multiworld.get_all_state(False)
+            unfilled_locations = [location for location in self.get_locations() if location.item is None]
+            fill_restrictive(self.multiworld, state, unfilled_locations, self.local_filler,
+                             single_player_placement=True, lock=False, allow_excluded=True)
+
+    def get_pre_fill_items(self) -> List["Item"]:
+        pre_fill_items = []
+        pre_fill_items.extend(self.local_alchemy)
+        pre_fill_items.extend(self.local_filler)
+        return pre_fill_items
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,
