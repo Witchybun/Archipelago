@@ -70,6 +70,8 @@ class Enemy:
 
     demon = "Abyssal Demon"
 
+    umbra = "Sanguis Umbra"
+
     randomizable_enemies = [
         snail, milk_snail, shulker, mummy, mummy_knight, slime_skeleton, skeleton, rat, rat_king, rat_queen, mimic, devil_slime, yakul, kodama, venus, neptune,
         unilateralis, tillandsia, enlightened_one, necronomicon, cursed_painting, poltergeist, vampire, vampire_page, great_bat, malformed, malformed_horse, hallowed_husk,
