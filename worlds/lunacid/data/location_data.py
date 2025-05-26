@@ -698,7 +698,7 @@ lore_locations = [
     create_location(LOCATION_CODE_START + lore_location_start + 29, LoreLocation.autopsy, LunacidRegion.temple_back),
     create_location(LOCATION_CODE_START + lore_location_start + 30, LoreLocation.cultist, LunacidRegion.temple_front),
     create_location(LOCATION_CODE_START + lore_location_start + 31, LoreLocation.sword_fight, LunacidRegion.hollow_basin),
-    create_location(LOCATION_CODE_START + lore_location_start + 32, LoreLocation.bonenard, LunacidRegion.fetid_mire),
+    create_location(LOCATION_CODE_START + lore_location_start + 32, LoreLocation.bonenard, LunacidRegion.fetid_mire_lower_secrets),
     create_location(LOCATION_CODE_START + lore_location_start + 33, LoreLocation.no_fire, LunacidRegion.fetid_mire),
     create_location(LOCATION_CODE_START + lore_location_start + 34, LoreLocation.invader, LunacidRegion.sealed_ballroom_cave_within_room),
     create_location(LOCATION_CODE_START + lore_location_start + 35, LoreLocation.vampire_complain, LunacidRegion.sealed_ballroom),
