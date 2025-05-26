@@ -1,13 +1,10 @@
-from collections import Counter
-from math import floor
-
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
 from random import Random
 from time import strftime
-from typing import Dict, Any, Iterable, TextIO, List, Tuple, Optional, ClassVar
+from typing import Dict, Any, Iterable, TextIO, List, Tuple, ClassVar
 import logging
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, EntranceType, CollectionState, MultiWorld
-from Fill import fill_restrictive, fast_fill
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, CollectionState, MultiWorld
+from Fill import fill_restrictive
 from Utils import visualize_regions
 from worlds.AutoWorld import World, WebWorld
 from . import Options
@@ -52,7 +49,7 @@ class LunacidWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Albrekka", "Tesseract (Advice/Direction)", "Scipio (UT Help)"]
+        ["Albrekka", "Tesseract (Advice/Direction)", "Scipio (UT Help)", "Miracee (Tracker)"]
     )]
 
 
@@ -107,7 +104,7 @@ class LunacidWorld(World):
     local_alchemy: List[Item] = []
     local_filler: List[Item] = []
     locations_for_filler: List[Location] = []
-    weapon_elements: Dict[str, str]
+    weapon_elements: Dict[str, str] = {}
     world_entrances = dict[str, Entrance]
     randomized_entrances: Dict[str, str] = {}
     enemy_random_data: Dict[str, List[str]]
@@ -119,13 +116,18 @@ class LunacidWorld(World):
     logger = logging.getLogger()
     explicit_indirect_conditions = True
 
+    passthrough: Dict[str, Any]
     using_ut: bool
-
-    # tracker_world: ClassVar = tracker.TRACKER_WORLD
+    tracker_world: ClassVar = Tracker.TRACKER_WORLD
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     def __init__(self, multiworld, player):
         super(LunacidWorld, self).__init__(multiworld, player)
-        self.seed = getattr(multiworld, "re_gen_passthrough", {}).get("Lunacid", self.random.getrandbits(64))
+        slot_data = getattr(multiworld, "re_gen_passthrough", {}).get("Lunacid")
+        if slot_data:
+            self.seed = slot_data.get("ut_seed")
+        else:
+            self.seed = self.random.getrandbits(64)
         self.random = Random(self.seed)
         self.custom_class_name = ""
         self.custom_class_description = ""
@@ -163,9 +165,15 @@ class LunacidWorld(World):
         if self.options.starting_area == self.options.starting_area.option_tomb:
             locations_count -= 1
         excluded_items = self.multiworld.precollected_items[self.player]
-        self.weapon_elements = determine_weapon_elements(self.options, self.random)
+        slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get("Lunacid")
+        if slot_data:
+            ut_starting_weapon = slot_data["starting_weapon"]
+        else:
+            ut_starting_weapon = ""
+        if not self.weapon_elements:
+            self.weapon_elements = determine_weapon_elements(self.options, self.random)
         (potential_pool, self.local_filler, starting_weapon_choice) = create_items(self.create_item, locations_count, excluded_items,
-                                                                                   self.weapon_elements, self.rolled_month, self.level, self.options,
+                                                                                   self.weapon_elements, self.rolled_month, self.level, ut_starting_weapon, self.options,
                                                                                    self.random)
         self.starting_weapon = starting_weapon_choice
         if potential_pool.count(self.starting_weapon) > 1:
@@ -196,7 +204,6 @@ class LunacidWorld(World):
 
         if self.multiworld.players == 1:
             self.multiworld.itempool += self.local_filler
-
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -262,6 +269,16 @@ class LunacidWorld(World):
                 disconnect_entrance_for_randomization(entrance, None, entrance.connected_region.name)
             result = randomize_entrances(self, True, {0: [0]})
             self.randomized_entrances = dict(result.pairings)
+            slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get("Lunacid")
+            if slot_data:
+                e_dict = {entrance.name: entrance for region in self.multiworld.get_regions(self.player) for entrance in region.entrances}
+                entrances = slot_data["entrances"]
+                for connection in slot_data["entrances"]:
+                    assert connection in e_dict, f"entrance {connection} in slot data not in world"
+                    assert entrances[connection] in e_dict, f"entrance {entrances[connection]} in slot data not in world"
+
+                    e_dict[connection].connected_region = e_dict[entrances[connection]].parent_region
+                self.randomized_entrances = slot_data["entrances"]
         # self.visualize_regions()
         # hi = True
 
@@ -505,6 +522,7 @@ class LunacidWorld(World):
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "client_version": "0.9.0",
             "rolled_month": self.rolled_month,
+            "starting_weapon": self.starting_weapon.name,
             "elements": self.weapon_elements,
             "created_class_name": self.custom_class_name,
             "created_class_description": self.custom_class_description,
@@ -516,16 +534,11 @@ class LunacidWorld(World):
                                    "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
                                    "secret_door_lock", "death_link", "starting_class", "normalized_drops",
                                    "item_colors", "custom_music", "starting_area", "levelsanity", "bookworm",
-                                   "grasssanity", "breakables"),
+                                   "grasssanity", "breakables", "total_strange_coin"),
             "entrances": self.randomized_entrances
         }
 
         return slot_data
 
-    @staticmethod
-    def interpret_slot_data(slot_data: Dict[str, Any]) -> Optional[int]:
-        # If the seed is not specified in the slot data, this mean the world was generated before Universal Tracker support.
-        seed = slot_data.get("ut_seed")
-        if seed is None:
-            logger.warning(f"World was generated before Universal Tracker support. Tracker might not be accurate.")
-        return seed
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        return slot_data

@@ -1,4 +1,3 @@
-from math import floor
 from random import Random
 import logging
 
@@ -64,7 +63,7 @@ def determine_weapon_elements(options: LunacidOptions, random: Random) -> Dict[s
 
 
 def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item],
-                 weapon_elements: Dict[str, str], month: int, level: int, options: LunacidOptions,
+                 weapon_elements: Dict[str, str], month: int, level: int, ut_starting_weapon: str, options: LunacidOptions,
                  random: Random) -> (List[Item], List[Item], Item):
     items = []
     lunacid_items = create_lunacid_items(item_factory, weapon_elements, month, level, options)
@@ -75,7 +74,10 @@ def create_items(item_factory: LunacidItemFactory, locations_count: int, items_t
         lunacid_items) <= locations_count, (f"There should be at least as many locations [{locations_count}] "
                                             f"as there are mandatory items [{len(lunacid_items)}]")
     items += lunacid_items
-    chosen_weapon = determine_starting_weapon(random, options)
+    if ut_starting_weapon != "":
+        chosen_weapon = ut_starting_weapon
+    else:
+        chosen_weapon = determine_starting_weapon(random, options)
     if weapon_elements[chosen_weapon] in [Elements.light, Elements.fire, Elements.dark_and_fire,
                                           Elements.normal_and_fire, Elements.dark_and_light]:
         starting_weapon_choice = item_factory(chosen_weapon, ItemClassification.progression)
@@ -214,9 +216,6 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
             items.append(item_factory(item))
         for item in shop_item_count:
             items.extend([item_factory(filler) for filler in [item] * shop_item_count[item]])
-    else:
-        for item in Voucher.vouchers:
-            items.append(item_factory(item))
     if options.dropsanity:
         items.extend(item_factory(item) for item in [Upgrade.drop_chance]*3)
     if options.levelsanity:
