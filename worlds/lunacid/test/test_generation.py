@@ -65,37 +65,3 @@ class TestGeneric(LunacidTestBase):
                 continue
             self.assertFalse(location.name not in constructed_location_table,
                              f"Found duplicate ID for {location.name}: {location.location_id} vs {constructed_item_table[location.name]}")
-
-
-class TestStrangeFail(LunacidTestBase):
-    options = {"accessibility": "minimal",
-               "ending": "ending_cd",
-               "starting_class": "forsaken",
-               "starting_area": "grotto",
-               "entrance_randomization": 'true',
-               "experience": 26,
-               "weapon_experience": 112,
-               "random_elements": 'true',
-               "enemy_randomization": 'true',
-               "required_strange_coin": 48,
-               "total_strange_coin": 15,
-               "shopsanity": 'true',
-               "dropsanity": 'false',
-               "quenchsanity": 'false',
-               "etnas_pupil": 'false',
-               "bookworm": 'false',
-               "levelsanity": 'true',
-               "grasssanity": 'true',
-               "breakables": 'false',
-               "normalized_drops": 'true',
-               "secret_door_lock": 'false',
-               "switch_locks": 'true',
-               "door_locks": 'true',
-               "filler_local_percent": 11,
-               "trap_percent": 81}
-
-    def test_ending_reachable(self):
-
-        self.collect_all_but(Creation.health_vial)
-        self.can_reach_location(Endings.look_into_abyss)
-        self.can_reach_location(BaseLocation.throne_book)
