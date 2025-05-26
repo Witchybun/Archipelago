@@ -45,6 +45,7 @@ class LunacidRules:
             LunacidRegion.chamber_of_fate: lambda state: state.has_all({UniqueItem.earth_talisman, UniqueItem.water_talisman}, self.player),
             LunacidRegion.terminus_prison_1f: lambda state: self.has_light_source(state, self.world.options),
             LunacidRegion.terminus_prison_4f: lambda state: state.has(UniqueItem.terminus_prison_key, self.player),
+            LunacidRegion.terminus_prison_basement: lambda state: self.has_light_source(state, self.world.options),
             LunacidRegion.throne_chamber: lambda state: self.can_defeat_the_prince(state, self.world.options),
         }
 
@@ -86,6 +87,7 @@ class LunacidRules:
                                                                   self.has_switch_key(Switch.archives_elevator_switches, state, self.world.options),
 
             LunacidEntrance.archives_3f_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
+            LunacidEntrance.archives_1f_to_1f_secret: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.archives_3f_to_vampire: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2),
 
             LunacidEntrance.archives_vampire_to_3f: lambda state: state.has(Progressives.vampiric_symbol, self.player, 2),
@@ -135,7 +137,7 @@ class LunacidRules:
             LunacidEntrance.castle_to_cattle: lambda state: self.is_vampire(self.world.options) or self.has_blood_spell_access(state),
             LunacidEntrance.castle_entrance_to_main_halls: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
 
-            LunacidEntrance.cattle_to_deeper: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
+            LunacidEntrance.cattle_to_deeper: lambda state: self.is_vampire(self.world.options) or self.has_blood_spell_access(state),
             LunacidEntrance.cattle_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
 
             LunacidEntrance.castle_main_halls_to_entrance: lambda state: self.is_vampire(self.world.options) or state.has(Progressives.vampiric_symbol, self.player, 1),
