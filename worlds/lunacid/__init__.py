@@ -137,7 +137,12 @@ class LunacidWorld(World):
         self.package_custom_class()
         self.level = self.determine_starting_level()
         self.verify_item_colors()
-        self.enemy_random_data, self.enemy_regions = self.randomize_enemies()
+        self.enemy_random_data, enemy_regions = self.randomize_enemies()
+        slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get("Lunacid")
+        if slot_data:
+            self.enemy_regions = slot_data.get("enemy_regions")
+        else:
+            self.enemy_regions = enemy_regions
         Tracker.setup_options_from_slot_data(self)
 
     def create_item(self, name: str, override_classification: ItemClassification = None) -> "LunacidItem":
@@ -529,6 +534,7 @@ class LunacidWorld(World):
             "created_class_stats": self.custom_class_stats,
             "enemy_placement": self.enemy_random_data,
             "item_spots": item_spots,
+            "enemy_regions": self.enemy_regions,
             **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience",
                                    "required_strange_coin", "enemy_randomization", "shopsanity", "dropsanity",
                                    "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
