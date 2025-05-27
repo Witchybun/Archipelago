@@ -17,7 +17,7 @@ all_locations = []
 
 
 # Some locations vary on multiple regions, so we default to Hollow Basin first.
-def create_location(location_id: Optional[int], name: str, region: Optional[str] = LunacidRegion.hollow_basin):
+def create_location(location_id: Optional[int], name: str, region: Optional[str] = LunacidRegion.wings_rest):
     location = LunacidLocation(location_id, name, region)
     if location_id is not None:
         all_locations.append(location)
