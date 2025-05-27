@@ -35,6 +35,7 @@ def setup_options_from_slot_data(world: "LunacidWorld"):
             stats = world.passthrough["created_class_stats"]
             stats["Name"] = world.passthrough["created_class_name"]
             stats["Description"] = world.passthrough["created_class_description"]
+            world.enemy_regions = world.passthrough["enemy_regions"]
             world.options.custom_class.value = stats
             world.seed = world.passthrough["ut_seed"]
         else:
