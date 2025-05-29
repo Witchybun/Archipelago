@@ -495,7 +495,7 @@ TRACKER_WORLD = {
                            "locations/The Fetid Mire.json", "locations/The Sanguine Sea.json", "locations/Throne Chamber.json", "locations/Tower of Abyss.json",
                            "locations/Wing's Rest.json", "locations/Yosei Forest.json", "locations/misc/Shopsanity.json", "locations/misc/Dropsanity.json",
                            "locations/misc/Etna's Pupil.json", ],
-    "map_page_setting_key": "Slot:{player}:Current Scene",
+    "map_page_setting_key": "Slot:{player}:currentScene",
     "map_page_index": map_page_index,
     "poptracker_name_mapping": poptracker_data
 }
