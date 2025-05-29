@@ -4,7 +4,7 @@ from typing import List, Dict, Optional, Protocol, Iterable
 
 from BaseClasses import MultiWorld, Region, Entrance
 
-from worlds.flipwitch.strings.regions_entrances import FlipwitchRegion, FlipwitchEntrance
+from worlds.flipwitch.strings.regions_entrances import FlipwitchRegion, FlipwitchEntrance, WitchyWoodsRegion
 
 
 class RegionFactory(Protocol):
@@ -57,9 +57,16 @@ class ConnectionData:
                 super().__setattr__("reverse", f"{destination}{connector_keyword}{origin}")
 
 
+new_flipwitch_regions = [
+    RegionData(WitchyWoodsRegion.beatrix_hut, []),
+]
+
 flipwitch_regions = [
     RegionData(FlipwitchRegion.menu, [FlipwitchEntrance.menu_to_woods]),
-    RegionData(FlipwitchRegion.witch_woods, [FlipwitchEntrance.witchy_to_spirit, FlipwitchEntrance.woods_to_woods_lower]),
+    RegionData(FlipwitchRegion.witch_woods, [FlipwitchEntrance.witchy_to_spirit, FlipwitchEntrance.woods_to_woods_lower, FlipwitchEntrance.woods_to_sex_experience_layer_1]),
+    RegionData(FlipwitchRegion.sex_experience_layer_1, [FlipwitchEntrance.sex_experience_layer_1_to_sex_experience_layer_2]),
+    RegionData(FlipwitchRegion.sex_experience_layer_2, [FlipwitchEntrance.sex_experience_layer_2_to_sex_experience_layer_3]),
+    RegionData(FlipwitchRegion.sex_experience_layer_3),
     RegionData(FlipwitchRegion.spirit_town, [FlipwitchEntrance.spirit_to_cafe, FlipwitchEntrance.spirit_to_mansion, FlipwitchEntrance.spirit_to_shady,
                                              FlipwitchEntrance.spirit_to_early_ghost, FlipwitchEntrance.spirit_to_jigoku,
                                              FlipwitchEntrance.spirit_to_outside_chaos_castle]),
@@ -90,6 +97,9 @@ flipwitch_regions = [
 
 flipwitch_entrances = [
     ConnectionData(FlipwitchEntrance.menu_to_woods, FlipwitchRegion.witch_woods),
+    ConnectionData(FlipwitchEntrance.woods_to_sex_experience_layer_1, FlipwitchRegion.sex_experience_layer_1),
+    ConnectionData(FlipwitchEntrance.sex_experience_layer_1_to_sex_experience_layer_2, FlipwitchRegion.sex_experience_layer_2),
+    ConnectionData(FlipwitchEntrance.sex_experience_layer_2_to_sex_experience_layer_3, FlipwitchRegion.sex_experience_layer_3),
     ConnectionData(FlipwitchEntrance.witchy_to_spirit, FlipwitchRegion.spirit_town),
     ConnectionData(FlipwitchEntrance.woods_to_woods_lower, FlipwitchRegion.witch_woods_lower),
     ConnectionData(FlipwitchEntrance.spirit_to_cafe, FlipwitchRegion.cabaret_cafe),
