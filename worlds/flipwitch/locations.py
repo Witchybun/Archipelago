@@ -74,7 +74,7 @@ def force_chaos_pieces(player: int, item_repository: Dict[str, int], lookup_tabl
     if options.shuffle_chaos_pieces == options.shuffle_chaos_pieces.option_true:
         return
     for location in lookup_table["Chaos Pieces"]:
-        created_item = Item(Goal.chaos_piece, item_name_to_item[Goal.chaos_piece].classification, item_repository[Goal.chaos_piece], player)
+        created_item = Item(Goal.chaos_piece, item_name_to_item[Goal.chaos_piece].classification, None, player)
         location.place_locked_item(created_item)
 
 
@@ -83,7 +83,7 @@ def force_gacha_items(player: int, item_repository: Dict[str, int], lookup_table
         return
     for location in lookup_table["Gacha Locations"]:
         static_item_name = locations_by_name[location.name].forced_off_item
-        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
+        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, None, player)
         location.place_locked_item(created_item)
     if options.gachapon_shuffle == options.gachapon_shuffle.option_coin:
         return
@@ -94,10 +94,10 @@ def force_gacha_items(player: int, item_repository: Dict[str, int], lookup_table
     random.shuffle(coins)
     coin_items = []
     for coin in coins:
-        coin_items.append(Item(coin, ItemClassification.progression | ItemClassification.useful, item_repository[coin], player))
+        coin_items.append(Item(coin, ItemClassification.progression | ItemClassification.useful, None, player))
     for location in lookup_table["Coin Locations"]:
         static_item_name = coins.pop()
-        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
+        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, None, player)
         location.place_locked_item(created_item)
 
 
@@ -106,7 +106,7 @@ def create_shop_locations(player: int, item_repository: Dict[str, int], lookup_t
         return
     for location in lookup_table["Shop Locations"]:
         static_item_name = locations_by_name[location.name].forced_off_item
-        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
+        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, None, player)
         location.place_locked_item(created_item)
 
 
@@ -115,7 +115,7 @@ def create_quest_locations(player: int, item_repository: Dict[str, int], lookup_
         return
     for location in lookup_table["Quest Locations"]:
         static_item_name = locations_by_name[location.name].forced_off_item
-        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
+        created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, None, player)
         location.place_locked_item(created_item)
     if options.quest_for_sex == options.quest_for_sex.option_sensei:
         return
@@ -123,10 +123,10 @@ def create_quest_locations(player: int, item_repository: Dict[str, int], lookup_
     for location in lookup_table["Sex Experience Locations"]:
         static_item_name = locations_by_name[location.name].forced_off_item
         if count < 8 and static_item_name == Upgrade.peachy_peach:
-            created_item = Item(static_item_name, ItemClassification.progression | ItemClassification.useful, item_repository[static_item_name], player)
+            created_item = Item(static_item_name, ItemClassification.progression | ItemClassification.useful, None, player)
             count += 1
         else:
-            created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
+            created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, None, player)
         location.place_locked_item(created_item)
 
 
@@ -137,8 +137,8 @@ def create_stat_locations(player: int, item_repository: Dict[str, int], lookup_t
     for location in lookup_table["Stat Locations"]:
         static_item_name = locations_by_name[location.name].forced_off_item
         if count < 8 and static_item_name == Upgrade.health:
-            created_item = Item(static_item_name, ItemClassification.progression | ItemClassification.useful, item_repository[static_item_name], player)
+            created_item = Item(static_item_name, ItemClassification.progression | ItemClassification.useful, None, player)
             count += 1
         else:
-            created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, item_repository[static_item_name], player)
+            created_item = Item(static_item_name, item_name_to_item[static_item_name].classification, None, player)
         location.place_locked_item(created_item)

@@ -2,15 +2,15 @@ import os
 import unittest
 from argparse import Namespace
 from contextlib import contextmanager
-from typing import Optional, Dict, Union, Any, Tuple, ClassVar, List, Hashable, Iterable
+from typing import Dict, ClassVar, Iterable, Hashable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import get_seed, MultiWorld, Location, CollectionState
+from BaseClasses import MultiWorld, CollectionState, get_seed, Location
 from Utils import cache_argsless
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
-from .. import FlipwitchWorld, FlipwitchOptions
-from ..options import FlipwitchOption
-from ...AutoWorld import call_all
+from worlds.AutoWorld import call_all
+from worlds.flipwitch import FlipwitchWorld, options
+from worlds.flipwitch.options import FlipwitchOptions, FlipwitchOption
 
 DEFAULT_TEST_SEED = get_seed()
 
@@ -18,6 +18,17 @@ DEFAULT_TEST_SEED = get_seed()
 @cache_argsless
 def default_options():
     return {}
+
+
+@cache_argsless
+def allsanity_options():
+    return {
+        options.StatShuffle.internal_name: options.StatShuffle.option_true,
+        options.Shopsanity.internal_name: options.Shopsanity.option_true,
+        options.ShuffleChaosPieces.internal_name: options.ShuffleChaosPieces.option_true,
+        options.GachaponShuffle.internal_name: options.GachaponShuffle.option_all,
+        options.QuestForSex.internal_name: options.QuestForSex.option_all,
+    }
 
 
 class FlipwitchTestCase(unittest.TestCase):
@@ -84,8 +95,8 @@ class FlipwitchTestBase(WorldTestBase, FlipwitchTestCase):
         if self.skip_base_tests:
             return False
         # world_setup is overridden, so it'd always run default tests when importing SVTestBase
-        is_not_flipwitch_test = type(self) is not FlipwitchTestBase
-        should_run_default_tests = is_not_flipwitch_test and super().run_default_tests
+        is_not_lunacid_test = type(self) is not FlipwitchTestBase
+        should_run_default_tests = is_not_lunacid_test and super().run_default_tests
         return should_run_default_tests
 
     def get_real_locations(self) -> List[Location]:
@@ -150,7 +161,7 @@ def parse_class_option_keys(test_options: dict) -> dict:
                 parsed_options[option.internal_name] = value
             else:
                 assert option in FlipwitchOptions.type_hints, \
-                    f"All keys of world_options must be a possible Lunacid option, {option} is not."
+                    f"All keys of world_options must be a possible Flipwitch option, {option} is not."
                 parsed_options[option] = value
 
     return parsed_options
