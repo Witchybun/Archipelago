@@ -34,71 +34,56 @@ class FlipwitchRules:
 
         self.entrance_rules = {
             FlipwitchEntrance.witchy_to_spirit: lambda state: state.has(Unlock.crystal_block, self.player),
+            FlipwitchEntrance.woods_to_sex_experience_layer_1: lambda state: state.has(QuestItem.fairy_bubble, self.player),
+            FlipwitchEntrance.sex_experience_layer_1_to_sex_experience_layer_2: lambda state: self.can_present_gender(state, self.world.options, "Female"),
+            FlipwitchEntrance.sex_experience_layer_2_to_sex_experience_layer_3: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
             FlipwitchEntrance.woods_to_woods_lower: lambda state: self.can_present_gender(state, self.world.options, "Male"),
             FlipwitchEntrance.spirit_to_cafe: lambda state: self.can_complete_quest(state, Quest.let_the_dog_out) and
                                                             self.can_complete_quest(state, Quest.panty_raid) and
                                                             self.can_complete_quest(state, Quest.need_my_cowbell),
             FlipwitchEntrance.spirit_to_mansion: lambda state: self.can_reach_mansion_door(world.options, state) and self.can_convince_mansion_guard(state),
             FlipwitchEntrance.spirit_to_shady: lambda state: state.has(Power.slime_form, self.player) and state.has(Power.ghost_form,
-                                                                                                                    self.player) and self.has_upgrade_stage(6, state),
+                                                                                                                    self.player) and self.has_upgrade_stage(3, state),
             FlipwitchEntrance.spirit_to_early_ghost: lambda state: state.has(Unlock.goblin_crystal_block, self.player) and self.has_upgrade_stage(1, state),
             FlipwitchEntrance.early_ghost_to_ghost: lambda state: state.has(Key.ghostly_castle, self.player) and self.can_take_either_ghost_castle_path_up_to_rose(state),
             FlipwitchEntrance.ghost_to_ghost_rose: lambda state: self.can_take_either_ghost_castle_path(state),
             FlipwitchEntrance.ghost_rose_to_upper_ghost: lambda state: state.has(Power.ghost_form, self.player) and state.has(Upgrade.bewitched_bubble, self.player),
-            FlipwitchEntrance.spirit_to_jigoku: lambda state: state.has(Power.ghost_form, self.player) and self.has_upgrade_stage(2, state),
+            FlipwitchEntrance.spirit_to_jigoku: lambda state: state.has(Power.ghost_form, self.player) and self.has_upgrade_stage(1, state),
             FlipwitchEntrance.jigoku_to_club_demon: lambda state: self.can_move_horizontally_enough(state),
             FlipwitchEntrance.early_ghost_to_fungal_forest: lambda state: state.has(Power.ghost_form, self.player),
-            FlipwitchEntrance.fungal_forest_to_tengoku: lambda state: self.can_move_horizontally_enough(state) and self.has_upgrade_stage(4, state),
+            FlipwitchEntrance.fungal_forest_to_tengoku: lambda state: self.can_move_horizontally_enough(state) and self.has_upgrade_stage(2, state),
             FlipwitchEntrance.tengoku_to_tengoku_upper: lambda state: self.can_present_gender(state, self.world.options, "Male") or state.has(Upgrade.angel_feathers,
                                                                                                                                               self.player),
             FlipwitchEntrance.angelic_to_angelic_mid: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
             FlipwitchEntrance.angelic_mid_to_angelic_upper: lambda state: state.has(Upgrade.angel_feathers, self.player),
-            FlipwitchEntrance.fungal_to_deep_fungal: lambda state: state.has(Upgrade.angel_feathers, self.player),
+            FlipwitchEntrance.fungal_to_deep_fungal: lambda state: state.has(Upgrade.angel_feathers, self.player) and self.has_upgrade_stage(
+                3, state),
             FlipwitchEntrance.deep_fungal_to_slime_citadel: lambda state: state.has(Power.slime_form, self.player) and state.has(Key.slime_citadel,
-                                                                                                                                 self.player) and self.has_upgrade_stage(
-                6, state),
-            FlipwitchEntrance.fungal_to_umi_umi: lambda state: state.has(Upgrade.mermaid_scale, self.player) and self.has_upgrade_stage(7, state),
+                                                                                                                                 self.player),
+            FlipwitchEntrance.fungal_to_umi_umi: lambda state: state.has(Upgrade.mermaid_scale, self.player) and self.has_upgrade_stage(3, state),
             FlipwitchEntrance.umi_umi_to_umi_umi_depths: lambda state: state.has(Upgrade.angel_feathers, self.player) or self.can_present_gender(state,
                                                                                                                                                  self.world.options,
                                                                                                                                                  "Male"),
             FlipwitchEntrance.spirit_to_outside_chaos_castle: lambda state: state.has(Goal.chaos_piece, self.player, 6),
-            FlipwitchEntrance.outside_chaos_to_chaos: lambda state: state.has(Upgrade.bewitched_bubble, self.player) and self.has_upgrade_stage(8, state),
+            FlipwitchEntrance.outside_chaos_to_chaos: lambda state: state.has(Upgrade.bewitched_bubble, self.player) and self.has_upgrade_stage(4, state),
         }
 
         self.location_rules = {
             WitchyWoods.red_costume: lambda state: self.can_present_gender(state, self.world.options, "Male"),
-            WitchyWoods.sexual_experience_1: lambda state: state.has(QuestItem.fairy_bubble, self.player) and self.has_fucked_enough(state, 4, self.world.options),
-            WitchyWoods.sexual_experience_2: lambda state: state.has(QuestItem.fairy_bubble, self.player) and self.has_fucked_enough(state, 8, self.world.options) and
-                                                           self.can_present_gender(state, self.world.options, "Female"),
-            WitchyWoods.sexual_experience_3: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                           self.has_fucked_enough(state, 8, self.world.options) and self.can_present_gender(state, self.world.options,
-                                                                                                                                            "Female"),
-            WitchyWoods.sexual_experience_4: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                           self.has_fucked_enough(state, 12, self.world.options) and self.can_present_gender(state, self.world.options,
-                                                                                                                                             "Female"),
-            WitchyWoods.sexual_experience_5: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                           self.has_fucked_enough(state, 16, self.world.options) and self.can_present_gender(state, self.world.options,
-                                                                                                                                             "Female"),
-            WitchyWoods.sexual_experience_6: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                           self.has_fucked_enough(state, 16, self.world.options) and self.can_present_gender(state, self.world.options,
-                                                                                                                                             "Female"),
-            WitchyWoods.sexual_experience_7: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                           self.has_fucked_enough(state, 20, self.world.options) and self.can_present_gender(state, self.world.options,
-                                                                                                                                             "Female"),
-            WitchyWoods.sexual_experience_8: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                           self.has_fucked_enough(state, 24, self.world.options) and state.has(Upgrade.bewitched_bubble, self.player),
-            WitchyWoods.sexual_experience_9: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                           self.has_fucked_enough(state, 24, self.world.options) and state.has(Upgrade.bewitched_bubble, self.player),
-            WitchyWoods.sexual_experience_10: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                            self.has_fucked_enough(state, 28, self.world.options) and state.has(Upgrade.bewitched_bubble, self.player),
-            WitchyWoods.sexual_experience_11: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                            self.has_fucked_enough(state, 32, self.world.options) and state.has(Upgrade.bewitched_bubble, self.player),
-            WitchyWoods.sexual_experience_12: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                            self.has_fucked_enough(state, 32, self.world.options) and state.has(Upgrade.bewitched_bubble, self.player),
-            WitchyWoods.sexual_experience_13: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                            self.has_fucked_enough(state, 36, self.world.options) and state.has(Upgrade.bewitched_bubble, self.player),
-            WitchyWoods.sexual_experience_14: lambda state: state.has(QuestItem.fairy_bubble, self.player) and
-                                                            self.has_fucked_enough(state, 40, self.world.options) and state.has(Upgrade.bewitched_bubble, self.player),
+            WitchyWoods.sexual_experience_1: lambda state: self.has_fucked_enough(state, 4, self.world.options),
+            WitchyWoods.sexual_experience_2: lambda state: self.has_fucked_enough(state, 8, self.world.options),
+            WitchyWoods.sexual_experience_3: lambda state: self.has_fucked_enough(state, 8, self.world.options),
+            WitchyWoods.sexual_experience_4: lambda state: self.has_fucked_enough(state, 12, self.world.options),
+            WitchyWoods.sexual_experience_5: lambda state: self.has_fucked_enough(state, 16, self.world.options),
+            WitchyWoods.sexual_experience_6: lambda state: self.has_fucked_enough(state, 16, self.world.options),
+            WitchyWoods.sexual_experience_7: lambda state: self.has_fucked_enough(state, 20, self.world.options),
+            WitchyWoods.sexual_experience_8: lambda state: self.has_fucked_enough(state, 24, self.world.options),
+            WitchyWoods.sexual_experience_9: lambda state: self.has_fucked_enough(state, 24, self.world.options),
+            WitchyWoods.sexual_experience_10: lambda state: self.has_fucked_enough(state, 28, self.world.options),
+            WitchyWoods.sexual_experience_11: lambda state: self.has_fucked_enough(state, 32, self.world.options),
+            WitchyWoods.sexual_experience_12: lambda state: self.has_fucked_enough(state, 32, self.world.options),
+            WitchyWoods.sexual_experience_13: lambda state: self.has_fucked_enough(state, 36, self.world.options),
+            WitchyWoods.sexual_experience_14: lambda state: self.has_fucked_enough(state, 40, self.world.options),
             WitchyWoods.goblin_apartment: lambda state: state.has(QuestItem.goblin_apartment, self.player) and
                                                         self.can_complete_quest(state, Quest.model_goblin),
             WitchyWoods.fairy_chest: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
@@ -164,10 +149,11 @@ class FlipwitchRules:
             Jigoku.slime_form: lambda state: state.has(Power.slime_form, self.player),
             Jigoku.cat_shrine: lambda state: self.can_wear_costume(state, self.world.options, Costume.miko),
             Jigoku.hot_guy: lambda state: state.has(Key.beast, self.player) and state.has(Upgrade.bewitched_bubble, self.player),
-            Jigoku.far_ledge: lambda state: self.can_move_horizontally_enough(state),
+            Jigoku.far_ledge: lambda state: state.has(Upgrade.angel_feathers, self.player) or (state.has(Upgrade.bewitched_bubble, self.player) and state.has(Upgrade.demon_wings, self.player)),
             Jigoku.hidden_flip_chest: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or
                                                     (self.can_present_gender(state, self.world.options, "Male") and state.has(Upgrade.angel_feathers, self.player) and
                                                      state.has(Upgrade.demon_wings, self.player)),
+            Jigoku.hidden_ledge: lambda state: self.can_present_gender(state, self.world.options, "Male") or state.has(Upgrade.angel_feathers, self.player),
             Jigoku.demon_wings: lambda state: state.has(Key.collapsed_temple, self.player) or self.can_move_horizontally_enough(state),
             Jigoku.demon_tutorial: lambda state: state.has(Upgrade.demon_wings, self.player),
             Jigoku.northern_cat_shrine: lambda state: self.can_wear_costume(state, self.world.options, Costume.miko) and
@@ -247,8 +233,8 @@ class FlipwitchRules:
             Quest.goblin_stud: lambda state: self.can_wear_costume(state, self.world.options, Costume.goblin) and state.has(Key.goblin_queen, self.player),
             Quest.legendary_chewtoy: lambda state: self.can_complete_quest(state, Quest.boned) and state.has(QuestItem.legendary_halo, self.player),
             Quest.deluxe_milkshake: lambda state: state.has(QuestItem.delicious_milk, self.player) and state.has(QuestItem.belle_milkshake, self.player),
-            Quest.rat_problem: lambda state: state.has(QuestItem.cherry_key, self.player),
-            Quest.haunted_bedroom: lambda state: self.can_complete_quest(state, Quest.ghost_hunters) and state.has(Power.ghost_form, self.player),
+            Quest.rat_problem: lambda state: state.has(QuestItem.cherry_key, self.player) and self.can_complete_quest(state, Quest.deluxe_milkshake),
+            Quest.haunted_bedroom: lambda state: self.can_complete_quest(state, Quest.ghost_hunters) and state.has(Power.slime_form, self.player),
             Quest.ectogasm: lambda state: self.can_complete_quest(state, Quest.haunted_bedroom) and self.can_wear_costume(state, self.world.options, Costume.cat),
             Quest.jelly_mushroom: lambda state: state.has(QuestItem.blue_jelly_mushroom, self.player),
             Quest.booze_bunny: lambda state: state.has(QuestItem.red_wine, self.player),
@@ -260,7 +246,7 @@ class FlipwitchRules:
             Quest.let_the_dog_out: lambda state: state.has(Power.ghost_form, self.player) and self.can_present_gender(state, self.world.options, "Female"),
             Quest.stop_democracy: lambda state: self.can_wear_costume(state, self.world.options, Costume.dominating),
             Quest.bunny_club: lambda state: self.can_wear_costume(state, self.world.options, Costume.bunny),
-            Quest.silky_slime: lambda state: state.has(QuestItem.silky_slime, self.player),
+            Quest.silky_slime: lambda state: state.has(QuestItem.silky_slime, self.player) and self.can_present_gender(state, self.world.options, "Male"),
             Quest.emotional_baggage: lambda state: state.has(QuestItem.gobliana_luggage, self.player) and self.can_complete_quest(state, Quest.model_goblin),
             Quest.dirty_debut: lambda state: self.can_complete_quest(state, Quest.emotional_baggage) and state.can_reach_location(AngelicHallway.elf_1, self.player),
             Quest.devilicious: lambda state: self.can_complete_quest(state, Quest.deluxe_milkshake) and state.has(QuestItem.hellish_dango, self.player),
