@@ -229,7 +229,7 @@ shop_locations = [
     create_location(LOCATION_CODE_START + shop_location_start + 6, SpiritTown.fashion_1, FlipwitchRegion.spirit_town, Costume.cat),
     create_location(LOCATION_CODE_START + shop_location_start + 7, SpiritTown.fashion_2, FlipwitchRegion.spirit_town, Costume.goblin),
     create_location(LOCATION_CODE_START + shop_location_start + 8, ShadySewers.elf_1, FlipwitchRegion.shady_sewers, Accessory.cursed_talisman),
-    create_location(LOCATION_CODE_START + shop_location_start + 9, ShadySewers.elf_2, FlipwitchRegion.shady_sewers, Upgrade.portable_portal),
+    create_location(LOCATION_CODE_START + shop_location_start + 9, ShadySewers.elf_2, FlipwitchRegion.shady_sewers, Trap.nothing),
     create_location(LOCATION_CODE_START + shop_location_start + 10, GhostCastle.elf, FlipwitchRegion.ghost_rose, Power.disarming_bell),
     create_location(LOCATION_CODE_START + shop_location_start + 11, GhostCastle.thimble_1, FlipwitchRegion.ghost_rose, Costume.nun),
     create_location(LOCATION_CODE_START + shop_location_start + 12, GhostCastle.thimble_2, FlipwitchRegion.ghost_rose, Costume.priest),
@@ -327,20 +327,20 @@ quest_locations = [
 
 sex_experience_location_start = 550
 sex_experience_locations = [
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 1, WitchyWoods.sexual_experience_1, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 2, WitchyWoods.sexual_experience_2, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 3, WitchyWoods.sexual_experience_3, FlipwitchRegion.witch_woods, Upgrade.wand),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 4, WitchyWoods.sexual_experience_4, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 5, WitchyWoods.sexual_experience_5, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 6, WitchyWoods.sexual_experience_6, FlipwitchRegion.witch_woods, Upgrade.peachy_upgrade),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 7, WitchyWoods.sexual_experience_7, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 8, WitchyWoods.sexual_experience_8, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 9, WitchyWoods.sexual_experience_9, FlipwitchRegion.witch_woods, Upgrade.wand),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 10, WitchyWoods.sexual_experience_10, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 11, WitchyWoods.sexual_experience_11, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 12, WitchyWoods.sexual_experience_12, FlipwitchRegion.witch_woods, Upgrade.peachy_upgrade),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 13, WitchyWoods.sexual_experience_13, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
-    create_location(LOCATION_CODE_START + sex_experience_location_start + 14, WitchyWoods.sexual_experience_14, FlipwitchRegion.witch_woods, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 1, WitchyWoods.sexual_experience_1, FlipwitchRegion.sex_experience_layer_1, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 2, WitchyWoods.sexual_experience_2, FlipwitchRegion.sex_experience_layer_2, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 3, WitchyWoods.sexual_experience_3, FlipwitchRegion.sex_experience_layer_2, Upgrade.wand),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 4, WitchyWoods.sexual_experience_4, FlipwitchRegion.sex_experience_layer_2, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 5, WitchyWoods.sexual_experience_5, FlipwitchRegion.sex_experience_layer_2, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 6, WitchyWoods.sexual_experience_6, FlipwitchRegion.sex_experience_layer_2, Upgrade.peachy_upgrade),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 7, WitchyWoods.sexual_experience_7, FlipwitchRegion.sex_experience_layer_2, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 8, WitchyWoods.sexual_experience_8, FlipwitchRegion.sex_experience_layer_3, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 9, WitchyWoods.sexual_experience_9, FlipwitchRegion.sex_experience_layer_3, Upgrade.wand),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 10, WitchyWoods.sexual_experience_10, FlipwitchRegion.sex_experience_layer_3, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 11, WitchyWoods.sexual_experience_11, FlipwitchRegion.sex_experience_layer_3, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 12, WitchyWoods.sexual_experience_12, FlipwitchRegion.sex_experience_layer_3, Upgrade.peachy_upgrade),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 13, WitchyWoods.sexual_experience_13, FlipwitchRegion.sex_experience_layer_3, Upgrade.peachy_peach),
+    create_location(LOCATION_CODE_START + sex_experience_location_start + 14, WitchyWoods.sexual_experience_14, FlipwitchRegion.sex_experience_layer_3, Upgrade.peachy_peach),
 ]
 
 gacha_location_start = 600
@@ -435,3 +435,6 @@ coin_locations = [
     create_location(LOCATION_CODE_START + coin_location_start + 43, ChaosCastle.ghost_coin, FlipwitchRegion.chaos_castle),
     create_location(LOCATION_CODE_START + coin_location_start + 44, ChaosCastle.fungal, FlipwitchRegion.chaos_castle),
 ]
+
+chaos_piece_location_names = [WitchyWoods.goblin_queen_chaos, GhostCastle.ghost_chaos, ClubDemon.demon_boss_chaos, AngelicHallway.angelica_chaos,
+                              SlimeCitadel.slimy_princess_chaos, UmiUmi.frog_boss_chaos]
