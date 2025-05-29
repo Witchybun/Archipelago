@@ -363,12 +363,20 @@ shop_item_count = {
 blood_spells = [Spell.blood_drain, Spell.blood_strike]
 
 base_light_sources = [
-    UniqueItem.crystal_lantern, UniqueItem.oil_lantern, Weapon.torch,
-    Weapon.twisted_staff, Weapon.moonlight, Spell.flame_flare, Spell.ghost_light
+    UniqueItem.crystal_lantern, Weapon.torch, Spell.ghost_light, Weapon.broken_hilt,
+    Weapon.twisted_staff, Weapon.moonlight, Spell.flame_flare, Weapon.wand_of_power
 ]
 
 shop_light_sources = [
     UniqueItem.oil_lantern
+]
+
+drop_light_sources = [
+    Weapon.jailor_candle
+]
+
+quench_light_sources = [
+    Weapon.fire_sword, Weapon.iron_torch,
 ]
 
 drop_spell_names = [drop.name for drop in drop_spells]

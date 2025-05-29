@@ -8,7 +8,7 @@ from worlds.generic.Rules import CollectionRule
 
 from .data.spell_info import ranged_spells, support_spells
 from .data.weapon_info import ranged_weapons
-from .data.item_data import base_light_sources, shop_light_sources, blood_spells
+from .data.item_data import base_light_sources, shop_light_sources, blood_spells, drop_light_sources, quench_light_sources
 from .data.enemy_data import all_enemy_data_by_name
 from .data.plant_data import all_alchemy_plant_data
 from .Options import LunacidOptions
@@ -677,7 +677,15 @@ class LunacidRules:
             return True
         sources = base_light_sources.copy()
         sources.extend(source for source in shop_light_sources)
-        return state.has_any(sources, self.player)
+        sources.extend(source for source in drop_light_sources)
+        sources.extend(source for source in quench_light_sources)
+        if options.quenchsanity:
+            sources.remove(Weapon.broken_hilt)
+        if options.etnas_pupil:
+            limbo_rule = state.has(Weapon.limbo, self.player)
+        else:
+            limbo_rule = state.has_all([Alchemy.broken_sword, Alchemy.fractured_life, Alchemy.fractured_death], self.player)
+        return state.has_any(sources, self.player) or limbo_rule
 
     def can_reach_level_in_levelsanity(self, level: int, state: CollectionState):
         can_you_hit_something = self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_3f,
