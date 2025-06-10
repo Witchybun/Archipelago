@@ -204,8 +204,6 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
         elif item == UniqueItem.dusty_crystal_orb and options.secret_door_lock == options.secret_door_lock.option_true:
             items.append(item_factory(item, ItemClassification.progression))
             continue
-        elif item == UniqueItem.oil_lantern and options.starting_area == options.starting_area.option_tomb:
-            continue  # We will force place it.
         items.append(item_factory(item))
     for item in Voucher.vouchers:
         items.append(item_factory(item, ItemClassification.progression))
@@ -213,11 +211,14 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
         items.extend(item_factory(special_item) for special_item in [item] * base_special_item_counts[item])
     if options.shopsanity:
         for item in shop_unique_items:
+            if item == UniqueItem.oil_lantern and options.starting_area == options.starting_area.option_tomb:
+                continue  # We will force place it.
             items.append(item_factory(item))
         for item in shop_item_count:
             items.extend([item_factory(filler) for filler in [item] * shop_item_count[item]])
     if options.dropsanity:
         items.extend(item_factory(item) for item in [Upgrade.drop_chance]*3)
+        items.append(item_factory(UniqueItem.black_book))
     if options.levelsanity:
         items.append(item_factory(CustomItem.lucky_bangle))
     create_strange_coins(item_factory, options, items)
