@@ -348,7 +348,7 @@ base_special_item_counts = {
     Progressives.vampiric_symbol: 3,
     UniqueItem.ocean_elixir: 7,
     UniqueItem.earth_elixir: 10,
-    UniqueItem.black_book: 2,
+    UniqueItem.black_book: 3,
 }
 
 shop_unique_items = [
