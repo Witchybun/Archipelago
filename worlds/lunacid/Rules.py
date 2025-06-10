@@ -13,7 +13,7 @@ from .data.enemy_data import all_enemy_data_by_name
 from .data.plant_data import all_alchemy_plant_data
 from .Options import LunacidOptions
 from .strings.custom_features import JumpHeight
-from .strings.regions_entrances import LunacidEntrance, LunacidRegion, region_to_level_value
+from .strings.regions_entrances import LunacidEntrance, LunacidRegion, region_to_level_value, indirect_regions
 from .strings.spells import Spell, MobSpell
 from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door, Coins, Voucher, SpookyItem, CustomItem
 from .strings.locations import BaseLocation, ShopLocation, all_drops_by_enemy, DropLocation, Quench, AlchemyLocation, SpookyLocation, LevelLocation, LoreLocation, \
@@ -132,6 +132,7 @@ class LunacidRules:
             LunacidEntrance.accursed_tomb_to_sea: lambda state: self.has_door_key(Door.sea_eastward, state, self.world.options),
             LunacidEntrance.accursed_tomb_to_secrets: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.vampire_tomb_to_secret: lambda state: self.has_crystal_orb(state, self.world.options),
+            LunacidEntrance.accursed_to_accursed_well: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options),
 
             LunacidEntrance.castle_entrance_to_sea: lambda state: self.has_door_key(Door.sea_double_doors, state, self.world.options),
             LunacidEntrance.castle_to_cattle: lambda state: self.is_vampire(self.world.options) or self.has_blood_spell_access(state),
@@ -221,12 +222,11 @@ class LunacidRules:
                                                                               state.has(UniqueItem.earth_talisman, self.player),
             LunacidEntrance.forlorn_arena_to_water_temple: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options) or
                                                                          state.has(Spell.wind_dash, self.player),
-            LunacidEntrance.temple_of_earth_to_secrets: lambda state: self.can_jump_given_height(JumpHeight.high, state, self.world.options) and
-                                                                      self.has_crystal_orb(state, self.world.options),
+            LunacidEntrance.temple_of_earth_to_secrets: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.temple_of_water_lower_to_secrets: lambda state: self.has_crystal_orb(state, self.world.options),
             LunacidEntrance.forlorn_path_to_chamber: lambda state: self.has_door_key(Door.sucsarian_key, state, self.world.options),
 
-            LunacidEntrance.chamber_to_grave: lambda state: self.has_door_key(Door.sleeper_key, state, self.world.options),
+            LunacidEntrance.chamber_to_grave: lambda state: self.has_door_key(Door.sleeper_key, state, self.world.options) and state.has(Weapon.lucid_blade, self.player),
         }
 
         self.location_rules = {
