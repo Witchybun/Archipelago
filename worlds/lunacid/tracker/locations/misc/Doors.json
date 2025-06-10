@@ -266,7 +266,6 @@
                         "access_rules": [
                            "^$CanReach|Sewers Sea Door (Sanguine Sea Side)"
                         ],
-                        "visibility_rules": "false",
                         "sections": [
                            { 
                               "name": "Enter the Fetid Mire",
@@ -367,7 +366,6 @@
                         "access_rules": [
                            "^$CanReach|Rickety Bridge Door (Yosei Forest Side)"
                         ],
-                        "visibility_rules": "false",
                         "sections": [
                            { 
                               "name": "Cabin Door",
@@ -597,6 +595,58 @@
                      }
                 ]
             },
+            {
+               "name": "Throne Chamber",
+               "access_rules": [
+                   "^$CanEnter|Throne Chamber"
+               ],
+               "children": [
+                   {
+                       "name": "Queen's Throne Door (Throne Chamber Side)",
+                       "chest_unopened_img": "images/items/check_misc_fade.png",
+                       "chest_opened_img": "images/items/check_misc.png",
+                       "access_rules": [
+                          "^$CanReach|Queen's Throne Door (Throne Chamber Side)"
+                       ], 
+                       "sections": [
+                          { 
+                             "name": "die monster...",
+                             "item_count": 1
+                          }
+                       ],
+                       "map_locations": [
+                          { 
+                             "map": "Throne Chamber",
+                             "x": 1096,
+                             "y": 2250,
+                             "size": 64
+                          }
+                       ]
+                    },
+                    {
+                     "name": "Prison Main Door (Throne Chamber Side)",
+                     "chest_unopened_img": "images/items/check_misc_fade.png",
+                     "chest_opened_img": "images/items/check_misc.png",
+                     "access_rules": [
+                        "^$CanReach|Prison Main Door (Throne Chamber Side)"
+                     ], 
+                     "sections": [
+                        { 
+                           "name": "die monster...",
+                           "item_count": 1
+                        }
+                     ],
+                     "map_locations": [
+                        { 
+                           "map": "Throne Chamber",
+                           "x": 280,
+                           "y": 520,
+                           "size": 64
+                        }
+                     ]
+                  }
+               ]
+           },
             {
                "name": "Leatus Chasm",
                "access_rules": [

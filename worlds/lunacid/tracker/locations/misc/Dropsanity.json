@@ -19,7 +19,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Spell Ring (Summon Snail)",
+                        "name": "Summon Snail Drop",
                         "item_count": 1
                     }
                 ],
@@ -40,7 +40,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Rusted Sword",
+                        "name": "Rusted Sword Drop",
                         "item_count": 1
                     }
                 ],
@@ -61,7 +61,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Spell Ring (Summon Kodama)",
+                        "name": "Summon Kodama Drop",
                         "item_count": 1
                     }
                 ],
@@ -82,7 +82,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Spell Ring (Quick Stride)",
+                        "name": "Quick Stride Drop",
                         "item_count": 1
                     }
                 ],
@@ -103,7 +103,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Ice Sickle",
+                        "name": "Ice Sickle Drop",
                         "item_count": 1
                     }
                 ],
@@ -124,11 +124,11 @@
                 ],
                 "sections": [
                     {
-                        "name": "Skeleton Axe",
+                        "name": "Skeleton Axe Drop",
                         "item_count": 1
                     },
                     {
-                        "name": "Spell Ring (Dark Skull)",
+                        "name": "Dark Skull Drop",
                         "item_count": 1
                     }
                 ],
@@ -154,7 +154,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Cursed Blade",
+                        "name": "Cursed Blade Drop",
                         "item_count": 1
                     }
                 ],
@@ -175,11 +175,11 @@
                 ],
                 "sections": [
                     {
-                        "name": "Obsidian Cursebrand",
+                        "name": "Obsidian Cursebrand Drop",
                         "item_count": 1
                     },
                     {
-                        "name": "Obsidian Poisonbrand",
+                        "name": "Obsidian Poisonguard Drop",
                         "item_count": 1
                     }
                 ],
@@ -206,11 +206,11 @@
                 ],
                 "sections": [
                     {
-                        "name": "Golden Khopesh",
+                        "name": "Golden Khopesh Drop",
                         "item_count": 1
                     },
                     {
-                        "name": "Golden Sickle",
+                        "name": "Golden Sickle Drop",
                         "item_count": 1
                     }
                 ],
@@ -236,7 +236,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Brittle Arming Sword",
+                        "name": "Brittle Arming Sword Drop",
                         "item_count": 1
                     }
                 ],
@@ -257,7 +257,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Jailor's Candle",
+                        "name": "Jailor's Candle Drop",
                         "item_count": 1
                     }
                 ],
@@ -279,7 +279,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Lyrian Longsword",
+                        "name": "Lyrian Longsword Drop",
                         "item_count": 1
                     }
                 ],
@@ -301,11 +301,11 @@
                 ],
                 "sections": [
                     {
-                        "name": "Sucsarian Dagger",
+                        "name": "Sucsarian Dagger Drop",
                         "item_count": 1
                     },
                     {
-                        "name": "Sucsarian Spear",
+                        "name": "Sucsarian Spear Drop",
                         "item_count": 1
                     }
                 ],
@@ -331,7 +331,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Spell Ring (Tornado)",
+                        "name": "Tornado Drop",
                         "item_count": 1
                     }
                 ],
@@ -352,7 +352,7 @@
                 ],
                 "sections": [
                     {
-                        "name": "Ocean Elixir",
+                        "name": "Ocean Elixir Drop",
                         "item_count": 1
                     }
                 ],
