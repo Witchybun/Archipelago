@@ -33,16 +33,28 @@
                  ]
             },
             {
-                "name": "Floor 5 Chest",
+                "name": "Floor 5",
                 "chest_unopened_img": "images/items/check_item_fade.png",
                 "chest_opened_img": "images/items/check_item.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 5 Chest"
+                    "^$CanReach|Floor 5"
                 ],
                 "sections": [
                     {
                         "name": "Mana Vial",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -57,16 +69,28 @@
                  ]
             },
             {
-                "name": "Floor 10 Chest",
+                "name": "Floor 10",
                 "chest_unopened_img": "images/items/check_item_fade.png",
                 "chest_opened_img": "images/items/check_item.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 10 Chest"
+                    "^$CanReach|Floor 10"
                 ],
                 "sections": [
                     {
                         "name": "Antidote",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -81,16 +105,28 @@
                  ]
             },
             {
-                "name": "Floor 15 Chest",
+                "name": "Floor 15",
                 "chest_unopened_img": "images/items/check_misc_fade.png",
                 "chest_opened_img": "images/items/check_misc.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 15 Chest"
+                    "^$CanReach|Floor 15"
                 ],
                 "sections": [
                     {
                         "name": "Fairy Moss",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -105,16 +141,28 @@
                  ]
             },
             {
-                "name": "Floor 20 Chest",
+                "name": "Floor 20",
                 "chest_unopened_img": "images/items/check_misc_fade.png",
                 "chest_opened_img": "images/items/check_misc.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 20 Chest"
+                    "^$CanReach|Floor 20"
                 ],
                 "sections": [
                     {
                         "name": "Spectral Candle",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -129,16 +177,28 @@
                  ]
             },
             {
-                "name": "Floor 25 Chest",
+                "name": "Floor 25",
                 "chest_unopened_img": "images/items/check_item_fade.png",
                 "chest_opened_img": "images/items/check_item.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 25 Chest"
+                    "^$CanReach|Floor 25"
                 ],
                 "sections": [
                     {
                         "name": "Health Vial",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -153,16 +213,28 @@
                  ]
             },
             {
-                "name": "Floor 30 Chest",
+                "name": "Floor 30",
                 "chest_unopened_img": "images/items/check_misc_fade.png",
                 "chest_opened_img": "images/items/check_misc.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 30 Chest"
+                    "^$CanReach|Floor 30"
                 ],
                 "sections": [
                     {
                         "name": "Crystal Lantern",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -177,16 +249,28 @@
                  ]
             },
             {
-                "name": "Floor 35 Chest",
+                "name": "Floor 35",
                 "chest_unopened_img": "images/items/check_coin_fade.png",
                 "chest_opened_img": "images/items/check_coin.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 35 Chest"
+                    "^$CanReach|Floor 35"
                 ],
                 "sections": [
                     {
                         "name": "2 Silver",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -201,16 +285,28 @@
                  ]
             },
             {
-                "name": "Floor 40 Chest",
+                "name": "Floor 40",
                 "chest_unopened_img": "images/items/check_misc_fade.png",
                 "chest_opened_img": "images/items/check_misc.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 40 Chest"
+                    "^$CanReach|Floor 40"
                 ],
                 "sections": [
                     {
                         "name": "Spectral Candle",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -225,16 +321,28 @@
                  ]
             },
             {
-                "name": "Floor 45 Chest",
+                "name": "Floor 45",
                 "chest_unopened_img": "images/items/check_item_fade.png",
                 "chest_opened_img": "images/items/check_item.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 45 Chest"
+                    "^$CanReach|Floor 45"
                 ],
                 "sections": [
                     {
                         "name": "Earth Elixir",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1
@@ -249,16 +357,28 @@
                  ]
             },
             {
-                "name": "Floor 50 Chest",
+                "name": "Floor 50",
                 "chest_unopened_img": "images/items/check_item_fade.png",
                 "chest_opened_img": "images/items/check_item.png",
                 "overlay_background": "#000000",
                 "access_rules": [
-                    "^$CanReach|Floor 50 Chest"
+                    "^$CanReach|Floor 50"
                 ],
                 "sections": [
                     {
                         "name": "Ocean Elixir",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 1",
+                        "access_rules": [],
+                        "visibility_rules": [],
+                        "item_count": 1
+                    },
+                    {
+                        "name": "Bonus Item 2",
                         "access_rules": [],
                         "visibility_rules": [],
                         "item_count": 1

@@ -242,6 +242,27 @@
             ],
             "children": [
                {
+                  "name": "Accursed Tomb Lobby Switch",
+                  "access_rules": [
+                     "^$CanReach|Accursed Tomb Lobby Switch"
+                  ],
+                  "chest_unopened_img": "images/items/check_misc_fade.png",
+                  "chest_opened_img": "images/items/check_misc.png",
+                  "sections": [
+                     { 
+                        "name": "Locks Easy Pathing",
+                        "item_count": 1
+                     }
+                  ],
+                  "map_locations": [
+                     { 
+                        "map": "Accursed Tomb",
+                        "x": 645,
+                        "y": 1535
+                     }
+                  ]
+               },
+               {
                   "name": "Accursed Tomb Crypt Switch",
                   "access_rules": [
                      "^$CanReach|Accursed Tomb Crypt Switch"
@@ -264,9 +285,6 @@
                },
                {
                   "name": "Accursed Tomb Light Switch (Near Save Crystal)",
-                  "visibility_rules": [
-                     "switch_locks"
-                  ],
                   "access_rules": [
                      "^$CanReach|Accursed Tomb Light Switch (Near Save Crystal)"
                   ],
@@ -288,9 +306,6 @@
                },
                {
                   "name": "Accursed Tomb Light Switch (Near Demi)",
-                  "visibility_rules": [
-                     "switch_locks"
-                  ],
                   "access_rules": [
                      "^$CanReach|Accursed Tomb Light Switch (Near Demi)"
                   ],
@@ -312,9 +327,6 @@
                },
                {
                   "name": "Accursed Tomb Light Switch (In Noble Crypt)",
-                  "visibility_rules": [
-                     "switch_locks"
-                  ],
                   "access_rules": [
                      "^$CanReach|Accursed Tomb Light Switch (In Noble Crypt)"
                   ],
