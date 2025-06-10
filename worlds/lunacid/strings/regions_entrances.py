@@ -345,3 +345,9 @@ region_to_level_value = {LunacidRegion.hollow_basin: 1,
                          LunacidRegion.forlorn_arena: 3,
                          LunacidRegion.labyrinth_of_ash: 2
                          }
+
+indirect_regions = [
+    LunacidRegion.forlorn_arena, LunacidRegion.temple_of_earth, LunacidRegion.temple_of_earth_secret, LunacidRegion.temple_of_water,
+    LunacidRegion.temple_of_water_lower, LunacidRegion.temple_of_water_lower_secrets, LunacidRegion.grave_of_the_sleeper
+]
+

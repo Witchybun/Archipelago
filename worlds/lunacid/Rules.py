@@ -873,6 +873,8 @@ class LunacidRules:
             for entrance in region.entrances:
                 if entrance.name in self.entrance_rules:
                     entrance.access_rule = entrance.access_rule and self.entrance_rules[entrance.name]
+                if region.name in indirect_regions:
+                    multiworld.register_indirect_condition(region, entrance)
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = loc.access_rule and self.location_rules[loc.name]
