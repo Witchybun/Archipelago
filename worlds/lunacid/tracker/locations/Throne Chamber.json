@@ -27,8 +27,9 @@
                 "map_locations": [
                     { 
                        "map": "Throne Chamber",
-                       "x": 1504,
-                       "y": 516
+                       "x": 1508,
+                       "y": 510,
+                       "size": 64
                     }
                  ]
             }
