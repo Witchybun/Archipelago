@@ -218,7 +218,6 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
             items.extend([item_factory(filler) for filler in [item] * shop_item_count[item]])
     if options.dropsanity:
         items.extend(item_factory(item) for item in [Upgrade.drop_chance]*3)
-        items.append(item_factory(UniqueItem.black_book))
     if options.levelsanity:
         items.append(item_factory(CustomItem.lucky_bangle))
     create_strange_coins(item_factory, options, items)
