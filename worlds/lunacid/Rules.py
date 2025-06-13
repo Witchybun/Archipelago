@@ -324,6 +324,7 @@ class LunacidRules:
             DropLocation.skeleton_mana_vial: lambda state: self.can_reach_and_hurt_enemy(Enemy.skeleton, state) or self.can_reach_and_hurt_enemy(Enemy.skeleton_weapon, state),
             DropLocation.skeleton_onyx: lambda state: self.can_reach_and_hurt_enemy(Enemy.skeleton, state) or self.can_reach_and_hurt_enemy(Enemy.skeleton_weapon, state),
             DropLocation.skeleton_bones: lambda state: self.can_reach_and_hurt_enemy(Enemy.skeleton, state) or self.can_reach_and_hurt_enemy(Enemy.skeleton_weapon, state),
+            DropLocation.skeleton_2c: lambda state: self.can_reach_and_hurt_enemy(Enemy.skeleton, state),
             DropLocation.skeleton_spell: lambda state: self.can_reach_and_hurt_enemy(Enemy.skeleton_weapon, state),
             DropLocation.skeleton_weapon: lambda state: self.can_reach_and_hurt_enemy(Enemy.skeleton_weapon, state),
             DropLocation.rat_king_10c: lambda state: self.can_reach_and_hurt_enemy(Enemy.rat_king, state),
