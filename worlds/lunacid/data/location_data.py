@@ -383,7 +383,7 @@ other_drop_locations = [
     create_location(LOCATION_CODE_START + other_drop_location_start + 19, DropLocation.enlightened_mana_vial),
     create_location(LOCATION_CODE_START + other_drop_location_start + 20, DropLocation.enlightened_ocean_bone_shell),
     create_location(LOCATION_CODE_START + other_drop_location_start + 21, DropLocation.slime_skeleton),
-    create_location(LOCATION_CODE_START + other_drop_location_start + 22, DropLocation.skeleton_10c),
+    create_location(LOCATION_CODE_START + other_drop_location_start + 22, DropLocation.skeleton_2c),
     create_location(LOCATION_CODE_START + other_drop_location_start + 23, DropLocation.skeleton_mana_vial),
     create_location(LOCATION_CODE_START + other_drop_location_start + 24, DropLocation.skeleton_onyx),
     create_location(LOCATION_CODE_START + other_drop_location_start + 25, DropLocation.skeleton_bones),
@@ -494,6 +494,7 @@ other_drop_locations = [
     create_location(LOCATION_CODE_START + other_drop_location_start + 131, DropLocation.lupine_bones),
     create_location(LOCATION_CODE_START + other_drop_location_start + 132, DropLocation.infested_bones),
     create_location(LOCATION_CODE_START + other_drop_location_start + 133, DropLocation.infested_antidote),
+    create_location(LOCATION_CODE_START + other_drop_location_start + 134, DropLocation.skeleton_10c)
 
 ]
 
