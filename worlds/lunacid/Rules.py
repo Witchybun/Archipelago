@@ -13,7 +13,7 @@ from .data.enemy_data import all_enemy_data_by_name
 from .data.plant_data import all_alchemy_plant_data
 from .Options import LunacidOptions
 from .strings.custom_features import JumpHeight
-from .strings.regions_entrances import LunacidEntrance, LunacidRegion, region_to_level_value, indirect_regions
+from .strings.regions_entrances import LunacidEntrance, LunacidRegion, region_to_level_value, indirect_entrances
 from .strings.spells import Spell, MobSpell
 from .strings.items import UniqueItem, Progressives, Switch, Alchemy, Door, Coins, Voucher, SpookyItem, CustomItem
 from .strings.locations import BaseLocation, ShopLocation, all_drops_by_enemy, DropLocation, Quench, AlchemyLocation, SpookyLocation, LevelLocation, LoreLocation, \
@@ -689,14 +689,9 @@ class LunacidRules:
         return state.has_any(sources, self.player) or limbo_rule
 
     def can_reach_level_in_levelsanity(self, level: int, state: CollectionState):
-        can_you_hit_something = self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_3f,
-                                                                  LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
-                                                                  LunacidRegion.fetid_mire, LunacidRegion.forlorn_arena,
-                                                                  LunacidRegion.terminus_prison_3f, LunacidRegion.hollow_basin, LunacidRegion.labyrinth_of_ash,
-                                                                  LunacidRegion.accursed_tomb])
 
         if level <= 10:
-            return can_you_hit_something and state.has(CustomItem.experience, self.player, max(level - self.level, 0))
+            return state.has(CustomItem.experience, self.player, max(level - self.level, 0))
         has_bangle = True
         level_cap = 0
         for region in region_to_level_value:
@@ -705,19 +700,20 @@ class LunacidRules:
         level_cap *= 10
         if level >= 50:
             has_bangle = state.has(CustomItem.lucky_bangle, self.player)
-        return state.has(CustomItem.experience, self.player, max(level - self.level, 0)) and can_you_hit_something and has_bangle and level_cap >= level
+        return state.has(CustomItem.experience, self.player, max(level - self.level, 0)) and has_bangle and level_cap >= level
 
     def can_level_reasonably(self, state: CollectionState, options: LunacidOptions) -> bool:
         if options.levelsanity:
             return state.has(CustomItem.experience, self.player, 40)
-        can_you = self.can_reach_any_region(state, [LunacidRegion.forbidden_archives_2f, LunacidRegion.forbidden_archives_3f,
-                                                    LunacidRegion.boiling_grotto, LunacidRegion.yosei_forest,
-                                                    LunacidRegion.sealed_ballroom, LunacidRegion.fetid_mire,
-                                                    LunacidRegion.forest_canopy, LunacidRegion.forlorn_arena,
-                                                    LunacidRegion.castle_le_fanu_main_halls, LunacidRegion.castle_le_fanu_upstairs_area,
-                                                    LunacidRegion.castle_le_fanu_cattle_prison, LunacidRegion.sanguine_sea,
-                                                    LunacidRegion.terminus_prison_1f, LunacidRegion.terminus_prison_3f,
-                                                    LunacidRegion.temple_back])
+        can_you = options.starting_area != options.starting_area.option_basin
+        if not can_you:
+            # The player should be able to find SOME place to run off to in order to level.
+            # Writing it like this avoids a region check.
+            can_escape_basin_start_in_all_directions = (self.has_light_source(state, options) and self.has_keys_for_basin_or_canopy(state, options) and
+                                                        self.has_door_key(Door.basin_broken_steps, state, options) and
+                                                        self.has_switch_key(Switch.temple_switch, state, options) and
+                                                        self.can_jump_given_height(JumpHeight.high, state, options))
+            can_you = can_escape_basin_start_in_all_directions
         return can_you
 
     def has_spell(self, spell: str, state: CollectionState) -> bool:
@@ -874,8 +870,9 @@ class LunacidRules:
             for entrance in region.entrances:
                 if entrance.name in self.entrance_rules:
                     entrance.access_rule = entrance.access_rule and self.entrance_rules[entrance.name]
-                if region.name in indirect_regions:
-                    multiworld.register_indirect_condition(region, entrance)
+                if entrance.name in indirect_entrances:
+                    indirect_region = self.world.get_region(indirect_entrances[entrance.name])
+                    multiworld.register_indirect_condition(indirect_region, entrance)
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = loc.access_rule and self.location_rules[loc.name]
