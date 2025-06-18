@@ -346,8 +346,8 @@ region_to_level_value = {LunacidRegion.hollow_basin: 1,
                          LunacidRegion.labyrinth_of_ash: 2
                          }
 
-indirect_regions = [
-    LunacidRegion.forlorn_arena, LunacidRegion.temple_of_earth, LunacidRegion.temple_of_earth_secret, LunacidRegion.temple_of_water,
-    LunacidRegion.temple_of_water_lower, LunacidRegion.temple_of_water_lower_secrets, LunacidRegion.grave_of_the_sleeper
-]
-
+indirect_entrances = {
+    LunacidEntrance.terminus_prison_1f_to_arena: LunacidRegion.terminus_prison_4f,
+    LunacidEntrance.castle_forbidden_to_upstairs: LunacidRegion.castle_le_fanu_entrance,
+    LunacidEntrance.castle_upstairs_to_forbidden: LunacidRegion.castle_le_fanu_entrance,
+}
