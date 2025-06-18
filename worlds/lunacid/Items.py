@@ -188,6 +188,8 @@ def determine_starting_weapon(random: Random, options: LunacidOptions) -> str:
         starting_selection += drop_starting_weapons
     if options.quenchsanity:
         starting_selection += quench_starting_weapons
+    if options.starting_class == options.starting_class.option_forsaken or (options.starting_class == options.starting_class.option_custom and options.custom_class["Intelligence"] == 1):
+        starting_selection = [weapon for weapon in starting_selection if weapon not in Spell.base_spells and weapon not in MobSpell.drop_spells]
     chosen_weapon_name = random.choice(starting_selection)
     return chosen_weapon_name
 
