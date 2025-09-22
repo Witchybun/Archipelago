@@ -1,0 +1,51 @@
+from typing import List
+
+from . import MadouOptions
+from .data.location_data import (all_locations, starting_spell_locations, souvenir_locations, flight_locations,
+                                 bestiary_locations, MadouLocation, base_locations)
+
+location_table = all_locations
+locations_by_name = {location.name: location for location in location_table}
+
+
+def create_locations(options: MadouOptions) -> List[MadouLocation]:
+    locations = base_locations.copy()
+    create_starting_spell_locations(options, locations)
+    create_souvenir_locations(options, locations)
+    create_flight_locations(options, locations)
+    create_bestiary_locations(options, locations)
+    return locations
+
+
+def create_starting_spell_locations(options: MadouOptions, locations: List[MadouLocation]) -> List[MadouLocation]:
+    starting_spells = options.starting_magic.value
+    if "Healing" not in starting_spells:
+        locations.append(starting_spell_locations[0])
+    if "Fire" not in starting_spells:
+        locations.append(starting_spell_locations[1])
+    if "Ice Storm" not in starting_spells:
+        locations.append(starting_spell_locations[2])
+    if "Thunder" not in starting_spells:
+        locations.append(starting_spell_locations[3])
+    return locations
+
+
+def create_souvenir_locations(options: MadouOptions, locations: List[MadouLocation]) -> List[MadouLocation]:
+    if not options.souvenir_hunt:
+        return locations
+    locations.extend(souvenir_locations)
+    return locations
+
+
+def create_flight_locations(options: MadouOptions, locations: List[MadouLocation]) -> List[MadouLocation]:
+    if not options.squirrel_stations:
+        return locations
+    locations.extend(flight_locations)
+    return locations
+
+
+def create_bestiary_locations(options: MadouOptions, locations: List[MadouLocation]) -> List[MadouLocation]:
+    if not options.bestiary:
+        return locations
+    locations.extend(bestiary_locations)
+    return locations
