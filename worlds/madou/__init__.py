@@ -1,8 +1,9 @@
+import base64
 import logging
 import os
 import threading
 from random import Random
-from typing import Dict, Any, List, Iterable
+from typing import Dict, Any, List, Iterable, ClassVar
 
 import settings
 from BaseClasses import Item, Tutorial, Location, Entrance, ItemClassification, Region
@@ -45,7 +46,7 @@ class MadouWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Albrekka"]
+        ["Albrekka", "Silvris (Advice)", "PinkSwitch (Advice)"]
     )]
 
 
@@ -70,6 +71,7 @@ class MadouWorld(World):
     enemy_random_data: Dict[str, List[str]]
     enemy_regions: Dict[str, List[str]]
     web = MadouWeb()
+    settings: ClassVar[MadouSettings]
     logger = logging.getLogger()
     explicit_indirect_conditions = True
 
@@ -163,12 +165,22 @@ class MadouWorld(World):
             victory.place_locked_item(self.create_event("Victory"))
             ending_region.locations.append(victory)
 
+    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
+        # wait for self.rom_name to be available.
+        self.rom_name_available_event.wait()
+        assert isinstance(self.rom_name, bytes)
+        rom_name = getattr(self, "rom_name", None)
+        # we skip in case of error, so that the original error in the output thread is the one that gets raised
+        if rom_name:
+            new_name = base64.b64encode(self.rom_name).decode()
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+
     def generate_output(self, output_directory: str) -> None:
         try:
             patch = MadouProcedurePatch(player=self.player, player_name=self.player_name)
             patch_rom(self, patch)
 
-            self.rom_name = patch.player_name
+            self.rom_name = patch.name
 
             patch.write(os.path.join(output_directory,
                                      f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}"))
