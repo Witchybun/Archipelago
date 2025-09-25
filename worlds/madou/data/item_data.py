@@ -57,9 +57,10 @@ spell_items = [
 
 tool_start_id = 20
 tool_items = [
-    create_item(tool_start_id + 1, Tool.ribbit_boots, "Tool", ItemClassification.progression | ItemClassification.useful, [MadouHexData(0xe0, 0x01),]),
+    create_item(tool_start_id + 1, Tool.ribbit_boots, "Tool", ItemClassification.progression | ItemClassification.useful,
+                [MadouHexData(0xb4, 0x03), MadouHexData(0xe0, 0x01),]),
     create_item(tool_start_id + 2, Tool.magic_bracelet, "Tool", ItemClassification.progression | ItemClassification.useful,
-                [MadouHexData(0xFF, 0x02), MadouHexData(0xe1, 0x01),]),
+                [MadouHexData(0xFF, 0x02), MadouHexData(0xdd, 0x01),]),
     create_item(tool_start_id + 3, Tool.panotty_flute, "Tool", ItemClassification.progression | ItemClassification.useful,
                 [MadouHexData(0xFF, 0x01), MadouHexData(0xdc, 0x01)]),
     create_item(tool_start_id + 4, Tool.magic_ribbon, "Tool", ItemClassification.progression | ItemClassification.useful,
@@ -83,19 +84,19 @@ special_items = [
     create_item(special_start_id + 4, Special.light_orb, "Special Item", ItemClassification.progression | ItemClassification.useful,
                 [MadouHexData(0xFF, 0x49)]),
     create_item(special_start_id + 5, Special.ripe_cucumber, "Special Item", ItemClassification.progression | ItemClassification.useful,
-                [MadouHexData(0xFF, 0x37)]),
+                [MadouHexData(0xFF, 0x37), MadouHexData(0x80, 0x02)]),
     create_item(special_start_id + 6, Special.dark_flower, "Special Item", ItemClassification.progression | ItemClassification.useful,
                 [MadouHexData(0xFF, 0x4c)]),
     create_item(special_start_id + 7, Special.bazaar_pass, "Special Item", ItemClassification.progression,
-                [MadouHexData(0xFF, 0x54)]),
+                [MadouHexData(0xFF, 0x54), MadouHexData(0x84, 0x10)]),
     create_item(special_start_id + 8, Custom.bomb, "Event Item", ItemClassification.progression,
                 [MadouHexData(0x8b, 0x04)]),
     create_item(special_start_id + 9, Special.firefly_egg, "Special Item", ItemClassification.progression | ItemClassification.useful,
                 [MadouHexData(0xFF, 0x4e)]),
     create_item(special_start_id + 10, Special.leaf, "Special Item", ItemClassification.progression | ItemClassification.useful,
                 [MadouHexData(0xFF, 0x4f)]),
-    create_item(special_start_id + 11, Special.carbuncle, "Event Item", ItemClassification.trap,
-                [MadouHexData(0x8d, 0x01)]),
+    create_item(special_start_id + 11, Special.carbuncle, "Event Item", ItemClassification.useful | ItemClassification.trap,
+                [MadouHexData(0x86, 0x20)]),
     create_item(special_start_id + 12, Special.squirrel_vip, "Special Item", ItemClassification.useful,
                 [MadouHexData(0x00, 0x55)]),
     create_item(special_start_id + 13, Special.wanderlust, "Special Item", ItemClassification.useful,
@@ -104,7 +105,7 @@ special_items = [
                 [MadouHexData(0x00, 0x42)]),
     create_item(special_start_id + 15, Special.bouquet, "Special Item", ItemClassification.progression | ItemClassification.useful,
                 [MadouHexData(0x00, 0x4d)]),
-    create_item(special_start_id + 16, "Nothing", Special.rotted_cucumber, ItemClassification.filler,
+    create_item(special_start_id + 16, Special.rotted_cucumber, "Nothing", ItemClassification.filler,
                 [MadouHexData(0xFF, 0xFF)]),  # Its "nothing".
 ]
 
@@ -131,9 +132,9 @@ souvenir_items = [
 gem_start_id = 60
 gem_items = [
     create_item(gem_start_id + 1, Gem.red_gem, "Gem", ItemClassification.progression_skip_balancing,
-                [MadouHexData(0xFF, 0x57)]),
+                [MadouHexData(0xFF, 0x57), MadouHexData(0x96, 0x01)]),
     create_item(gem_start_id + 2, Gem.purple_gem, "Gem", ItemClassification.progression_skip_balancing,
-                [MadouHexData(0xFF, 0x5b)]),
+                [MadouHexData(0xFF, 0x5b), ]),
     create_item(gem_start_id + 3, Gem.blue_gem,"Gem",  ItemClassification.progression_skip_balancing,
                 [MadouHexData(0xFF, 0x58)]),
     create_item(gem_start_id + 4, Gem.cyan_gem, "Gem", ItemClassification.progression_skip_balancing,
