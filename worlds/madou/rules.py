@@ -39,12 +39,27 @@ class MadouRules:
             MadouEntrance.smoky_left_to_right: lambda state: state.has(Tool.ribbit_boots, self.player),
             MadouEntrance.magic_village_to_tower: lambda state: self.can_fight_generic_at_level(state, 5, self.world.options) and self.can_reach_tower(state, self.world.options),
             MadouEntrance.headmaster_to_school_maze: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
-
+            MadouEntrance.smoky_to_graveyard: lambda state: state.has(Special.dark_flower, self.player) and state.has(Special.leaf, self.player),
             MadouEntrance.flight_magic_to_ruins: lambda state: state.has(FlightUnlocks.ruins_town, self.player),
             MadouEntrance.flight_magic_to_wolf: lambda state: state.has(FlightUnlocks.wolf_town, self.player),
             MadouEntrance.flight_magic_to_ancient: lambda state: state.has(FlightUnlocks.ancient_village, self.player),
             MadouEntrance.flight_magic_to_sage: lambda state: state.has(FlightUnlocks.sage_mountain, self.player),
             MadouEntrance.flight_ruins_to_magic: lambda state: state.has(FlightUnlocks.magic_village, self.player),
+            MadouEntrance.flight_ruins_to_ancient: lambda state: state.has(FlightUnlocks.ancient_village, self.player),
+            MadouEntrance.flight_ruins_to_wolf: lambda state: state.has(FlightUnlocks.wolf_town, self.player),
+            MadouEntrance.flight_ruins_to_sage: lambda state: state.has(FlightUnlocks.sage_mountain, self.player),
+            MadouEntrance.flight_wolf_to_magic: lambda state: state.has(FlightUnlocks.magic_village, self.player),
+            MadouEntrance.flight_wolf_to_ruins: lambda state: state.has(FlightUnlocks.ruins_town, self.player),
+            MadouEntrance.flight_wolf_to_ancient: lambda state: state.has(FlightUnlocks.ancient_village, self.player),
+            MadouEntrance.flight_wolf_to_sage: lambda state: state.has(FlightUnlocks.sage_mountain, self.player),
+            MadouEntrance.flight_ancient_to_magic: lambda state: state.has(FlightUnlocks.magic_village, self.player),
+            MadouEntrance.flight_ancient_to_ruins: lambda state: state.has(FlightUnlocks.ruins_town, self.player),
+            MadouEntrance.flight_ancient_to_wolf: lambda state: state.has(FlightUnlocks.wolf_town, self.player),
+            MadouEntrance.flight_ancient_to_sage: lambda state: state.has(FlightUnlocks.sage_mountain, self.player),
+            MadouEntrance.flight_sage_to_magic: lambda state: state.has(FlightUnlocks.magic_village, self.player),
+            MadouEntrance.flight_sage_to_ruins: lambda state: state.has(FlightUnlocks.ruins_town, self.player),
+            MadouEntrance.flight_sage_to_wolf: lambda state: state.has(FlightUnlocks.wolf_town, self.player),
+            MadouEntrance.flight_sage_to_ancient: lambda state: state.has(FlightUnlocks.ancient_village, self.player),
         }
 
         self.location_rules = {
@@ -77,7 +92,7 @@ class MadouRules:
             AncientVillage.villager_5: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             AncientVillage.villager_6: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             DragonAreas.firefly_egg: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options),
-            DragonAreas.stone: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options),
+            DragonAreas.stone: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options) and state.has(Special.firefly_egg, self.player, 2),
             MagicTown.suketoudara: lambda state: state.has(Special.secret_stone, self.player, 7) and self.can_fight_generic_at_level(state, 4, self.world.options),
             Bestiary.wood_man: lambda state: state.has(EventItem.hammer_switch, self.player)  # Enemies don't spawn unless you hit the switch.
 
