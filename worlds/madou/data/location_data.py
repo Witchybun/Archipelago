@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Tuple, Dict
+from typing import Optional, Tuple, Dict, List
 
 from worlds.madou.strings.locations import Spell, MagicTown, School, BuildingBlockMaze, ForestOfLight, LookoutMountain, LightGarden, HarpyPath, AncientRuins, DarkForest, \
     SatanVilla, AncientVillage, SageMountain, Bazaar, DragonAreas, FlightSpots, Bestiary, ShadyWell, Shop
@@ -68,7 +68,7 @@ magic_village_locations = [
     create_location(magic_village_start + 2, MagicTown.white_gem, MadouRegion.arle_house, 0x001388, 0x02),
     create_location(magic_village_start + 3, MagicTown.suketoudara, MadouRegion.magic_village, 0x001386, 0x40),
     create_location(magic_village_start + 4, LookoutMountain.red_gem, MadouRegion.lookout_mountain, 0x001387, 0x08),
-    create_location(magic_village_start + 5, LookoutMountain.carbuncle, MadouRegion.lookout_mountain, 0x001386, 0x20),
+    create_location(magic_village_start + 5, LookoutMountain.carbuncle, MadouRegion.lookout_mountain, 0x001394, 0x02),
 ]
 
 school_location_start = 50
@@ -92,10 +92,10 @@ light_forest_locations = [
 
 ruins_location_start = 70
 ruins_locations = [
-    create_location(ruins_location_start + 1, LightGarden.bouquet, MadouRegion.fairy_cove, 0x001382, 0x40),
+    create_location(ruins_location_start + 1, LightGarden.bouquet, MadouRegion.fairy_cove, 0x001394, 0x08),
     create_location(ruins_location_start + 2, LightGarden.purple_orb, MadouRegion.fairy_cove, 0x001387, 0x80),
     create_location(ruins_location_start + 3, HarpyPath.bag, MadouRegion.harpy_mountain, 0x00137e, 0x01),
-    create_location(ruins_location_start + 4, AncientRuins.elephant_head, MadouRegion.ancient_ruins, 0x001379, 0x10),
+    create_location(ruins_location_start + 4, AncientRuins.elephant_head, MadouRegion.ancient_ruins, 0x001394, 0x01),
     create_location(ruins_location_start + 5, AncientRuins.zoh_daimaoh, MadouRegion.zoh_daimaoh_room, 0x00137a, 0x20),
 ]
 
@@ -113,9 +113,9 @@ dark_forest_locations = [
 
 well_location_start = 90
 well_locations = [
-    create_location(well_location_start + 1, ShadyWell.yellow_gem, MadouRegion.well, 0x001387, 0x40),  # 139d was set to 20 at the end.  Which one?
+    create_location(well_location_start + 1, ShadyWell.yellow_gem, MadouRegion.well, 0x001387, 0x40),
     create_location(well_location_start + 2, ShadyWell.lofu, MadouRegion.well, 0x0013a4, 0x04),
-    create_location(well_location_start + 3, ShadyWell.ripe_cucumber, MadouRegion.well, 0x001380, 0x02),
+    create_location(well_location_start + 3, ShadyWell.ripe_cucumber, MadouRegion.well, 0x001394, 0x04),
     create_location(well_location_start + 4, ShadyWell.rotten_cucumber_1, MadouRegion.well, 0x001380, 0x40),
     create_location(well_location_start + 5, ShadyWell.rotten_cucumber_2, MadouRegion.well, 0x001381, 0x01),
     create_location(well_location_start + 6, ShadyWell.rotten_cucumber_3, MadouRegion.well, 0x001380, 0x01),
@@ -141,7 +141,7 @@ ancient_village_locations = [
 
 bazaar_location_start = 120
 bazaar_locations = [
-    create_location(bazaar_location_start + 1, Bazaar.bazaar_pass, MadouRegion.bazaar, 0x001384, 0x10),
+    create_location(bazaar_location_start + 1, Bazaar.bazaar_pass, MadouRegion.bazaar, 0x001393, 0x10),
     create_location(bazaar_location_start + 2, Bazaar.elephant, MadouRegion.bazaar, 0x001384, 0x08),
     create_location(bazaar_location_start + 3, Bazaar.blue_gem, MadouRegion.bazaar, 0x001387, 0x10),
     create_location(bazaar_location_start + 4, Bazaar.firefly_egg, MadouRegion.bazaar, 0x001384, 0x40),
