@@ -18,9 +18,10 @@ static_patches = {
 }
 
 endings = {
-    0: (0x001388, 0x08),
-    1: (0x0013a1, 0x80),
-    3: (0x001388, 0x02)
+    0: (0x88, 0x08),
+    1: (0xa1, 0x80),
+    3: (0x88, 0x02),
+    4: (0x9c, 0x01),
 }
 
 #  EXP gained is stored at 0x00175a from the point at 0x01af13 (_ in ROM).  We can manipulate this for rates.
