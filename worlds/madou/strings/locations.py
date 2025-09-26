@@ -4,6 +4,7 @@ class EventLocation:
     wolf_shop = "Wolf Town Shops"
     bazaar_shop = "Bazaar Shops"
     hammer_switch = "Hammer Switch in Rain Forest"
+    unpetrify = "Student Body"
 
 
 class Spell:

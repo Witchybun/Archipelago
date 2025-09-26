@@ -98,13 +98,13 @@ special_items = [
     create_item(special_start_id + 11, Special.carbuncle, "Event Item", ItemClassification.useful | ItemClassification.trap,
                 [MadouHexData(0x86, 0x20)]),
     create_item(special_start_id + 12, Special.squirrel_vip, "Special Item", ItemClassification.useful,
-                [MadouHexData(0x00, 0x55)]),
+                [MadouHexData(0xFF, 0x55), MadouHexData(0xa3, 0x08)]),
     create_item(special_start_id + 13, Special.wanderlust, "Special Item", ItemClassification.useful,
-                [MadouHexData(0x00, 0x41)]),
+                [MadouHexData(0xFF, 0x41)]),
     create_item(special_start_id + 14, Special.wallet, "Special Item", ItemClassification.useful,
-                [MadouHexData(0x00, 0x42)]),
+                [MadouHexData(0xFF, 0x42)]),
     create_item(special_start_id + 15, Special.bouquet, "Special Item", ItemClassification.progression | ItemClassification.useful,
-                [MadouHexData(0x00, 0x4d)]),
+                [MadouHexData(0xFF, 0x4d)]),
     create_item(special_start_id + 16, Special.rotted_cucumber, "Nothing", ItemClassification.filler,
                 [MadouHexData(0xFF, 0xFF)]),  # Its "nothing".
 ]
@@ -186,7 +186,7 @@ consumable_items = [
     create_item(consumable_start_id + 6, Consumable.dragon_meat, "Consumable", ItemClassification.filler,
                 [MadouHexData(0xFF, 0x29)]),
     create_item(consumable_start_id + 7, Consumable.magic_crystal, "Consumable", ItemClassification.filler,
-                [MadouHexData(0xFF, 0x29)]),
+                [MadouHexData(0xFF, 0x2c)]),
     create_item(consumable_start_id + 8, Consumable.turtle_heart, "Consumable", ItemClassification.filler,
                 [MadouHexData(0xFF, 0x3a)]),
     create_item(consumable_start_id + 9, Consumable.crown_grass, "Consumable", ItemClassification.filler,
@@ -216,11 +216,11 @@ flight_items = [
 ]
 
 filler_weights = {
-    Consumable.scallion: 50,
-    Consumable.veggies: 30,
+    Consumable.scallion: 40,
+    Consumable.veggies: 25,
     Consumable.momomo_wine: 20,
     Consumable.curry_rice: 20,
-    Consumable.magic_wine: 50,
+    Consumable.magic_wine: 40,
     Consumable.dragon_meat: 10,
     Consumable.magic_crystal: 5,
     Consumable.turtle_heart: 1,
@@ -228,6 +228,7 @@ filler_weights = {
     Consumable.cotton_ball_grass: 1,
     Consumable.crown_grass: 1,
     Consumable.medicine: 1,
+    Consumable.cookies: 25
 }
 
 items_on_flag_value = {}

@@ -141,6 +141,7 @@ class MadouWorld(World):
 
         self.get_region(MadouRegion.frog_swamp).add_event(EventLocation.hammer_switch, EventItem.hammer_switch, lambda state: state.has(Tool.hammer, self.player),
                                                           show_in_spoiler=True)
+        self.get_region(MadouRegion.school_maze).add_event(EventLocation.unpetrify, EventItem.unpetrify, None),
 
         if not self.options.souvenir_hunt:
             self.get_region(MadouRegion.ruins_town).add_event(EventLocation.ruins_shop, EventItem.ruins_buy, show_in_spoiler=True)
