@@ -178,7 +178,7 @@ class MadouWorld(World):
     def generate_output(self, output_directory: str) -> None:
         try:
             patch = MadouProcedurePatch(player=self.player, player_name=self.player_name)
-            patch_rom(self, patch)
+            patch_rom(self, self.random, patch)
 
             self.rom_name = patch.name
 

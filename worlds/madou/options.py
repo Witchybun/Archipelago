@@ -31,6 +31,17 @@ class RequiredStones(Range):
     default = 8
 
 
+class SchoolLunch(Choice):
+    """Whether the starting 'school lunch' you have (the four Pickled Scallions) are randomized.
+    Vanilla: Don't touch the items.
+    Consumables: They are four random consumables or equipment items instead.
+    Anything: They can be any item."""
+    option_vanilla = 0
+    option_consumables = 1
+    option_anything = 2
+    default = 0
+
+
 class StartingMagic(OptionSet):
     """What magic Arle should start with, out of the starting spells.
     If this list is not default the other spells will be locations that send on start."""
@@ -113,6 +124,7 @@ class Bestiary(Toggle):
 class MadouOptions(PerGameCommonOptions):
     goal: Goal
     required_secret_stones: RequiredStones
+    school_lunch: SchoolLunch
     starting_magic: StartingMagic
     souvenir_hunt: SouvenirHunt
     starting_cookies: StartingCookies

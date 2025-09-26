@@ -191,6 +191,13 @@ class FlightSpots:
     ancient_flight = "Ancient Village: Flight Access Spot"
 
 
+class SchoolLunchSpot:
+    food_1 = "Arle's School Lunch 1"
+    food_2 = "Arle's School Lunch 2"
+    food_3 = "Arle's School Lunch 3"
+    food_4 = "Arle's School Lunch 4"
+
+
 class Mixology:
     scallion_scallion = "Mix Pickled Scallions with Pickled Scallions"
     scallion_soy = "Mix Pickled Scallions with Soy Veggies"
