@@ -2,7 +2,7 @@ from typing import List
 
 from . import MadouOptions
 from .data.location_data import (all_locations, starting_spell_locations, souvenir_locations, flight_locations,
-                                 bestiary_locations, MadouLocation, base_locations)
+                                 bestiary_locations, MadouLocation, base_locations, school_lunch_locations)
 
 location_table = all_locations
 locations_by_name = {location.name: location for location in location_table}
@@ -14,6 +14,7 @@ def create_locations(options: MadouOptions) -> List[MadouLocation]:
     create_souvenir_locations(options, locations)
     create_flight_locations(options, locations)
     create_bestiary_locations(options, locations)
+    create_lunch_locations(options, locations)
     return locations
 
 
@@ -48,4 +49,11 @@ def create_bestiary_locations(options: MadouOptions, locations: List[MadouLocati
     if not options.bestiary:
         return locations
     locations.extend(bestiary_locations)
+    return locations
+
+
+def create_lunch_locations(options: MadouOptions, locations: List[MadouLocation]) -> List[MadouLocation]:
+    if options.school_lunch != options.school_lunch.option_anything:
+        return locations
+    locations.extend(school_lunch_locations)
     return locations
