@@ -50,7 +50,7 @@ madou_regions = [
 
     RegionData(MadouRegion.forest_of_light, [MadouEntrance.forest_of_light_to_village, MadouEntrance.forest_to_frog]),
     RegionData(MadouRegion.frog_swamp, [MadouEntrance.frog_to_forest, MadouEntrance.frog_to_rain_forest]),
-    RegionData(MadouRegion.rain_forest, [MadouEntrance.rain_forest_to_frog, MadouEntrance.rain_forest_to_ancient_village]),
+    RegionData(MadouRegion.rain_forest, [MadouEntrance.rain_forest_to_ancient_village]),
     RegionData(MadouRegion.ancient_village, [MadouEntrance.ancient_village_to_rain_forest, MadouEntrance.ancient_village_to_squirrel]),
     RegionData(MadouRegion.ancient_village_squirrel, [MadouEntrance.flight_ancient_to_magic, MadouEntrance.squirrel_to_ancient_village,
                                                       MadouEntrance.flight_ancient_to_ruins, MadouEntrance.flight_ancient_to_wolf,
@@ -118,8 +118,7 @@ madou_entrances = [
     EntranceData(MadouEntrance.forest_of_light_to_village, MadouRegion.magic_village, type=EntranceType.TWO_WAY),
     EntranceData(MadouEntrance.forest_to_frog, MadouRegion.frog_swamp, type=EntranceType.TWO_WAY),
     EntranceData(MadouEntrance.frog_to_forest, MadouRegion.forest_of_light, type=EntranceType.TWO_WAY),
-    EntranceData(MadouEntrance.frog_to_rain_forest, MadouRegion.rain_forest, type=EntranceType.TWO_WAY),
-    EntranceData(MadouEntrance.rain_forest_to_frog, MadouRegion.frog_swamp, type=EntranceType.TWO_WAY),
+    EntranceData(MadouEntrance.frog_to_rain_forest, MadouRegion.rain_forest),
     EntranceData(MadouEntrance.rain_forest_to_ancient_village, MadouRegion.ancient_village, type=EntranceType.TWO_WAY),
     EntranceData(MadouEntrance.ancient_village_to_rain_forest, MadouRegion.rain_forest, type=EntranceType.TWO_WAY),
     EntranceData(MadouEntrance.ancient_village_to_squirrel, MadouRegion.ancient_village_squirrel, type=EntranceType.TWO_WAY),
