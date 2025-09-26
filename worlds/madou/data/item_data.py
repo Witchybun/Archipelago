@@ -90,7 +90,7 @@ special_items = [
     create_item(special_start_id + 7, Special.bazaar_pass, "Special Item", ItemClassification.progression,
                 [MadouHexData(0xFF, 0x54), MadouHexData(0x84, 0x10)]),
     create_item(special_start_id + 8, Custom.bomb, "Event Item", ItemClassification.progression,
-                [MadouHexData(0x8b, 0x04)]),
+                [MadouHexData(0x7f, 0x10)]),
     create_item(special_start_id + 9, Special.firefly_egg, "Special Item", ItemClassification.progression | ItemClassification.useful,
                 [MadouHexData(0xFF, 0x4e)]),
     create_item(special_start_id + 10, Special.leaf, "Special Item", ItemClassification.progression | ItemClassification.useful,
