@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Dict, List
 
 from BaseClasses import CollectionState
 from worlds.madou.strings.locations import HarpyPath, Spell, ShadyWell, DarkForest, ForestOfLight, LightGarden, MagicTown, SatanVilla, AncientRuins, School, \
-    AncientVillage, DragonAreas, Bestiary
+    AncientVillage, DragonAreas, Bestiary, LookoutMountain
 from worlds.madou.strings.region_entrances import MadouEntrance
 from worlds.madou.strings.items import Tool, Custom, Special, Souvenir, EventItem, Gem, SpellItem, FlightUnlocks
 from worlds.madou.options import MadouOptions
@@ -35,6 +35,7 @@ class MadouRules:
             MadouEntrance.ruins_to_ancient_ruins: lambda state: state.has(Tool.magic_bracelet, self.player),
             MadouEntrance.ancient_to_zoh: lambda state: state.has(Special.elephant_head, self.player),
             MadouEntrance.nw_cave_to_smoky: lambda state: state.has(Custom.bomb, self.player),
+            MadouEntrance.fairy_to_harpy: lambda state: state.has(Special.secret_stone, self.player, 4),
             MadouEntrance.death_to_bazaar: lambda state: state.has(Special.bazaar_pass, self.player) and state.has(Tool.ribbit_boots, self.player),
             MadouEntrance.smoky_left_to_right: lambda state: state.has(Tool.ribbit_boots, self.player),
             MadouEntrance.magic_village_to_tower: lambda state: self.can_fight_generic_at_level(state, 5, self.world.options) and self.can_reach_tower(state, self.world.options),
