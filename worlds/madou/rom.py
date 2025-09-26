@@ -1,10 +1,12 @@
 import hashlib
 import os
 import typing
+from random import Random
 from typing import Collection, SupportsIndex
 
 import settings
 from .data.static_data import endings
+from .data.item_data import item_by_group
 
 import Utils
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
@@ -99,7 +101,7 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x163700, bytes([0x00]))  # White Gem
     patch.write_token(APTokenTypes.WRITE, 0x176077, bytes([0x00]))  # Red Gem
     # Patch every spell instance so it never adds anything.
-    patch.write_token(APTokenTypes.WRITE, 0x175997, bytes([0x00]))  # Jugem
+    patch.write_token(APTokenTypes.WRITE, 0x175d32, bytes([0x00]))  # Jugem
     patch.write_token(APTokenTypes.WRITE, 0x180a97, bytes([0x00]))  # Bayohihihii
     patch.write_token(APTokenTypes.WRITE, 0x180a47, bytes([0x00]))  # BAYOEEEEEEEEEEEEEEEN
     patch.write_token(APTokenTypes.WRITE, 0x180a6f, bytes([0x00]))  # Braindumbed
@@ -122,9 +124,11 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x175df0, bytes([0x00]))  # Thunder Magic (Library Secret)
 
     # Neuter the possibility of the game giving the player a tool.
-    patch.write_token(APTokenTypes.WRITE, 0x160a40, bytes([0x6b]))
+    patch.write_token(APTokenTypes.WRITE, 0x160a2a, bytes([0x6b]))
     #  Sets the flag for reading all the books in the library.
     patch.write_token(APTokenTypes.WRITE, base_save_offset + 0xa5, bytes([0xf0, 0xff]))
+    # Make Carbuncle show up immediately.
+    patch.write_token(APTokenTypes.WRITE, 0x16fa8b, bytes([0x88, 0x01]))
     #  Forces the situation where the orb in light forest is dark by patching out the intro setting it to 0x03.
     patch.write_token(APTokenTypes.WRITE, 0x180136, bytes([0x88, 0x01]))
     patch.write_token(APTokenTypes.WRITE, 0x180139, bytes([0x88, 0x01]))
@@ -208,6 +212,7 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x17912b, bytes([0xF8, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x17907c, bytes([0xF8, 0x00]))
     # Ripe Cucumber
+    patch.write_token(APTokenTypes.WRITE, 0x184323, bytes([0xFA, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x184365, bytes([0xFA, 0x00]))
     # Move all flags on the library secret door.
     patch.write_token(APTokenTypes.WRITE, 0x1807de, bytes([0x08, 0x01]))
@@ -227,7 +232,7 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.COPY, 0x7FC0, (21, 0x3C000))
 
 
-def patch_rom(world: "MadouWorld", patch: MadouProcedurePatch) -> None:
+def patch_rom(world: "MadouWorld", random: Random, patch: MadouProcedurePatch) -> None:
     initial_patch(world, patch)
     # Written slot data.
     ending = world.options.goal.value
@@ -265,7 +270,16 @@ def patch_rom(world: "MadouWorld", patch: MadouProcedurePatch) -> None:
         patch.write_token(APTokenTypes.WRITE, 0x1655e4, bytes([0x00]))  # Wolves 2
         patch.write_token(APTokenTypes.WRITE, 0x165547, bytes([0x00]))  # Bazaar 1
         patch.write_token(APTokenTypes.WRITE, 0x165121, bytes([0x00]))  # Bazaar 2
-
+    if world.options.school_lunch == world.options.school_lunch.option_consumables:
+        consumables = item_by_group["Consumable"] + item_by_group["Equipment"]
+        chosen_items = random.sample(consumables, 4)
+        patch.write_token(APTokenTypes.WRITE, 0x1272d, bytes([
+            chosen_items[0].hex_info[0].value, chosen_items[1].hex_info[0].value, chosen_items[2].hex_info[0].value, chosen_items[3].hex_info[0].value,
+        ]))
+    elif world.options.school_lunch == world.options.school_lunch.option_anything:
+        patch.write_token(APTokenTypes.WRITE, 0x1272d, bytes([
+            0x00, 0x00, 0x00, 0x00
+        ]))
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
