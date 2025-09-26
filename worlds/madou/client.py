@@ -40,7 +40,7 @@ MADOU_AP_SAVEINFO_LENGTH = 0x0A
 MADOU_FREEZE = 0x001401
 MADOU_MENU = 0x00172B
 
-MADOU_RANDO_INFO = 0x00f0c0
+MADOU_RANDO_INFO = 0x0070c0
 
 
 class MadouSNIClient(SNIClient):
@@ -125,10 +125,9 @@ class MadouSNIClient(SNIClient):
             return
         goal_state = await snes_read(ctx, WRAM_START + MADOU_SAVE + goal_address[0], 0x01)
         is_goaled = goal_state[0] & goal_flag[0] == goal_flag[0]
-        if is_goaled:
+        if is_goaled and not ctx.finished_game:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
-
         new_checks = []
 
         for loc_id, loc_data in hex_by_location.items():
@@ -165,16 +164,12 @@ class MadouSNIClient(SNIClient):
             group = hex_data_by_item[item.item][0]
             if group == "Equipment" or group == "Consumable" or group == "Gem" or group == "Souvenir" or group == "Special Item":
                 self.item_queue.append(item.item)
-                snes_logger.info(f"Item was of group {group} so its being added to the list.")
-                snes_logger.info(f"Current List: {self.item_queue}")
             elif group != "Nothing":
                 hex_commands_list = hex_data_by_item[item.item][1]
                 for command in hex_commands_list:
                     if group == "Event Item" or group == "Flight Access":
                         value = await snes_read(ctx, WRAM_START + MADOU_SAVE + command.hex_address, 0x01)
-                        snes_logger.info(f"For ID {item.item} we are looking at {hex(MADOU_SAVE + command.hex_address)} and wanting to apply {hex(value[0])}.")
                         new_value = (value[0] | command.value).to_bytes(1, "little")
-                        snes_logger.info(f"New value will by {hex(new_value[0])}")
                         snes_buffered_write(ctx, WRAM_START + MADOU_SAVE + command.hex_address, new_value)
                     elif group == "Cookies":
                         value = await snes_read(ctx, WRAM_START + MADOU_SAVE + command.hex_address, 0x02)
@@ -193,6 +188,7 @@ class MadouSNIClient(SNIClient):
                                         tool_count = await snes_read(ctx, WRAM_START + MADOU_TOOL_COUNT, 0x01)
                                         new_count = min(6, tool_count[0] + 1).to_bytes(1, "little")
                                         snes_buffered_write(ctx, WRAM_START + MADOU_TOOL_COUNT, new_count)
+                                        snes_buffered_write(ctx, WRAM_START + MADOU_TOOL_COUNT - 1, new_count)
                                         break
                                     if tool_value[0] == command.value:
                                         break  # Was already given.
