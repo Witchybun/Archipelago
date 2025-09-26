@@ -115,10 +115,6 @@ class MadouSNIClient(SNIClient):
         is_menued = menu_state[0] > 0x00
         is_in_game = main_menu_state[0] != 0x00
         intro_over = intro[0] & 0x01 == 0x01
-        is_not_in_playable_state = is_paused or is_menued or not is_in_game or not intro_over
-
-        if is_not_in_playable_state:
-            return
         rom = await snes_read(ctx, MADOU_ROMHASH_START, 0x15)
         if rom != ctx.rom:
             ctx.rom = None
@@ -126,8 +122,13 @@ class MadouSNIClient(SNIClient):
         goal_state = await snes_read(ctx, WRAM_START + MADOU_SAVE + goal_address[0], 0x01)
         is_goaled = goal_state[0] & goal_flag[0] == goal_flag[0]
         if is_goaled and not ctx.finished_game:
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-            ctx.finished_game = True
+            if goal_address[0] != 0xa1 or is_paused:
+                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                ctx.finished_game = True
+        is_not_in_playable_state = is_paused or is_menued or not is_in_game or not intro_over
+
+        if is_not_in_playable_state:
+            return
         new_checks = []
 
         for loc_id, loc_data in hex_by_location.items():
@@ -185,10 +186,12 @@ class MadouSNIClient(SNIClient):
                                     tool_value = await snes_read(ctx, WRAM_START + MADOU_TOOLS + i, 0x01)
                                     if tool_value[0] == 0x00:
                                         snes_buffered_write(ctx, WRAM_START + MADOU_TOOLS + i, command.value.to_bytes(1, "little"))
-                                        tool_count = await snes_read(ctx, WRAM_START + MADOU_TOOL_COUNT, 0x01)
-                                        new_count = min(6, tool_count[0] + 1).to_bytes(1, "little")
-                                        snes_buffered_write(ctx, WRAM_START + MADOU_TOOL_COUNT, new_count)
-                                        snes_buffered_write(ctx, WRAM_START + MADOU_TOOL_COUNT - 1, new_count)
+                                        tool_count = bytearray(await snes_read(ctx, WRAM_START + MADOU_TOOL_COUNT, 0x02))
+                                        if tool_count[0] == 0x00 and tool_count[1] > 0x00:
+                                            tool_count[1] = min(6, tool_count[1] + 1)
+                                        else:
+                                            tool_count[0] = min(6, tool_count[1] + 1)
+                                        snes_buffered_write(ctx, WRAM_START + MADOU_TOOL_COUNT, tool_count)
                                         break
                                     if tool_value[0] == command.value:
                                         break  # Was already given.
