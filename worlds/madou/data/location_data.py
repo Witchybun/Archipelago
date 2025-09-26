@@ -74,7 +74,7 @@ magic_village_locations = [
 school_location_start = 50
 school_locations = [
     # The address for dictionary is actually right before you talk to the headmaster about the dictionary.
-    create_location(school_location_start + 1, School.magical_dictionary, MadouRegion.headmaster_office, 0x001388, 0x10),
+    create_location(school_location_start + 1, School.magical_dictionary, MadouRegion.headmaster_office, 0x001394, 0x20),
     create_location(school_location_start + 2, School.mandrake_leaf, MadouRegion.school, 0x001383, 0x10),
     create_location(school_location_start + 3, BuildingBlockMaze.magic_crystal, MadouRegion.school_maze, 0x0013a7, 0x01),
     create_location(school_location_start + 4, BuildingBlockMaze.dragon_meat, MadouRegion.school_maze, 0x0013a7, 0x04),
@@ -102,12 +102,12 @@ ruins_locations = [
 dark_forest_location_start = 80
 dark_forest_locations = [
     create_location(dark_forest_location_start + 1, DarkForest.flute, MadouRegion.dark_orb_clearing, 0x00137d, 0x04),
-    create_location(dark_forest_location_start + 2, DarkForest.dark_flower, MadouRegion.dark_forest, 0x001383, 0x08),
+    create_location(dark_forest_location_start + 2, DarkForest.dark_flower, MadouRegion.dark_orb_clearing, 0x001383, 0x08),
     create_location(dark_forest_location_start + 3, DarkForest.green_gem, MadouRegion.dark_forest, 0x001387, 0x20),
     create_location(dark_forest_location_start + 4, DarkForest.orb, MadouRegion.dark_orb_clearing, 0x00137d, 0x01),
     create_location(dark_forest_location_start + 5, DarkForest.rele, MadouRegion.dark_maze, 0x0013a4, 0x02),
     create_location(dark_forest_location_start + 6, DarkForest.ribbon, MadouRegion.dark_maze, 0x001389, 0x04),
-    create_location(dark_forest_location_start + 7, SatanVilla.satan, MadouRegion.satan_mansion, 0x00137b, 0x80),
+    create_location(dark_forest_location_start + 7, SatanVilla.satan, MadouRegion.satan_mansion, 0x00137a, 0x80),
     create_location(dark_forest_location_start + 8, SageMountain.cyan_orb, MadouRegion.sage_mountain, 0x001388, 0x01),
 ]
 
@@ -144,7 +144,7 @@ bazaar_locations = [
     create_location(bazaar_location_start + 1, Bazaar.bazaar_pass, MadouRegion.bazaar, 0x001393, 0x10),
     create_location(bazaar_location_start + 2, Bazaar.elephant, MadouRegion.bazaar, 0x001384, 0x08),
     create_location(bazaar_location_start + 3, Bazaar.blue_gem, MadouRegion.bazaar, 0x001387, 0x10),
-    create_location(bazaar_location_start + 4, Bazaar.firefly_egg, MadouRegion.bazaar, 0x001384, 0x40),
+    create_location(bazaar_location_start + 4, Bazaar.firefly_egg, MadouRegion.bazaar, 0x001393, 0x20),
     create_location(bazaar_location_start + 5, DragonAreas.firefly_egg, MadouRegion.dragon_graveyard, 0x001382, 0x10),
     create_location(bazaar_location_start + 6, DragonAreas.stone, MadouRegion.dragon_temple, 0x001382, 0x02),
 ]
@@ -208,8 +208,7 @@ bestiary_locations = [
     create_location(bestiary_location_start + 28, Bestiary.flea, MadouRegion.fairy_cove, 0x0014cb, 0x00),
     create_location(bestiary_location_start + 29, Bestiary.skeleton_t, MadouRegion.dragon_graveyard, 0x0014bb, 0x00),
     create_location(bestiary_location_start + 30, Bestiary.leviathan, MadouRegion.dragon_temple, 0x0014bf, 0x00),
-    create_location(bestiary_location_start + 31, Bestiary.owlbear, MadouRegion.dark_forest, 0x0014af, 0x00),
-    create_location(bestiary_location_start + 32, Bestiary.devil, MadouRegion.headmaster_office, 0x0014c9, 0x00),
+    create_location(bestiary_location_start + 31, Bestiary.owlbear, MadouRegion.dark_orb_clearing, 0x0014af, 0x00),
     create_location(bestiary_location_start + 33, Bestiary.giant_puyo, MadouRegion.magical_tower, 0x0014c6, 0x00),
 ]
 
