@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional, Tuple, Dict, List
 
 from worlds.madou.strings.locations import Spell, MagicTown, School, BuildingBlockMaze, ForestOfLight, LookoutMountain, LightGarden, HarpyPath, AncientRuins, DarkForest, \
-    SatanVilla, AncientVillage, SageMountain, Bazaar, DragonAreas, FlightSpots, Bestiary, ShadyWell, Shop
+    SatanVilla, AncientVillage, SageMountain, Bazaar, DragonAreas, FlightSpots, Bestiary, ShadyWell, Shop, SchoolLunchSpot
 from worlds.madou.strings.region_entrances import MadouRegion
 
 
@@ -66,7 +66,7 @@ magic_village_start = 40
 magic_village_locations = [
     create_location(magic_village_start + 1, MagicTown.magic_bracelet, MadouRegion.magic_village, 0x00137c, 0x80),
     create_location(magic_village_start + 2, MagicTown.white_gem, MadouRegion.arle_house, 0x001388, 0x02),
-    create_location(magic_village_start + 3, MagicTown.suketoudara, MadouRegion.magic_village, 0x001386, 0x40),
+    create_location(magic_village_start + 3, MagicTown.suketoudara, MadouRegion.magic_village, 0x001388, 0x80),
     create_location(magic_village_start + 4, LookoutMountain.red_gem, MadouRegion.lookout_mountain, 0x001387, 0x08),
     create_location(magic_village_start + 5, LookoutMountain.carbuncle, MadouRegion.lookout_mountain, 0x001394, 0x02),
 ]
@@ -211,4 +211,12 @@ bestiary_locations = [
     create_location(bestiary_location_start + 31, Bestiary.owlbear, MadouRegion.dark_forest, 0x0014af, 0x00),
     create_location(bestiary_location_start + 32, Bestiary.devil, MadouRegion.headmaster_office, 0x0014c9, 0x00),
     create_location(bestiary_location_start + 33, Bestiary.giant_puyo, MadouRegion.magical_tower, 0x0014c6, 0x00),
+]
+
+school_lunch_location_start = 190
+school_lunch_locations = [
+    create_location(school_lunch_location_start + 1, SchoolLunchSpot.food_1, MadouRegion.arle_house, 0x001379, 0x01),
+    create_location(school_lunch_location_start + 2, SchoolLunchSpot.food_2, MadouRegion.arle_house, 0x001379, 0x01),
+    create_location(school_lunch_location_start + 3, SchoolLunchSpot.food_3, MadouRegion.arle_house, 0x001379, 0x01),
+    create_location(school_lunch_location_start + 4, SchoolLunchSpot.food_4, MadouRegion.arle_house, 0x001379, 0x01),
 ]
