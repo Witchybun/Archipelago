@@ -17,8 +17,9 @@ static_patches = {
     0x00008b: 0x04,  # Places Suketoudora at the school to fight.  Put this behind 7 stones.
 }
 
+# certificate ending should be 0xa2, 0x08
 endings = {
-    0: (0x88, 0x08),
+    0: (0xa2, 0x08),
     1: (0xa1, 0x80),
     3: (0x88, 0x02),
     4: (0x9c, 0x01),
