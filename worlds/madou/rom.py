@@ -86,9 +86,10 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x17627f, bytes([0x00]))  # Magic Crystal
     patch.write_token(APTokenTypes.WRITE, 0x176337, bytes([0x00]))  # Dragon Meat
     patch.write_token(APTokenTypes.WRITE, 0x1762db, bytes([0x00]))  # Soy Veggies
+    patch.write_token(APTokenTypes.WRITE, 0x176393, bytes([0x00]))  # Cotton Ball Grass
     patch.write_token(APTokenTypes.WRITE, 0x186f36, bytes([0x00]))  # Turtle Heart
     patch.write_token(APTokenTypes.WRITE, 0x187015, bytes([0x00]))  # VIP Pass
-    patch.write_token(APTokenTypes.WRITE, 0x1872b0, bytes([0x00]))  # Cotton Ball Grass
+    patch.write_token(APTokenTypes.WRITE, 0x1872b0, bytes([0x00]))  # Cotton Ball Grass (Ancient Village)
     patch.write_token(APTokenTypes.WRITE, 0x1871dd, bytes([0x00]))  # Stroll Grass
     patch.write_token(APTokenTypes.WRITE, 0x18710a, bytes([0x00]))  # Crown Grass
     patch.write_token(APTokenTypes.WRITE, 0x18739a, bytes([0x00]))  # Dragon Meat but Ancient Village
@@ -145,6 +146,9 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x182aa1, bytes([0x88, 0x01]))
     patch.write_token(APTokenTypes.WRITE, 0x182420, bytes([0x88, 0x01]))
     patch.write_token(APTokenTypes.WRITE, 0x181f0c, bytes([0x88, 0x01]))
+    # Patch out situation where Sukiyapodes fight removes your shoes for whatever reason.
+    patch.write_token(APTokenTypes.WRITE, 0x1823ff, bytes([0x9a]))
+    patch.write_token(APTokenTypes.WRITE, 0x182404, bytes([0x28, 0x01]))
     # Skips when Suketoudora runs away from Ancient Ruins.
     patch.write_token(APTokenTypes.WRITE, base_save_offset + 0x9F, bytes([0x20])),
     # Skips part where Suketoudora moves to his house.
@@ -176,33 +180,36 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x17d3a6, bytes([0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x182496, bytes([0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x184d7a, bytes([0x00]))
-    # Removes all in-game attempts to add secret stones to the inventory icons
-    patch.write_token(APTokenTypes.WRITE, 0x182491, bytes([0x00]))
-    patch.write_token(APTokenTypes.WRITE, 0x178307, bytes([0x00]))
-    patch.write_token(APTokenTypes.WRITE, 0x184d75, bytes([0x00]))
-    patch.write_token(APTokenTypes.WRITE, 0x17bde7, bytes([0x00]))
-    patch.write_token(APTokenTypes.WRITE, 0x17b644, bytes([0x00]))
-    patch.write_token(APTokenTypes.WRITE, 0x17d3a1, bytes([0x00]))
-    patch.write_token(APTokenTypes.WRITE, 0x16f2ea, bytes([0x00]))
-    patch.write_token(APTokenTypes.WRITE, 0x162a93, bytes([0x00]))
+    # Removes all in-game attempts to add secret stones to the inventory icons.  Moves setting to zero to 139A, so never use it for anything!
+    patch.write_token(APTokenTypes.WRITE, 0x18248f, bytes([0x9a, 0x13, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x178305, bytes([0x9a, 0x13, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x184d73, bytes([0x9a, 0x13, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x17bde5, bytes([0x9a, 0x13, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x17b642, bytes([0x9a, 0x13, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x17d3bf, bytes([0x9a, 0x13, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x16f2e8, bytes([0x9a, 0x13, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x162a91, bytes([0x9a, 0x13, 0x00]))
     # Patch out toggles for in-game item icons that are in the status bar.
-    patch.write_token(APTokenTypes.WRITE, 0x181f09, bytes([0x00]))  # Ribbit Boots
-    patch.write_token(APTokenTypes.WRITE, 0x17eeee, bytes([0x00]))  # Magic Bracelet
-    patch.write_token(APTokenTypes.WRITE, 0x183098, bytes([0x00]))  # Panotty Flute
-    patch.write_token(APTokenTypes.WRITE, 0x183f1c, bytes([0x00]))  # HAMMER
-    patch.write_token(APTokenTypes.WRITE, 0x17a6de, bytes([0x00]))  # Magical Dictionary
-    patch.write_token(APTokenTypes.WRITE, 0x175e95, bytes([0x00]))  # Ribbon
-    patch.write_token(APTokenTypes.WRITE, 0x165173, bytes([0x00]))  # Toy Elephant
+    patch.write_token(APTokenTypes.WRITE, 0x181f07, bytes([0x9a, 0x13, 0x00]))  # Ribbit Boots
+    patch.write_token(APTokenTypes.WRITE, 0x17eeec, bytes([0x9a, 0x13, 0x00]))  # Magic Bracelet
+    patch.write_token(APTokenTypes.WRITE, 0x183096, bytes([0x9a, 0x13, 0x00]))  # Panotty Flute
+    patch.write_token(APTokenTypes.WRITE, 0x183f1a, bytes([0x9a, 0x13, 0x00]))  # HAMMER
+    patch.write_token(APTokenTypes.WRITE, 0x17a6dc, bytes([0x9a, 0x13, 0x00]))  # Magical Dictionary
+    patch.write_token(APTokenTypes.WRITE, 0x175e93, bytes([0x9a, 0x13, 0x00]))  # Ribbon
+    patch.write_token(APTokenTypes.WRITE, 0x165171, bytes([0x9a, 0x13, 0x00]))  # Toy Elephant
     # Patch Carbuncle interaction to refer to another flag.
     patch.write_token(APTokenTypes.WRITE, 0x16fa92, bytes([0xF9, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x16fb2f, bytes([0xF9, 0x00]))
-    # Patch the explosion event to put its value somewhere needless.  This is actually the book checks which doesn't matter.
-    patch.write_token(APTokenTypes.WRITE, 0x179dc5, bytes([0x88, 0x01]))
+    # Patch the explosion event to give the book instead.
+    patch.write_token(APTokenTypes.WRITE, 0x179dc5, bytes([0xFD, 0x00]))
+    # Change the VIP flag
+    patch.write_token(APTokenTypes.WRITE, 0x18700d, bytes([0xFC, 0x00]))
     # Patch the shop item locations so the flags aren't tied.
     patch.write_token(APTokenTypes.WRITE, 0x1650f3, bytes([0xF4, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x165155, bytes([0xF4, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x1651e1, bytes([0xF5, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x1651bc, bytes([0xF5, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x165103, bytes([0xF5, 0x00]))
     # Patch the check for whether the egg is in your inventory first time.
     patch.write_token(APTokenTypes.WRITE, 0x16e310, bytes([0xF6, 0x00]))
     # Patch the check for adding firefly egg so its always in the shop.
@@ -222,6 +229,8 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x1807fa, bytes([0x0c, 0x01]))
     patch.write_token(APTokenTypes.WRITE, 0x180801, bytes([0x0d, 0x01]))
     patch.write_token(APTokenTypes.WRITE, 0x180808, bytes([0x0e, 0x01]))
+    # Change the flag for when the certificate is given to you to instead just open the gate to the tower.
+    # patch.write_token(APTokenTypes.WRITE, 0x00, bytes([0x6b, 0x01]))
     from Utils import __version__
     patch_name = bytearray(
         f'Madou{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
@@ -230,6 +239,9 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x3C000, patch.name)
 
     patch.write_token(APTokenTypes.COPY, 0x7FC0, (21, 0x3C000))
+
+    # This just boosts Arle's starting stats somewhat.  It seems that if you get certain items too early, you get kind of boned.
+    patch.write_token(APTokenTypes.WRITE, base_save_offset + 0x4A, bytes([0x0c, 0x0c, 0x0c, 0x0c]))
 
 
 def patch_rom(world: "MadouWorld", random: Random, patch: MadouProcedurePatch) -> None:
@@ -280,6 +292,8 @@ def patch_rom(world: "MadouWorld", random: Random, patch: MadouProcedurePatch) -
         patch.write_token(APTokenTypes.WRITE, 0x1272d, bytes([
             0x00, 0x00, 0x00, 0x00
         ]))
+    cookies = world.options.starting_cookies.value.to_bytes(2, "little")
+    patch.write_token(APTokenTypes.WRITE, 0x1272b, cookies)
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
