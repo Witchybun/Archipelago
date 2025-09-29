@@ -110,6 +110,8 @@ class MadouSNIClient(SNIClient):
         # We need to find a place in the ROM to store the goal of the game, then do a read on it.
         goal_address = await snes_read(ctx, MADOU_RANDO_INFO, 0x01)
         goal_flag = await snes_read(ctx, MADOU_RANDO_INFO + 0x01, 0x01)
+        necessary_stones = await snes_read(ctx, MADOU_RANDO_INFO + 0x02, 0x01)
+        skip_fairy = await snes_read(ctx, MADOU_RANDO_INFO + 0x04, 0x01)
 
         is_paused = pause_state[0] > 0x00
         is_menued = menu_state[0] > 0x00
@@ -209,6 +211,16 @@ class MadouSNIClient(SNIClient):
                                 stone_icons[i] = 0x01
                                 break
                         snes_buffered_write(ctx,  WRAM_START + MADOU_SAVE + 0xe4, stone_icons)
+                        # Set these values accordingly for the Suketoudara or Fairy interaction, since in-game its a simple compare.
+                        # Perhaps when we move to remote, this can be put in the ROM instead.
+                        if new_count[0] >= 7:
+                            snes_buffered_write(ctx, WRAM_START + MADOU_SAVE + 0x98, bytes([0x07]))
+                        if new_count[0] >= necessary_stones[0]:
+                            snes_buffered_write(ctx, WRAM_START + MADOU_SAVE + 0x99, bytes([0x08]))
+                            if skip_fairy[0] > 0:
+                                fairy_cond = await snes_read(ctx, WRAM_START + MADOU_SAVE + 0x88, 0x01)
+                                new_value = (fairy_cond[0] | 0x04).to_bytes(1, "little")
+                                snes_buffered_write(ctx, WRAM_START + MADOU_SAVE + 0x88, new_value)
                     elif group == "Spell":
                         spell_count = await snes_read(ctx, WRAM_START + MADOU_SAVE + command.hex_address, 0x01)
                         new_count = (min(command.value, spell_count[0] + 1)).to_bytes(1, "little")

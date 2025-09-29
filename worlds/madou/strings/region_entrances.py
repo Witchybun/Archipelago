@@ -34,6 +34,7 @@ class MadouRegion:
     ancient_village = "Ancient Village"
     ancient_village_squirrel = "Ancient Village Squirrel Station"
     sage_mountain = "Sage's Mountain"
+    sage_mountain_summit = "Sage's Mountain Summit"
     sage_mountain_squirrel = "Sage's Mountain Squirrel Station"
     harpy_mountain = "Harpy Mountain"
     bazaar = "Bazaar"
@@ -110,6 +111,7 @@ class MadouEntrance:
     sage_to_wolf = "Sage Mountain Road Path (Back)"
     sage_to_squirrel = "Sage Mountain Squirrel Station Door (Front)"
     squirrel_to_sage = "Sage Mountain Squirrel Station Door (Back)"
+    sage_to_summit = "Final Sage Mountain Climb"
 
     flight_magic_to_ruins = "Squirrel Magic to Ruins"
     flight_ruins_to_magic = "Squirrel Ruins to Magic"

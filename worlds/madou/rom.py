@@ -1,17 +1,23 @@
 import hashlib
+import logging
 import os
 import typing
 from random import Random
-from typing import Collection, SupportsIndex
 
 import settings
 from .data.static_data import endings
 from .data.item_data import item_by_group
+from .data.location_data import text_lookup
+from .text_constructor import message_byte_constructor
 
 import Utils
-from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
+
+logger = logging.getLogger("Madou Monogatari Hanamaru Daiyouchienji")
 
 base_save_offset = 0x12724
+text_space_offset = 0x19bd20
+text_space_offset_ram = 0x33bd20
 HASH = 'fe6af670466c1e64538a4d14ad033440'
 
 if typing.TYPE_CHECKING:
@@ -67,10 +73,13 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
         0x5c, 0x40, 0xcf, 0x01,  # JL $01cf40, which is one after the increment code
         0x6b,  # RTL; not needed necessarily but who knows.
     ]))
+    # Modify the encounter rate code, so that the stored encounter
     # Add a jump to the item code, which jumps to the above.
     patch.write_token(APTokenTypes.WRITE, 0xcf38, bytes([
         0x5c, 0x90, 0xf0, 0x00,  # JSL $00f090, which should be the above.
     ]))
+    # Fix bug where checking for Bayohihihi checks for Braindumbed instead.
+    patch.write_token(APTokenTypes.WRITE, 0xc7c6, bytes([0x0e]))
     # Patch every in-game instance where an item is added to inventory, to instead call $00, so the above is triggered, effectively making it so no item is given.
     patch.write_token(APTokenTypes.WRITE, 0x183e92, bytes([0x00]))  # Dark Orb
     patch.write_token(APTokenTypes.WRITE, 0x17911a, bytes([0x00]))  # Elephant Head
@@ -123,7 +132,8 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x181da5, bytes([0x00]))  # Fire Magic (Library Secret)
     patch.write_token(APTokenTypes.WRITE, 0x175a47, bytes([0x00]))  # Thunder Magic (???)
     patch.write_token(APTokenTypes.WRITE, 0x175df0, bytes([0x00]))  # Thunder Magic (Library Secret)
-
+    # Make it so "fast" is the default for text speed.
+    patch.write_token(APTokenTypes.WRITE, base_save_offset + 0x06, bytes([0x00]))
     # Neuter the possibility of the game giving the player a tool.
     patch.write_token(APTokenTypes.WRITE, 0x160a2a, bytes([0x6b]))
     #  Sets the flag for reading all the books in the library.
@@ -157,9 +167,11 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x1515b3, bytes([0x88, 0x01]))
     # Patches for the school incident.  Makes the school frozen, and moves the victory read for entering the headmaster room elsewhere.
     patch.write_token(APTokenTypes.WRITE, base_save_offset + 0x7f, bytes([0x08])),
-    patch.write_token(APTokenTypes.WRITE, 0x150735, bytes([0xF8, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x150735, bytes([0x0f, 0x01]))
     # Change flag that would usually be set given the book.
     patch.write_token(APTokenTypes.WRITE, 0x17a6d9, bytes([0x88, 0x01]))
+    # Force harpy door to be open
+    patch.write_token(APTokenTypes.WRITE, 0x17b1d7, bytes([0x88, 0x01]))
     # Modify where the "fail" saves in the villages go so regardless of what you do you get everything.
     patch.write_token(APTokenTypes.WRITE, 0x17d43c, bytes([0x88, 0x01]))
     patch.write_token(APTokenTypes.WRITE, 0x17d4c2, bytes([0x88, 0x01]))
@@ -189,6 +201,7 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x17d3bf, bytes([0x9a, 0x13, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x16f2e8, bytes([0x9a, 0x13, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x162a91, bytes([0x9a, 0x13, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x17d3a1, bytes([0x9a, 0x13, 0x00]))
     # Patch out toggles for in-game item icons that are in the status bar.
     patch.write_token(APTokenTypes.WRITE, 0x181f07, bytes([0x9a, 0x13, 0x00]))  # Ribbit Boots
     patch.write_token(APTokenTypes.WRITE, 0x17eeec, bytes([0x9a, 0x13, 0x00]))  # Magic Bracelet
@@ -202,14 +215,22 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x16fb2f, bytes([0xF9, 0x00]))
     # Patch the explosion event to give the book instead.
     patch.write_token(APTokenTypes.WRITE, 0x179dc5, bytes([0xFD, 0x00]))
+    # Make it so Wood Man always shows up
+    patch.write_token(APTokenTypes.WRITE, base_save_offset + 0x9d, bytes([0x80]))
     # Change the VIP flag
     patch.write_token(APTokenTypes.WRITE, 0x18700d, bytes([0xFC, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x186ff7, bytes([0xFC, 0x00]))
     # Patch the shop item locations so the flags aren't tied.
     patch.write_token(APTokenTypes.WRITE, 0x1650f3, bytes([0xF4, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x165155, bytes([0xF4, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x1651e1, bytes([0xF5, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x1651bc, bytes([0xF5, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x165103, bytes([0xF5, 0x00]))
+    # Patch the final exam certificate chest to refer instead to the flag that opens the gate.
+    patch.write_token(APTokenTypes.WRITE, 0x1760d4, bytes([0x6b, 0x01]))
+    patch.write_token(APTokenTypes.WRITE, 0x17610f, bytes([0x6b, 0x01]))
+    # Make the dragon always show up in the Bazaar.
+    patch.write_token(APTokenTypes.WRITE, base_save_offset + 0x82, bytes([0x01]))
     # Patch the check for whether the egg is in your inventory first time.
     patch.write_token(APTokenTypes.WRITE, 0x16e310, bytes([0xF6, 0x00]))
     # Patch the check for adding firefly egg so its always in the shop.
@@ -218,6 +239,7 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     # Elephant Head
     patch.write_token(APTokenTypes.WRITE, 0x17912b, bytes([0xF8, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x17907c, bytes([0xF8, 0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x1790fc, bytes([0xF8, 0x00]))
     # Ripe Cucumber
     patch.write_token(APTokenTypes.WRITE, 0x184323, bytes([0xFA, 0x00]))
     patch.write_token(APTokenTypes.WRITE, 0x184365, bytes([0xFA, 0x00]))
@@ -229,8 +251,11 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x1807fa, bytes([0x0c, 0x01]))
     patch.write_token(APTokenTypes.WRITE, 0x180801, bytes([0x0d, 0x01]))
     patch.write_token(APTokenTypes.WRITE, 0x180808, bytes([0x0e, 0x01]))
-    # Change the flag for when the certificate is given to you to instead just open the gate to the tower.
-    # patch.write_token(APTokenTypes.WRITE, 0x00, bytes([0x6b, 0x01]))
+    # Change the $13e3 checks for giving a stone, checking if Suketoudara shows up, or if the fairy quest starts,
+    # where it checks your current stone count, to instead chest $1397, $1398, $1399 instead.  The client will set these value on its on when necessary.
+    patch.write_token(APTokenTypes.WRITE, 0x1626fc, bytes([0x97, 0x13]))
+    patch.write_token(APTokenTypes.WRITE, 0x1630ae, bytes([0x98, 0x13]))
+    patch.write_token(APTokenTypes.WRITE, 0x186415, bytes([0x99, 0x13]))
     from Utils import __version__
     patch_name = bytearray(
         f'Madou{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
@@ -240,22 +265,62 @@ def initial_patch(world: "MadouWorld", patch: MadouProcedurePatch):
 
     patch.write_token(APTokenTypes.COPY, 0x7FC0, (21, 0x3C000))
 
-    # This just boosts Arle's starting stats somewhat.  It seems that if you get certain items too early, you get kind of boned.
-    patch.write_token(APTokenTypes.WRITE, base_save_offset + 0x4A, bytes([0x0c, 0x0c, 0x0c, 0x0c]))
+
+def text_patch(world: "MadouWorld", patch: MadouProcedurePatch):
+    # Patch Mandrake text so leaves -> item, or multiworld item:
+    patch.write_token(APTokenTypes.WRITE, 0x5a55e, bytes([
+        0x1b, 0x26, 0x17, 0x1f
+    ]))
+    patch.write_token(APTokenTypes.WRITE, 0x5a59e, bytes([
+        0x1b, 0x26, 0x17, 0x1f
+    ]))
+    patch.write_token(APTokenTypes.WRITE, 0x5a5b4, bytes([
+        0x1b, 0x26, 0x17, 0x1f
+    ]))
+    patch.write_token(APTokenTypes.WRITE, 0x5a5d7, bytes([
+        0x1b, 0x26, 0x17, 0x1f
+    ]))
+    # King Frog refers to an item.
+    patch.write_token(APTokenTypes.WRITE, 0x18d917, bytes([
+        0x15, 0x21, 0x21, 0x1e, 0x00, 0x1b, 0x26, 0x17, 0x1f, 0x49, 0x00, 0x00, 0x00
+    ]))
+    patch.write_token(APTokenTypes.WRITE, 0x18dac4, bytes([
+        0x45, 0x21, 0x27, 0x00, 0x15, 0x13, 0x20, 0x00, 0x1a, 0x13, 0x28, 0x17, 0x00, 0x26, 0x1a,
+        0x1b, 0x25, 0xf9, 0x1f, 0x27, 0x1e, 0x26, 0x1b, 0x29, 0x21, 0x24, 0x1e, 0x16, 0x00, 0x1b,
+        0x26, 0x17, 0x1f, 0x47, 0x00, 0x00
+    ]))
+    # Add text for all the general locations, usually reading a tablet, opening a chest, etc.
+    current_position = 0
+    for location in world.get_locations():
+        if location.address not in text_lookup:
+            continue
+        if text_lookup[location.address] is None:
+            continue
+        if not world.options.souvenir_hunt and location.address in range(130, 140):
+            continue
+        for container in text_lookup[location.address]:
+            if container.hex_address == 0:
+                logger.warning(f"Could not find a valid address for location {location.name} for Player {location.player}, of type {container.container}.  Skipping.")
+                continue
+            message = message_byte_constructor(location.item, container.container)
+            patch.write_token(APTokenTypes.WRITE, text_space_offset + current_position, message)
+            patch.write_token(APTokenTypes.WRITE, container.hex_address, (text_space_offset_ram + current_position).to_bytes(3, "little"))
+            current_position += len(message)
 
 
 def patch_rom(world: "MadouWorld", random: Random, patch: MadouProcedurePatch) -> None:
     initial_patch(world, patch)
+    text_patch(world, patch)
     # Written slot data.
     ending = world.options.goal.value
     goal_address = endings[ending][0]
     goal_flag = endings[ending][1]
     required_stones = world.options.required_secret_stones.value
-    experience_rates = world.options.experience_multiplier // 50
+    skip_fairy = world.options.skip_fairy_search.value
 
     patch.write_token(APTokenTypes.WRITE, 0x0070c0, bytes(
         [
-            goal_address, goal_flag, required_stones, experience_rates
+            goal_address, goal_flag, required_stones, 0x00, skip_fairy  # Fourth value will be exp rate later.
         ]
     ))
     starting_spells = world.options.starting_magic.value
@@ -292,9 +357,20 @@ def patch_rom(world: "MadouWorld", random: Random, patch: MadouProcedurePatch) -
         patch.write_token(APTokenTypes.WRITE, 0x1272d, bytes([
             0x00, 0x00, 0x00, 0x00
         ]))
+    if world.options.reduced_encounters:
+        # Make new method that just doubles the encounter cap for the map.
+        patch.write_token(APTokenTypes.WRITE, 0x007080, bytes([
+            0xB9, 0x01, 0x00,  # LDA $0001, y
+            0x0A,  # ASL
+            0x8D, 0x0C, 0x14,  # STA $140C
+            0x5C, 0x7E, 0x8a, 0x02  # JSL $02A783
+        ]))
+        patch.write_token(APTokenTypes.WRITE, 0x10a78, bytes([0x5C, 0x80, 0xf0, 0x00]))
     cookies = world.options.starting_cookies.value.to_bytes(2, "little")
     patch.write_token(APTokenTypes.WRITE, 0x1272b, cookies)
     patch.write_file("token_patch.bin", patch.get_token_binary())
+    required_stones = world.options.required_secret_stones.value
+    patch.write_token(APTokenTypes.WRITE, 0x186417, required_stones.to_bytes(1, "little"))
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

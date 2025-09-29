@@ -84,7 +84,8 @@ madou_regions = [
     RegionData(MadouRegion.satan_mansion),
     RegionData(MadouRegion.dark_maze),
 
-    RegionData(MadouRegion.sage_mountain, [MadouEntrance.sage_to_wolf, MadouEntrance.sage_to_squirrel]),
+    RegionData(MadouRegion.sage_mountain, [MadouEntrance.sage_to_wolf, MadouEntrance.sage_to_squirrel, MadouEntrance.sage_to_summit]),
+    RegionData(MadouRegion.sage_mountain_summit),
     RegionData(MadouRegion.sage_mountain_squirrel, [MadouEntrance.squirrel_to_sage, MadouEntrance.flight_sage_to_ruins,
                                                     MadouEntrance.flight_sage_to_magic, MadouEntrance.flight_sage_to_ancient,
                                                     MadouEntrance.flight_sage_to_wolf]),
@@ -160,6 +161,7 @@ madou_entrances = [
     EntranceData(MadouEntrance.sage_to_squirrel, MadouRegion.sage_mountain_squirrel, type=EntranceType.TWO_WAY),
     EntranceData(MadouEntrance.squirrel_to_sage, MadouRegion.sage_mountain, type=EntranceType.TWO_WAY),
     EntranceData(MadouEntrance.dark_forest_to_well, MadouRegion.well),
+    EntranceData(MadouEntrance.sage_to_summit, MadouRegion.sage_mountain_summit),
 
     EntranceData(MadouEntrance.flight_magic_to_ruins, MadouRegion.ruins_town_squirrel, type=EntranceType.TWO_WAY),
     EntranceData(MadouEntrance.flight_ruins_to_magic, MadouRegion.magic_village_squirrel, type=EntranceType.TWO_WAY),
