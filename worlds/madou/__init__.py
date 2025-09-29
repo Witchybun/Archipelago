@@ -17,8 +17,8 @@ from .regions import create_regions
 from .client import MadouSNIClient
 from .rom import MadouProcedurePatch, patch_rom, HASH
 from .rules import MadouRules
-from .strings.items import EventItem, Special, Souvenir, Tool
-from .strings.locations import EventLocation
+from .strings.items import EventItem, Special, Souvenir, Tool, Gem
+from .strings.locations import EventLocation, MagicTown
 from .strings.region_entrances import MadouRegion
 
 logger = logging.getLogger("Madou Monogatari Hanamaru Daiyouchienji")
@@ -59,6 +59,11 @@ class MadouWorld(World):
     topology_present = False
     item_name_to_id = {item.name: item.code for item in item_table}
     location_name_to_id = {location.name: location.location_id for location in location_table}
+
+    item_name_groups = {
+        "Gem": [Gem.green_gem, Gem.red_gem, Gem.cyan_gem, Gem.blue_gem, Gem.purple_gem, Gem.yellow_gem, Gem.white_gem],
+        "Souvenir": Souvenir.souvenirs
+    }
 
     required_client_version = (0, 6, 2)
 
@@ -139,26 +144,24 @@ class MadouWorld(World):
 
         self.multiworld.regions.extend(world_regions.values())
 
-        self.get_region(MadouRegion.frog_swamp).add_event(EventLocation.hammer_switch, EventItem.hammer_switch, lambda state: state.has(Tool.hammer, self.player),
-                                                          show_in_spoiler=True)
         self.get_region(MadouRegion.school_maze).add_event(EventLocation.unpetrify, EventItem.unpetrify, None),
-
+        self.get_region(MadouRegion.sage_mountain_summit).add_event("Chest on Sage Mountain",
+                                                                    "Final Exam Certificate",
+                                                                    lambda state: state.has(Special.secret_stone, self.player, self.options.required_secret_stones.value)
+                                                                    and (self.options.skip_fairy_search or state.has(Special.dark_orb, self.player)),
+                                                                    show_in_spoiler=True)
         if not self.options.souvenir_hunt:
             self.get_region(MadouRegion.ruins_town).add_event(EventLocation.ruins_shop, EventItem.ruins_buy, show_in_spoiler=True)
             self.get_region(MadouRegion.bazaar).add_event(EventLocation.bazaar_shop, EventItem.bazaar_buy, show_in_spoiler=True)
             self.get_region(MadouRegion.wolf_town).add_event(EventLocation.wolf_shop, EventItem.wolf_buy, show_in_spoiler=True)
 
         if self.options.goal == self.options.goal.option_souvenirs:
-            multiworld.completion_condition[self.player] = lambda state: (state.has(Souvenir.magic_king_tusk, player) and state.has(Souvenir.magic_king_statue, player) and
-                                                                          state.has(Souvenir.magic_king_picture, player) and state.has(Souvenir.magic_king_foot, player) and
-                                                                          state.has(Souvenir.dark_jug, player) and state.has(Souvenir.wolf_tail, player) and
-                                                                          state.has(Souvenir.waterfall_vase, player) and state.has(Souvenir.dragon_nail, player))
+            white_gem = self.get_location(MagicTown.white_gem)
+            white_gem.address = None
+            white_gem.place_locked_item(self.create_event("Mother's Appreciation"))
+            multiworld.completion_condition[self.player] = lambda state: state.has("Mother's Appreciation", player)
         elif self.options.goal == self.options.goal.option_certificate:
-            ending_region = self.get_region(MadouRegion.sage_mountain)
-            chest = Location(player, "Chest High on Sage Mountain", None, ending_region)
-            chest.place_locked_item(self.create_event("Certificate"))
-            chest.access_rule = lambda state: state.has(Special.secret_stone, player, 7)
-            multiworld.completion_condition[self.player] = lambda state: state.has("Certificate", player)
+            multiworld.completion_condition[self.player] = lambda state: state.has("Final Exam Certificate", player)
         else:
             ending_region = self.get_region(MadouRegion.magical_tower)
             victory = Location(player, "Graduate!", None, ending_region)

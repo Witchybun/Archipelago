@@ -78,9 +78,7 @@ def create_special_items(item_factory: MadouItemFactory, options: MadouOptions, 
             items.extend(item_factory(x) for x in [item]*2)
             continue
         if item == "Secret Stone":
-            necessary = options.required_secret_stones.value
-            items.extend(item_factory(x) for x in [item]*necessary)
-            items.extend(item_factory(y, ItemClassification.useful) for y in [item]*(8 - necessary))
+            items.extend(item_factory(x) for x in [item]*8)
         if item == "Rotted Cucumber":
             items.extend(item_factory(x) for x in [item]*9)
         items.append(item_factory(item))

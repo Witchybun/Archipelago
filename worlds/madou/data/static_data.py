@@ -21,8 +21,8 @@ static_patches = {
 endings = {
     0: (0xa2, 0x08),
     1: (0xa1, 0x80),
-    3: (0x88, 0x02),
-    4: (0x9c, 0x01),
+    2: (0x88, 0x02),
+    3: (0x9c, 0x01),
 }
 
 #  EXP gained is stored at 0x00175a from the point at 0x01af13 (_ in ROM).  We can manipulate this for rates.
@@ -98,6 +98,11 @@ hidden_stats = {
     "Defense": 0x00004b,
     "Speed": 0x00004c,
 }
+
+# The way secret stone text works is that it reads your current stones count and does a lookup based on it.  Of course, having 8 causes a bug, but also, this means
+# its hard to pinpoint a way to write custom text for those locations.  But here's the address for where the calls are stored at:
+secret_stone_master_list_offset = 0x162702
+counts_offset = 0x56f3
 
 #  It turns out that instead of checking inventory, the game checks for if you checked the location.  Since this is a read,
 #  it's possible to make a patch jump at around 0x029476, or _ in the ROM, which is where the game reads if a flag is set, and simply
@@ -180,5 +185,7 @@ char_conversion = {
     '(': 0x4f,
     ')': 0x50,
     '\n': 0xf9,
+    '+': 0xfe,
+    '-': 0x0b,
     # Page Break is 0xfe.
 }
