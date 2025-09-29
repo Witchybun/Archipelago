@@ -3,6 +3,7 @@ from typing import List
 from . import MadouOptions
 from .data.location_data import (all_locations, starting_spell_locations, souvenir_locations, flight_locations,
                                  bestiary_locations, MadouLocation, base_locations, school_lunch_locations)
+from .strings.locations import Bestiary
 
 location_table = all_locations
 locations_by_name = {location.name: location for location in location_table}
@@ -48,7 +49,11 @@ def create_flight_locations(options: MadouOptions, locations: List[MadouLocation
 def create_bestiary_locations(options: MadouOptions, locations: List[MadouLocation]) -> List[MadouLocation]:
     if not options.bestiary:
         return locations
-    locations.extend(bestiary_locations)
+    excluded_locations = []
+    if options.skip_fairy_search:
+        excluded_locations.append(Bestiary.owlbear)
+    included_locations = [location for location in bestiary_locations if location.name not in excluded_locations]
+    locations.extend(included_locations)
     return locations
 
 

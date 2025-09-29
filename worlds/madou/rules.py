@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Dict, List
 
 from BaseClasses import CollectionState
 from worlds.madou.strings.locations import HarpyPath, Spell, ShadyWell, DarkForest, ForestOfLight, LightGarden, MagicTown, SatanVilla, AncientRuins, School, \
-    AncientVillage, DragonAreas, Bestiary, LookoutMountain
+    AncientVillage, DragonAreas, Bestiary, LookoutMountain, SageMountain
 from worlds.madou.strings.region_entrances import MadouEntrance
 from worlds.madou.strings.items import Tool, Custom, Special, Souvenir, EventItem, Gem, SpellItem, FlightUnlocks
 from worlds.madou.options import MadouOptions
@@ -33,19 +33,22 @@ class MadouRules:
             MadouEntrance.forest_to_frog: lambda state: state.has(Tool.ribbit_boots, self.player),
             MadouEntrance.frog_to_forest: lambda state: state.has(Tool.ribbit_boots, self.player),
             MadouEntrance.ruins_to_ancient_ruins: lambda state: state.has(Tool.magic_bracelet, self.player),
+            MadouEntrance.rain_forest_to_ancient_village: lambda state: state.has(Tool.hammer, self.player),
             MadouEntrance.ancient_to_zoh: lambda state: state.has(Special.elephant_head, self.player),
             MadouEntrance.nw_cave_to_smoky: lambda state: state.has(Custom.bomb, self.player),
-            MadouEntrance.fairy_to_harpy: lambda state: state.has(Special.secret_stone, self.player, 2),
             MadouEntrance.death_to_bazaar: lambda state: state.has(Special.bazaar_pass, self.player) and state.has(Tool.ribbit_boots, self.player),
             MadouEntrance.smoky_left_to_right: lambda state: state.has(Tool.ribbit_boots, self.player),
-            MadouEntrance.magic_village_to_tower: lambda state: self.can_fight_generic_at_level(state, 5, self.world.options) and self.can_reach_tower(state,
-                                                                                                                                                       self.world.options),
+            MadouEntrance.magic_village_to_tower: lambda state: self.can_fight_generic_at_level(state, 5, self.world.options) and
+                                                                state.has("Final Exam Certificate", self.player),
             MadouEntrance.headmaster_to_school_maze: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             MadouEntrance.smoky_to_graveyard: lambda state: state.has(Special.dark_flower, self.player) and state.has(Special.leaf, self.player),
             MadouEntrance.dark_forest_to_well: lambda state: state.has(Tool.ribbit_boots, self.player),
             MadouEntrance.dark_forest_to_satan: lambda state: state.has(Tool.ribbit_boots, self.player) and state.has(Special.secret_stone, self.player, 3),
             MadouEntrance.dark_forest_to_maze: lambda state: state.has(Tool.ribbit_boots, self.player),
             MadouEntrance.dark_forest_to_dark_orb: lambda state: state.has(Tool.ribbit_boots, self.player),
+            MadouEntrance.wolf_to_sage: lambda state: state.has(Tool.ribbit_boots, self.player),
+            MadouEntrance.sage_to_wolf: lambda state: state.has(Tool.ribbit_boots, self.player),
+            MadouEntrance.sage_to_summit: lambda state: state.has(Tool.ribbit_boots, self.player),
             # TODO: find a way to make the game accept a flight path even if you only have one; this isn't very intuitive.
             MadouEntrance.flight_magic_to_ruins: lambda state: state.has(FlightUnlocks.ruins_town, self.player) and
                                                                self.has_any_flight_path_other_than(FlightUnlocks.ruins_town, state),
@@ -99,6 +102,9 @@ class MadouRules:
             LightGarden.purple_orb: lambda state: state.has(Tool.toy_elephant, self.player),
             LightGarden.bouquet: lambda state: state.has(Special.leaf, self.player) and state.has(Special.dark_flower, self.player) and state.has(EventItem.unpetrify,
                                                                                                                                                   self.player),
+            ShadyWell.lofu: lambda state: state.has(Tool.toy_elephant, self.player),
+            SageMountain.cyan_orb: lambda state: state.has(Tool.toy_elephant, self.player) and state.has(Tool.ribbit_boots, self.player),
+            DarkForest.rele: lambda state: state.has(Tool.toy_elephant, self.player),
             MagicTown.white_gem: lambda state: self.has_souvenirs(state, self.world.options),
             LookoutMountain.red_gem: lambda state: state.has(Tool.ribbit_boots, self.player),
             #  Gold Tablets
@@ -127,9 +133,8 @@ class MadouRules:
             DragonAreas.firefly_egg: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options),
             DragonAreas.stone: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options) and state.has(Special.firefly_egg, self.player, 2),
             MagicTown.suketoudara: lambda state: state.has(Special.secret_stone, self.player, 7) and self.can_fight_generic_at_level(state, 4, self.world.options),
-            Bestiary.wood_man: lambda state: state.has(EventItem.hammer_switch, self.player),  # Enemies don't spawn unless you hit the switch.
-            Bestiary.owlbear: lambda state: state.has(Special.secret_stone, self.player, 8),
-
+            Bestiary.owlbear: lambda state: state.has(Special.secret_stone, self.player, 8) and state.has(Special.dark_orb, self.player),
+            Bestiary.flea: lambda state: state.has(Tool.toy_elephant, self.player)
         }
 
     def has_all(self, items: List[str], state: CollectionState):
@@ -161,10 +166,6 @@ class MadouRules:
         if level > 1:
             stun_rule = state.has(SpellItem.bayoen, self.player)
         return state.has(SpellItem.diacute, self.player, diacute_count) and stun_rule and average_count >= min(4, level)
-
-    def can_reach_tower(self, state: CollectionState, options: MadouOptions):
-        required_stones = options.required_secret_stones.value
-        return state.has(Special.secret_stone, self.player, required_stones)
 
     def has_any_flight_path_other_than(self, exception: str, state: CollectionState):
         flights = [FlightUnlocks.magic_village, FlightUnlocks.ancient_village, FlightUnlocks.wolf_town, FlightUnlocks.ruins_town, FlightUnlocks.sage_mountain]

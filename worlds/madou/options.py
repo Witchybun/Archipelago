@@ -94,7 +94,8 @@ class CookieMultiplier(Range):
 
 
 class ReducedEncounters(Toggle):
-    """Halves the rate of encounters.  Helps as some places are labyrintian and will cause a lot of encounters to happen."""
+    """Halves the rate of encounters.  Helps as some places are labyrinthine and will cause a lot of encounters to happen.
+    Also can offset the 4x encounter rate from holding Scorpion's Wallet"""
     internal_name = "reduced_encounters"
     display_name = "Reduced Encounters"
 
@@ -120,6 +121,13 @@ class Bestiary(Toggle):
     display_name = "Bestiary"
 
 
+class SkipFairySearch(Toggle):
+    """Skips the event where the fairy at the top of Sage Mountain goes missing, so when you have 8 secrest stones you
+    can immediately get the certificate.  If Bestiary is on, this removes the Owlbear location as it is not encountered."""
+    internal_name = "skip_fairy_search"
+    display_name = "Skip Fairy Search"
+
+
 @dataclass
 class MadouOptions(PerGameCommonOptions):
     goal: Goal
@@ -128,9 +136,10 @@ class MadouOptions(PerGameCommonOptions):
     starting_magic: StartingMagic
     souvenir_hunt: SouvenirHunt
     starting_cookies: StartingCookies
-    experience_multiplier: ExperienceMultiplier
-    cookie_multiplier: CookieMultiplier
+    # experience_multiplier: ExperienceMultiplier
+    # cookie_multiplier: CookieMultiplier
     reduced_encounters: ReducedEncounters
     shop_prices: ShopPrices
     squirrel_stations: SquirrelStations
     bestiary: Bestiary
+    skip_fairy_search: SkipFairySearch
