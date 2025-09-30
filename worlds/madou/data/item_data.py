@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Tuple
 
 from BaseClasses import ItemClassification
-from worlds.madou.strings.items import SpellItem, Tool, Special, Custom, Souvenir, Gem, Equip, Consumable, FlightUnlocks
+from ..strings.items import SpellItem, Tool, Special, Custom, Souvenir, Gem, Equip, Consumable, FlightUnlocks
 
 
 @dataclass(frozen=True)

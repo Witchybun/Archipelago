@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import Optional, Tuple, Dict, List
 
-from worlds.madou.strings.locations import Spell, MagicTown, School, BuildingBlockMaze, ForestOfLight, LookoutMountain, LightGarden, HarpyPath, AncientRuins, DarkForest, \
+from ..strings.locations import Spell, MagicTown, School, BuildingBlockMaze, ForestOfLight, LookoutMountain, LightGarden, HarpyPath, AncientRuins, DarkForest, \
     SatanVilla, AncientVillage, SageMountain, Bazaar, DragonAreas, FlightSpots, Bestiary, ShadyWell, Shop, SchoolLunchSpot
-from worlds.madou.strings.region_entrances import MadouRegion
+from ..strings.region_entrances import MadouRegion
 
 
 @dataclass(frozen=True)

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Protocol, Iterable, List, Optional, Tuple, Dict
 
 from BaseClasses import Region, EntranceType, MultiWorld, Entrance
-from worlds.madou.strings.region_entrances import MadouRegion, MadouEntrance
+from .strings.region_entrances import MadouRegion, MadouEntrance
 
 
 class RegionFactory(Protocol):

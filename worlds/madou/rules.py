@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Dict, List
 
 from BaseClasses import CollectionState
-from worlds.madou.strings.locations import HarpyPath, Spell, ShadyWell, DarkForest, ForestOfLight, LightGarden, MagicTown, SatanVilla, AncientRuins, School, \
+from .strings.locations import HarpyPath, Spell, ShadyWell, DarkForest, ForestOfLight, LightGarden, MagicTown, SatanVilla, AncientRuins, School, \
     AncientVillage, DragonAreas, Bestiary, LookoutMountain, SageMountain
-from worlds.madou.strings.region_entrances import MadouEntrance
-from worlds.madou.strings.items import Tool, Custom, Special, Souvenir, EventItem, Gem, SpellItem, FlightUnlocks
-from worlds.madou.options import MadouOptions
+from .strings.region_entrances import MadouEntrance
+from .strings.items import Tool, Custom, Special, Souvenir, EventItem, Gem, SpellItem, FlightUnlocks
+from .options import MadouOptions
 from worlds.generic.Rules import CollectionRule
 
 if TYPE_CHECKING:
