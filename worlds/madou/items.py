@@ -3,8 +3,8 @@ from random import Random
 from typing import Protocol, Union, List, Dict
 
 from BaseClasses import ItemClassification, Item
-from worlds.madou import MadouOptions
-from worlds.madou.data.item_data import (MadouItemData, all_items, spell_items, tool_items, special_items, gem_items, souvenir_items, flight_items,
+from . import MadouOptions
+from .data.item_data import (MadouItemData, all_items, spell_items, tool_items, special_items, gem_items, souvenir_items, flight_items,
                                          consumable_items, filler_weights)
 
 logger = logging.getLogger(__name__)
