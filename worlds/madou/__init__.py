@@ -52,7 +52,8 @@ class MadouWeb(WebWorld):
 
 class MadouWorld(World):
     """
-    Oomf.
+    Arle has to graduate from Kindergarten.  The method?  Find the Final Exam Certificate!  Don't remember this story?
+    You only know about the puzzle game?  Uhhh BAYOEN BAYOEN ICE STOOOMU DIACUTO.
     """
 
     game = "Madou Monogatari Hanamaru Daiyouchienji"
