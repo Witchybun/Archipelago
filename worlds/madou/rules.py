@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Dict, List
 
 from BaseClasses import CollectionState
-from .strings.locations import HarpyPath, Spell, ShadyWell, DarkForest, ForestOfLight, LightGarden, MagicTown, SatanVilla, AncientRuins, School, \
-    AncientVillage, DragonAreas, Bestiary, LookoutMountain, SageMountain
+from .strings.locations import HarpyPath, Spell, ShadyWell, DarkForest, ForestOfLight, LightGarden, MagicTown, \
+    SatanVilla, AncientRuins, School, \
+    AncientVillage, DragonAreas, Bestiary, LookoutMountain, SageMountain, Bazaar
 from .strings.region_entrances import MadouEntrance
 from .strings.items import Tool, Custom, Special, Souvenir, EventItem, Gem, SpellItem, FlightUnlocks
 from .options import MadouOptions
@@ -93,6 +94,7 @@ class MadouRules:
         }
 
         self.location_rules = {
+            MagicTown.magic_bracelet: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
             SatanVilla.satan: lambda state: state.has(Special.secret_stone, self.player, 3),
             ForestOfLight.sukiyapodes_2: lambda state: state.has(Special.light_orb, self.player),
             Spell.thunder_dark_forest: lambda state: state.has(Tool.ribbit_boots, self.player),
@@ -101,7 +103,7 @@ class MadouRules:
             DarkForest.dark_flower: lambda state: state.has(Special.dark_orb, self.player),
             LightGarden.purple_orb: lambda state: state.has(Tool.toy_elephant, self.player),
             LightGarden.bouquet: lambda state: state.has(Special.leaf, self.player) and state.has(Special.dark_flower, self.player) and state.has(EventItem.unpetrify,
-                                                                                                                                                  self.player),
+                                                                                                                                      self.player),
             ShadyWell.lofu: lambda state: state.has(Tool.toy_elephant, self.player),
             SageMountain.cyan_orb: lambda state: state.has(Tool.toy_elephant, self.player) and state.has(Tool.ribbit_boots, self.player),
             DarkForest.rele: lambda state: state.has(Tool.toy_elephant, self.player),
@@ -116,13 +118,13 @@ class MadouRules:
             Spell.thunder_library: lambda state: self.has_gems(state) and state.has(Tool.magical_dictionary, self.player),
             Spell.diacute_library: lambda state: self.has_gems(state) and state.has(Tool.magical_dictionary, self.player),
             #  Combat Rules
-            ForestOfLight.orb: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            ForestOfLight.orb: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options) and state.has(Tool.ribbit_boots, self.player),
             ForestOfLight.ribbit_boots: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
             ForestOfLight.sukiyapodes_1: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
             AncientRuins.zoh_daimaoh: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
             HarpyPath.bag: lambda state: state.has(Tool.panotty_flute, self.player) and self.can_fight_generic_at_level(state, 2, self.world.options),
             ShadyWell.arachne: lambda state: state.has(Special.ripe_cucumber, self.player) and self.can_fight_generic_at_level(state, 2, self.world.options),
-            School.magical_dictionary: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
+            School.magical_dictionary: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
             AncientVillage.elder: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             AncientVillage.villager_1: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             AncientVillage.villager_2: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
@@ -130,11 +132,37 @@ class MadouRules:
             AncientVillage.villager_4: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             AncientVillage.villager_5: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             AncientVillage.villager_6: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
-            DragonAreas.firefly_egg: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options),
+            DragonAreas.firefly_egg: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             DragonAreas.stone: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options) and state.has(Special.firefly_egg, self.player, 2),
             MagicTown.suketoudara: lambda state: state.has(Special.secret_stone, self.player, 7) and self.can_fight_generic_at_level(state, 4, self.world.options),
-            Bestiary.owlbear: lambda state: state.has(Special.secret_stone, self.player, 8) and state.has(Special.dark_orb, self.player),
-            Bestiary.flea: lambda state: state.has(Tool.toy_elephant, self.player)
+            Bestiary.flea: lambda state: state.has(Tool.toy_elephant, self.player),
+            DarkForest.ribbon: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
+            # Boss checks require that you can actually defeat them
+            Bestiary.owlbear: lambda state: state.has(Special.secret_stone, self.player, 8) and state.has(
+                Special.dark_orb, self.player) and self.can_fight_generic_at_level(state, 4, self.world.options),
+            Bestiary.sukiyapodes: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Bestiary.mini_zombie: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Bestiary.zoh: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Bestiary.arachne: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
+            Bestiary.headmaster: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
+            Bestiary.harpy: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
+            Bestiary.skeleton_d: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
+            Bestiary.skeleton_t: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
+            Bestiary.nasu_grave: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
+            Bestiary.leviathan: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options),
+            # Shop locations require combat to farm money.
+            Souvenir.dragon_nail: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Souvenir.magic_king_foot: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Souvenir.magic_king_tusk: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Souvenir.magic_king_picture: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Souvenir.magic_king_statue: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Souvenir.waterfall_vase: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Souvenir.wolf_tail: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Souvenir.dark_jug: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Bazaar.bazaar_pass: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            Bazaar.elephant: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
+            # Firefly egg is really expensive, so push it a bit later.
+            Bazaar.firefly_egg: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
         }
 
     def has_all(self, items: List[str], state: CollectionState):
@@ -152,9 +180,11 @@ class MadouRules:
         return self.has_all(Gem.gems, state)
 
     def can_fight_generic_at_level(self, state: CollectionState, level: int, options: MadouOptions):
+        total_combat_spell_items = state.count_from_list(SpellItem.combat_spells, self.player)
+        if total_combat_spell_items == 0:
+            return False
         stun_rule = True
         diacute_count = max(0, level - 1)
-        total_combat_spell_items = state.count_from_list(SpellItem.combat_spells, self.player)
         starting_spells = options.starting_magic.value
         if "Fire" in starting_spells:
             total_combat_spell_items += 1
@@ -165,7 +195,7 @@ class MadouRules:
         average_count = total_combat_spell_items // 3
         if level > 1:
             stun_rule = state.has(SpellItem.bayoen, self.player)
-        return state.has(SpellItem.diacute, self.player, diacute_count) and stun_rule and average_count >= min(4, level)
+        return (state.has(SpellItem.diacute, self.player, diacute_count) and stun_rule and average_count >= min(4, level)) or state.has(EventItem.glitch, self.player)
 
     def has_any_flight_path_other_than(self, exception: str, state: CollectionState):
         flights = [FlightUnlocks.magic_village, FlightUnlocks.ancient_village, FlightUnlocks.wolf_town, FlightUnlocks.ruins_town, FlightUnlocks.sage_mountain]
