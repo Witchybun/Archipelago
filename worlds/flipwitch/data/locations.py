@@ -127,7 +127,7 @@ tengoku_location_start = 180
 tengoku_locations = [
     create_location(LOCATION_CODE_START + tengoku_location_start + 1, Tengoku.early_chest, FlipwitchRegion.tengoku),
     create_location(LOCATION_CODE_START + tengoku_location_start + 2, Tengoku.hidden_foliage, FlipwitchRegion.tengoku),
-    create_location(LOCATION_CODE_START + tengoku_location_start + 3, Tengoku.birby, FlipwitchRegion.tengoku),
+    create_location(LOCATION_CODE_START + tengoku_location_start + 3, Tengoku.birby, FlipwitchRegion.tengoku_upper),
     create_location(LOCATION_CODE_START + tengoku_location_start + 4, Tengoku.flip_magic, FlipwitchRegion.tengoku_upper),
     create_location(LOCATION_CODE_START + tengoku_location_start + 5, Tengoku.secret_alcove, FlipwitchRegion.tengoku_upper),
 ]

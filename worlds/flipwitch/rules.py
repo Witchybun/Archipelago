@@ -52,8 +52,8 @@ class FlipwitchRules:
             FlipwitchEntrance.jigoku_to_club_demon: lambda state: self.can_move_horizontally_enough(state),
             FlipwitchEntrance.early_ghost_to_fungal_forest: lambda state: state.has(Power.ghost_form, self.player),
             FlipwitchEntrance.fungal_forest_to_tengoku: lambda state: self.can_move_horizontally_enough(state) and self.has_upgrade_stage(2, state),
-            FlipwitchEntrance.tengoku_to_tengoku_upper: lambda state: self.can_present_gender(state, self.world.options, "Male") or state.has(Upgrade.angel_feathers,
-                                                                                                                                              self.player),
+            FlipwitchEntrance.tengoku_to_tengoku_upper: lambda state: state.has(Upgrade.bewitched_bubble, self.player)
+                                                                      or state.has(Upgrade.angel_feathers, self.player),
             FlipwitchEntrance.angelic_to_angelic_mid: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
             FlipwitchEntrance.angelic_mid_to_angelic_upper: lambda state: state.has(Upgrade.angel_feathers, self.player),
             FlipwitchEntrance.fungal_to_deep_fungal: lambda state: state.has(Upgrade.angel_feathers, self.player) and self.has_upgrade_stage(
@@ -172,7 +172,7 @@ class FlipwitchRules:
             ClubDemon.demon_boss_mp: lambda state: state.has(Key.demon_boss, self.player) and state.has(Upgrade.bewitched_bubble, self.player),
 
             Tengoku.hidden_flip: lambda state: self.can_present_gender(state, self.world.options, "Female"),
-            Tengoku.birby: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
+            Tengoku.birby: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or state.has(Upgrade.demon_wings, self.player),
             Tengoku.flip_magic: lambda state: self.can_present_gender(state, self.world.options, "Female"),
 
             AngelicHallway.hidden_foliage_2: lambda state: state.has(Upgrade.angel_feathers, self.player),
