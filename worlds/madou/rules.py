@@ -132,7 +132,7 @@ class MadouRules:
             AncientVillage.villager_4: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             AncientVillage.villager_5: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             AncientVillage.villager_6: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
-            DragonAreas.firefly_egg: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
+            DragonAreas.firefly_egg: lambda state: state.has(Special.bouquet, self.player) and self.can_fight_generic_at_level(state, 3, self.world.options),
             DragonAreas.stone: lambda state: self.can_fight_generic_at_level(state, 4, self.world.options) and state.has(Special.firefly_egg, self.player, 2),
             MagicTown.suketoudara: lambda state: state.has(Special.secret_stone, self.player, 7) and self.can_fight_generic_at_level(state, 4, self.world.options),
             Bestiary.flea: lambda state: state.has(Tool.toy_elephant, self.player),
