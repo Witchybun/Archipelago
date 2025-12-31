@@ -11,7 +11,7 @@ from .data.item_data import (all_items, LunacidItemData, base_unique_items, star
                              all_item_data_by_name, quench_starting_weapons)
 from .data.weapon_info import all_weapons, ranged_weapons, all_weapon_info_by_name
 from .data.spell_info import all_spells, ranged_spells, all_spell_info_by_name
-from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap, CustomItem, Upgrade, SpookyItem
+from .strings.items import UniqueItem, Coins, Door, Voucher, Switch, Trap, CustomItem, Upgrade, SpookyItem, Progressives
 from .strings.properties import Elements, Types
 from .strings.spells import Spell, MobSpell, CrimpusSpell, SpookySpell
 from .strings.weapons import SpookyWeapon
@@ -65,7 +65,7 @@ def determine_weapon_elements(options: LunacidOptions, random: Random) -> Dict[s
 def create_items(item_factory: LunacidItemFactory, locations_count: int, items_to_exclude: List[Item],
                  weapon_elements: Dict[str, str], month: int, level: int, ut_starting_weapon: str, options: LunacidOptions,
                  random: Random) -> (List[Item], List[Item], Item):
-    items = []
+    items: List[Item] = []
     lunacid_items = create_lunacid_items(item_factory, weapon_elements, month, level, options)
     for item in items_to_exclude:
         if item in lunacid_items:
@@ -211,6 +211,12 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
         items.append(item_factory(item, ItemClassification.progression))
     for item in base_special_item_counts:
         items.extend(item_factory(special_item) for special_item in [item] * base_special_item_counts[item])
+    if options.progressive_symbols:
+        items.extend(item_factory(symbol) for symbol in [Progressives.vampiric_symbol]*3)
+    else:
+        items.append(item_factory(UniqueItem.vampiric_symbol_w))
+        items.append(item_factory(UniqueItem.vampiric_symbol_a))
+        items.append(item_factory(UniqueItem.vampiric_symbol_e))
     if options.shopsanity:
         for item in shop_unique_items:
             if item == UniqueItem.oil_lantern and options.starting_area == options.starting_area.option_tomb:
@@ -326,7 +332,7 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
             items.append(item_factory(trap))
 
     local_filler_count = int(filler_count * (options.filler_local_percent / 100))
-    local_filler = []
+    local_filler: List[Item] = []
     filler_table = random.choices(population=list(filler_weights.keys()), weights=list(filler_weights.values()), k=filler_count)
     for filler in filler_table:
         if local_filler_count > 0:

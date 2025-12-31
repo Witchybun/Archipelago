@@ -137,13 +137,14 @@ class LunacidWorld(World):
     def generate_early(self) -> None:
         self.package_custom_class()
         self.level = self.determine_starting_level()
-        self.verify_item_colors()
         self.enemy_random_data, enemy_regions = self.randomize_enemies()
         slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get("Lunacid")
         if slot_data:
             self.enemy_regions = slot_data.get("enemy_regions")
         else:
             self.enemy_regions = enemy_regions
+        if self.options.challenges == self.options.challenges.option_exp:
+            self.options.levelsanity.value = self.options.levelsanity.option_false
         Tracker.setup_options_from_slot_data(self)
 
     def create_item(self, name: str, override_classification: ItemClassification = None) -> "LunacidItem":
@@ -163,6 +164,9 @@ class LunacidWorld(World):
         return self.random.choice(all_filler_items)
 
     def set_rules(self):
+        if self.options.challenges == self.options.challenges.option_logic:
+            logger.info(f"WARNING: Player {self.player} has chosen NO LOGIC for Lunacid.  If not intended reroll and smack them.")
+            return
         LunacidRules(self).set_lunacid_rules(self.weapon_elements, self.enemy_regions)
 
     def create_items(self):
@@ -360,23 +364,6 @@ class LunacidWorld(World):
             return self.custom_class_stats["Level"]
         return -1
 
-    def verify_item_colors(self) -> None:
-        self.fix_colors("ProgUseful", DefaultColors.progression)
-        self.fix_colors("Progression", DefaultColors.progression)
-        self.fix_colors("Useful", DefaultColors.useful)
-        self.fix_colors("Trap", DefaultColors.trap)
-        self.fix_colors("Filler", DefaultColors.filler)
-        self.fix_colors("Gift", DefaultColors.gift)
-        self.fix_colors("Cheat", DefaultColors.cheat)
-
-    def fix_colors(self, name: str, default_color: str) -> None:
-        if name not in self.options.item_colors:
-            self.options.item_colors.value[name] = default_color
-        elif not self.is_hex(self.options.item_colors.value[name]):
-            self.options.item_colors.value[name] = default_color
-        elif "#" not in self.options.item_colors.value[name]:
-            self.options.item_colors.value[name] = "#" + self.options.item_colors.value[name]
-
     @staticmethod
     def total_points_given_starting_level(starting_level: int):
         if starting_level <= 5:
@@ -385,18 +372,6 @@ class LunacidWorld(World):
             return 300 - 4 * starting_level
         else:
             return 200 - 2 * starting_level
-
-    @staticmethod
-    def is_hex(possible_hex: str) -> bool:
-        pure_hex = possible_hex.replace("#", "")
-        # We sin in this bitch
-        try:
-            if len(pure_hex) != 6:
-                return False
-            int(pure_hex, 16)
-            return True
-        except ValueError:
-            return False
 
     def randomize_enemies(self) -> Tuple[Dict[str, List[str]], Dict[str, List[str]]]:
         chosen_enemies = []
@@ -538,12 +513,13 @@ class LunacidWorld(World):
             "enemy_placement": self.enemy_random_data,
             "item_spots": item_spots,
             "enemy_regions": self.enemy_regions,
-            **self.options.as_dict("ending", "entrance_randomization", "experience", "weapon_experience",
+            "force_no_exp": self.options.challenges == self.options.challenges.option_exp,
+            **self.options.as_dict("ending", "entrance_randomization",
                                    "required_strange_coin", "enemy_randomization", "shopsanity", "dropsanity",
                                    "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
-                                   "secret_door_lock", "death_link", "starting_class", "normalized_drops",
-                                   "item_colors", "custom_music", "starting_area", "levelsanity", "bookworm",
-                                   "grasssanity", "breakables", "total_strange_coin"),
+                                   "secret_door_lock", "death_link", "starting_class",
+                                   "starting_area", "levelsanity", "bookworm",
+                                   "grasssanity", "breakables", "total_strange_coin", "random_equip_stats"),
             "entrances": self.randomized_entrances
         }
 
