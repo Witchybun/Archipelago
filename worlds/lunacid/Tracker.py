@@ -483,6 +483,7 @@ def map_page_index(data: Any) -> int:
 
 
 TRACKER_WORLD = {
+    "map_page_folder": "tracker",
     "map_page_maps": ["maps/maps.json"],
     "map_page_locations": ["locations/locations.json", "locations/Accursed Tomb.json", "locations/A Holy Battlefield.json", "locations/Boiling Grotto.json",
                            "locations/Castle Le Fanu.json", "locations/Chamber of Fate.json", "locations/Forbidden Archives.json", "locations/Forest Canopy.json",
@@ -493,6 +494,6 @@ TRACKER_WORLD = {
                            "locations/misc/Etna's Pupil.json", ],
     "map_page_setting_key": "Slot:{player}:currentScene",
     "map_page_index": map_page_index,
-    "external_pack_key": "ut_poptracker_path",
+    #"external_pack_key": "ut_poptracker_path",
     "poptracker_name_mapping": poptracker_data
 }

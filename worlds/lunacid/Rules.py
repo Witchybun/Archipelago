@@ -266,6 +266,7 @@ class LunacidRules:
             BaseLocation.chasm_invisible_cliffside: lambda state: state.has_any([Spell.coffin, Spell.icarian_flight], self.player),
             BaseLocation.catacombs_restore_vampire: lambda state: self.has_blood_spell_access(state),
             BaseLocation.mausoleum_upper_table: lambda state: self.can_jump_given_height(JumpHeight.medium, state, self.world.options),
+            BaseLocation.mausoleum_hidden_chest: lambda state: self.has_crystal_orb(state, self.world.options),
             BaseLocation.mausoleum_kill_death: lambda state: state.has_all({Alchemy.fractured_life, Alchemy.fractured_death, Alchemy.broken_sword},
                                                                            self.player),
             BaseLocation.corrupted_room: lambda state: state.has(UniqueItem.corrupted_key, self.player),
