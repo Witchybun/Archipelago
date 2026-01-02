@@ -43,14 +43,14 @@ class LunacidItem(Item):
     game: str = "Lunacid"
 
 
-class LunacidSettings(Group):
+#class LunacidSettings(Group):
 
-    class UTPoptrackerPath(FilePath):
-        """Path to the user's Lunacid's Poptracker Pack."""
-        description = "Lunacid's Poptracker Pack zip file"
-        required = False
+    #class UTPoptrackerPath(FilePath):
+    #    """Path to the user's Lunacid's Poptracker Pack."""
+    #    description = "Lunacid's Poptracker Pack zip file"
+    #    required = False
 
-    ut_poptracker_path: UTPoptrackerPath | str = UTPoptrackerPath()
+    #ut_poptracker_path: UTPoptrackerPath | str = UTPoptrackerPath()
 
 
 class LunacidWeb(WebWorld):
@@ -116,6 +116,7 @@ class LunacidWorld(World):
     local_alchemy: List[Item] = []
     local_filler: List[Item] = []
     locations_for_filler: List[Location] = []
+    #settings: ClassVar[LunacidSettings]
     weapon_elements: Dict[str, str] = {}
     world_entrances = dict[str, Entrance]
     randomized_entrances: Dict[str, str] = {}
