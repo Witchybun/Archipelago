@@ -110,6 +110,7 @@ core_items = [
     create_item(ITEM_CODE_START + base_start_id + 75, UniqueItem.vampiric_symbol_w, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 76, UniqueItem.vampiric_symbol_a, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 77, UniqueItem.vampiric_symbol_e, ItemClassification.progression),
+    create_item(ITEM_CODE_START + base_start_id + 78, GenericItem.demi_gift, ItemClassification.filler),
     ]
 
 trap_start_id = 100
@@ -125,6 +126,7 @@ trap_items = [
     create_item(ITEM_CODE_START + trap_start_id + 8, Trap.bleed_trap, ItemClassification.trap),
     create_item(ITEM_CODE_START + trap_start_id + 9, Trap.rat, ItemClassification.trap),
     create_item(ITEM_CODE_START + trap_start_id + 10, Trap.timeout, ItemClassification.trap),
+    create_item(ITEM_CODE_START + trap_start_id + 11, GenericItem.patchouli_gift, ItemClassification.trap),
 ]
 
 all_traps = {trap.name: trap for trap in trap_items}
@@ -436,6 +438,7 @@ default_filler_weights = {
     Creation.bomb: 1,
     RareDrops.angel_feather: 1,
     GenericItem.nothing: 0,
+    GenericItem.demi_gift: 0,
 }
 
 default_trap_weights = {
@@ -451,5 +454,5 @@ default_trap_weights = {
     Trap.timeout: 1,
     Trap.eggnog: 1,
     Trap.coal: 1,
-
+    GenericItem.patchouli_gift: 0,
 }

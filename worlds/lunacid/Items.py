@@ -233,9 +233,9 @@ def create_special_items(item_factory: LunacidItemFactory, options: LunacidOptio
     return items
 
 
-def create_strange_coins(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]) -> None:
+def create_strange_coins(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]) -> List[Item]:
     if options.ending != options.ending.option_ending_b and options.ending != options.ending.option_any_ending:
-        return
+        return items
     total_coins = max(options.required_strange_coin.value, options.total_strange_coin.value)
     required_coins = options.required_strange_coin.value
     count = 0
@@ -246,7 +246,7 @@ def create_strange_coins(item_factory: LunacidItemFactory, options: LunacidOptio
     while count < total_coins - required_coins:
         items.append(item_factory(Coins.strange_coin, ItemClassification.progression))
         count += 1
-
+    return items
 
 def create_switch_items(item_factory: LunacidItemFactory, options: LunacidOptions, items: List[Item]) -> List[Item]:
     if not options.switch_locks:
@@ -294,6 +294,7 @@ def create_crimpus_items(item_factory: LunacidItemFactory, month: int, equipment
         items.append(item_factory(CrimpusSpell.jingle_bells, ItemClassification.progression))
     else:
         items.append(item_factory(CrimpusSpell.jingle_bells))
+    return items
 
 
 def create_stat_items(item_factory: LunacidItemFactory, level: int, options: LunacidOptions, items: List[Item]):
@@ -336,10 +337,10 @@ def create_filler(item_factory: LunacidItemFactory, options: LunacidOptions, ran
     filler_table = random.choices(population=list(filler_weights.keys()), weights=list(filler_weights.values()), k=filler_count)
     for filler in filler_table:
         if local_filler_count > 0:
-            local_filler.append(item_factory(filler))
+            local_filler.append(item_factory(filler, ItemClassification.filler))
             local_filler_count -= 1
             continue
-        items.append(item_factory(filler))
+        items.append(item_factory(filler, ItemClassification.filler))  # Someone said this bleeds progression somehow??
     return items, local_filler
 
 

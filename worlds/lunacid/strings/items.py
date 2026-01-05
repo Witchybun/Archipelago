@@ -4,6 +4,8 @@ class GenericItem:
     cloth_bandage = "Cloth Bandage"
     dark_urn = "Dark Urn"
     nothing = "The Weight of the Dream (Nothing)"
+    demi_gift = "Demi's Gift for a Stranger"
+    patchouli_gift = "Patchouli's Gift for a Stranger"
 
 
 class Alchemy:

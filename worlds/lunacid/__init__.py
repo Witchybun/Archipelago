@@ -61,7 +61,7 @@ class LunacidWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Albrekka", "Tesseract (Advice/Direction)", "Scipio (UT Help)", "Miracee (Tracker)"]
+        ["Albrekka", "Tesseract (Advice/Direction)", "Scipio (UT Help)", "Miracee/Scipio (Tracker)"]
     )]
 
 
@@ -478,35 +478,47 @@ class LunacidWorld(World):
             self.multiworld.spoiler.set_entrance(original_entrance, replaced_entrance, "entrance", self.player)
 
     def important_item_locations(self):
-        item_spots = {}
-        location_info = [self.multiworld.player_name[data.player] + "'s " + data.name
-                         for data in self.multiworld.find_item_locations(Progressives.vampiric_symbol, self.player)]
-        item_spots[Progressives.vampiric_symbol] = location_info
-        location_info = [self.multiworld.player_name[data.player] + "'s " + data.name
+        item_spots: Dict[str, List[List[str]]] = {}
+        if self.options.progressive_symbols:
+            location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address]
+                            for data in self.multiworld.find_item_locations(Progressives.vampiric_symbol, self.player)]
+            item_spots[Progressives.vampiric_symbol] = location_info
+        else:
+            location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address] for data in self.multiworld.find_item_locations(
+                UniqueItem.vampiric_symbol_w, self.player)]
+            item_spots[UniqueItem.vampiric_symbol_w] = location_info
+            location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address] for data in self.multiworld.find_item_locations(
+                UniqueItem.vampiric_symbol_a, self.player)]
+            item_spots[UniqueItem.vampiric_symbol_a] = location_info
+            location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address] for data in self.multiworld.find_item_locations(
+                UniqueItem.vampiric_symbol_e, self.player)]
+            item_spots[UniqueItem.vampiric_symbol_e] = location_info
+
+        location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address]
                          for data in self.multiworld.find_item_locations(Weapon.lucid_blade, self.player)]
         item_spots[Weapon.lucid_blade] = location_info
         for item in UniqueItem.completion_important:
-            location_info = [self.multiworld.player_name[data.player] + "'s " + data.name
+            location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address]
                              for data in self.multiworld.find_item_locations(item, self.player)]
             item_spots[item] = location_info
         if self.options.door_locks == self.options.door_locks.option_true:
             for key in Door.all_door_keys:
-                location_info = [self.multiworld.player_name[data.player] + "'s " + data.name
+                location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address]
                                  for data in self.multiworld.find_item_locations(key, self.player)]
                 item_spots[key] = location_info
         if self.options.switch_locks == self.options.switch_locks.option_true:
             for key in Switch.switches:
-                location_info = [self.multiworld.player_name[data.player] + "'s " + data.name
+                location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address]
                                  for data in self.multiworld.find_item_locations(key, self.player)]
                 item_spots[key] = location_info
         if self.options.ending == self.options.ending.option_ending_e:
             for spell in Spell.base_spells:
-                location_info = [self.multiworld.player_name[data.player] + "'s " + data.name
+                location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address]
                                  for data in self.multiworld.find_item_locations(spell, self.player)]
                 item_spots[spell] = location_info
             if self.options.dropsanity != self.options.dropsanity.option_off:
                 for spell in MobSpell.drop_spells:
-                    location_info = [self.multiworld.player_name[data.player] + "'s " + data.name
+                    location_info = [[self.multiworld.player_name[data.player] + "'s " + data.name, data.player, data.address]
                                      for data in self.multiworld.find_item_locations(spell, self.player)]
                     item_spots[spell] = location_info
         return item_spots
@@ -532,7 +544,7 @@ class LunacidWorld(World):
                                    "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
                                    "secret_door_lock", "death_link", "starting_class",
                                    "starting_area", "levelsanity", "bookworm",
-                                   "grasssanity", "breakables", "total_strange_coin", "random_equip_stats"),
+                                   "grasssanity", "breakables", "total_strange_coin", "random_equip_stats", "silver_link"),
             "entrances": self.randomized_entrances
         }
 
