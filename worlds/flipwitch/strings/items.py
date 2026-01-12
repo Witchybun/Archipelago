@@ -69,6 +69,8 @@ class Upgrade:
     demon_wings = "Demon Wings"
     angel_feathers = "Angel Feathers"
     mermaid_scale = "Mermaid Scale"
+    rose_ribbon = "Rose Ribbon"  # Use Rose Cutters
+    orb_of_avoidance = "Orb of Avoidance"  # Use Arcane Cannon
 
 
 class Coin:
@@ -100,6 +102,24 @@ class Warp:
     slimy_depths = "Slimy Depths Teleport"
     umi_umi = "Umi Umi Teleport"
     chaos_castle = "Chaos Castle Teleport"
+
+    area_to_warp = {
+        0: sensei,
+        1: witchy,
+        2: goblin,
+        3: spirit,
+        4: shady,
+        5: ghost_entrance,
+        6: ghost_castle,
+        7: jigoku,
+        8: club_demon,
+        9: tengoku,
+        10: angelic_hallway,
+        11: fungal_forest,
+        12: slime_citadel,
+        13: slimy_depths,
+        14: umi_umi,
+    }
 
 
 class GachaItem:
