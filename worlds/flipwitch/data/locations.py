@@ -4,7 +4,7 @@ from typing import Optional, List
 from ..strings.items import QuestItem, Upgrade, Accessory, Power, Costume, Coin, GachaItem, Key, Trap
 from ..strings.locations import WitchyWoods, SpiritTown, Quest, ShadySewers, GhostCastle, Gacha, FungalForest, SlimeCitadel, AngelicHallway, Tengoku, ClubDemon, Jigoku, \
     UmiUmi, ChaosCastle
-from ..strings.regions_entrances import FlipwitchRegion
+from ..strings.regions_entrances import WitchyWoodsRegion, SpiritCityRegion, GhostCastleRegion, JigokuRegion, FungalForestRegion
 
 
 @dataclass(frozen=True)
@@ -32,13 +32,13 @@ def create_location(location_id: Optional[int], name: str, region: str, forced_o
 LOCATION_CODE_START = 0
 witchy_woods_location_start = 0
 witchy_woods_locations = [
-    create_location(LOCATION_CODE_START + witchy_woods_location_start + 1, WitchyWoods.navy_costume, FlipwitchRegion.witch_woods),
-    create_location(LOCATION_CODE_START + witchy_woods_location_start + 2, WitchyWoods.red_costume, FlipwitchRegion.witch_woods),
-    create_location(LOCATION_CODE_START + witchy_woods_location_start + 3, WitchyWoods.peachy_peach, FlipwitchRegion.witch_woods),
-    create_location(LOCATION_CODE_START + witchy_woods_location_start + 4, WitchyWoods.hidden_chest_save, FlipwitchRegion.witch_woods),
-    create_location(LOCATION_CODE_START + witchy_woods_location_start + 5, WitchyWoods.waterfall_chest_1, FlipwitchRegion.witch_woods),
-    create_location(LOCATION_CODE_START + witchy_woods_location_start + 6, WitchyWoods.hidden_coin_early_chest, FlipwitchRegion.witch_woods),
-    create_location(LOCATION_CODE_START + witchy_woods_location_start + 7, WitchyWoods.hidden_chest_mimic, FlipwitchRegion.witch_woods),
+    create_location(LOCATION_CODE_START + witchy_woods_location_start + 1, WitchyWoods.navy_costume, WitchyWoodsRegion.beatrice_hut_interior),
+    create_location(LOCATION_CODE_START + witchy_woods_location_start + 2, WitchyWoods.red_costume, WitchyWoodsRegion.beatrice_hut_interior),
+    create_location(LOCATION_CODE_START + witchy_woods_location_start + 3, WitchyWoods.peachy_peach, WitchyWoodsRegion.peachy_peach_bridge),
+    create_location(LOCATION_CODE_START + witchy_woods_location_start + 4, WitchyWoods.hidden_chest_save, WitchyWoodsRegion.drop_down),
+    create_location(LOCATION_CODE_START + witchy_woods_location_start + 5, WitchyWoods.waterfall_chest_1, WitchyWoodsRegion.waterfall_secret),
+    create_location(LOCATION_CODE_START + witchy_woods_location_start + 6, WitchyWoods.hidden_coin_early_chest, WitchyWoodsRegion.waterfall_secret),
+    create_location(LOCATION_CODE_START + witchy_woods_location_start + 7, WitchyWoods.hidden_chest_mimic, WitchyWoodsRegion.mimic_room),
     create_location(LOCATION_CODE_START + witchy_woods_location_start + 8, WitchyWoods.rundown_chest, FlipwitchRegion.witch_woods),
     create_location(LOCATION_CODE_START + witchy_woods_location_start + 9, WitchyWoods.past_man_cave, FlipwitchRegion.witch_woods_lower),
     create_location(LOCATION_CODE_START + witchy_woods_location_start + 10, WitchyWoods.bomb, FlipwitchRegion.witch_woods_lower),

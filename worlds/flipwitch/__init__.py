@@ -119,7 +119,7 @@ class FlipwitchWorld(World):
             flipwitch_region.exits = [Entrance(player, exit_name, flipwitch_region) for exit_name in exits]
             return flipwitch_region
 
-        world_regions = create_regions(create_region)
+        world_regions = create_regions(self.player, create_region)
         final_locations = all_locations
         self.filter_locations_based_on_settings(final_locations, world_regions)
 

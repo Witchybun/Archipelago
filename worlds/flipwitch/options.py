@@ -17,6 +17,40 @@ class StartingGender(Choice):
     default = 0
 
 
+class StartingArea(Choice):
+    """Which Crystal Warp platform the player starts at.
+    Chaos Castle is omitted due to triviality of the seed."""
+    internal_name = "starting_area"
+    display_name = "Starting Area"
+    option_beatrice_house = 0
+    option_goblin_cave = 1
+    option_outside_spirit_city = 2
+    option_spirit_city = 3
+    option_slums = 4
+    option_outside_ghost_castle = 5
+    option_ghost_castle = 6
+    option_jigoku = 7
+    option_club_demon = 8
+    option_tengoku = 9
+    option_angelic_hallway = 10
+    option_fungal_forest = 11
+    option_slime_citadel = 12
+    option_umi_umi = 13
+    default = 0
+
+
+class ShuffleDoubleJump(Toggle):
+    """Shuffle the ability to double jump.
+    In some starting areas, you will get stuck very early without it."""
+    internal_name = "shuffle_double_jump"
+    display_name = "Shuffle Double Jump"
+
+
+class ShuffleDodge(Toggle):
+    """Shuffle the ability to dodge.
+    Some logic requires a dodge-jump, so it is possible to be stuck early without it."""
+
+
 class ShuffleChaosPieces(Toggle):
     """Shuffles the six Chaos Pieces in your game.
     Off: All pieces are placed in their original locations.
@@ -25,6 +59,12 @@ class ShuffleChaosPieces(Toggle):
     """
     internal_name = "shuffle_chaos_pieces"
     display_name = "Shuffle Chaos Pieces"
+
+
+class PotteryLottery(Toggle):
+    """Breaking the breakables around the world sends out items."""
+    internal_name = "pottery_lottery"
+    display_name = "Pottery Lottery"
 
 
 class Shopsanity(Toggle):
@@ -81,14 +121,14 @@ class QuestForSex(Choice):
 
 class CrystalTeleports(Toggle):
     """Shuffles the crystal teleports other than the starting warp.  Item is obtained by interacting with a teleport panel.
-    Chaos Castle cannot be warped to unless you have six chaos key pieces.
-    Not Implemented Currently"""
+    Chaos Castle teleport is omitted due to triviality."""
     internal_name = "crystal_teleports"
     display_name = "Crystal Teleports"
 
 
 class JunkHint(Range):
-    """Percent chance an in-game hint is a junk hint."""
+    """Percent chance an in-game hint is a junk hint.
+    Helps to keep in-game hints from being too useful."""
     internal_name = "junk_hint"
     display_name = "Junk Hint Percent"
     range_start = 0
@@ -97,13 +137,23 @@ class JunkHint(Range):
 
 
 class FuckLink(Toggle):
-    """When you get fucked, everyone gets fucked (or dies, I suppose). Of course the reverse is true too."""
-    display_name = "FuckLink"
+    """When you get fucked, everyone gets fucked (or dies, I suppose). Of course the reverse is true too.
+    This is just Death Link btw."""
+    display_name = "Fuck Link"
+
+
+class CoinLink(Toggle):
+    """Coins you pick up are tied to those who have RingLink."""
+    internal_name = "coin_link"
+    display_name = "Coin Link"
 
 
 @dataclass
 class FlipwitchOptions(PerGameCommonOptions):
     starting_gender: StartingGender
+    starting_area: StartingArea
+    shuffle_double_jump: ShuffleDoubleJump
+    shuffle_dodge: ShuffleDodge
     shuffle_chaos_pieces: ShuffleChaosPieces
     shopsanity: Shopsanity
     shop_prices: ShopPrices
