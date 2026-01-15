@@ -11,13 +11,13 @@ from .data.items import FlipwitchItemData
 from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi, witchy_woods_locations, spirit_town_locations, \
     shady_sewer_locations, ghostly_castle_locations, jigoku_locations, tengoku_locations, fungal_forest_locations, slime_citadel_locations, umi_umi_locations, \
     chaos_castle_locations
-from .strings.regions_entrances import FlipwitchRegion
+from .strings.regions_entrances import ChaosCastleRegion
 from .strings.items import Goal, Power, Upgrade, Key
 from .strings.locations import Gacha
 from .strings.fake_hints import possible_fakes
 from .items import item_table, complete_items_by_name, create_items
 from .locations import construct_forced_local_items, force_location_table, location_table, get_forced_location_count
-from .regions import link_flipwitch_areas, create_regions
+from .regions import create_regions
 from .rules import FlipwitchRules
 from worlds.generic.Rules import set_rule
 
@@ -119,18 +119,16 @@ class FlipwitchWorld(World):
             flipwitch_region.exits = [Entrance(player, exit_name, flipwitch_region) for exit_name in exits]
             return flipwitch_region
 
-        world_regions = create_regions(self.player, create_region)
+        show_spoiler = self.options.quest_for_sex != self.options.quest_for_sex.option_off
+        create_sex_events = self.options.quest_for_sex != self.options.quest_for_sex.option_all
+        world_regions = create_regions(self.player, create_region, create_sex_events, show_spoiler)
         final_locations = all_locations
         self.filter_locations_based_on_settings(final_locations, world_regions)
 
         self.multiworld.regions.extend(world_regions.values())
 
-        ending_region = world.get_region(FlipwitchRegion.chaos_castle, player)
-        victory = Location(player, "Defeat the Chaos Queen", None, ending_region)
-        victory.place_locked_item(self.create_event("Victory"))
-        ending_region.locations.append(victory)
-        set_rule(victory, lambda state: state.has(Goal.chaos_piece, self.player, 6) and state.has(Power.slime_form, self.player) and
-                                        state.has(Upgrade.angel_feathers, self.player) and state.has(Key.chaos_sanctum, self.player))
+        ending_region = world.get_region(ChaosCastleRegion.cc_chaos_witch, player)
+        ending_region.add_event("Defeat the Chaos Queen", "Victory", show_in_spoiler=True)
 
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
 

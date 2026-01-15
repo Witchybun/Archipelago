@@ -6,8 +6,9 @@ from . import FlipwitchOptions
 from .data.items import item_name_to_item
 from .data.locations import all_locations, gacha_locations, FlipwitchLocation, coin_locations, shop_locations, quest_locations, sex_experience_locations, \
     stat_locations
-from .strings.items import Goal, Coin, Upgrade
-from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi
+from .strings.items import Goal, Coin, Upgrade, SexEventsItem, QuestEventItem
+from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi, SexEventsLocation, QuestEventLocation
+from .strings.regions_entrances import WitchyWoodsRegion, SpiritCityRegion
 
 location_table = all_locations
 locations_by_name: Dict[str, FlipwitchLocation] = {location.name: location for location in location_table}
