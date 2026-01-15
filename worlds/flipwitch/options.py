@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
-from Options import Toggle, Choice, Range, PerGameCommonOptions
+from Options import Toggle, Choice, Range, PerGameCommonOptions, OptionSet
 
 
 class FlipwitchOption(Protocol):
