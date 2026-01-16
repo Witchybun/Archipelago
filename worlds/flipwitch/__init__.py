@@ -1,25 +1,26 @@
 from random import Random
-from typing import Dict, Any, Iterable, List
+from typing import Dict, Any, List
 import logging
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, CollectionState
+from Utils import visualize_regions
 from worlds.AutoWorld import World, WebWorld
 from . import options
-from .data.locations import all_locations, FlipwitchLocation, stat_locations, shop_locations, quest_locations, sex_experience_locations, gacha_locations, coin_locations, \
-    chaos_piece_location_names
+from .data.locations import all_locations, FlipwitchLocation, stat_locations, shop_locations, quest_locations, sex_experience_locations, \
+    gacha_locations, coin_locations, \
+    chaos_piece_location_names, pot_locations, warp_locations, event_sex_locations, event_quest_locations
 from .options import FlipwitchOptions
 from .data.items import FlipwitchItemData
 from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi, witchy_woods_locations, spirit_town_locations, \
     shady_sewer_locations, ghostly_castle_locations, jigoku_locations, tengoku_locations, fungal_forest_locations, slime_citadel_locations, umi_umi_locations, \
     chaos_castle_locations
-from .strings.regions_entrances import ChaosCastleRegion
-from .strings.items import Goal, Power, Upgrade, Key
+from .strings.regions_entrances import ChaosCastleRegion, FungalForestRegion
+from .strings.items import GoalItem, Power, Upgrade, Key
 from .strings.locations import Gacha
 from .strings.fake_hints import possible_fakes
 from .items import item_table, complete_items_by_name, create_items
-from .locations import construct_forced_local_items, force_location_table, location_table, get_forced_location_count
-from .regions import create_regions
+from .locations import location_table, create_locations
+from .regions import create_regions, ConnectionData, randomized_entrance_names
 from .rules import FlipwitchRules
-from worlds.generic.Rules import set_rule
 
 logger = logging.getLogger()
 
@@ -73,6 +74,7 @@ class FlipwitchWorld(World):
     options: FlipwitchOptions
     web = FlipwitchWeb()
     logger = logging.getLogger()
+    world_entrances = {}
     animal_order = []
     bunny_order = []
     monster_order = []
@@ -104,8 +106,8 @@ class FlipwitchWorld(World):
         FlipwitchRules(self).set_flipwitch_rules(self.animal_order, self.bunny_order, self.monster_order, self.angel_order)
 
     def create_items(self):
-        self.item_lookup = force_location_table(self.multiworld, self.player)
-        locations_count = len(location_table) - get_forced_location_count(self.item_lookup, self.options)
+        locations_count = len([location
+                               for location in self.get_locations() if location.item is None])
         excluded_items = self.multiworld.precollected_items[self.player]
         potential_pool, self.hint_lookup = create_items(self.create_item, locations_count, excluded_items, self.options, self.random)
         self.multiworld.itempool += potential_pool
@@ -114,16 +116,23 @@ class FlipwitchWorld(World):
         world = self.multiworld
         player = self.player
 
-        def create_region(region_name: str, exits: Iterable[str]) -> Region:
+        def create_region(region_name: str, exits: List[ConnectionData]) -> Region:
             flipwitch_region = Region(region_name, player, world)
-            flipwitch_region.exits = [Entrance(player, exit_name, flipwitch_region) for exit_name in exits]
+            true_exits = [connector.name for connector in exits]
+            flipwitch_region.exits = [Entrance(player, true_exit, flipwitch_region) for true_exit in true_exits]
             return flipwitch_region
 
-        show_spoiler = self.options.quest_for_sex != self.options.quest_for_sex.option_off
-        create_sex_events = self.options.quest_for_sex != self.options.quest_for_sex.option_all
-        world_regions = create_regions(self.player, create_region, create_sex_events, show_spoiler)
-        final_locations = all_locations
-        self.filter_locations_based_on_settings(final_locations, world_regions)
+        world_regions, world_entrances, = create_regions(create_region, world)
+        self.world_entrances = world_entrances
+        real_locations, event_locations = create_locations(self.random, self.options)
+
+        for location in real_locations:
+            name = location.name
+            location_id = location.location_id
+            region: Region = world_regions[location.region]
+            region.add_locations({name: location_id})
+
+        self.place_event_items_in_event_locations(event_locations, world_regions)
 
         self.multiworld.regions.extend(world_regions.values())
 
@@ -132,37 +141,28 @@ class FlipwitchWorld(World):
 
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
 
-    def filter_locations_based_on_settings(self, final_locations: List[FlipwitchLocation], world_regions: Dict[str, Region]):
-        for location in final_locations:
-            name = location.name
-            location_id = location.location_id
-            # Make some locations events if they are static.
-            if location.name in chaos_piece_location_names:
-                if self.options.shuffle_chaos_pieces == self.options.shuffle_chaos_pieces.option_false:
-                    location_id = None
-            if location in stat_locations:
-                if self.options.stat_shuffle == self.options.stat_shuffle.option_false:
-                    location_id = None
-            elif location in shop_locations:
-                if self.options.shopsanity == self.options.shopsanity.option_false:
-                    location_id = None
-            elif location in quest_locations:
-                if self.options.quest_for_sex == self.options.quest_for_sex.option_off or self.options.quest_for_sex == self.options.quest_for_sex.option_sensei:
-                    location_id = None
-            elif location in sex_experience_locations:
-                if self.options.quest_for_sex == self.options.quest_for_sex.option_off:
-                    location_id = None
-            elif location in gacha_locations:
-                if self.options.gachapon_shuffle != self.options.gachapon_shuffle.option_all:
-                    location_id = None
-            elif location in coin_locations:
-                if self.options.gachapon_shuffle == self.options.gachapon_shuffle.option_off:
-                    location_id = None
-            region: Region = world_regions[location.region]
-            region.add_locations({name: location_id})
+    def place_event_items_in_event_locations(self, event_locations_from_settings: Dict[str, List[FlipwitchLocation]], region_lookup: Dict[str, Region]):
+        show_spoiler = self.options.quest_for_sex != self.options.quest_for_sex.option_off
+        for region in event_locations_from_settings:
+            for location in event_locations_from_settings[region]:
+                region_lookup[region].add_event(location.name, location.forced_off_item)
 
-    def pre_fill(self) -> None:
-        construct_forced_local_items(self.item_lookup, self.player, self.item_name_to_id, self.options, self.random)
+        if self.options.quest_for_sex != self.options.quest_for_sex.option_all:
+            for region in event_sex_locations:
+                for location in event_sex_locations[region]:
+                    region_lookup[region].add_event(location.name, location.forced_off_item)
+        for region in event_quest_locations:
+            for location in event_quest_locations[region]:
+                region_lookup[region].add_event(location.name, location.forced_off_item)
+
+    #def connect_entrances(self) -> None:
+        #self.visualize_regions()
+
+    def visualize_regions(self):
+        multiworld = self.multiworld
+        player = self.player
+        sex_regions = set(self.get_regions())
+        visualize_regions(multiworld.get_region(FungalForestRegion.phone_booth, player), f"{multiworld.get_out_file_name_base(player)}.puml", show_locations=False, regions_to_highlight=sex_regions)
 
     def get_groups_for_location(self, location: Location):
         player_game = self.multiworld.worlds[location.player]
@@ -211,6 +211,8 @@ class FlipwitchWorld(World):
                     break
                 else:
                     possible_groups = self.get_groups_for_location(location)
+                    if not possible_groups:
+                        continue  # Curious about this scenario.
                     chosen_candidate = self.random.choice(possible_groups)
                     player_id = location.item.player
                     if self.player == player_id:
@@ -251,7 +253,7 @@ class FlipwitchWorld(World):
             "angel_order": self.angel_order,
             "hints": self.packaged_hints,
             "path": self.necessary_to_do_order,
-            **self.options.as_dict("starting_gender", "gachapon_shuffle", "shopsanity", "shop_prices", "stat_shuffle",
+            **self.options.as_dict("starting_gender", "gachapon_shuffle", "shopsanity", "shop_prices", "stat_shuffle", "pottery_lottery",
                                    "shuffle_chaos_pieces", "gachapon_shuffle", "quest_for_sex", "crystal_teleports", "death_link"),
         }
         return slot_data

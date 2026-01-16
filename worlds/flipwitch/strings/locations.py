@@ -629,8 +629,8 @@ class Potsanity:
     spc_green_house_4 = "SpC: Green House Pot 4"
 
     gc_crypt_1 = "GC: Crypt Pot 1"
-    gc_crypt_2 = "GC: Crypt Pot 1"
-    gc_crypt_3 = "GC: Crypt Pot 1"
+    gc_crypt_2 = "GC: Crypt Pot 2"
+    gc_crypt_3 = "GC: Crypt Pot 3"
     gc_gardens_three_1 = "GC: Three Gardens Pot 1"
     gc_gardens_three_2 = "GC: Three Gardens Pot 2"
     gc_stairwell_lower_1 = "GC: Ghost Stairwell Lower Pot 1"
@@ -723,3 +723,12 @@ class Potsanity:
     tg_flower_garden_5 = "TG: Flower Garden Pot 5"
     tg_flower_garden_6 = "TG: Flower Garden Pot 6"
     tg_flower_garden_7 = "TG: Flower Garden Pot 7"
+
+    uu_surfacing_1 = "UU: Surfacing Pot 1"
+    uu_surfacing_2 = "UU: Surfacing Pot 2"
+    uu_diving_deeper_1 = "UU: Diving Deeper Pot 1"
+    uu_diving_deeper_2 = "UU: Diving Deeper Pot 2"
+    uu_diving_deeper_3 = "UU: Diving Deeper Pot 3"
+    uu_diving_deeper_4 = "UU: Diving Deeper Pot 4"
+    uu_diving_1 = "UU: Diving Pot 1"
+    uu_diving_2 = "UU: Diving Pot 2"

@@ -223,62 +223,8 @@ class Key:
     forgotten_fungal = "Forgotten Fungal Door Key"
 
 
-class Goal:
+class GoalItem:
     chaos_piece = "Chaos Key Piece"
-
-
-class SexEventsItem:
-    # WW
-    beatrice_1 = "Fucked Beatrice 1"
-    beatrice_2 = "Fucked Beatrice 2"
-    belle_1 = "Fucked Belle 1"
-    gobliana_1 = "Fucked Gobliana 1"
-    mimic = "Fucked Mimic"
-    fairy = "Fucked Fairy"
-    goblin_princess = "Fucked Goblin Princess"
-    # SC
-    rover_1 = "Fucked Rover 1"
-    rover_2 = "Fucked Rover 2"
-    rover_3 = "Fucked Rover 3"
-    bottom_ghost = "Fucked Bottom Ghost"
-    belle_2 = "Fucked Belle 2"
-    belle_3 = "Fucked Belle 3"
-    cat_girls_2 = "Fucked Cat Girls 2"
-    cat_girls_3 = "Fucked Cat Girls 3"
-    bunny_owner_1 = "Fucked Bunny Owner 1"
-    bunny_owner_2 = "Fucked Bunny Owner 2"
-    merchant = "Watched Merchant Masturbate"
-    ghost = "Fucked Ghost"
-    patient = "Sucked Patient"
-    bunny_girls = "Fucked Bunny Girls"
-    bunny_boys = "Fucked Bunny Boys"
-    momo_boy = "Fucked Momobot as Girl"
-    momo_girl = "Fucked Momobot as Boy"
-    cult_boy = "Fucked Cult Priestess"
-    cult_girl = "Fucked Cult Priests"
-    cat = "Fucked Alley Cat"
-    tatil = "Fucked Tatil"
-    pig = "Fucked Pig Owner"
-    kyoni_1 = "Watched Kyoni Masturbate 1"
-    kyoni_2 = "Watched Kyoni Masturbate 2"
-    gobliana_2 = "Fucked Gobliana 2"
-    gobliana_3 = "Fucked Gobliana 3"
-    rat = "Fucked Rat"
-    #GC
-    cat_girls_1 = "Fucked Cat Girls"
-    #JG
-    cat_statue = "Fucked Evil Cat"
-    goat = "Fucked Goat"
-    #FF
-    natasha = "Fucked Natasha"
-    #TG
-    angel = "Fucked Angel"
-    #UU
-    frog = "Fucked Frog"
-
-    all_sex_items =  [beatrice_1, beatrice_2, belle_1, gobliana_1, mimic, fairy, goblin_princess, rover_1, rover_2, rover_3, bottom_ghost, belle_2, belle_3,
-                      cat_girls_2, cat_girls_3, bunny_owner_1, bunny_owner_2, merchant, ghost, patient, bunny_girls, bunny_boys, momo_girl, momo_boy,
-                      cult_girl, cult_boy, cat, tatil, pig, kyoni_2, kyoni_1, gobliana_2, gobliana_3, rat, cat_girls_1, cat_statue, goat, natasha, angel, frog]
 
 
 class QuestEventItem:

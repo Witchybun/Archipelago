@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 from BaseClasses import ItemClassification
 
-from ..strings.items import QuestItem, Upgrade, Coin, GachaItem, Unlock, Key, Costume, Power, Warp, Goal, Accessory, Custom, Trap
+from ..strings.items import QuestItem, Upgrade, Coin, GachaItem, Unlock, Key, Costume, Power, Warp, GoalItem, Accessory, Custom, Trap
 
 
 @dataclass(frozen=True)
@@ -74,7 +74,7 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 41, Key.demon_club, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 42, Key.slime_boss, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 43, Key.forgotten_fungal, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 45, Goal.chaos_piece, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 45, GoalItem.chaos_piece, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 46, Custom.hp_heal, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 47, Custom.mp_heal, ItemClassification.filler),
     create_item(ITEM_CODE_START + base_start_id + 48, Custom.peach_recharge, ItemClassification.filler),
@@ -125,11 +125,11 @@ gacha_items = [
     create_item(ITEM_CODE_START + gacha_item_id + 39, GachaItem.monster_girl_8, ItemClassification.filler),
     create_item(ITEM_CODE_START + gacha_item_id + 40, GachaItem.monster_girl_9, ItemClassification.filler),
     create_item(ITEM_CODE_START + gacha_item_id + 41, GachaItem.monster_girl_10, ItemClassification.filler),
-    create_item(ITEM_CODE_START + gacha_item_id + 42, Coin.animal_coin, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + gacha_item_id + 43, Coin.bunny_coin, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + gacha_item_id + 44, Coin.angel_demon_coin, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + gacha_item_id + 45, Coin.monster_coin, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + gacha_item_id + 46, Coin.promotional_coin, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + gacha_item_id + 42, Coin.animal_coin, ItemClassification.progression_deprioritized),
+    create_item(ITEM_CODE_START + gacha_item_id + 43, Coin.bunny_coin, ItemClassification.progression_deprioritized),
+    create_item(ITEM_CODE_START + gacha_item_id + 44, Coin.angel_demon_coin, ItemClassification.progression_deprioritized),
+    create_item(ITEM_CODE_START + gacha_item_id + 45, Coin.monster_coin, ItemClassification.progression_deprioritized),
+    create_item(ITEM_CODE_START + gacha_item_id + 46, Coin.promotional_coin, ItemClassification.progression_deprioritized),
 ]
 
 shop_item_id = 150
@@ -193,7 +193,7 @@ quest_items = [
     create_item(ITEM_CODE_START + quest_item_id + 23, QuestItem.mimic_chest, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + quest_item_id + 24, QuestItem.fungal, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + quest_item_id + 25, QuestItem.goblin_apartment, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + quest_item_id + 26, Custom.sex_experience, ItemClassification.progression | ItemClassification.useful),
+    create_item(ITEM_CODE_START + quest_item_id + 26, Custom.sex_experience, ItemClassification.progression_deprioritized),
     create_item(ITEM_CODE_START + quest_item_id + 27, Costume.bunny, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + quest_item_id + 28, Key.abandoned_apartment, ItemClassification.progression | ItemClassification.useful),
 ]
@@ -229,6 +229,7 @@ trap_items = [
     create_item(ITEM_CODE_START + trap_item_id + 1, Trap.nothing, ItemClassification.trap),
     create_item(ITEM_CODE_START + trap_item_id + 2, Trap.sexual_thoughts, ItemClassification.trap)
 ]
+
 
 item_name_to_item = {item.name: item for item in all_items}
 
