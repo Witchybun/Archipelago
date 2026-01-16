@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
-from Options import Toggle, Choice, Range, PerGameCommonOptions, OptionSet
+from Options import Toggle, Choice, Range, PerGameCommonOptions
 
 
 class FlipwitchOption(Protocol):
@@ -18,24 +18,21 @@ class StartingGender(Choice):
 
 
 class StartingArea(Choice):
-    """Which Crystal Warp platform the player starts at.
-    Chaos Castle is omitted due to triviality of the seed."""
+    """Which Crystal Warp platform the player starts at.  Some changes are made to assist accessibility due to
+    possibly being unable to reach Bewitched Bubble beforehand:
+    Tengoku: The honey bounce block in Large Tower Room is strengthened.
+    Slime Citadel: A honey bounce block is placed at Plummet to reach the top."""
     internal_name = "starting_area"
     display_name = "Starting Area"
     option_beatrice_house = 0
     option_goblin_cave = 1
-    option_outside_spirit_city = 2
-    option_spirit_city = 3
-    option_slums = 4
-    option_outside_ghost_castle = 5
-    option_ghost_castle = 6
-    option_jigoku = 7
-    option_club_demon = 8
-    option_tengoku = 9
-    option_angelic_hallway = 10
-    option_fungal_forest = 11
-    option_slime_citadel = 12
-    option_umi_umi = 13
+    option_spirit_city = 2
+    option_ghost_castle = 3
+    option_jigoku = 4
+    option_club_demon = 5
+    option_tengoku = 6
+    option_slime_citadel = 7
+    option_umi_umi = 8
     default = 0
 
 
@@ -155,6 +152,7 @@ class FlipwitchOptions(PerGameCommonOptions):
     shuffle_double_jump: ShuffleDoubleJump
     shuffle_dodge: ShuffleDodge
     shuffle_chaos_pieces: ShuffleChaosPieces
+    pottery_lottery: PotteryLottery
     shopsanity: Shopsanity
     shop_prices: ShopPrices
     stat_shuffle: StatShuffle

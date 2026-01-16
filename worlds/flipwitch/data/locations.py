@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 from typing import Optional, List, Dict
 
-from ..strings.items import QuestItem, Upgrade, Accessory, Power, Costume, Coin, GachaItem, Key, Trap, Warp, SexEventsItem, QuestEventItem
+from ..strings.items import QuestItem, Upgrade, Accessory, Power, Costume, Coin, GachaItem, Key, Trap, Warp, QuestEventItem, GoalItem, Custom
 from ..strings.locations import WitchyWoods, SpiritCity, Quest, ShadySewers, GhostCastle, Gacha, FungalForest, SlimeCitadel, AngelicHallway, Tengoku, \
     ClubDemon, Jigoku, \
     UmiUmi, ChaosCastle, Potsanity, WarpLocation, SexEventsLocation, QuestEventLocation
 from ..strings.regions_entrances import WitchyWoodsRegion, SpiritCityRegion, GhostCastleRegion, JigokuRegion, FungalForestRegion, UmiUmiRegion, \
-    TengokuRegion
+    TengokuRegion, ChaosCastleRegion
 
 
 @dataclass(frozen=True)
@@ -18,7 +18,7 @@ class FlipwitchLocation:
 
 
 all_locations: List[FlipwitchLocation] = []
-base_locations = []
+base_locations: List[FlipwitchLocation] = []
 
 
 # Some locations vary on multiple regions, so we default to Hollow Basin first.
@@ -52,7 +52,7 @@ witchy_woods_locations = [
     create_location(witchy_woods_location_start + 13, WitchyWoods.after_chaos, WitchyWoodsRegion.horseshoe),
     create_location(witchy_woods_location_start + 14, WitchyWoods.boss_key_chest, WitchyWoodsRegion.cave_heart),
     create_location(witchy_woods_location_start + 15, WitchyWoods.boss_key_big_chest, WitchyWoodsRegion.cave_heart),
-    create_location(witchy_woods_location_start + 16, WitchyWoods.goblin_queen_chaos, WitchyWoodsRegion.goblin_treasure),
+    create_location(witchy_woods_location_start + 16, WitchyWoods.goblin_queen_chaos, WitchyWoodsRegion.goblin_treasure, GoalItem.chaos_piece),
     create_location(witchy_woods_location_start + 17, WitchyWoods.fairy_chest, WitchyWoodsRegion.fairy_room),
     create_location(witchy_woods_location_start + 18, WitchyWoods.fairy_reward, WitchyWoodsRegion.fairy_shrine),
 ]
@@ -97,7 +97,7 @@ ghost_castle_locations = [
     create_location(ghost_castle_location_start + 12, GhostCastle.hidden_shrub, GhostCastleRegion.upper_dropdown),
     create_location(ghost_castle_location_start + 13, GhostCastle.ghost_form, GhostCastleRegion.tall_tower),
     create_location(ghost_castle_location_start + 14, GhostCastle.thimble_chest, GhostCastleRegion.fashion_room),
-    create_location(ghost_castle_location_start + 15, GhostCastle.ghost_chaos, GhostCastleRegion.ghost_treasure),
+    create_location(ghost_castle_location_start + 15, GhostCastle.ghost_chaos, GhostCastleRegion.ghost_treasure, GoalItem.chaos_piece),
 ]
 
 jigoku_location_start = 120
@@ -125,7 +125,7 @@ club_demon_locations = [
     create_location(club_demon_location_start + 4, ClubDemon.flip_magic_chest, JigokuRegion.spiral_flame_room),
     create_location(club_demon_location_start + 5, ClubDemon.club_key_chest, JigokuRegion.club_hallway_left),
     create_location(club_demon_location_start + 6, ClubDemon.demon_boss_chest, JigokuRegion.purple_room),
-    create_location(club_demon_location_start + 7, ClubDemon.demon_boss_chaos, JigokuRegion.demon_boss_right),
+    create_location(club_demon_location_start + 7, ClubDemon.demon_boss_chaos, JigokuRegion.demon_boss_right, GoalItem.chaos_piece),
 ]
 
 tengoku_location_start = 180
@@ -147,7 +147,7 @@ angelic_hallway_locations = [
     create_location(angelic_hallway_location_start + 6, AngelicHallway.behind_vines, TengokuRegion.maze_up_top),
     create_location(angelic_hallway_location_start + 7, AngelicHallway.angel_feathers, TengokuRegion.highest_point),
     create_location(angelic_hallway_location_start + 8, AngelicHallway.below_boss_chest, TengokuRegion.flower_garden),
-    create_location(angelic_hallway_location_start + 9, AngelicHallway.angelica_chaos, TengokuRegion.angel_reward),
+    create_location(angelic_hallway_location_start + 9, AngelicHallway.angelica_chaos, TengokuRegion.angel_reward, GoalItem.chaos_piece),
 ]
 
 fungal_forest_location_start = 240
@@ -173,31 +173,31 @@ slime_citadel_locations = [
     create_location(slime_citadel_location_start + 5, SlimeCitadel.near_stone, FungalForestRegion.nature_hall),
     create_location(slime_citadel_location_start + 6, SlimeCitadel.hidden_tunnel, FungalForestRegion.long_secret),
     create_location(slime_citadel_location_start + 7, SlimeCitadel.slurp_chest, FungalForestRegion.fruity),
-    create_location(slime_citadel_location_start + 8, SlimeCitadel.slimy_princess_chaos, FungalForestRegion.slime_boss_reward),
+    create_location(slime_citadel_location_start + 8, SlimeCitadel.slimy_princess_chaos, FungalForestRegion.slime_boss_reward, GoalItem.chaos_piece),
 ]
 
 umi_umi_location_start = 300
 umi_umi_locations = [
-    create_location(umi_umi_location_start + 1, UmiUmi.save_chest, FlipwitchRegion.umi_umi),
-    create_location(umi_umi_location_start + 2, UmiUmi.angler_costume, FlipwitchRegion.umi_umi),
-    create_location(umi_umi_location_start + 3, UmiUmi.flip_magic_chest, FlipwitchRegion.umi_umi),
-    create_location(umi_umi_location_start + 4, UmiUmi.sacrificial_dagger, FlipwitchRegion.umi_umi),
-    create_location(umi_umi_location_start + 5, UmiUmi.mermaid_chest, FlipwitchRegion.umi_umi_depths),
-    create_location(umi_umi_location_start + 6, UmiUmi.chaos_fight, FlipwitchRegion.umi_umi_depths),
-    create_location(umi_umi_location_start + 7, UmiUmi.octrina_path, FlipwitchRegion.umi_umi_depths),
-    create_location(umi_umi_location_start + 8, UmiUmi.octrina_chest, FlipwitchRegion.umi_umi_depths),
-    create_location(umi_umi_location_start + 9, UmiUmi.frog_boss_chaos, FlipwitchRegion.umi_umi_depths),
+    create_location(umi_umi_location_start + 1, UmiUmi.save_chest, UmiUmiRegion.stairs_jump),
+    create_location(umi_umi_location_start + 2, UmiUmi.angler_costume, UmiUmiRegion.mermaid_statue),
+    create_location(umi_umi_location_start + 3, UmiUmi.flip_magic_chest, UmiUmiRegion.water_hall),
+    create_location(umi_umi_location_start + 4, UmiUmi.sacrificial_dagger, UmiUmiRegion.blue_pillars),
+    create_location(umi_umi_location_start + 5, UmiUmi.mermaid_chest, UmiUmiRegion.diving),
+    create_location(umi_umi_location_start + 6, UmiUmi.chaos_fight, UmiUmiRegion.surfacing),
+    create_location(umi_umi_location_start + 7, UmiUmi.octrina_path, UmiUmiRegion.coral_zone),
+    create_location(umi_umi_location_start + 8, UmiUmi.octrina_chest, UmiUmiRegion.water_reward),
+    create_location(umi_umi_location_start + 9, UmiUmi.frog_boss_chaos, UmiUmiRegion.frog_treasure, GoalItem.chaos_piece),
 ]
 
 chaos_castle_location_start = 330
 chaos_castle_locations = [
-    create_location(chaos_castle_location_start + 1, ChaosCastle.early_chest, FlipwitchRegion.chaos_castle),
-    create_location(chaos_castle_location_start + 2, ChaosCastle.jigoku_coin, FlipwitchRegion.chaos_castle),
-    create_location(chaos_castle_location_start + 3, ChaosCastle.sanctum, FlipwitchRegion.chaos_castle),
-    create_location(chaos_castle_location_start + 4, ChaosCastle.elf_chest, FlipwitchRegion.chaos_castle),
-    create_location(chaos_castle_location_start + 5, ChaosCastle.citadel, FlipwitchRegion.chaos_castle),
-    create_location(chaos_castle_location_start + 6, ChaosCastle.jump_chest, FlipwitchRegion.chaos_castle),
-    create_location(chaos_castle_location_start + 7, ChaosCastle.pandora_key, FlipwitchRegion.chaos_castle),
+    create_location(chaos_castle_location_start + 1, ChaosCastle.early_chest, ChaosCastleRegion.cc_entrance_hall),
+    create_location(chaos_castle_location_start + 2, ChaosCastle.jigoku_coin, ChaosCastleRegion.cc_jigoku_pyramid_upper),
+    create_location(chaos_castle_location_start + 3, ChaosCastle.sanctum, ChaosCastleRegion.cc_save_pyramid_lower_b),
+    create_location(chaos_castle_location_start + 4, ChaosCastle.elf_chest, ChaosCastleRegion.cc_blue_triangle_upper_right),
+    create_location(chaos_castle_location_start + 5, ChaosCastle.citadel, ChaosCastleRegion.cc_slime_pipes),
+    create_location(chaos_castle_location_start + 6, ChaosCastle.jump_chest, ChaosCastleRegion.cc_umi_upper),
+    create_location(chaos_castle_location_start + 7, ChaosCastle.pandora_key, ChaosCastleRegion.cc_sub_boss),
 ]
 
 stat_location_start = 360
@@ -218,10 +218,10 @@ stat_locations = [
     create_location(stat_location_start + 14, FungalForest.fungella, FungalForestRegion.tiny_room, Upgrade.mana),
     create_location(stat_location_start + 15, SlimeCitadel.slimy_gauntlet, FungalForestRegion.slimy_prize, Upgrade.health),
     create_location(stat_location_start + 16, SlimeCitadel.slimy_princess_mp, FungalForestRegion.slime_boss_reward, Upgrade.mana),
-    create_location(stat_location_start + 17, UmiUmi.watery_gauntlet, FlipwitchRegion.umi_umi_depths, Upgrade.health),
-    create_location(stat_location_start + 18, UmiUmi.frog_boss_mp, FlipwitchRegion.umi_umi_depths, Upgrade.mana),
-    create_location(stat_location_start + 19, ChaosCastle.jump_hp, FlipwitchRegion.chaos_castle, Upgrade.health),
-    create_location(stat_location_start + 20, ChaosCastle.pandora_mp, FlipwitchRegion.chaos_castle, Upgrade.mana),
+    create_location(stat_location_start + 17, UmiUmi.watery_gauntlet, UmiUmiRegion.dead_end, Upgrade.health),
+    create_location(stat_location_start + 18, UmiUmi.frog_boss_mp, UmiUmiRegion.frog_treasure, Upgrade.mana),
+    create_location(stat_location_start + 19, ChaosCastle.jump_hp, ChaosCastleRegion.cc_umi_upper, Upgrade.health),
+    create_location(stat_location_start + 20, ChaosCastle.pandora_mp, ChaosCastleRegion.cc_sub_boss, Upgrade.mana),
 ]
 
 shop_location_start = 400
@@ -254,7 +254,7 @@ shop_locations = [
     create_location(shop_location_start + 26, SlimeCitadel.thimble_2, FungalForestRegion.picnic, Costume.alchemist),
     create_location(shop_location_start + 27, SlimeCitadel.elf_1, FungalForestRegion.long_secret, Power.slime_sentry),
     create_location(shop_location_start + 28, SlimeCitadel.elf_2, FungalForestRegion.long_secret, Accessory.blue_frog_talisman),
-    create_location(shop_location_start + 29, ChaosCastle.elf_1, FlipwitchRegion.chaos_castle, Power.haunted_scythe),
+    create_location(shop_location_start + 29, ChaosCastle.elf_1, ChaosCastleRegion.cc_blue_triangle_upper_right, Power.haunted_scythe),
 ]
 
 quest_location_start = 450
@@ -272,7 +272,7 @@ quest_locations = [
     create_location(quest_location_start + 11, Quest.harvest_season, JigokuRegion.mini_shrine_left, Trap.nothing),
     create_location(quest_location_start + 12, Quest.long_distance, TengokuRegion.switchy_statue_left, Trap.nothing),
     create_location(quest_location_start + 13, Quest.summoning_stones, FungalForestRegion.nature_hall, Trap.nothing),
-    create_location(quest_location_start + 14, Quest.semen_with_a, FlipwitchRegion.umi_umi, Trap.nothing),
+    create_location(quest_location_start + 14, Quest.semen_with_a, UmiUmiRegion.frog_boss, Trap.nothing),
     create_location(quest_location_start + 15, Quest.cardio_day, SpiritCityRegion.rat_girl, Trap.nothing),
     create_location(quest_location_start + 16, Quest.stop_democracy, SpiritCityRegion.spirit_bottom_tomb, Trap.nothing),
     create_location(quest_location_start + 17, Quest.medical_emergency, SpiritCityRegion.clinic_interior_back, Trap.nothing),
@@ -298,7 +298,7 @@ quest_locations = [
     create_location(quest_location_start + 37, Quest.priest, SpiritCityRegion.cult_hall_right, Trap.nothing),
     create_location(quest_location_start + 38, Quest.goblin_stud, WitchyWoodsRegion.caves_climb, Trap.nothing),
     create_location(quest_location_start + 39, WitchyWoods.rundown_outside_chest, WitchyWoodsRegion.goblin_tower_exit, QuestItem.cowbell),
-    create_location(quest_location_start + 40, WitchyWoods.red_wine, WitchyWoodsRegion.goblin_camp, QuestItem.red_wine),
+    create_location(quest_location_start + 40, WitchyWoods.red_wine, WitchyWoodsRegion.goblin_camp_bottom, QuestItem.red_wine),
     create_location(quest_location_start + 41, WitchyWoods.goblin_apartment, WitchyWoodsRegion.ex_bf, QuestItem.gobliana_luggage),
     create_location(quest_location_start + 42, WitchyWoods.man_cave, WitchyWoodsRegion.man_cave, QuestItem.business_card),
     create_location(quest_location_start + 43, WitchyWoods.goblin_headshot, WitchyWoodsRegion.model_cavern, QuestItem.goblin_headshot),
@@ -334,13 +334,13 @@ sex_experience_location_start = 550
 sex_experience_locations = [
     create_location(sex_experience_location_start + 1, WitchyWoods.sexual_experience_1, WitchyWoodsRegion.sex_layer_1, Upgrade.peachy_peach),
     create_location(sex_experience_location_start + 2, WitchyWoods.sexual_experience_2, WitchyWoodsRegion.sex_layer_1, Upgrade.peachy_peach),
-    create_location(sex_experience_location_start + 3, WitchyWoods.sexual_experience_3, WitchyWoodsRegion.sex_layer_2, Upgrade.wand),
+    create_location(sex_experience_location_start + 3, WitchyWoods.sexual_experience_3, WitchyWoodsRegion.sex_layer_1, Upgrade.wand),
     create_location(sex_experience_location_start + 4, WitchyWoods.sexual_experience_4, WitchyWoodsRegion.sex_layer_2, Upgrade.peachy_peach),
     create_location(sex_experience_location_start + 5, WitchyWoods.sexual_experience_5, WitchyWoodsRegion.sex_layer_2, Upgrade.peachy_peach),
     create_location(sex_experience_location_start + 6, WitchyWoods.sexual_experience_6, WitchyWoodsRegion.sex_layer_2, Upgrade.peachy_upgrade),
     create_location(sex_experience_location_start + 7, WitchyWoods.sexual_experience_7, WitchyWoodsRegion.sex_layer_2, Upgrade.peachy_peach),
     create_location(sex_experience_location_start + 8, WitchyWoods.sexual_experience_8, WitchyWoodsRegion.sex_layer_2, Upgrade.peachy_peach),
-    create_location(sex_experience_location_start + 9, WitchyWoods.sexual_experience_9, WitchyWoodsRegion.sex_layer_3, Upgrade.wand),
+    create_location(sex_experience_location_start + 9, WitchyWoods.sexual_experience_9, WitchyWoodsRegion.sex_layer_2, Upgrade.wand),
     create_location(sex_experience_location_start + 10, WitchyWoods.sexual_experience_10, WitchyWoodsRegion.sex_layer_3, Upgrade.peachy_peach),
     create_location(sex_experience_location_start + 11, WitchyWoods.sexual_experience_11, WitchyWoodsRegion.sex_layer_3, Upgrade.peachy_peach),
     create_location(sex_experience_location_start + 12, WitchyWoods.sexual_experience_12, WitchyWoodsRegion.sex_layer_3, Upgrade.peachy_upgrade),
@@ -430,15 +430,15 @@ coin_locations = [
     create_location(coin_location_start + 33, SlimeCitadel.small_detour, FungalForestRegion.shroom_platform),
     create_location(coin_location_start + 34, SlimeCitadel.across_key, FungalForestRegion.peach_eggplant_right),
     create_location(coin_location_start + 35, SlimeCitadel.secret_spring_coin, FungalForestRegion.secret),
-    create_location(coin_location_start + 36, UmiUmi.early_coin, FlipwitchRegion.umi_umi),
-    create_location(coin_location_start + 37, UmiUmi.far_corner, FlipwitchRegion.umi_umi),
-    create_location(coin_location_start + 38, UmiUmi.flip_magic_coin, FlipwitchRegion.umi_umi),
-    create_location(coin_location_start + 39, UmiUmi.above_save, FlipwitchRegion.umi_umi_depths),
-    create_location(coin_location_start + 40, UmiUmi.frog_boss_path, FlipwitchRegion.umi_umi_depths),
-    create_location(coin_location_start + 41, ChaosCastle.outside_coin, FlipwitchRegion.outside_chaos),
-    create_location(coin_location_start + 42, ChaosCastle.goblin_coin, FlipwitchRegion.chaos_castle),
-    create_location(coin_location_start + 43, ChaosCastle.ghost_coin, FlipwitchRegion.chaos_castle),
-    create_location(coin_location_start + 44, ChaosCastle.fungal, FlipwitchRegion.chaos_castle),
+    create_location(coin_location_start + 36, UmiUmi.early_coin, UmiUmiRegion.coral_reef),
+    create_location(coin_location_start + 37, UmiUmi.far_corner, UmiUmiRegion.coral_room),
+    create_location(coin_location_start + 38, UmiUmi.flip_magic_coin, UmiUmiRegion.deep_drop),
+    create_location(coin_location_start + 39, UmiUmi.above_save, UmiUmiRegion.water_pillars),
+    create_location(coin_location_start + 40, UmiUmi.frog_boss_path, UmiUmiRegion.treasure),
+    create_location(coin_location_start + 41, ChaosCastle.outside_coin, ChaosCastleRegion.outside_upper_corner),
+    create_location(coin_location_start + 42, ChaosCastle.goblin_coin, ChaosCastleRegion.cc_jigoku_pyramid_lower),
+    create_location(coin_location_start + 43, ChaosCastle.ghost_coin, ChaosCastleRegion.cc_fork_b),
+    create_location(coin_location_start + 44, ChaosCastle.fungal, ChaosCastleRegion.cc_umi_lower),
 ]
 
 warp_location_start = 700
@@ -608,6 +608,14 @@ pot_locations = [
     create_location(pot_location_start + 138, Potsanity.tg_flower_garden_6, TengokuRegion.flower_garden),
     create_location(pot_location_start + 139, Potsanity.tg_flower_garden_7, TengokuRegion.flower_garden),
 
+    create_location(pot_location_start + 140, Potsanity.uu_surfacing_1, UmiUmiRegion.surfacing),
+    create_location(pot_location_start + 141, Potsanity.uu_surfacing_2, UmiUmiRegion.surfacing),
+    create_location(pot_location_start + 142, Potsanity.uu_diving_deeper_1, UmiUmiRegion.diving_deeper),
+    create_location(pot_location_start + 143, Potsanity.uu_diving_deeper_2, UmiUmiRegion.diving_deeper),
+    create_location(pot_location_start + 144, Potsanity.uu_diving_deeper_3, UmiUmiRegion.diving_deeper),
+    create_location(pot_location_start + 145, Potsanity.uu_diving_deeper_4, UmiUmiRegion.diving_deeper),
+    create_location(pot_location_start + 146, Potsanity.uu_diving_1, UmiUmiRegion.diving),
+    create_location(pot_location_start + 147, Potsanity.uu_diving_2, UmiUmiRegion.diving),
 
 ]
 
@@ -615,48 +623,47 @@ chaos_piece_location_names = [WitchyWoods.goblin_queen_chaos, GhostCastle.ghost_
                               SlimeCitadel.slimy_princess_chaos, UmiUmi.frog_boss_chaos]
 
 event_sex_locations: Dict[str, List[FlipwitchLocation]] = {
-    WitchyWoodsRegion.sex_layer_2: [create_event_location(SexEventsLocation.beatrice_1, "", SexEventsItem.beatrice_1)],
-    WitchyWoodsRegion.sex_layer_3: [create_event_location(SexEventsLocation.beatrice_2, "", SexEventsItem.beatrice_2)],
-    WitchyWoodsRegion.belle_room: [create_event_location(SexEventsLocation.belle_1, "", SexEventsItem.belle_1)],
-    WitchyWoodsRegion.mimic_room: [create_event_location(SexEventsLocation.mimic, "", SexEventsItem.mimic)],
-    WitchyWoodsRegion.model_cavern: [create_event_location(SexEventsLocation.gobliana_1, "", SexEventsItem.gobliana_1)],
-    WitchyWoodsRegion.fairy_room: [create_event_location(SexEventsLocation.fairy, "", SexEventsItem.fairy)],
-    WitchyWoodsRegion.caves_climb: [create_event_location(SexEventsLocation.goblin_princess, "", SexEventsItem.goblin_princess)],
+    WitchyWoodsRegion.sex_layer_2: [create_event_location(SexEventsLocation.beatrice_1, "", Custom.sex_experience)],
+    WitchyWoodsRegion.sex_layer_3: [create_event_location(SexEventsLocation.beatrice_2, "", Custom.sex_experience)],
+    WitchyWoodsRegion.belle_room: [create_event_location(SexEventsLocation.belle_1, "", Custom.sex_experience)],
+    WitchyWoodsRegion.mimic_room: [create_event_location(SexEventsLocation.mimic, "", Custom.sex_experience)],
+    WitchyWoodsRegion.model_cavern: [create_event_location(SexEventsLocation.gobliana_1, "", Custom.sex_experience)],
+    WitchyWoodsRegion.fairy_room: [create_event_location(SexEventsLocation.fairy, "", Custom.sex_experience)],
+    WitchyWoodsRegion.caves_climb: [create_event_location(SexEventsLocation.goblin_princess, "", Custom.sex_experience)],
 
-    SpiritCityRegion.dog_cage_tomb: [create_event_location(SexEventsLocation.rover_1, "", SexEventsItem.rover_1)],
-    SpiritCityRegion.spirit_bottom_tomb: [create_event_location(SexEventsLocation.bottom_ghost, "", SexEventsItem.bottom_ghost)],
-    SpiritCityRegion.cabaret_cafe: [create_event_location(SexEventsLocation.belle_2, "", SexEventsItem.belle_2),
-                                    create_event_location(SexEventsLocation.belle_3, "", SexEventsItem.belle_3),
-                                    create_event_location(SexEventsLocation.rover_2, "", SexEventsItem.rover_2),
-                                    create_event_location(SexEventsLocation.rover_3, "", SexEventsItem.rover_3),
-                                    create_event_location(SexEventsLocation.bunny_owner_1, "", SexEventsItem.bunny_owner_1),
-                                    create_event_location(SexEventsLocation.cat_girls_2, "", SexEventsItem.cat_girls_2),
-                                    create_event_location(SexEventsLocation.cat_girls_3, "", SexEventsItem.cat_girls_3),
-                                    create_event_location(SexEventsLocation.merchant, "", SexEventsItem.merchant)],
-    SpiritCityRegion.cabaret_wizard_toilet_subboss: [create_event_location(SexEventsLocation.ghost, "", SexEventsItem.ghost)],
-    SpiritCityRegion.viproom_cabaret: [create_event_location(SexEventsLocation.bunny_owner_2, "", SexEventsItem.bunny_owner_2)],
-    SpiritCityRegion.clinic_interior_back: [create_event_location(SexEventsLocation.patient, "", SexEventsItem.patient)],
-    SpiritCityRegion.shady_bunny_cafe: [create_event_location(SexEventsLocation.bunny_girls, "", SexEventsItem.bunny_girls),
-                                        create_event_location(SexEventsLocation.bunny_boys, "", SexEventsItem.bunny_boys)],
-    SpiritCityRegion.shady_alley: [create_event_location(SexEventsLocation.cat, "", SexEventsItem.cat),
-                                   create_event_location(SexEventsLocation.kyoni_1, "", SexEventsItem.kyoni_1),
-                                   create_event_location(SexEventsLocation.kyoni_2, "", SexEventsItem.kyoni_2),
-                                   create_event_location(SexEventsLocation.momo_boy, "", SexEventsItem.momo_boy),
-                                   create_event_location(SexEventsLocation.momo_girl, "", SexEventsItem.momo_girl)],
-    SpiritCityRegion.goblin_office: [create_event_location(SexEventsLocation.gobliana_2, "", SexEventsItem.gobliana_2),
-                                     create_event_location(SexEventsLocation.gobliana_3, "", SexEventsItem.gobliana_3)],
-    SpiritCityRegion.cult_hall_left: [create_event_location(SexEventsLocation.cult_girl, "", SexEventsItem.cult_girl)],
-    SpiritCityRegion.cult_hall_right: [create_event_location(SexEventsLocation.cult_boy, "", SexEventsItem.cult_boy)],
-    SpiritCityRegion.pig_mansion_lobby: [create_event_location(SexEventsLocation.tatil, "", SexEventsItem.tatil)],
-    SpiritCityRegion.pig_mansion_owner: [create_event_location(SexEventsLocation.pig, "", SexEventsItem.pig)],
-    SpiritCityRegion.rat_girl: [create_event_location(SexEventsLocation.rat, "", SexEventsItem.rat)],
-    GhostCastleRegion.large_gardens: [create_event_location(SexEventsLocation.cat_girls_1, "", SexEventsItem.cat_girls_1)],
-    JigokuRegion.mini_shrine_left: [create_event_location(SexEventsLocation.goat, "", SexEventsItem.goat)],
-    JigokuRegion.cat_shrine: [create_event_location(SexEventsLocation.cat_statue, "", SexEventsItem.cat_statue)],
-    FungalForestRegion.nature_hall: [create_event_location(SexEventsLocation.natasha, "", SexEventsItem.natasha)],
-    TengokuRegion.switchy_statue_left: [create_event_location(SexEventsLocation.angel, "", SexEventsItem.angel)],
-
-
+    SpiritCityRegion.dog_cage_tomb: [create_event_location(SexEventsLocation.rover_1, "", Custom.sex_experience)],
+    SpiritCityRegion.spirit_bottom_tomb: [create_event_location(SexEventsLocation.bottom_ghost, "", Custom.sex_experience)],
+    SpiritCityRegion.cabaret_cafe: [create_event_location(SexEventsLocation.belle_2, "", Custom.sex_experience),
+                                    create_event_location(SexEventsLocation.belle_3, "", Custom.sex_experience),
+                                    create_event_location(SexEventsLocation.rover_2, "", Custom.sex_experience),
+                                    create_event_location(SexEventsLocation.rover_3, "", Custom.sex_experience),
+                                    create_event_location(SexEventsLocation.bunny_owner_1, "", Custom.sex_experience),
+                                    create_event_location(SexEventsLocation.cat_girls_2, "", Custom.sex_experience),
+                                    create_event_location(SexEventsLocation.cat_girls_3, "", Custom.sex_experience),
+                                    create_event_location(SexEventsLocation.merchant, "", Custom.sex_experience)],
+    SpiritCityRegion.cabaret_wizard_toilet_subboss: [create_event_location(SexEventsLocation.ghost, "", Custom.sex_experience)],
+    SpiritCityRegion.viproom_cabaret: [create_event_location(SexEventsLocation.bunny_owner_2, "", Custom.sex_experience)],
+    SpiritCityRegion.clinic_interior_back: [create_event_location(SexEventsLocation.patient, "", Custom.sex_experience)],
+    SpiritCityRegion.shady_bunny_cafe: [create_event_location(SexEventsLocation.bunny_girls, "", Custom.sex_experience),
+                                        create_event_location(SexEventsLocation.bunny_boys, "", Custom.sex_experience)],
+    SpiritCityRegion.shady_alley: [create_event_location(SexEventsLocation.cat, "", Custom.sex_experience),
+                                   create_event_location(SexEventsLocation.kyoni_1, "", Custom.sex_experience),
+                                   create_event_location(SexEventsLocation.kyoni_2, "", Custom.sex_experience),
+                                   create_event_location(SexEventsLocation.momo_boy, "", Custom.sex_experience),
+                                   create_event_location(SexEventsLocation.momo_girl, "", Custom.sex_experience)],
+    SpiritCityRegion.goblin_office: [create_event_location(SexEventsLocation.gobliana_2, "", Custom.sex_experience),
+                                     create_event_location(SexEventsLocation.gobliana_3, "", Custom.sex_experience)],
+    SpiritCityRegion.cult_hall_left: [create_event_location(SexEventsLocation.cult_girl, "", Custom.sex_experience)],
+    SpiritCityRegion.cult_hall_right: [create_event_location(SexEventsLocation.cult_boy, "", Custom.sex_experience)],
+    SpiritCityRegion.pig_mansion_lobby: [create_event_location(SexEventsLocation.tatil, "", Custom.sex_experience)],
+    SpiritCityRegion.pig_mansion_owner: [create_event_location(SexEventsLocation.pig, "", Custom.sex_experience)],
+    SpiritCityRegion.rat_girl: [create_event_location(SexEventsLocation.rat, "", Custom.sex_experience)],
+    GhostCastleRegion.large_gardens: [create_event_location(SexEventsLocation.cat_girls_1, "", Custom.sex_experience)],
+    JigokuRegion.mini_shrine_left: [create_event_location(SexEventsLocation.goat, "", Custom.sex_experience)],
+    JigokuRegion.cat_shrine: [create_event_location(SexEventsLocation.cat_statue, "", Custom.sex_experience)],
+    FungalForestRegion.nature_hall: [create_event_location(SexEventsLocation.natasha, "", Custom.sex_experience)],
+    TengokuRegion.switchy_statue_left: [create_event_location(SexEventsLocation.angel, "", Custom.sex_experience)],
+    UmiUmiRegion.frog_boss: [create_event_location(SexEventsLocation.frog, "", Custom.sex_experience)],
 }
 
 event_quest_locations: Dict[str, List[FlipwitchLocation]] = {
@@ -675,7 +682,8 @@ event_quest_locations: Dict[str, List[FlipwitchLocation]] = {
                                     create_event_location(QuestEventLocation.bunny_1, "", QuestEventItem.bunny_1),
                                     create_event_location(QuestEventLocation.bunny_2, "", QuestEventItem.bunny_2)],
     SpiritCityRegion.cabaret_wizard_toilet_subboss: [create_event_location(QuestEventLocation.cat_girls_3_a, "", QuestEventItem.cat_girls_3_a)],
-    SpiritCityRegion.shady_alley: [create_event_location(QuestEventLocation.kyoni_1, "", QuestEventItem.kyoni_1)],
+    SpiritCityRegion.shady_alley: [create_event_location(QuestEventLocation.kyoni_1, "", QuestEventItem.kyoni_1),
+                                   create_event_location(QuestEventLocation.belle_2_a, "", QuestEventItem.belle_2_a)],
     SpiritCityRegion.pig_mansion_lobby: [create_event_location(QuestEventLocation.tatil_1, "", QuestEventItem.tatil_1)],
     SpiritCityRegion.goblin_office: [create_event_location(QuestEventLocation.gobliana_luggage_1, "", QuestEventItem.gobliana_luggage_1),
                                      create_event_location(QuestEventLocation.gobliana_luggage_3, "", QuestEventItem.gobliana_luggage_3)],
@@ -690,7 +698,6 @@ event_quest_locations: Dict[str, List[FlipwitchLocation]] = {
     FungalForestRegion.reward: [create_event_location(QuestEventLocation.stone_2, "", QuestEventItem.stone_2)],
     FungalForestRegion.fruity: [create_event_location(QuestEventLocation.stone_3, "", QuestEventItem.stone_3)],
     FungalForestRegion.nature_hall: [create_event_location(QuestEventLocation.stone_start, "", QuestEventItem.stone_start)],
+    TengokuRegion.cloudy_drop: [create_event_location(QuestEventLocation.gobliana_photographer, "", QuestEventItem.gobliana_photographer)],
     TengokuRegion.switchy_statue_left: [create_event_location(QuestEventLocation.angel_letter, "", QuestEventItem.angel_letter)],
-
 }
-

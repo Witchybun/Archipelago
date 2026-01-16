@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from enum import IntFlag
 from typing import List, Dict, Optional, Protocol, Iterable, Tuple
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import MultiWorld, Region, Entrance, Item
 from worlds.flipwitch.data.locations import event_sex_locations, event_quest_locations
 
 from worlds.flipwitch.strings.regions_entrances import CrystalRegion, CrystalEntrance, \
@@ -12,10 +12,6 @@ from worlds.flipwitch.strings.regions_entrances import CrystalRegion, CrystalEnt
     JigokuEntrance, GhostCastleEntrance, GhostCastleRegion, SpiritCityRegion, \
     SpiritCityEntrance, WitchyWoodsEntrance, WitchyWoodsRegion
 
-
-class RegionFactory(Protocol):
-    def __call__(self, name: str, regions: Iterable[str]) -> Region:
-        raise NotImplementedError
 
 
 connector_keyword = " to "
@@ -41,6 +37,10 @@ class ConnectionData:
             if self.reverse is None:
                 super().__setattr__("reverse", f"{destination}{connector_keyword}{origin}")
 
+
+class RegionFactory(Protocol):
+    def __call__(self, name: str, regions: List[ConnectionData]) -> Region:
+        raise NotImplementedError
 
 @dataclass(frozen=True)
 class RegionData:
@@ -120,17 +120,20 @@ flipwitch_regions = [
                 ConnectionData(WitchyWoodsEntrance.goblin_tower_exit_to_goblin_tower, WitchyWoodsRegion.goblin_tower),
                 ConnectionData(WitchyWoodsEntrance.goblin_tower_exit_to_fairy_ruins, WitchyWoodsRegion.fairy_ruins)]),
     RegionData(WitchyWoodsRegion.goblin_camp_start,
-               [ConnectionData(WitchyWoodsEntrance.goblin_camp_start_to_goblin_camp, WitchyWoodsRegion.goblin_camp),
+               [ConnectionData(WitchyWoodsEntrance.goblin_camp_start_to_goblin_camp_mid, WitchyWoodsRegion.goblin_camp_mid),
                 ConnectionData(WitchyWoodsEntrance.goblin_camp_start_to_eight_dropdown, WitchyWoodsRegion.drop_down)]),
-    RegionData(WitchyWoodsRegion.goblin_camp,
-               [ConnectionData(WitchyWoodsEntrance.goblin_camp_to_goblin_camp_start, WitchyWoodsRegion.goblin_camp_start),
-                ConnectionData(WitchyWoodsEntrance.goblin_camp_to_mimic_room, WitchyWoodsRegion.mimic_room),
-                ConnectionData(WitchyWoodsEntrance.goblin_camp_to_ex_bf, WitchyWoodsRegion.ex_bf),
-                ConnectionData(WitchyWoodsEntrance.goblin_camp_to_save_waterfall, WitchyWoodsRegion.save_waterfall)]),
+    RegionData(WitchyWoodsRegion.goblin_camp_mid,
+               [ConnectionData(WitchyWoodsEntrance.goblin_camp_mid_to_mimic_room, WitchyWoodsRegion.mimic_room),
+                ConnectionData(WitchyWoodsEntrance.goblin_camp_mid_to_goblin_camp_bottom, WitchyWoodsRegion.goblin_camp_bottom),
+                ConnectionData(WitchyWoodsEntrance.goblin_camp_mid_to_goblin_camp_start, WitchyWoodsRegion.goblin_camp_start),]),
+    RegionData(WitchyWoodsRegion.goblin_camp_bottom,
+               [ConnectionData(WitchyWoodsEntrance.goblin_camp_bottom_to_goblin_camp_mid, WitchyWoodsRegion.goblin_camp_mid),
+                ConnectionData(WitchyWoodsEntrance.goblin_camp_bottom_to_ex_bf, WitchyWoodsRegion.ex_bf),
+                ConnectionData(WitchyWoodsEntrance.goblin_camp_bottom_to_save_waterfall, WitchyWoodsRegion.save_waterfall)]),
     RegionData(WitchyWoodsRegion.mimic_room),
     RegionData(WitchyWoodsRegion.ex_bf),
     RegionData(WitchyWoodsRegion.save_waterfall,
-               [ConnectionData(WitchyWoodsEntrance.save_waterfall_to_goblin_camp, WitchyWoodsRegion.goblin_camp),
+               [ConnectionData(WitchyWoodsEntrance.save_waterfall_to_goblin_camp, WitchyWoodsRegion.goblin_camp_bottom),
                 ConnectionData(WitchyWoodsEntrance.save_waterfall_to_waterfall_secret, WitchyWoodsRegion.waterfall_secret),
                 ConnectionData(WitchyWoodsEntrance.save_waterfall_to_goblin_tower, WitchyWoodsRegion.goblin_tower)]),
     RegionData(WitchyWoodsRegion.waterfall_secret),
@@ -221,7 +224,8 @@ flipwitch_regions = [
                [ConnectionData(SpiritCityEntrance.city_entrance_to_spirit_city_bridge, WitchyWoodsRegion.spirit_city_bridge,
                                flag=RandomizationFlag.RANDOMIZED, type=EntranceType.TWO_WAY),
                 ConnectionData(SpiritCityEntrance.city_entrance_to_shopping_district, SpiritCityRegion.shopping_district),
-                ConnectionData(SpiritCityEntrance.city_entrance_to_cc_entrance, ChaosCastleRegion.cc_entrance)]),
+                ConnectionData(SpiritCityEntrance.city_entrance_to_cc_entrance, ChaosCastleRegion.cc_entrance,
+                               flag=RandomizationFlag.RANDOMIZED, type=EntranceType.TWO_WAY)]),
     RegionData(SpiritCityRegion.shopping_district,
                [ConnectionData(SpiritCityEntrance.shopping_district_to_city_entrance, SpiritCityRegion.city_entrance),
                 ConnectionData(SpiritCityEntrance.shopping_district_to_bathroom_female, SpiritCityRegion.bathroom_female),
@@ -301,12 +305,12 @@ flipwitch_regions = [
     RegionData(SpiritCityRegion.cult_hall_right),
     RegionData(SpiritCityRegion.cult_hall_left),
     RegionData(SpiritCityRegion.residential_lane,
-               [ConnectionData(SpiritCityEntrance.residential_lane_to_city_stairwell),
-                ConnectionData(SpiritCityEntrance.three_residential_to_interiorhouse_one_three_),
-                SpiritCityEntrance.three_residential_to_interiorhouse_one_one_,
-                SpiritCityEntrance.three_residential_to_interiorhouse_one,
-                SpiritCityEntrance.three_residential_to_interiorhouse_one_two_,
-                SpiritCityEntrance.three_residential_to_six_ghostcastlerd]),
+               [ConnectionData(SpiritCityEntrance.residential_lane_to_city_stairwell, SpiritCityRegion.city_stairwell),
+                ConnectionData(SpiritCityEntrance.residential_lane_to_ohtwo_house, SpiritCityRegion.ohtwo_house),
+                ConnectionData(SpiritCityEntrance.residential_lane_to_ohone_house, SpiritCityRegion.ohone_house),
+                ConnectionData(SpiritCityEntrance.residential_lane_to_six_house, SpiritCityRegion.six_house),
+                ConnectionData(SpiritCityEntrance.residential_lane_to_green_house, SpiritCityRegion.green_house),
+                ConnectionData(SpiritCityEntrance.residential_lane_to_ghost_castle_rd, SpiritCityRegion.ghost_castle_rd)]),
     RegionData(SpiritCityRegion.ohtwo_house),
     RegionData(SpiritCityRegion.ohone_house),
     RegionData(SpiritCityRegion.six_house),
@@ -511,7 +515,7 @@ flipwitch_regions = [
     RegionData(JigokuRegion.demon_entrance,
                [ConnectionData(JigokuEntrance.demon_entrance_to_start_drop, JigokuRegion.start_drop),
                 ConnectionData(JigokuEntrance.demon_entrance_to_lava_jump_top, JigokuRegion.lava_jump_top),
-                JigokuEntrance.demon_entrance_to_jigoku_ruins, JigokuRegion.jigoku_ruins]),
+                ConnectionData(JigokuEntrance.demon_entrance_to_jigoku_ruins, JigokuRegion.jigoku_ruins)]),
     RegionData(JigokuRegion.lava_jump_top,
                [ConnectionData(JigokuEntrance.lava_jump_top_to_demon_entrance, JigokuRegion.demon_entrance),
                 ConnectionData(JigokuEntrance.lava_jump_top_to_the_mound, JigokuRegion.the_mound)]),
@@ -1158,7 +1162,7 @@ flipwitch_regions = [
                 ConnectionData(ChaosCastleEntrance.cc_thorn_drop_to_cc_double_hall_lower, ChaosCastleRegion.cc_double_hall_lower),
                 ConnectionData(ChaosCastleEntrance.cc_thorn_drop_to_cc_honey_up, ChaosCastleRegion.cc_honey_up)]),
     RegionData(ChaosCastleRegion.cc_double_hall_lower,
-               [ConnectionData(ChaosCastleEntrance.cc_double_hall_to_cc_torch_cave_b, ChaosCastleRegion.cc_torch_cave_b)]),
+               [ConnectionData(ChaosCastleEntrance.cc_double_hall_lower_to_torch_cave_a, ChaosCastleRegion.cc_torch_cave_a)]),
     RegionData(ChaosCastleRegion.cc_torch_cave_a,
                [ConnectionData(ChaosCastleEntrance.cc_torch_cave_a_to_cc_triangles_upper, ChaosCastleRegion.cc_triangles_upper)]),
     RegionData(ChaosCastleRegion.cc_triangles_upper,
@@ -1205,7 +1209,7 @@ flipwitch_regions = [
     RegionData(ChaosCastleRegion.cc_jigoku_pyramid_upper),
     RegionData(ChaosCastleRegion.cc_junction_a,
                [ConnectionData(ChaosCastleEntrance.cc_junction_a_to_cc_tengoku_a, ChaosCastleRegion.cc_tengoku_a),
-                ConnectionData(ChaosCastleEntrance.twotwo_cc_junction_to_twothree_cc_tengokuladder, ChaosCastleRegion.cc_tengoku_ladder),
+                ConnectionData(ChaosCastleEntrance.cc_junction_a_to_cc_tengoku_ladder, ChaosCastleRegion.cc_tengoku_ladder),
                 ConnectionData(ChaosCastleEntrance.cc_junction_a_to_cc_save_pyramid_lower_b, ChaosCastleRegion.cc_save_pyramid_lower_b)]),
     RegionData(ChaosCastleRegion.cc_save_pyramid_lower_b),
     RegionData(ChaosCastleRegion.cc_tengoku_a,
@@ -1252,29 +1256,26 @@ flipwitch_regions = [
     RegionData(ChaosCastleRegion.cc_chaos_witch),
 ]
 
+flipwitch_connections: List[ConnectionData] = []
+for region_data_info in flipwitch_regions:
+    flipwitch_connections.extend(region_data_info.exits)
 
-def create_regions(player: int, region_factory: RegionFactory, do_sex_events: bool, show_spoiler: bool) -> Dict[str, Region]:
+
+randomized_entrance_names = [entrance.name for entrance in flipwitch_connections if entrance.flag == RandomizationFlag.RANDOMIZED]
+
+
+def create_regions(region_factory: RegionFactory, multiworld: MultiWorld) -> Tuple[Dict[str, Region], Dict[str, Entrance]]:
     final_regions = flipwitch_regions
-    regions: Dict[str: Region] = {}
+    regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in
+                                  final_regions}
     entrances: Dict[str: Entrance] = {}
-    connections: List[ConnectionData] = []
-    for region in final_regions:
-        exits = [con.name for con in region.exits]
-        regions[region.name] = region_factory(region.name, exits)
-        connections.extend(region.exits)
     for region in regions.values():
         for entrance in region.exits:
-            entrances[entrance.name] = Entrance(player, entrance.name, region)
-        # Add the full event locations here, to reduce generation time.
-        if do_sex_events and region.name in event_sex_locations:
-            for location in event_sex_locations[region.name]:
-                region.add_event(location.name, location.forced_off_item, show_in_spoiler=show_spoiler)
-        if region.name in event_quest_locations:
-            for location in event_quest_locations[region.name]:
-                region.add_event(location.name, location.forced_off_item)
+            multiworld.register_indirect_condition(region, entrance)
+            entrances[entrance.name] = entrance
 
-    for connection in connections:
+    for connection in flipwitch_connections:
         if connection.name in entrances:
+            entrances[connection.name].randomization_type = connection.type
             entrances[connection.name].connect(regions[connection.destination])
-
-    return regions
+    return regions, entrances
