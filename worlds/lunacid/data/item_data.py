@@ -442,17 +442,17 @@ default_filler_weights = {
 }
 
 default_trap_weights = {
-    Trap.health_viai: 1,
-    Trap.blindness_trap: 1,
-    Trap.slowness_trap: 1,
-    Trap.mana_drain_trap: 1,
-    Trap.xp_drain_trap: 1,
-    Trap.curse_trap: 1,
-    Trap.poison_trap: 1,
-    Trap.bleed_trap: 1,
+    Trap.health_viai: 4,
+    Trap.blindness_trap: 2,
+    Trap.slowness_trap: 2,
+    Trap.mana_drain_trap: 2,
+    Trap.xp_drain_trap: 2,
+    Trap.curse_trap: 2,
+    Trap.poison_trap: 2,
+    Trap.bleed_trap: 2,
     Trap.rat: 1,
-    Trap.timeout: 1,
-    Trap.eggnog: 1,
-    Trap.coal: 1,
+    Trap.timeout: 0,
+    Trap.eggnog: 4,
+    Trap.coal: 4,
     GenericItem.patchouli_gift: 0,
 }
