@@ -9,6 +9,7 @@ from Utils import visualize_regions
 from worlds.AutoWorld import World, WebWorld
 from . import Options
 from .OptionGroups import lunacid_option_groups
+from .Tracker import disconnect_entrances, reconnect_found_entrance
 from .data.enemy_positions import (base_enemy_placement, EnemyPlacement, construct_flag_data_for_mod,
                                    construct_enemy_dictionary)
 from .data.location_data import grass_location_names, breakable_location_names
@@ -129,15 +130,18 @@ class LunacidWorld(World):
     glitches_item_name = "Glitched Item"
 
     passthrough: Dict[str, Any]
-    using_ut: bool
+    using_ut: bool = False
     tracker_world: ClassVar = Tracker.TRACKER_WORLD
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
+    disconnected_entrances: dict[Entrance, Region]
+    found_entrances_datastorage_key = "Slot:{player}:TraversedEntrances"
 
     def __init__(self, multiworld, player):
         super(LunacidWorld, self).__init__(multiworld, player)
         slot_data = getattr(multiworld, "re_gen_passthrough", {}).get("Lunacid")
         if slot_data:
             self.seed = slot_data.get("ut_seed")
+            self.using_ut = True
         else:
             self.seed = self.random.getrandbits(64)
         self.random = Random(self.seed)
@@ -302,8 +306,14 @@ class LunacidWorld(World):
 
                     e_dict[connection].connected_region = e_dict[entrances[connection]].parent_region
                 self.randomized_entrances = slot_data["entrances"]
+            if self.using_ut and self.multiworld.enforce_deferred_connections in ("on", "default"):
+                disconnect_entrances(self)
         # self.visualize_regions()
         # hi = True
+
+    def reconnect_found_entrances(self, found_key: str, data_storage_value: Any) -> None:
+        if self.found_entrances_datastorage_key in found_key:
+            reconnect_found_entrance(self, data_storage_value)
 
     def visualize_regions(self):
         multiworld = self.multiworld
