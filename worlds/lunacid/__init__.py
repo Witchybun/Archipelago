@@ -312,8 +312,9 @@ class LunacidWorld(World):
         # hi = True
 
     def reconnect_found_entrances(self, found_key: str, data_storage_value: Any) -> None:
-        if self.found_entrances_datastorage_key in found_key:
-            reconnect_found_entrance(self, data_storage_value)
+        if not data_storage_value:
+            return
+        reconnect_found_entrance(self, data_storage_value)
 
     def visualize_regions(self):
         multiworld = self.multiworld
@@ -536,7 +537,7 @@ class LunacidWorld(World):
         slot_data = {
             "ut_seed": self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "1.0.0",
+            "client_version": "1.0.9",
             "rolled_month": self.rolled_month,
             "starting_weapon": self.starting_weapon.name,
             "elements": self.weapon_elements,
