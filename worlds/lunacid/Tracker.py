@@ -457,7 +457,6 @@ poptracker_data: dict[str, int] = {
 
 def disconnect_entrances(world: "LunacidWorld") -> None:
     world.disconnected_entrances = {}
-    world.found_entrances_datastorage_key = []
     randoable_entrances = LunacidEntrance.randoable_entrances
     for entrance in world.get_entrances():
         if entrance.name in randoable_entrances:
@@ -467,7 +466,7 @@ def disconnect_entrances(world: "LunacidWorld") -> None:
 
 def reconnect_found_entrance(world: "LunacidWorld", value: Any) -> None:
     entrance_connected = False
-    traversed_entrances = dict(value)
+    traversed_entrances = {entry["Key"]: entry["Value"] for entry in value}
     for entrance, region in world.disconnected_entrances.items():
         if entrance.name in traversed_entrances:
                 entrance.connect(region)
@@ -478,7 +477,7 @@ def reconnect_found_entrance(world: "LunacidWorld", value: Any) -> None:
                     reverse_region = world.disconnected_entrances[reverse_entrance]
                     reverse_entrance.connect(reverse_region)
     if not entrance_connected:
-        raise Exception("Entrance not found in reconnect_found_entrance")
+        raise Exception(f"Some entrance in {traversed_entrances} not found for reconnect_found_entrance method.")
 
 
 
