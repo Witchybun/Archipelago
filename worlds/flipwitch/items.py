@@ -139,7 +139,7 @@ def create_shop_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
 
 
 def create_quest_items(item_factory: FlipwitchItemFactory, options: FlipwitchOptions, hints_lookup: Dict[str, Item], items: List[Item]) -> List[Item]:
-    if options.quest_for_sex == options.quest_for_sex.option_off:
+    if options.quest_for_sex == options.quest_for_sex.option_off or options.quest_for_sex == options.quest_for_sex.option_sensei:
         return items
     for item in quest_items:
         if item.name == Custom.sex_experience:

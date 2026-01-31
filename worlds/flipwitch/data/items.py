@@ -233,5 +233,5 @@ trap_items = [
 
 item_name_to_item = {item.name: item for item in all_items}
 
-filler_items = [item for item in all_items if item.classification == ItemClassification.filler]
+filler_items = [item for item in all_items if item.classification == ItemClassification.filler and item not in gacha_items]
 

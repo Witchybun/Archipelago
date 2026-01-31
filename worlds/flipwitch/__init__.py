@@ -13,7 +13,7 @@ from .data.items import FlipwitchItemData
 from .strings.locations import WitchyWoods, GhostCastle, ClubDemon, AngelicHallway, SlimeCitadel, UmiUmi, witchy_woods_locations, spirit_town_locations, \
     shady_sewer_locations, ghostly_castle_locations, jigoku_locations, tengoku_locations, fungal_forest_locations, slime_citadel_locations, umi_umi_locations, \
     chaos_castle_locations
-from .strings.regions_entrances import ChaosCastleRegion, FungalForestRegion
+from .strings.regions_entrances import ChaosCastleRegion, FungalForestRegion, CrystalRegion
 from .strings.items import GoalItem, Power, Upgrade, Key
 from .strings.locations import Gacha
 from .strings.fake_hints import possible_fakes
@@ -81,6 +81,7 @@ class FlipwitchWorld(World):
     angel_order = []
     item_lookup = {}
     hint_lookup = {}
+    area_order = []
     necessary_to_do_order: Dict[int, str] = {}
     packaged_hints = {}
 
@@ -161,8 +162,9 @@ class FlipwitchWorld(World):
     def visualize_regions(self):
         multiworld = self.multiworld
         player = self.player
-        sex_regions = set(self.get_regions())
-        visualize_regions(multiworld.get_region(FungalForestRegion.phone_booth, player), f"{multiworld.get_out_file_name_base(player)}.puml", show_locations=False, regions_to_highlight=sex_regions)
+        regions_to_check = set([location.parent_region for location in self.multiworld.get_reachable_locations(CollectionState(self.multiworld), self.player) if
+                                    location.item is None])
+        visualize_regions(multiworld.get_region(CrystalRegion.menu, player), f"{multiworld.get_out_file_name_base(player)}.puml", show_locations=False, regions_to_highlight=regions_to_check)
 
     def get_groups_for_location(self, location: Location):
         player_game = self.multiworld.worlds[location.player]
@@ -246,7 +248,7 @@ class FlipwitchWorld(World):
         self.package_hints()
         slot_data = {
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "0.2.11",
+            "client_version": "1.0.0",
             "animal_order": self.animal_order,
             "bunny_order": self.bunny_order,
             "monster_order": self.monster_order,
@@ -254,7 +256,8 @@ class FlipwitchWorld(World):
             "hints": self.packaged_hints,
             "path": self.necessary_to_do_order,
             **self.options.as_dict("starting_gender", "gachapon_shuffle", "shopsanity", "shop_prices", "stat_shuffle", "pottery_lottery",
-                                   "shuffle_chaos_pieces", "gachapon_shuffle", "quest_for_sex", "crystal_teleports", "death_link"),
+                                   "shuffle_chaos_pieces", "gachapon_shuffle", "quest_for_sex", "crystal_teleports", "death_link", "starting_area",
+                                   "shuffle_double_jump", "shuffle_dodge"),
         }
         return slot_data
 

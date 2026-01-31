@@ -90,6 +90,7 @@ class FlipwitchRules:
             SpiritCityEntrance.cabaretcafe_to_viproom_cabaret: lambda state: state.has(QuestItem.vip_key, self.player),
             SpiritCityEntrance.clinic_front_to_clinic_back: lambda state: self.can_wear_costume(state, Costume.nurse),
             SpiritCityEntrance.city_stairwell_to_residential_lane: lambda state: state.has(Unlock.goblin_crystal_block, self.player),
+            SpiritCityEntrance.cemetery_a_to_waterfall_tomb: lambda state: state.has(Unlock.goblin_crystal_block, self.player),
             SpiritCityEntrance.residential_lane_to_city_stairwell: lambda state: state.has(Unlock.goblin_crystal_block, self.player),
             SpiritCityEntrance.ghost_castle_rd_to_pig_mansion_entrance: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or
                                                                                       (self.can_present_gender(state, "Female") and
@@ -100,8 +101,8 @@ class FlipwitchRules:
             SpiritCityEntrance.shady_alley_to_goblin_office: lambda state: state.has(QuestEventItem.goblin_model_3, self.player),
             SpiritCityEntrance.cult_hall_lobby_to_cult_hall_left: lambda state: self.can_wear_costume(state, Costume.nun),
             SpiritCityEntrance.cult_hall_lobby_to_cult_hall_right: lambda state: self.can_wear_costume(state, Costume.priest),
-            SpiritCityEntrance.city_stairwell_to_pipeworld_entrance: lambda state: state.has(Power.ghost_form, self.player),
-            SpiritCityEntrance.pipeworld_entrance_to_city_stairwell: lambda state: state.has(Power.ghost_form, self.player),
+            SpiritCityEntrance.city_stairwell_to_pipeworld_entrance: lambda state: self.can_ghost_dodge(state),
+            SpiritCityEntrance.pipeworld_entrance_to_city_stairwell: lambda state: self.can_ghost_dodge(state),
 
             SpiritCityEntrance.jigoku_path_to_pipe_entrance: lambda state: state.has(Power.slime_form, self.player),
             SpiritCityEntrance.tall_pipe_to_secret: lambda state: self.can_double_jump(state),
@@ -111,8 +112,8 @@ class FlipwitchRules:
             GhostCastleEntrance.ghost_castle_door_to_three_gardens: lambda state: state.has(Key.ghostly_castle, self.player),
             GhostCastleEntrance.three_gardens_to_ghost_castle_door: lambda state: state.has(Key.ghostly_castle, self.player),
             GhostCastleEntrance.three_gardens_to_ghost_gardens_secret: lambda state: state.has(Power.slime_form, self.player),
-            GhostCastleEntrance.ghost_castle_back_exit_to_fungal_forest: lambda state: state.has(Power.ghost_form, self.player),
-            GhostCastleEntrance.fungal_forest_to_ghost_castle_back_exit: lambda state: state.has(Power.ghost_form, self.player),
+            GhostCastleEntrance.ghost_castle_back_exit_to_fungal_forest: lambda state: self.can_ghost_dodge(state),
+            GhostCastleEntrance.fungal_forest_to_ghost_castle_back_exit: lambda state: self.can_ghost_dodge(state),
             GhostCastleEntrance.fungal_forest_to_pathway_to_umi_umi: lambda state: state.has(Upgrade.mermaid_scale, self.player),
             GhostCastleEntrance.pathway_to_umi_umi_to_fungal_forest: lambda state: state.has(Upgrade.mermaid_scale, self.player) and self.can_double_jump(state),
             GhostCastleEntrance.three_gardens_to_four_gardens: lambda state: self.can_double_jump(state),
@@ -130,12 +131,12 @@ class FlipwitchRules:
                                                                           self.can_triple_jump(state) or state.has(Upgrade.demon_wings, self.player),
             GhostCastleEntrance.fashion_room_to_upper_halls: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or self.can_roll(state) or
                                                                           self.can_triple_jump(state) or state.has(Upgrade.demon_wings, self.player),
-            GhostCastleEntrance.tall_tower_to_large_key_room: lambda state: state.has(Power.ghost_form, self.player),
-            GhostCastleEntrance.large_key_room_to_tall_tower: lambda state: state.has(Power.ghost_form, self.player),
-            GhostCastleEntrance.tall_tower_to_tutorial_room: lambda state: state.has(Power.ghost_form, self.player),
+            GhostCastleEntrance.tall_tower_to_large_key_room: lambda state: self.can_ghost_dodge(state),
+            GhostCastleEntrance.large_key_room_to_tall_tower: lambda state: self.can_ghost_dodge(state),
+            GhostCastleEntrance.tall_tower_to_tutorial_room: lambda state: self.can_ghost_dodge(state),
             GhostCastleEntrance.ghost_castle_door_top_to_cellar_hall: lambda state: state.has(Key.secret_garden, self.player),
             GhostCastleEntrance.cellar_hall_to_ghost_castle_door_top: lambda state: state.has(Key.secret_garden, self.player) and self.can_triple_jump(state),
-            GhostCastleEntrance.crumbling_room_to_parkour: lambda state: state.has(Upgrade.bewitched_bubble, self.player) and state.has(Power.ghost_form, self.player),
+            GhostCastleEntrance.crumbling_room_to_parkour: lambda state: state.has(Upgrade.bewitched_bubble, self.player) and self.can_ghost_dodge(state),
 
             # Jigoku
 
@@ -218,7 +219,7 @@ class FlipwitchRules:
                                                                        (self.can_present_gender(state, "Female") and self.can_double_jump(state)),
             TengokuEntrance.jump_hallway_left_to_chaos_room: lambda state: self.can_double_jump(state) or self.can_roll(state) or state.has(Upgrade.demon_wings, self.player),
             TengokuEntrance.long_jump_to_stone_climb: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
-            TengokuEntrance.maze_up_lower_to_gender_platforms: lambda state: state.has(Power.ghost_form, self.player),
+            TengokuEntrance.maze_up_lower_to_gender_platforms: lambda state: self.can_ghost_dodge(state),
             TengokuEntrance.maze_up_lower_to_maze_up_top: lambda state: self.can_triple_jump(state) or (state.has(Upgrade.bewitched_bubble, self.player) and self.can_double_jump(state)),
             TengokuEntrance.switch_floor_to_yellow_door: lambda state: (state.has(Upgrade.bewitched_bubble, self.player) and
                                                                         ((self.can_roll(state) and self.can_double_jump(state)) or
@@ -251,8 +252,8 @@ class FlipwitchRules:
             ChaosCastleEntrance.cc_entrance_hall_to_cc_thorn_drop: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
             ChaosCastleEntrance.cc_entrance_hall_to_outside_upper_corner: lambda state: self.can_triple_jump(state) and state.has(Upgrade.demon_wings, self.player),
             ChaosCastleEntrance.cc_torch_cave_a_to_cc_triangles_upper: lambda state: self.can_double_jump(state),
-            ChaosCastleEntrance.cc_honey_up_to_cc_ghost_torches_b: lambda state: state.has(Power.ghost_form, self.player),
-            ChaosCastleEntrance.cc_honey_up_to_ghost_torches_a: lambda state: state.has(Power.ghost_form, self.player),
+            ChaosCastleEntrance.cc_honey_up_to_cc_ghost_torches_b: lambda state: self.can_ghost_dodge(state),
+            ChaosCastleEntrance.cc_honey_up_to_ghost_torches_a: lambda state: self.can_ghost_dodge(state),
             ChaosCastleEntrance.cc_ghost_torches_b_to_cc_honey_bend_a: lambda state: self.can_double_jump(state),
             ChaosCastleEntrance.cc_junction_a_to_cc_tengoku_ladder: lambda state: self.can_triple_jump(state) and state.has(Key.chaos_sanctum, self.player),
             ChaosCastleEntrance.cc_honey_jumps_to_cc_stairwell_a: lambda state: self.can_triple_jump(state) and state.has(Upgrade.demon_wings, self.player),
@@ -312,7 +313,7 @@ class FlipwitchRules:
             SpiritCity.alley: lambda state: state.has(Power.slime_form, self.player),
             SpiritCity.chaos: lambda state: state.has(Key.abandoned_apartment, self.player),
             SpiritCity.home_2: lambda state: self.can_triple_jump(state) or (self.can_double_jump(state) and state.has(Upgrade.demon_wings, self.player)),
-            SpiritCity.home_1: lambda state: state.has(Power.ghost_form, self.player),
+            SpiritCity.home_1: lambda state: self.can_ghost_dodge(state),
             SpiritCity.home_6: lambda state: state.has(Upgrade.mermaid_scale, self.player),
             SpiritCity.green_house: lambda state: state.has(Power.slime_form, self.player),
             SpiritCity.fungal_key: lambda state: self.can_wear_costume(state, Costume.pigman),
@@ -332,7 +333,7 @@ class FlipwitchRules:
             ShadySewers.dwd_tutorial: lambda state: state.has(Power.slime_form, self.player),
 
             # Spirit City Events
-            SexEventsLocation.rover_1: lambda state: state.has(Power.ghost_form, self.player) and self.can_present_gender(state, "Female"),
+            SexEventsLocation.rover_1: lambda state: self.can_ghost_dodge(state) and self.can_present_gender(state, "Female"),
             SexEventsLocation.bottom_ghost: lambda state: self.can_wear_costume(state, Costume.dominating),
             SexEventsLocation.rover_3: lambda state: state.has(QuestItem.legendary_halo, self.player),
             SexEventsLocation.belle_2: lambda state: state.has(QuestEventItem.belle_2_b, self.player),
@@ -344,6 +345,7 @@ class FlipwitchRules:
             SexEventsLocation.tatil: lambda state: state.has(QuestItem.deed, self.player) and state.has(QuestEventItem.tatil_2, self.player),
             SexEventsLocation.pig: lambda state: state.has(QuestItem.maid_contract, self.player),
 
+            QuestEventLocation.rover_1: lambda state: self.can_ghost_dodge(state) and self.can_present_gender(state, "Female"),
             QuestEventLocation.rover_3: lambda state: state.has(QuestItem.legendary_halo, self.player),
             QuestEventLocation.cat_girls_3_b: lambda state: state.has(QuestEventItem.cat_girls_3_a, self.player),
             QuestEventLocation.belle_2_a: lambda state: state.has(QuestEventItem.belle_1, self.player) and state.has(QuestEventItem.rover_1, self.player)
@@ -357,7 +359,7 @@ class FlipwitchRules:
 
             # Ghost Castle
 
-            GhostCastle.below_entrance: lambda state: state.has(Power.ghost_form, self.player),
+            GhostCastle.below_entrance: lambda state: self.can_ghost_dodge(state),
             GhostCastle.slime_3: lambda state: (state.has(Upgrade.bewitched_bubble, self.player) and (self.can_double_jump(state) or
                                                                                                       state.has(Upgrade.demon_wings, self.player))) or
                                                (self.can_present_gender(state, "Female") and ((self.can_double_jump(state) and
@@ -500,7 +502,7 @@ class FlipwitchRules:
 
             # Chaos Castle
 
-            ChaosCastle.ghost_coin: lambda state: state.has(Power.ghost_form, self.player),
+            ChaosCastle.ghost_coin: lambda state: self.can_ghost_dodge(state),
             ChaosCastle.citadel: lambda state: state.has(Power.slime_form, self.player),
             ChaosCastle.fungal: lambda state: state.has(Power.slime_form, self.player),
             ChaosCastle.pandora_key: lambda state: state.has(Power.slime_form, self.player),
@@ -530,7 +532,7 @@ class FlipwitchRules:
             Quest.help_wanted: lambda state: state.has(QuestEventItem.rover_3, self.player) and state.has(QuestEventItem.belle_3, self.player) and
                                              state.has(QuestEventItem.cat_girls_3_b, self.player) and state.has(QuestEventItem.bunny_1, self.player),
             Quest.medical_emergency: lambda state: self.can_wear_costume(state, Costume.nurse),
-            Quest.let_the_dog_out: lambda state: state.has(Power.ghost_form, self.player) and self.can_present_gender(state, "Female"),
+            Quest.let_the_dog_out: lambda state: self.can_ghost_dodge(state) and self.can_present_gender(state, "Female"),
             Quest.stop_democracy: lambda state: self.can_wear_costume(state, Costume.dominating),
             Quest.bunny_club: lambda state: self.can_wear_costume(state, Costume.bunny),
             Quest.silky_slime: lambda state: state.has(QuestItem.silky_slime, self.player) and self.can_present_gender(state, "Male"),
@@ -607,6 +609,9 @@ class FlipwitchRules:
 
     def can_roll(self, state: CollectionState) -> bool:
         return not self.world.options.shuffle_dodge or state.has(Upgrade.orb_of_avoidance, self.player)
+    
+    def can_ghost_dodge(self, state: CollectionState) -> bool:
+        return state.has(Power.ghost_form, self.player) and self.can_roll(state)
 
     def can_double_jump(self, state: CollectionState) -> bool:
         return not self.world.options.shuffle_double_jump or state.has(Upgrade.rose_ribbon, self.player) or state.has(Upgrade.angel_feathers, self.player)
