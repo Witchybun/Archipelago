@@ -105,20 +105,14 @@ class Warp:
 
     area_to_warp = {
         0: sensei,
-        1: witchy,
-        2: goblin,
-        3: spirit,
-        4: shady,
-        5: ghost_entrance,
-        6: ghost_castle,
-        7: jigoku,
-        8: club_demon,
-        9: tengoku,
-        10: angelic_hallway,
-        11: fungal_forest,
-        12: slime_citadel,
-        13: slimy_depths,
-        14: umi_umi,
+        1: goblin,
+        2: spirit,
+        3: ghost_castle,
+        4: jigoku,
+        5: club_demon,
+        6: tengoku,
+        7: slime_citadel,
+        8: umi_umi,
     }
 
 

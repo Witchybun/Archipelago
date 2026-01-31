@@ -732,3 +732,8 @@ class Potsanity:
     uu_diving_deeper_4 = "UU: Diving Deeper Pot 4"
     uu_diving_1 = "UU: Diving Pot 1"
     uu_diving_2 = "UU: Diving Pot 2"
+
+    ww_goblin_camp_lower_1 = "WW: Goblin Camp Lower Pot 1"
+    ww_goblin_camp_lower_2 = "WW: Goblin Camp Lower Pot 2"
+    ww_goblin_camp_lower_3 = "WW: Goblin Camp Lower Pot 3"
+    jg_green_stairwell_3 = "JG: Green Stairwell Pot 3"
