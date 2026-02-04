@@ -1089,6 +1089,7 @@ flipwitch_regions = [
                 ConnectionData(UmiUmiEntrance.coral_junction_to_deep_drop, UmiUmiRegion.deep_drop)]),
     RegionData(UmiUmiRegion.coral_zone,
                [ConnectionData(UmiUmiEntrance.coral_zone_to_swim_up, UmiUmiRegion.swim_up)]),
+
     RegionData(UmiUmiRegion.swim_up,
                [ConnectionData(UmiUmiEntrance.swim_up_to_ocean_puzzle, UmiUmiRegion.ocean_puzzle)]),
     RegionData(UmiUmiRegion.ocean_puzzle,
@@ -1098,6 +1099,7 @@ flipwitch_regions = [
     RegionData(UmiUmiRegion.trident_hall,
                [ConnectionData(UmiUmiEntrance.trident_hall_to_water_reward, UmiUmiRegion.water_reward)]),
     RegionData(UmiUmiRegion.water_reward),
+
     RegionData(UmiUmiRegion.diving,
                [ConnectionData(UmiUmiEntrance.diving_to_diving_deeper, UmiUmiRegion.diving_deeper),
                 ConnectionData(UmiUmiEntrance.diving_to_surfacing, UmiUmiRegion.surfacing),

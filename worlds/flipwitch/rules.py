@@ -162,7 +162,7 @@ class FlipwitchRules:
             JigokuEntrance.small_room_to_late_drop: lambda state: self.can_triple_jump(state) or
                                                                   (state.has(Upgrade.demon_wings, self.player) and
                                                                    self.can_double_jump(state)),
-            JigokuEntrance.goat_guy_room_to_club_arrow: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
+            JigokuEntrance.goat_guy_room_to_evil_stairs: lambda state: state.has(Upgrade.bewitched_bubble, self.player),
             JigokuEntrance.purple_orange_to_purple_tunnel: lambda state: state.has(Key.secret_club, self.player),
             JigokuEntrance.lava_pit_to_gender_puzzle: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or
                                                                     (self.can_present_gender(state, "Male") and self.can_triple_jump(state)),
@@ -242,7 +242,7 @@ class FlipwitchRules:
             UmiUmiEntrance.diving_deeper_to_dead_mans_drop: lambda state: self.can_present_gender(state, "Female") or self.can_triple_jump(state),
             UmiUmiEntrance.swim_up_to_ocean_puzzle: lambda state: state.has(Upgrade.bewitched_bubble, self.player) and self.can_triple_jump(state),
             UmiUmiEntrance.coral_junction_to_deep_drop: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or
-                                                                      (not self.startedFemale and self.can_triple_jump(state)),
+                                                                      (self.can_present_gender(state, "Female") and self.can_triple_jump(state)),
             UmiUmiEntrance.water_junction_to_deep_drop: lambda state: self.can_triple_jump(state) or
                                                                       (self.can_present_gender(state, "Male") and self.can_double_jump(state)),
 
@@ -446,6 +446,7 @@ class FlipwitchRules:
             AngelicHallway.thimble_1: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or (self.startedFemale and self.can_double_jump(state)),
             AngelicHallway.thimble_2: lambda state: state.has(Upgrade.bewitched_bubble, self.player) or (self.startedFemale and self.can_double_jump(state)),
             AngelicHallway.angel_letter: lambda state: self.can_wear_costume(state, Costume.postman),
+            AngelicHallway.behind_vines: lambda state: state.has(Power.ghost_form, self.player),
 
             # Tengoku Events
 
