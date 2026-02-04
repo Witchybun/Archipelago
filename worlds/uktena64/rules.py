@@ -4,7 +4,8 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule
 from .strings.items import JebCampaignItem, BaseItem, JeebCampaignItem, JebItem, JeebItem, PhotoItem, MeatItem
 from .strings.locations import TurkeyCreek, JebCabin, CabinCamera, TurkeyCamera, Hyena, FrigidValley, FrigidCamera, HowlingMarsh, HowlingCamera, \
-    BleedingGrove, TheBBQBasket, BBQMeat, RitualRoad, RitualMeat, LakeLinger, LakeMeat, PallidPark, PallidMeat, BurningGrove, BurningMeat
+    BleedingGrove, TheBBQBasket, BBQMeat, RitualRoad, RitualMeat, LakeLinger, LakeMeat, PallidPark, PallidMeat, BurningGrove, BurningMeat, \
+    BleedingCamera
 from .strings.regions import JebEntrance, JeebEntrance
 
 if TYPE_CHECKING:
@@ -39,11 +40,12 @@ class UktenaRules:
 
         self.location_rules = {
             "Complete Both Campaigns": lambda state: state.has("Complete Jeb Campaign", self.player) and state.has("Complete Jeeb Campaign", self.player),
+            "Uktena Defeated": lambda state: state.has(JebItem.bren_lmg, self.player) and state.has(PhotoItem.bleeding_grove, self.player),
+            "Failed Rhythm Game": lambda state: state.has(MeatItem.burning, self.player, 7) and state.has(JeebItem.banjo, self.player),
             # Jeb
 
             # Cabin
             JebCabin.camera: lambda state: state.has(JebItem.knife, self.player),
-            JebCabin.rifle: lambda state: state.has(JebItem.knife, self.player),
             JebCabin.clear: lambda state: state.has(PhotoItem.cabin, self.player),
 
             CabinCamera.squirrel: lambda state: state.has(JebItem.camera, self.player),
@@ -122,6 +124,7 @@ class UktenaRules:
                                                          and state.has(PhotoItem.frigid_valley, self.player, 13),
             FrigidCamera.snowman_skull: lambda state: self.can_break_barrel_in_campaign(state, "Jeb") and
                                                       state.has(JebItem.camera, self.player) and state.has(PhotoItem.frigid_valley, self.player, 13),
+            FrigidCamera.mountain_wolf: lambda state: state.has(JebItem.camera, self.player) and self.has_ranged_options_in_campaign(state, "Jeb"),
 
             Hyena.frigid_valley: lambda state: self.has_ranged_options_in_campaign(state, "Jeb"),
 
@@ -152,8 +155,10 @@ class UktenaRules:
                                                    state.has(JebItem.camera, self.player),
 
             # Bleeding Grove
-            BleedingGrove.bren: lambda state: state.has(JebItem.camera, self.player),
+            BleedingGrove.bren: lambda state: state.has(JebItem.camera, self.player) and self.has_ranged_options_in_campaign(state, "Jeb"),
             BleedingGrove.clear: lambda state: state.has(JebItem.bren_lmg, self.player) and state.has(PhotoItem.bleeding_grove, self.player),
+
+            BleedingCamera.starved: lambda state: state.has(JebItem.camera, self.player) and self.has_ranged_options_in_campaign(state, "Jeb"),
 
             # Jeeb
 
@@ -204,6 +209,8 @@ class UktenaRules:
             LakeLinger.trapped_start_trap_3: lambda state: self.can_break_barrel_in_campaign(state, "Jeeb") and state.has(MeatItem.lake, self.player, 16),
             LakeLinger.trapped_start_trap_4: lambda state: self.can_break_barrel_in_campaign(state, "Jeeb") and state.has(MeatItem.lake, self.player, 16),
             LakeLinger.trapped_start_trap_5: lambda state: self.can_break_barrel_in_campaign(state, "Jeeb") and state.has(MeatItem.lake, self.player, 16),
+            LakeLinger.trapped_start_trap_6: lambda state: self.can_break_barrel_in_campaign(state, "Jeeb") and state.has(MeatItem.lake, self.player, 16),
+            LakeLinger.trapped_start_trap_7: lambda state: self.can_break_barrel_in_campaign(state, "Jeeb") and state.has(MeatItem.lake, self.player, 16),
             LakeLinger.clear: lambda state: state.has(MeatItem.lake, self.player, 16),
 
             LakeMeat.dead_body: lambda state: state.has(JeebItem.butcher_knives, self.player),

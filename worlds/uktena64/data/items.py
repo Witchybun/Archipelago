@@ -49,7 +49,7 @@ jeb_base_items = [
 jeeb_base_item_code = 30
 jeeb_base_items = [
     create_item(jeeb_base_item_code + 1, JeebItem.butcher_knives, ItemClassification.progression),
-    create_item(jeeb_base_item_code + 2, JeebItem.binoculars, ItemClassification.progression),
+    # create_item(jeeb_base_item_code + 2, JeebItem.binoculars, ItemClassification.progression),
     create_item(jeeb_base_item_code + 3, JeebItem.ruger, ItemClassification.progression),
     create_item(jeeb_base_item_code + 4, JeebItem.bear_trap, ItemClassification.progression),
     create_item(jeeb_base_item_code + 5, JeebItem.crossbow, ItemClassification.progression),

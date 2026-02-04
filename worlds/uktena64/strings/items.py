@@ -37,8 +37,8 @@ class JeebItem:
     starting_bear_traps = "Starting Bear Traps + 1"
     starting_crossbow_bolts = "Starting Crossbow Bolts + 1"
 
-    weapons = [butcher_knives, ruger, crossbow, banjo]
-    guns = [ruger, crossbow, banjo]
+    weapons = [butcher_knives, ruger, crossbow]
+    guns = [ruger, crossbow]
 
 class JeebCampaignItem:
     ritual_road = "Ritual Road"

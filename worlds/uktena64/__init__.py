@@ -10,7 +10,7 @@ from worlds.uktena64.options import UktenaOptions
 from worlds.uktena64.regions import ConnectionData, create_regions
 from worlds.uktena64.rules import UktenaRules
 from worlds.uktena64.strings.items import BaseItem, JebItem, JeebItem
-from worlds.uktena64.strings.locations import BurningGrove, BleedingGrove, JebCabin, TheBBQBasket
+from worlds.uktena64.strings.locations import BurningGrove, BleedingGrove, JebCabin, TheBBQBasket, jeb_clears, jeeb_clears
 from worlds.uktena64.strings.regions import JebRegion, JeebRegion, BaseRegion
 
 logger = logging.getLogger()
@@ -81,6 +81,10 @@ class UktenaWorld(World):
             forced_items += 1
             if self.options.campaign == self.options.campaign.option_both:
                 forced_items += 1
+        if self.options.campaign != self.options.campaign.option_jeeb:
+            forced_items += 5
+        if self.options.campaign != self.options.campaign.option_jebidiah:
+            forced_items += 5
         locations_count = len([location
                                for location in self.get_locations() if location.item is None]) - forced_items
         excluded_items = self.multiworld.precollected_items[self.player]
@@ -109,12 +113,12 @@ class UktenaWorld(World):
         self.place_event_items_in_event_locations(event_locations, world_regions)
 
         if self.options.campaign == self.options.campaign.option_jebidiah:
-            world_regions[JebRegion.bleeding].add_event(BleedingGrove.clear, "Victory")
+            world_regions[JebRegion.bleeding].add_event("Uktena Defeated", "Victory")
         if self.options.campaign == self.options.campaign.option_jeeb:
-            world_regions[JeebRegion.burning].add_event(BurningGrove.clear, "Victory")
+            world_regions[JeebRegion.burning].add_event("Failed Rhythm Game", "Victory")
         if self.options.campaign == self.options.campaign.option_both:
-            world_regions[JebRegion.bleeding].add_event(BleedingGrove.clear, "Complete Jeb Campaign")
-            world_regions[JeebRegion.burning].add_event(BurningGrove.clear, "Complete Jeeb Campaign")
+            world_regions[JebRegion.bleeding].add_event("Uktena Defeated", "Complete Jeb Campaign")
+            world_regions[JeebRegion.burning].add_event("Failed Rhythm Game", "Complete Jeeb Campaign")
             world_regions[BaseRegion.menu].add_event("Complete Both Campaigns", "Victory")
 
         self.multiworld.regions.extend(world_regions.values())
@@ -129,9 +133,19 @@ class UktenaWorld(World):
             if self.options.campaign != self.options.campaign.option_jebidiah:
                 butcher_location = self.get_location(TheBBQBasket.butcher_knives)
                 butcher_location.place_locked_item(self.create_item(JeebItem.butcher_knives))
+        if self.options.campaign != self.options.campaign.option_jebidiah:
+            for clear in jeeb_clears:
+                jeeb_level_done = self.get_location(clear)
+                jeeb_level_done.place_locked_item(self.create_item(BaseItem.jeeb_campaign))
+        if self.options.campaign != self.options.campaign.option_jeeb:
+            for clear in jeb_clears:
+                jeb_level_done = self.get_location(clear)
+                jeb_level_done.place_locked_item(self.create_item(BaseItem.jeb_campaign))
 
     def get_pre_fill_items(self) -> List["Item"]:
         pre_fill_items = []
+        pre_fill_items.extend([self.create_item(jeb) for jeb in [BaseItem.jeb_campaign]*5])
+        pre_fill_items.extend([self.create_item(jeeb) for jeeb in [BaseItem.jeeb_campaign]*5])
         if self.options.randomize_camera_knife:
             return pre_fill_items
         if self.options.campaign != self.options.campaign.option_jeeb:
@@ -144,13 +158,6 @@ class UktenaWorld(World):
         for region in event_locations_from_settings:
             for location in event_locations_from_settings[region]:
                 region_lookup[region].add_event(location.name, location.forced_item)
-
-        if self.options.campaign != self.options.campaign.option_jeeb:
-            for region in jeb_clear_events:
-                region_lookup[region].add_event(jeb_clear_events[region], BaseItem.jeb_campaign)
-        if self.options.campaign != self.options.campaign.option_jebidiah:
-            for region in jeeb_clear_events:
-                region_lookup[region].add_event(jeeb_clear_events[region], BaseItem.jeeb_campaign)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {

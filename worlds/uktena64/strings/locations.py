@@ -1,18 +1,19 @@
 class JebCabin:
     knife = "Jeb's Cabin: Rocking Chair Item"
     camera = "Jeb's Cabin: Camera Barrel"
-    rifle = "Jeb's Cabin: Rifle Barrel"
-    clear = "Jeb's Cabin Clear"
+    rifle = "Jeb's Cabin: Rifle Near Rocking Chair"
     coffee = "Jeb's Cabin: Coffee"
+    ammo = "Jeb's Cabin: Ammo"
+    clear = "Jeb's Cabin Cleared"
 
 class TurkeyCreek:
     turkey_call = "Turkey Creek: Turkey Call Item"
-    hen_coffee = "Turkey Creek: Hen House Coffee"
     hen_ammo = "Turkey Creek: Hen House Barrel Ammo"
-    dark_spot_ammo = "Turkey Creek: Dark Spot Barrel Ammo"
-    rock_coffee = "Turkey Creek: Rock Coffee"
-    house_coffee = "Turkey Creek: House Barrel Coffee"
+    hen_coffee = "Turkey Creek: Hen House Coffee"
     house_ammo = "Turkey Creek: House Barrel Ammo"
+    dark_spot_ammo = "Turkey Creek: Dark Spot Barrel Ammo"
+    house_coffee = "Turkey Creek: House Barrel Coffee"
+    rock_coffee = "Turkey Creek: Rock Coffee"
     clear = "Turkey Creek Cleared"
 
 class FrigidValley:
@@ -27,7 +28,7 @@ class FrigidValley:
     final_shack_coffee = "Frigid Valley: Final Shack Barrel Coffee"
     final_shack_ammo = "Frigid Valley: Final Shack Barrel Ammo"
     late_path_ammo = "Frigid Valley: Late Path Barrel Ammo"
-    clear = "Frigid Valley Clear"
+    clear = "Frigid Valley Cleared"
 
 class HowlingMarsh:
     revolver = "Howling Marsh: Church Podium Item"
@@ -40,16 +41,17 @@ class HowlingMarsh:
     greenhouse_ammo_1 = "Howling Marsh: Greenhouse Barrel Ammo 1"
     greenhouse_ammo_2 = "Howling Marsh: Greenhouse Barrel Ammo 2"
     trailer_coffee = "Howling Marsh: Trailer Coffee"
-    clear = "Howling Marsh Clear"
+    clear = "Howling Marsh Cleared"
 
 class BleedingGrove:
     bren = "Bleeding Grove: Starved Corpse's Weapon"
-    clear = "Bleeding Grove Clear"
+    clear = "Bleeding Grove Cleared"
 
 class JebLore:
     guide = "Jeb's Cabin: Controls Manual"
     cdc = "Jeb's Cabin: Totally Real CDC Notice"
     hero_of_horned_snake = "Turkey Creek: Hero of the Horned Snake"
+    ate_fish = "Turkey Creek: They Ate All The Fish! Note"
     starved_chickens = "Turkey Creek: Note on Starved Chickens"
     newfound_god = "Turkey Creek: Newfound God Gibberish"
     the_turkeys = "Turkey Creek: Dead Man's Realization on Turkeys"
@@ -108,6 +110,7 @@ class FrigidCamera:
     skinned_return_6 = "Frigid Valley: Skinned Return Dog 6 Photo"
     skinned_return_7 = "Frigid Valley: Skinned Return Dog 7 Photo"
     snowman_skull = "Frigid Valley: Snowman Skull Photo"
+    mountain_wolf = "Frigid Valley: Wolf Watching Over Valley Photo"
 
 class HowlingCamera:
     bear_1 = "Howling Marsh: Bear 1 Photo"
@@ -130,7 +133,7 @@ class TheBBQBasket:
     binoculars = "The BBQ Basket: Binoculars in Barrel"
     ruger = "The BBQ Basket: Ruger in Barrel"
     coffee = "The BBQ Basket: Coffee"
-    clear = "The BBQ Basket Clear"
+    clear = "The BBQ Basket Cleared"
 
 class RitualRoad:
     bridge_ammo = "Ritual Road: Early Bridge Barrel Ammo"
@@ -139,7 +142,7 @@ class RitualRoad:
     venereal_ammo = "Ritual Road: Dollar Venereal Ammo"
     truck_ammo = "Ritual Road: Truck Barrel Ammo"
     tent_coffee = "Ritual Road: Tent Coffee"
-    clear = "Ritual Road Clear"
+    clear = "Ritual Road Cleared"
 
 class LakeLinger:
     starting_ammo = "Lake Linger: Starting House Barrel Ammo"
@@ -149,6 +152,7 @@ class LakeLinger:
     dead_end_ammo = "Lake Linger: Northern Dead End Barrel Ammo"
     two_story_coffee = "Lake Linger: Two Story Building Barrel Coffee"
     main_office_ammo = "Lake Linger: Main Office Barrel Ammo"
+    main_office_trap = "Lake Linger: Main Office Bear Trap Pack"
     north_house_trap = "Lake Linger: North House Set Bear Trap"
     coffee_trap_trap_1 = "Lake Linger: Coffee Trap Set Bear Trap 1"
     coffee_trap_trap_2 = "Lake Linger: Coffee Trap Set Bear Trap 2"
@@ -161,7 +165,9 @@ class LakeLinger:
     trapped_start_trap_3 = "Lake Linger: Trapped Start Trap 3"
     trapped_start_trap_4 = "Lake Linger: Trapped Start Trap 4"
     trapped_start_trap_5 = "Lake Linger: Trapped Start Trap 5"
-    clear = "Lake Linger Clear"
+    trapped_start_trap_6 = "Lake Linger: Trapped Start Trap 6"
+    trapped_start_trap_7 = "Lake Linger: Trapped Start Trap 7"
+    clear = "Lake Linger Cleared"
 
 class PallidPark:
     chamber_ammo = "Pallid Park: Office Chamber Barrel Ammo"
@@ -174,11 +180,14 @@ class PallidPark:
     swamp_shack_coffee = "Pallid Park: Swamp Shack Coffee"
     south_office_coffee = "Pallid Park: South Office Coffee"
     south_office_ammo = "Pallid Park: South Office Ammo"
-    clear = "Pallid Park Clear"
+    clear = "Pallid Park Cleared"
 
 class BurningGrove:
     banjo = "Burning Grove: Jeeb's Banjo"
-    clear = "Burning Grove Clear"
+    clear = "Burning Grove Cleared"
+
+jeb_clears = [JebCabin.clear, TurkeyCreek.clear, FrigidValley.clear, HowlingMarsh.clear, BleedingGrove.clear]
+jeeb_clears = [TheBBQBasket.clear, RitualRoad.clear, LakeLinger.clear, PallidPark.clear, BurningGrove.clear]
 
 class JeebLore:
     jeeb_diary = "The BBQ Basket: Jeeb's Diary"
@@ -194,6 +203,7 @@ class JeebLore:
     otter_warning = "Lake Linger: Otter Warning Note"
     juiced_baby = "Pallid Park: Juiced Baby Note"
     woke_gallows = "Pallid Park: Too Woke Note"
+    nipple_yogurt = "Pallid Park: Nipple Yogurt Note"
     great_leech = "Pallid Park: The Great Leech of Tlanusi'yi"
     right_to_be_naked = "Pallid Park: Right to be Naked Note"
     what_magic = "Burning Grove: What Magic Note"

@@ -34,6 +34,8 @@ class BBQChef(Toggle):
 
 class Hyenas(Toggle):
     """Destroying every Hyena is a location, and each one is an item, for the given campaigns."""
+    internal_name = "hyenas"
+    display_name = "Hyenas"
 
 class RogueScholar(Toggle):
     """Reading books, notes, and the like with some lore benefit are checks."""
