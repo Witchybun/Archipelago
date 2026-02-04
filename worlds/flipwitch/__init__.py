@@ -1,10 +1,10 @@
 from random import Random
 from typing import Dict, Any, List
 import logging
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, CollectionState
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, CollectionState, MultiWorld
 from Utils import visualize_regions
 from worlds.AutoWorld import World, WebWorld
-from . import options
+from . import options, tracker
 from .data.locations import all_locations, FlipwitchLocation, stat_locations, shop_locations, quest_locations, sex_experience_locations, \
     gacha_locations, coin_locations, \
     chaos_piece_location_names, pot_locations, warp_locations, event_sex_locations, event_quest_locations
@@ -85,8 +85,22 @@ class FlipwitchWorld(World):
     necessary_to_do_order: Dict[int, str] = {}
     packaged_hints = {}
 
+    passthrough: Dict[str, Any]
+    using_ut: bool = False
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
+
     def __init__(self, multiworld, player):
         super(FlipwitchWorld, self).__init__(multiworld, player)
+        slot_data = getattr(multiworld, "re_gen_passthrough", {}).get("Flipwitch Forbidden Sex Hex")
+        if slot_data:
+            self.seed = slot_data.get("ut_seed")
+            self.using_ut = True
+        else:
+            self.seed = self.random.getrandbits(64)
+        self.random = Random(self.seed)
+
+    def generate_early(self) -> None:
+        tracker.setup_options_from_slot_data(self)
 
     def create_item(self, name: str, override_classification: ItemClassification = None) -> "FlipwitchItem":
         item_id: int = self.item_name_to_id[name]
@@ -103,7 +117,7 @@ class FlipwitchWorld(World):
         return self.random.choice(["Nothing"])
 
     def set_rules(self):
-        self.determine_gacha_order(self.random)
+        self.determine_gacha_order(self.multiworld, self.random)
         FlipwitchRules(self).set_flipwitch_rules(self.animal_order, self.bunny_order, self.monster_order, self.angel_order)
 
     def create_items(self):
@@ -156,8 +170,8 @@ class FlipwitchWorld(World):
             for location in event_quest_locations[region]:
                 region_lookup[region].add_event(location.name, location.forced_off_item)
 
-    #def connect_entrances(self) -> None:
-        #self.visualize_regions()
+    def connect_entrances(self) -> None:
+        self.visualize_regions()
 
     def visualize_regions(self):
         multiworld = self.multiworld
@@ -230,23 +244,27 @@ class FlipwitchWorld(World):
             hint_package[item] = message
         return hint_package
 
-    def determine_gacha_order(self, random: Random):
-        bunny_order = Gacha.bunny_gacha.copy()
-        random.shuffle(bunny_order)
-        self.bunny_order = bunny_order
-        animal_order = Gacha.animal_gacha.copy()
-        random.shuffle(animal_order)
-        self.animal_order = animal_order
-        monster_order = Gacha.monster_gacha.copy()
-        random.shuffle(monster_order)
-        self.monster_order = monster_order
-        angel_order = Gacha.angel_demon_gacha.copy()
-        random.shuffle(angel_order)
-        self.angel_order = angel_order
+    def determine_gacha_order(self, multiworld: MultiWorld, random: Random):
+        slot_data = getattr(multiworld, "re_gen_passthrough", {}).get("Flipwitch Forbidden Sex Hex")
+        if not slot_data:
+            bunny_order = Gacha.bunny_gacha.copy()
+            random.shuffle(bunny_order)
+            self.bunny_order = bunny_order
+            animal_order = Gacha.animal_gacha.copy()
+            random.shuffle(animal_order)
+            self.animal_order = animal_order
+            monster_order = Gacha.monster_gacha.copy()
+            random.shuffle(monster_order)
+            self.monster_order = monster_order
+            angel_order = Gacha.angel_demon_gacha.copy()
+            random.shuffle(angel_order)
+            self.angel_order = angel_order
+
 
     def fill_slot_data(self) -> Dict[str, Any]:
         self.package_hints()
         slot_data = {
+            "ut_seed": self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "client_version": "1.0.0",
             "animal_order": self.animal_order,
@@ -266,3 +284,6 @@ class FlipwitchWorld(World):
         for item in self.packaged_hints:
 
             output.write(self.hint_lookup[item].location.name + ": " + self.packaged_hints[item] + "\n")
+
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        return slot_data
