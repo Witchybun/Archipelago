@@ -150,6 +150,7 @@ class LunacidWorld(World):
         self.custom_class_stats = {}
 
     def generate_early(self) -> None:
+        Tracker.setup_options_from_slot_data(self)
         self.package_custom_class()
         self.level = self.determine_starting_level()
         self.enemy_random_data, enemy_regions = self.randomize_enemies()
@@ -160,7 +161,6 @@ class LunacidWorld(World):
             self.enemy_regions = enemy_regions
         if self.options.challenges == self.options.challenges.option_exp:
             self.options.levelsanity.value = self.options.levelsanity.option_false
-        Tracker.setup_options_from_slot_data(self)
 
     def create_item(self, name: str, override_classification: ItemClassification = None) -> "LunacidItem":
         if name == self.glitches_item_name:
