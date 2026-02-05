@@ -553,7 +553,8 @@ class LunacidWorld(World):
                                    "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
                                    "secret_door_lock", "death_link", "starting_class",
                                    "starting_area", "levelsanity", "bookworm",
-                                   "grasssanity", "breakables", "total_strange_coin", "random_equip_stats", "silver_link"),
+                                   "grasssanity", "breakables", "total_strange_coin", "random_equip_stats", "silver_link",
+                                   "challenges", "tricks_and_glitches"),
             "entrances": self.randomized_entrances
         }
 
