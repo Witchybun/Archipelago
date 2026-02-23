@@ -537,7 +537,7 @@ class LunacidWorld(World):
         slot_data = {
             "ut_seed": self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "1.0.9",
+            "client_version": "1.0.16",
             "rolled_month": self.rolled_month,
             "starting_weapon": self.starting_weapon.name,
             "elements": self.weapon_elements,
