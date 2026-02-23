@@ -223,10 +223,10 @@ class LunacidWorld(World):
 
         if self.options.etnas_pupil and self.options.dropsanity == self.options.dropsanity.option_randomized:
             alchemy_items = []
-            for alchemy_item in Alchemy.necessary_alchemy_items:
-                alchemy_items.append(Item(alchemy_item, ItemClassification.progression | ItemClassification.useful,
-                                          self.item_name_to_id[alchemy_item], self.player))
-            alchemy_items *= 5  # make sure there's enough of them to go around
+            for _ in range(5):  # make sure there's enough of them to go around
+                for alchemy_item in Alchemy.necessary_alchemy_items:
+                    alchemy_items.append(Item(alchemy_item, ItemClassification.progression | ItemClassification.useful,
+                                              self.item_name_to_id[alchemy_item], self.player))
             self.local_alchemy = alchemy_items
 
         if self.multiworld.players == 1:
