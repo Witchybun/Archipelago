@@ -122,7 +122,8 @@ class MadouRules:
             ForestOfLight.ribbit_boots: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
             ForestOfLight.sukiyapodes_1: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
             AncientRuins.zoh_daimaoh: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
-            HarpyPath.bag: lambda state: state.has(Tool.panotty_flute, self.player) and self.can_fight_generic_at_level(state, 2, self.world.options),
+            HarpyPath.bag: lambda state: state.has(Tool.panotty_flute, self.player) and self.can_fight_generic_at_level(state, 2, self.world.options)
+                                         and state.has(Tool.panotty_flute, self.player),
             ShadyWell.arachne: lambda state: state.has(Special.ripe_cucumber, self.player) and self.can_fight_generic_at_level(state, 2, self.world.options),
             School.magical_dictionary: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
             AncientVillage.elder: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
@@ -145,7 +146,8 @@ class MadouRules:
             Bestiary.zoh: lambda state: self.can_fight_generic_at_level(state, 1, self.world.options),
             Bestiary.arachne: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
             Bestiary.headmaster: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
-            Bestiary.harpy: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
+            Bestiary.harpy: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options) and state.has(Tool.panotty_flute, self.player)
+                                          and state.has(Tool.ribbit_boots, self.player),
             Bestiary.skeleton_d: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             Bestiary.skeleton_t: lambda state: self.can_fight_generic_at_level(state, 3, self.world.options),
             Bestiary.nasu_grave: lambda state: self.can_fight_generic_at_level(state, 2, self.world.options),
