@@ -77,7 +77,7 @@ class ShopPrices(Range):
     display_name = "Shop Prices"
     range_start = 0
     range_end = 200
-    default = 100
+    default = 25
 
 
 class StatShuffle(Toggle):

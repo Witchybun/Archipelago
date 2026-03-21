@@ -170,8 +170,8 @@ class FlipwitchWorld(World):
             for location in event_quest_locations[region]:
                 region_lookup[region].add_event(location.name, location.forced_off_item)
 
-    def connect_entrances(self) -> None:
-        self.visualize_regions()
+    # def connect_entrances(self) -> None:
+        # self.visualize_regions()
 
     def visualize_regions(self):
         multiworld = self.multiworld
@@ -189,8 +189,8 @@ class FlipwitchWorld(World):
         for item in self.hint_lookup:
             is_junk = self.random.choice(range(101)) < self.options.junk_hint.value
             spot_location = self.hint_lookup[item].location
-            if spot_location is None and item in self.options.start_inventory.value:
-                self.write_hint(item, "in your starting inventory", is_junk, packaged_hints)
+            if spot_location is None:
+                self.write_hint(item, "in your starting inventory probably", is_junk, packaged_hints)
                 continue
             player = self.multiworld.player_name[spot_location.player]
             possible_spots = self.get_groups_for_location(spot_location)
@@ -266,7 +266,7 @@ class FlipwitchWorld(World):
         slot_data = {
             "ut_seed": self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "1.0.0",
+            "client_version": "1.0.5",
             "animal_order": self.animal_order,
             "bunny_order": self.bunny_order,
             "monster_order": self.monster_order,

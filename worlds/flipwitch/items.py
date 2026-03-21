@@ -6,7 +6,7 @@ from typing import Dict, List, Union, Protocol, Tuple
 
 from worlds.flipwitch import FlipwitchOptions
 from worlds.flipwitch.data.items import FlipwitchItemData, all_items, base_items, gacha_items, filler_items, shop_items, quest_items, warp_items
-from worlds.flipwitch.strings.items import Coin, Upgrade, GoalItem, QuestItem, Custom, hint_base_items
+from worlds.flipwitch.strings.items import Coin, Upgrade, GoalItem, QuestItem, Custom, hint_base_items, Warp
 
 logger = logging.getLogger(__name__)
 
@@ -65,8 +65,7 @@ def create_base_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
             if options.stat_shuffle == options.stat_shuffle.option_false:
                 continue
             upgrade_name = item.name
-            items.extend([item_factory(stat, ItemClassification.progression | ItemClassification.useful) for stat in [upgrade_name]*8])
-            items.extend([item_factory(stat) for stat in [upgrade_name]*2])
+            items.extend([item_factory(stat) for stat in [upgrade_name]*10])
         elif item.name == Upgrade.mana:
             if options.stat_shuffle == options.stat_shuffle.option_false:
                 continue
@@ -171,6 +170,8 @@ def create_warp_items(item_factory: FlipwitchItemFactory, options: FlipwitchOpti
     if options.crystal_teleports == options.crystal_teleports.option_false:
         return items
     for item in warp_items:
+        if item.name == Warp.area_to_warp[options.starting_area.value]:
+            continue
         items.append(item_factory(item.name))
     return items
 

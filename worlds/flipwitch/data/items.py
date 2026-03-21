@@ -43,7 +43,7 @@ base_items = [
     create_item(ITEM_CODE_START + base_start_id + 8, Upgrade.health, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 9, Upgrade.mana, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 10, Upgrade.wand, ItemClassification.useful),
-    create_item(ITEM_CODE_START + base_start_id + 11, Upgrade.peachy_peach, ItemClassification.useful),
+    create_item(ITEM_CODE_START + base_start_id + 11, Upgrade.peachy_peach, ItemClassification.progression),
     create_item(ITEM_CODE_START + base_start_id + 12, Upgrade.bewitched_bubble, ItemClassification.progression | ItemClassification.useful),
     # create_item(ITEM_CODE_START + base_start_id + 13, Upgrade.goblin_crystal, ItemClassification.useful),
     create_item(ITEM_CODE_START + base_start_id + 14, Upgrade.demon_wings, ItemClassification.progression | ItemClassification.useful),
@@ -215,7 +215,7 @@ warp_items = [
     create_item(ITEM_CODE_START + warp_item_id + 13, Warp.slime_citadel, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + warp_item_id + 14, Warp.slimy_depths, ItemClassification.progression | ItemClassification.useful),
     create_item(ITEM_CODE_START + warp_item_id + 15, Warp.umi_umi, ItemClassification.progression | ItemClassification.useful),
-    create_item(ITEM_CODE_START + warp_item_id + 16, Warp.chaos_castle, ItemClassification.progression | ItemClassification.useful),
+    # create_item(ITEM_CODE_START + warp_item_id + 16, Warp.chaos_castle, ItemClassification.progression | ItemClassification.useful),
 ]
 
 ability_item_id = 275
