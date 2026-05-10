@@ -106,7 +106,7 @@ class FlipwitchRules:
             SpiritCityEntrance.city_stairwell_to_pipeworld_entrance: self.can_ghost_dodge(),
             SpiritCityEntrance.pipeworld_entrance_to_city_stairwell: self.can_ghost_dodge(),
 
-            SpiritCityEntrance.jigoku_path_to_pipe_entrance: Has(Power.slime_form),
+            SpiritCityEntrance.jigoku_path_to_pipe_entrance: Has(Power.slime_form) & self.can_double_jump(),
             SpiritCityEntrance.tall_pipe_to_secret: self.can_double_jump(),
             SpiritCityEntrance.pipe_sub_boss_to_pipe_chest: Has(Upgrade.peachy_peach),
             SpiritCityEntrance.pipe_chest_to_scale_tutorial: Has(Upgrade.mermaid_scale),
@@ -159,8 +159,8 @@ class FlipwitchRules:
             JigokuEntrance.the_mound_to_lava_jump_top: (Has(Upgrade.bewitched_bubble) & self.can_double_jump()) |
                                                                      (self.can_triple_jump()),
             JigokuEntrance.fencing_to_long_hallway: Has(Key.beast) & Has(Upgrade.peachy_peach),
-            JigokuEntrance.first_drop_to_jigoku_ruins: Has(Upgrade.bewitched_bubble) |
-                                                                     (self.can_present_gender("Male") & self.can_triple_jump()),
+            JigokuEntrance.first_drop_bottom_to_first_drop_top: Has(Upgrade.bewitched_bubble) |
+                                                           (self.can_present_gender("Male") & self.can_triple_jump()),
             JigokuEntrance.tall_ruins_bottom_to_multi_story_lower: self.can_present_gender("Female") | self.can_double_jump(),
             JigokuEntrance.anthill_lower_to_multi_story_lower: self.can_triple_jump() | (self.can_double_jump() & Has(Upgrade.bewitched_bubble)),
             JigokuEntrance.anthill_lower_to_top: (self.can_present_gender("Female") & self.can_triple_jump()) |
@@ -359,8 +359,8 @@ class FlipwitchRules:
             SexEventsLocation.merchant: Has(QuestItem.blue_jelly_mushroom),
             SexEventsLocation.cat: self.can_triple_jump() & Has(Upgrade.bewitched_bubble),
             SexEventsLocation.rat: self.can_wear_costume(Costume.rat),
-            SexEventsLocation.tatil: Has(QuestItem.deed) & Has(QuestEventItem.tatil_2),
-            SexEventsLocation.pig: Has(QuestItem.maid_contract),
+            SexEventsLocation.tatil: Has(QuestItem.deed) & Has(QuestEventItem.tatil_2) & self.can_wear_costume(Costume.pigman),
+            SexEventsLocation.pig: Has(QuestItem.maid_contract) & self.can_wear_costume(Costume.maid),
             SexEventsLocation.kyoni_1: Has(QuestEventItem.belle_2_b) & Has(QuestItem.hellish_dango),
             SexEventsLocation.kyoni_2: Has(QuestEventItem.kyoni_1) & Has(QuestItem.heavenly_daikon),
             SexEventsLocation.bunny_boys: self.can_wear_costume(Costume.bunny),
@@ -384,11 +384,12 @@ class FlipwitchRules:
             QuestEventLocation.gobliana_luggage_3: Has(QuestItem.gobliana_luggage)
                                                                  & Has(QuestEventItem.gobliana_luggage_1) &
                                                                  Has(QuestEventItem.gobliana_luggage_2),
+            QuestEventLocation.tatil_1: self.can_wear_costume(Costume.pigman),
 
             # Ghost Castle
 
             GhostCastle.below_entrance: self.can_ghost_dodge(),
-            GhostCastle.slime_3: (Has(Upgrade.bewitched_bubble) & (self.can_double_jump() |
+            GhostCastle.slime_1: (Has(Upgrade.bewitched_bubble) & (self.can_double_jump() |
                                                                                                       Has(Upgrade.demon_wings))) |
                                                (self.can_present_gender("Female") & ((self.can_double_jump() &
                                                                                                Has(Upgrade.demon_wings)) |
@@ -432,9 +433,9 @@ class FlipwitchRules:
             Jigoku.demon_tutorial: Has(Upgrade.demon_wings),
             Jigoku.northern_cat_shrine: Has(QuestEventItem.cat_statue_start),
             Jigoku.hidden_hole: self.can_double_jump(),
-            Potsanity.jg_first_drop_1: self.can_double_jump(),
-            Potsanity.jg_first_drop_2: self.can_double_jump(),
-            Potsanity.jg_first_drop_3: self.can_double_jump(),
+            Potsanity.jg_first_drop_4: self.can_double_jump(),
+            Potsanity.jg_first_drop_5: self.can_double_jump(),
+            Potsanity.jg_first_drop_6: self.can_double_jump(),
 
             ClubDemon.demon_letter: Has(QuestItem.angelic_letter) & Has(QuestEventItem.angel_letter),
             ClubDemon.door: Has(Key.demon_club) &
