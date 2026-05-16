@@ -193,8 +193,9 @@ class FlipwitchRules:
             FungalForestEntrance.vertical_junction_to_cute_hall: self.can_triple_jump(),
             FungalForestEntrance.cute_hall_to_vertical_junction: Has(Upgrade.demon_wings) | self.can_double_jump(),
             FungalForestEntrance.plummet_to_moving_platforms: self.can_double_jump() & (Has(Upgrade.bewitched_bubble) | self.slime_start()),
-            FungalForestEntrance.mushroom_alter_to_on_top: self.can_present_gender("Male"),
+            FungalForestEntrance.mushroom_alter_to_on_top: self.can_present_gender("Female") & (Has(Upgrade.bewitched_bubble) | (Has(Upgrade.demon_wings) & self.can_triple_jump())),
             FungalForestEntrance.mushroom_alter_to_circle_back: self.can_double_jump() | self.can_roll() | Has(Upgrade.demon_wings),
+            FungalForestEntrance.gender_lifts_to_moving_east: self.can_double_jump(),
             FungalForestEntrance.gender_lifts_to_tutorial_room: Has(Power.slime_form) & Has(Key.forgotten_fungal) &
                                                                               self.can_double_jump() &
                                                                               (Has(Upgrade.bewitched_bubble) |
@@ -213,6 +214,7 @@ class FlipwitchRules:
             FungalForestEntrance.sexy_statue_to_slime_gap: Has(Power.slime_form),
             FungalForestEntrance.statue_sisters_to_candle_hall: Has(Key.slimy_sub_boss) & Has(Upgrade.peachy_peach),
             FungalForestEntrance.long_hallway_to_tall_room: Has(Key.slime_boss) & Has(Upgrade.peachy_peach),
+            FungalForestEntrance.classic_jumps_to_long_cellar: Has(Upgrade.demon_wings) | self.can_triple_jump(),
 
             FungalForestEntrance.brick_hall_to_mossy_room: self.can_present_gender("Male") | self.can_double_jump(),
             FungalForestEntrance.brick_hall_to_tower_entrance: self.can_double_jump(),
@@ -368,6 +370,14 @@ class FlipwitchRules:
             SexEventsLocation.ghost: Has(QuestEventItem.cat_girls_3_b) & self.can_wear_costume(Costume.cat),
             SexEventsLocation.momo_boy: Has(QuestItem.mono_password),
             SexEventsLocation.momo_girl: Has(QuestItem.mono_password),
+            SexEventsLocation.bunny_owner_1: Has(QuestItem.red_wine),
+            SexEventsLocation.bunny_owner_2: Has(QuestEventItem.rover_3) & Has(QuestEventItem.belle_3)
+                                                      & Has(QuestEventItem.cat_girls_3_b) & Has(QuestEventItem.bunny_1),
+            SexEventsLocation.gobliana_2: Has(QuestItem.gobliana_luggage) &
+                                                   Has(QuestEventItem.gobliana_luggage_1)
+                                                   & Has(QuestEventItem.gobliana_luggage_2),
+            SexEventsLocation.gobliana_3: Has(QuestEventItem.gobliana_luggage_3) &
+                                             Has(QuestEventItem.gobliana_photographer),
 
             QuestEventLocation.rover_1: self.can_ghost_dodge() & self.can_present_gender("Female"),
             QuestEventLocation.rover_3: Has(QuestItem.legendary_halo),
@@ -377,7 +387,7 @@ class FlipwitchRules:
                                                         Has(QuestItem.delicious_milk),
             QuestEventLocation.belle_2_b: Has(QuestEventItem.belle_2_a) & Has(QuestItem.belle_milkshake),
             QuestEventLocation.belle_3: Has(QuestEventItem.belle_2_b) & Has(QuestItem.cherry_key),
-            QuestEventLocation.bunny_1: Has(QuestItem.red_wine) & self.can_present_gender("Female"),
+            QuestEventLocation.bunny_1: Has(QuestItem.red_wine),
             QuestEventLocation.bunny_2: Has(QuestEventItem.rover_3) & Has(QuestEventItem.belle_3)
                                                       & Has(QuestEventItem.cat_girls_3_b) & Has(QuestEventItem.bunny_1),
             QuestEventLocation.kyoni_1: Has(QuestEventItem.belle_2_b) & Has(QuestItem.hellish_dango),
@@ -520,6 +530,9 @@ class FlipwitchRules:
                                                      Has(QuestEventItem.stone_3) & Has(QuestItem.summon_stone, 3),
 
             QuestEventLocation.stone_start: self.can_wear_costume(Costume.alchemist),
+            QuestEventLocation.stone_1: Has(QuestEventItem.stone_start),
+            QuestEventLocation.stone_2: Has(QuestEventItem.stone_start),
+            QuestEventLocation.stone_3: Has(QuestEventItem.stone_start),
 
             # Umi Umi
 
@@ -554,10 +567,9 @@ class FlipwitchRules:
             Quest.goblin_stud: self.can_wear_costume(Costume.goblin),
 
             Quest.legendary_chewtoy: Has(QuestItem.legendary_halo),
-            Quest.deluxe_milkshake: Has(QuestItem.delicious_milk) &
-                                                  Has(QuestItem.belle_milkshake),
+            Quest.deluxe_milkshake: Has(QuestEventItem.belle_2_b),
             Quest.rat_problem: Has(QuestItem.cherry_key) & Has(QuestEventItem.belle_2_b),
-            Quest.haunted_bedroom: Has(Power.slime_form),
+            Quest.haunted_bathroom: Has(QuestEventItem.cat_girls_3_b),
             Quest.ectogasm: Has(QuestEventItem.cat_girls_3_b) & self.can_wear_costume(Costume.cat),
             Quest.jelly_mushroom: Has(QuestItem.blue_jelly_mushroom),
             Quest.booze_bunny: Has(QuestItem.red_wine),
@@ -591,7 +603,7 @@ class FlipwitchRules:
             Quest.long_distance: Has(QuestEventItem.goat_guy) & Has(QuestItem.demonic_letter),
             Quest.summoning_stones: Has(QuestItem.summon_stone, 3) & Has(QuestEventItem.stone_1) &
                                     Has(QuestEventItem.stone_2) & Has(QuestEventItem.stone_3),
-            Quest.semen_with_a: self.can_wear_costume(Costume.angler) & Has(Key.frog_boss),
+            Quest.semen_with_a: self.can_wear_costume(Costume.angler),
 
             Gacha.gacha_sp1: Has(Coin.promotional_coin),
             Gacha.gacha_ad1: self.has_enough_coins(Gacha.gacha_ad1),

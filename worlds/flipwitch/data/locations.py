@@ -279,7 +279,7 @@ quest_locations = [
     create_location(quest_location_start + 18, Quest.let_the_dog_out, SpiritCityRegion.dog_cage_tomb, Trap.nothing),
     create_location(quest_location_start + 19, Quest.rat_problem, SpiritCityRegion.cabaret_cafe, Trap.nothing),
     create_location(quest_location_start + 20, Quest.ghost_hunters, SpiritCityRegion.cabaret_cafe, Trap.nothing),
-    create_location(quest_location_start + 21, Quest.haunted_bedroom, SpiritCityRegion.cabaret_cafe, Trap.nothing),
+    create_location(quest_location_start + 21, Quest.haunted_bathroom, SpiritCityRegion.cabaret_cafe, Trap.nothing),
     create_location(quest_location_start + 22, Quest.ectogasm, SpiritCityRegion.cabaret_wizard_toilet_subboss, Trap.nothing),
     create_location(quest_location_start + 23, Quest.jelly_mushroom, SpiritCityRegion.cabaret_cafe, Trap.nothing),
     create_location(quest_location_start + 24, Quest.booze_bunny, SpiritCityRegion.cabaret_cafe, Trap.nothing),
