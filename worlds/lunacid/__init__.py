@@ -6,6 +6,7 @@ import logging
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, CollectionState, MultiWorld
 from Fill import fill_restrictive
 from Utils import visualize_regions
+from rule_builder.rules import Has, CanReachRegion
 from worlds.AutoWorld import World, WebWorld
 from . import Options
 from .OptionGroups import lunacid_option_groups
@@ -27,13 +28,14 @@ from .strings.locations import (BaseLocation, ShopLocation, unique_drop_location
                                 AlchemyLocation, all_drops, Quench, all_drops_by_enemy)
 from .Items import (item_table, complete_items_by_name, create_items, determine_starting_weapon,
                     determine_weapon_elements, all_filler)
-from .Options import LunacidOptions
+from .Options import LunacidOptions, OfflineMode
 from .Locations import create_locations, location_table
 from .Regions import create_regions, randomized_entrance_names
 from .Rules import LunacidRules
 from worlds.generic.Rules import set_rule
 from .data.plant_data import all_alchemy_plant_data
 from . import Tracker
+from .output_json import generate_json
 
 logger = logging.getLogger()
 
@@ -150,6 +152,8 @@ class LunacidWorld(World):
         self.custom_class_stats = {}
 
     def generate_early(self) -> None:
+        #if self.multiworld.players > 1:
+        #    self.options.offline_mode.value = self.options.offline_mode.option_false
         Tracker.setup_options_from_slot_data(self)
         self.package_custom_class()
         self.level = self.determine_starting_level()
@@ -182,7 +186,7 @@ class LunacidWorld(World):
         if self.options.challenges == self.options.challenges.option_logic:
             logger.info(f"WARNING: Player {self.player} has chosen NO LOGIC for Lunacid.  If not intended reroll and smack them.")
             return
-        LunacidRules(self).set_lunacid_rules(self.weapon_elements, self.enemy_regions)
+        LunacidRules(self).set_lunacid_rules()
 
     def create_items(self):
         locations_count = len([location
@@ -215,6 +219,7 @@ class LunacidWorld(World):
         self.multiworld.itempool += potential_pool
 
         starting_location = self.get_location(BaseLocation.wings_rest_crystal_shard)
+
         starting_location.place_locked_item(self.starting_weapon)
         if self.options.starting_area == self.options.starting_area.option_tomb:
             lamp = self.create_item(UniqueItem.oil_lantern, ItemClassification.progression | ItemClassification.useful)
@@ -275,17 +280,7 @@ class LunacidWorld(World):
         victory.place_locked_item(self.create_event(Victory.victory))
         ending_region.locations.append(victory)
 
-        if self.options.ending == self.options.ending.option_ending_b:
-            set_rule(victory, lambda state: LunacidRules(self).has_coins_for_door(self.options, state))
-        elif self.options.ending == self.options.ending.option_ending_e:
-            set_rule(victory, lambda state: LunacidRules(self).has_every_spell(state, self.options, self.starting_weapon.name)
-                                            and state.has(UniqueItem.white_tape, self.player))
-        elif self.options.ending == self.options.ending.option_any_ending:
-            set_rule(victory, lambda state: state.can_reach_region(LunacidRegion.grave_of_the_sleeper, self.player)
-                                            or (LunacidRules(self).has_coins_for_door(self.options, state)
-                                                and state.can_reach_region(LunacidRegion.labyrinth_of_ash, self.player)))
-
-        multiworld.completion_condition[self.player] = lambda state: state.has(Victory.victory, player)
+        self.set_completion_rule(Has(Victory.victory))
 
     def connect_entrances(self) -> None:
         world_entrances = self.world_entrances
@@ -476,6 +471,13 @@ class LunacidWorld(World):
         pre_fill_items.extend(self.local_filler)
         return pre_fill_items
 
+    #def generate_output(self, output_directory: str):
+        """
+        Generates the json files for the main mod.
+        """
+        #if self.options.offline_mode:
+        #generate_json(self, output_directory)
+
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,
         if as stage it's right under the common header before per-player options."""
@@ -537,7 +539,7 @@ class LunacidWorld(World):
         slot_data = {
             "ut_seed": self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "1.0.16",
+            "client_version": "1.1.0",
             "rolled_month": self.rolled_month,
             "starting_weapon": self.starting_weapon.name,
             "elements": self.weapon_elements,
@@ -548,6 +550,7 @@ class LunacidWorld(World):
             "item_spots": item_spots,
             "enemy_regions": self.enemy_regions,
             "force_no_exp": self.options.challenges == self.options.challenges.option_exp,
+            "entrances": self.randomized_entrances,
             **self.options.as_dict("ending", "entrance_randomization",
                                    "required_strange_coin", "enemy_randomization", "shopsanity", "dropsanity",
                                    "quenchsanity", "etnas_pupil", "switch_locks", "door_locks", "random_elements",
@@ -555,7 +558,6 @@ class LunacidWorld(World):
                                    "starting_area", "levelsanity", "bookworm",
                                    "grasssanity", "breakables", "total_strange_coin", "random_equip_stats", "silver_link",
                                    "challenges", "tricks_and_glitches"),
-            "entrances": self.randomized_entrances
         }
 
         return slot_data
