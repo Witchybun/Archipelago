@@ -73,6 +73,7 @@ class FlipwitchRules:
             WitchyWoodsEntrance.fairy_ruins_to_spirit_city_bridge: Has(Unlock.crystal_block),
             WitchyWoodsEntrance.spirit_city_bridge_to_fairy_ruins: Has(Unlock.crystal_block),
             WitchyWoodsEntrance.man_cave_entrance_to_man_cave: self.can_present_gender("Male"),
+            WitchyWoodsEntrance.goblin_stairwell_to_goblin_tower_exit: self.can_double_jump() | self.can_roll() | Has(Upgrade.demon_wings),
             WitchyWoodsEntrance.tall_chasm_to_small_cavern: (Has(Upgrade.bewitched_bubble) & self.can_double_jump()) |
                                                                           (self.can_present_gender("Female") & self.can_triple_jump() &
                                                                            Has(Upgrade.demon_wings)),
@@ -233,7 +234,7 @@ class FlipwitchRules:
             TengokuEntrance.tree_garden_to_cloudy_room: self.can_double_jump() | Has(Upgrade.demon_wings),
             TengokuEntrance.jump_hallway_to_cloudy_drop: self.can_triple_jump() |
                                                                        (self.can_present_gender("Female") & self.can_double_jump()),
-            TengokuEntrance.jump_hallway_left_to_chaos_room: self.can_double_jump() | self.can_roll() | Has(Upgrade.demon_wings),
+            TengokuEntrance.jump_hallway_left_to_chaos_room: self.can_double_jump() | self.can_ghost_dodge(),
             TengokuEntrance.long_jump_to_stone_climb: Has(Upgrade.bewitched_bubble),
             TengokuEntrance.maze_up_lower_to_gender_platforms: self.can_ghost_dodge(),
             TengokuEntrance.maze_up_lower_to_maze_up_top: self.can_triple_jump() | (Has(Upgrade.bewitched_bubble) & self.can_double_jump()),
@@ -479,6 +480,8 @@ class FlipwitchRules:
 
             Tengoku.birby: Has(Upgrade.bewitched_bubble) | self.can_double_jump() | Has(
                 Upgrade.demon_wings) & Has(Upgrade.peachy_peach),
+            Tengoku.flip_magic: self.can_present_gender("Male") &
+                                (self.can_triple_jump() | Has(Upgrade.bewitched_bubble) | self.tengoku_start()),
 
             AngelicHallway.hidden_foliage_1: self.can_triple_jump() | (self.can_double_jump() &
                                                                                            Has(Upgrade.demon_wings)),
