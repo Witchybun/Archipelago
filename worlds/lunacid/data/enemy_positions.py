@@ -592,6 +592,19 @@ immovable_enemies = {
 
 }
 
+banned_enemies_by_position = {
+    "VOID": [
+    EnemyPlacement("VOID", "MainVoid", 6, Enemy.giant_skeleton, LunacidRegion.labyrinth_interior),
+    EnemyPlacement("VOID", "MainVoid", 7, Enemy.giant_skeleton, LunacidRegion.labyrinth_interior),
+    EnemyPlacement("VOID", "MainVoid", 8, Enemy.giant_skeleton, LunacidRegion.labyrinth_interior),],
+    "CAS_3": [
+    EnemyPlacement("CAS_3", "HallowNest2Cas3", 0, Enemy.giant_skeleton, LunacidRegion.sealed_ballroom_secret_walls),
+    EnemyPlacement("CAS_3", "HallowNest2Cas3", 1, Enemy.giant_skeleton, LunacidRegion.sealed_ballroom_secret_walls),
+
+    EnemyPlacement("CAS_3", "HallowNest3Cas3", 0, Enemy.giant_skeleton, LunacidRegion.sealed_ballroom_rooms),
+    EnemyPlacement("CAS_3", "HallowNest3Cas3", 1, Enemy.giant_skeleton, LunacidRegion.sealed_ballroom_rooms),
+    EnemyPlacement("CAS_3", "HallowNest3Cas3", 2, Enemy.giant_skeleton, LunacidRegion.sealed_ballroom_rooms),],
+}
 
 def construct_flag_data_for_mod(enemy_data: List[EnemyPlacement]) -> Dict[str, List[str]]:
     mod_package = {}

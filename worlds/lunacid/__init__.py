@@ -12,7 +12,7 @@ from . import Options
 from .OptionGroups import lunacid_option_groups
 from .Tracker import disconnect_entrances, reconnect_found_entrance
 from .data.enemy_positions import (base_enemy_placement, EnemyPlacement, construct_flag_data_for_mod,
-                                   construct_enemy_dictionary)
+                                   construct_enemy_dictionary, banned_enemies_by_position)
 from .data.location_data import grass_location_names, breakable_location_names
 from .strings.custom_features import all_classes, DefaultColors
 from .strings.enemies import Enemy
@@ -309,6 +309,8 @@ class LunacidWorld(World):
     def reconnect_found_entrances(self, found_key: str, data_storage_value: Any) -> None:
         if not data_storage_value:
             return
+        if not self.options.entrance_randomization:
+            return
         reconnect_found_entrance(self, data_storage_value)
 
     def visualize_regions(self):
@@ -397,7 +399,13 @@ class LunacidWorld(World):
         enemy_to_enemy_placement = {}
         if self.options.enemy_randomization:
             for enemy_data in base_enemy_placement:
-                picked_enemy = self.random.choice(Enemy.randomizable_enemies)
+                allowable_enemies = Enemy.randomizable_enemies.copy()
+                # Some enemies cause problems in-game due to positions, usually doors.
+                if enemy_data.scene in banned_enemies_by_position:
+                    for banned_data in banned_enemies_by_position[enemy_data.scene]:
+                        if banned_data.group_name == enemy_data.group_name and banned_data.child_id == enemy_data.child_id:
+                            allowable_enemies.remove(banned_data.enemy)
+                picked_enemy = self.random.choice(allowable_enemies)
                 new_data = EnemyPlacement(enemy_data.scene, enemy_data.group_name, enemy_data.child_id, picked_enemy,
                                           enemy_data.region)
                 if picked_enemy not in chosen_enemies:
@@ -539,7 +547,7 @@ class LunacidWorld(World):
         slot_data = {
             "ut_seed": self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-            "client_version": "1.1.0",
+            "client_version": "1.1.2",
             "rolled_month": self.rolled_month,
             "starting_weapon": self.starting_weapon.name,
             "elements": self.weapon_elements,
