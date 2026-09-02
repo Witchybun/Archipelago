@@ -154,10 +154,10 @@ class FlipwitchRules:
 
             JigokuEntrance.start_drop_to_stone_shrine: Has(Power.slime_form),
             JigokuEntrance.demon_entrance_to_lava_jump_top: self.can_double_jump() | Has(Upgrade.demon_wings),
-            JigokuEntrance.lava_jump_top_to_the_mound: Has(Upgrade.bewitched_bubble) |
+            JigokuEntrance.lava_jump_top_to_hidden_flip: Has(Upgrade.bewitched_bubble) |
                                                                          (self.can_present_gender("Male") & self.can_triple_jump()),
             JigokuEntrance.the_mound_to_fencing: self.can_present_gender("Female") & self.can_double_jump(),
-            JigokuEntrance.the_mound_to_lava_jump_top: (Has(Upgrade.bewitched_bubble) & self.can_double_jump()) |
+            JigokuEntrance.the_mound_to_lava_jump_top_hidden_flip: (Has(Upgrade.bewitched_bubble) & self.can_double_jump()) |
                                                                      (self.can_triple_jump()),
             JigokuEntrance.fencing_to_long_hallway: Has(Key.beast) & Has(Upgrade.peachy_peach),
             JigokuEntrance.first_drop_bottom_to_first_drop_top: Has(Upgrade.bewitched_bubble) |
@@ -224,7 +224,7 @@ class FlipwitchRules:
             # Since this rule only matters in one direction, & if you cannot triple jump you must have bewitched bubble...
             FungalForestEntrance.large_tower_room_to_tower_hall: self.can_triple_jump() |
                                                                                (self.can_double_jump() & Has(Upgrade.demon_wings)),
-            FungalForestEntrance.tower_hall_to_big_tower: self.can_triple_jump() | self.can_double_jump(),
+            FungalForestEntrance.tower_hall_to_big_tower: self.can_double_jump(),
 
             # Tengoku
 
@@ -434,9 +434,10 @@ class FlipwitchRules:
             Jigoku.cat_shrine: Has(QuestEventItem.cat_statue_start),
             Jigoku.far_ledge: self.can_triple_jump() | (Has(Upgrade.demon_wings) &
                                                                             (self.can_roll() | self.can_double_jump())),
-            Jigoku.hidden_flip_chest: (self.can_double_jump() & Has(Upgrade.bewitched_bubble)) |
-                                                    (self.can_present_gender("Male") & Has(Upgrade.demon_wings) &
-                                                     (self.can_triple_jump() | self.can_roll())),
+            Jigoku.hidden_flip_chest: (self.can_double_jump() | Has(Upgrade.demon_wings) | self.can_roll()) &
+                                      (Has(Upgrade.bewitched_bubble) | (self.can_present_gender("Male") &
+                                                                        Has(Upgrade.demon_wings) & (self.can_triple_jump() |
+                                                                                                    (self.can_double_jump() & self.can_roll())))),
             Jigoku.spring_chest: self.can_double_jump(),
             Jigoku.hidden_ledge: Has(Upgrade.bewitched_bubble) |
                                                (self.can_present_gender("Male") & self.can_double_jump()) |
